@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    <!--hr.analytic.timesheet-->
+    <record id='view_hr_analytic_timesheet_tree_invoice' model='ir.ui.view'>
+        <field name='name'>HR analytic timesheet invoice</field>
+        <field name='model'>hr.analytic.timesheet</field>
+        <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_tree"/>
+        <field name='arch' type='xml'>
+            <field name="to_invoice" position="after">
+               <field name="invoice_id" />
+            </field> 
+        </field>
+    </record>  
+
+    <record id='view_hr_analytic_timesheet_from_invoice' model='ir.ui.view'>
+        <field name='name'>HR analytic timesheet invoice</field>
+        <field name='model'>hr.analytic.timesheet</field>
+        <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_form"/>
+        <field name='arch' type='xml'>
+           <field name="general_account_id" position="after">
+               <field name="invoice_id" context="{'form_view_ref':'account.invoice_form'}" domain="[('partner_id','=',intervent_partner_id)]"/>
+            </field> 
+        </field>
+    </record>  
+    
+    <!--account.invoice-->
+    
+    <record id='view_invoice_tree_intervent' model='ir.ui.view'>
+        <field name='name'>Intervent</field>
+        <field name='model'>account.invoice</field>
+        <field name='inherit_id' ref='account.invoice_tree' />
+        <field name='arch' type='xml'>
+            <field name="user_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>   
+            <field name="amount_total" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </field>               
+            <field name="amount_total" position="after">
+                <field name="to_invoice_total" sum="hours"/>
+                <field name="to_invoice_total_price" sum="amount"/>
+            </field>
+            <!--Hide fields not used now:-->
+            <field name="residual" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>   
+            <field name="amount_untaxed" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>   
+            <field name="amount_total" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>   
+	    </field>
+	</record>            
+    <record id='view_invoice_form_intervent' model='ir.ui.view'>
+        <field name='name'>Intervent</field>
+        <field name='model'>account.invoice</field>
+        <field name='inherit_id' ref='account.invoice_form' />
+        <field name='arch' type='xml'>
+            <xpath expr="/form/sheet/notebook/page" position="before"> 
+                <page string="Intervents">
+                   <group colspan="4" col="6">
+                       <field name="to_invoice_summary" colspan="2" /> 
+                       <field name="to_invoice_total" colspan="2" />
+                       <field name="to_invoice_total_price" colspan="2" />
+                   </group>
+                   <field name="intervention_report_ids" context="{'form_view_ref':'intervention_report.intervention_report.view_hr_analytic_timesheet_form'}">
+                       <tree string="Intervent list" colors="brown:manual_total;grey:not_in_report">
+                            <field name="ref" />
+                            <field name="date_start" /> 
+                            <field name="user_name" />
+                            <field name="intervention_request" />                       
+                            <field name="account_id" invisible="1" />
+                            <field name="intervent_duration" widget="float_time"/>
+                            <field name="trip_hour" widget="float_time" invisible="1"/>
+                            <field name="break_hour" widget="float_time" invisible="1"/>
+                            <field name="to_invoice" />
+                            <field name="manual_total" invisible="1"/>
+                            <field name="intervent_total" string="Total" widget="float_time"/>
+                            <field name="mode" invisible="1" />
+
+                            <button name="intervention_draft" string="Draft" states="cancel" icon="gtk-go-back" />
+                            <button name="intervention_waiting" string="Waiting" states="draft" icon="gtk-execute" />
+                            <button name="intervention_confirmed" string="Confirmed" states="draft" icon="gtk-go-forward" />
+                            <button name="intervention_waiting_cancel" string="Cancel" states="waiting" icon="gtk-cancel" />
+                            <button name="intervention_reschedule" string="Reschedule" states="waiting" icon="gtk-go-back" />
+                            <button name="intervention_waiting_confirmed" string="Confirmed" states="waiting" icon="gtk-go-forward" />
+                            <button name="intervention_confirmed_cancel" string="Cancel" states="confirmed" icon="gtk-cancel" />
+                            <button name="intervention_report_close" string="Close with report" states="confirmed" icon="gtk-go-forward" />
+                            <button name="intervention_close" string="Close" states="confirmed" icon="gtk-ok" />
+                            <field name="state" />     
+     	                    <field name="not_in_report" invisible="1"/>                            
+                       </tree>                       
+                   </field>
+                </page>
+            </xpath>
+        </field>        
+    </record>
+
+    <record id="action_view_account_invoice_intervent" model="ir.actions.act_window">
+            <field name="name">Invoice and intervent</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="account.invoice_tree" />
+            <field name="context">{'form_view_ref':'account.invoice_form'}</field>
+            <!--<field name="search_view_id" ref="hr_analytic_timesheet_trip_search"/>-->
+        </record>
+
+    <act_window
+        domain="[('invoice_id','=',active_id)]"
+        id="act_intervent_list_from_invoice"
+        name="Intervent list"
+        res_model="hr.analytic.timesheet"
+        src_model="account.invoice"/>
+    
+    <!-- Menu -->               
+        <menuitem name="Invoices" 
+                  parent="intervention_report.menu_base_intervention_trip_root" 
+                  id="menu_base_intervention_invoice_list"
+                  sequence="10" />        <!--<menuitem name="Trip list" parent="menu_base_intervention_trip_root" id="menu_base_intervention_trip_list" action="action_view_hr_analytic_timesheet_trip" sequence="20" /> -->
+
+        <menuitem name="Invoice list" 
+                  parent="menu_base_intervention_invoice_list" 
+                  id="menu_account_invoice_intervent" 
+                  action="action_view_account_invoice_intervent" 
+                  sequence="20" />                     
+    </data>
+</openerp>

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+     <record model="hr_timesheet_invoice.factor" id="working_intervent_100">
+        <field name="name">Pay</field>
+        <field name="customer_name">100&#37;</field>
+        <field name="factor" eval="100.0" />
+    </record>
+     <record model="hr_timesheet_invoice.factor" id="personal_intervent_0">
+        <field name="name">Personal</field>
+        <field name="customer_name">0&#37;</field>
+        <field name="factor" eval="0.0" />
+    </record>
+     <record model="hr_timesheet_invoice.factor" id="extra_work_intervent_0">
+        <field name="name">Extra work</field>
+        <field name="customer_name">0&#37;</field>
+        <field name="factor" eval="0.0" />
+    </record>
+     <record model="hr_timesheet_invoice.factor" id="job_intervent_0">
+        <field name="name">Job work</field>
+        <field name="customer_name">0&#37;</field>
+        <field name="factor" eval="0.0" />
+    </record>
+     <record model="hr_timesheet_invoice.factor" id="gratis_intervent_0">
+        <field name="name">Gratis</field>
+        <field name="customer_name">0&#37;</field>
+        <field name="factor" eval="0.0" />
+    </record>
+     <record model="hr_timesheet_invoice.factor" id="warranty_intervent_0">
+        <field name="name">Warranty</field>
+        <field name="customer_name">0&#37;</field>
+        <field name="factor" eval="0.0" />
+    </record>
+     <record model="hr_timesheet_invoice.factor" id="internal_intervent_0">
+        <field name="name">Internal</field>
+        <field name="customer_name">0&#37;</field>
+        <field name="factor" eval="0.0" />
+    </record>
+     <record model="hr_timesheet_invoice.factor" id="free_analysis_intervent_0">
+        <field name="name">Free analysis</field>
+        <field name="customer_name">0&#37;</field>
+        <field name="factor" eval="0.0" />
+    </record>
+     <record model="hr_timesheet_invoice.factor" id="pay_analysis_intervent_100">
+        <field name="name">Pay analysis</field>
+        <field name="customer_name">100&#37;</field>
+        <field name="factor" eval="0.0" />
+    </record>
+    <delete model="hr_timesheet_invoice.factor" id="timesheet_invoice_factor1" />
+    <delete model="hr_timesheet_invoice.factor" id="timesheet_invoice_factor2" />
+    <delete model="hr_timesheet_invoice.factor" id="timesheet_invoice_factor3" />
+    <delete model="hr_timesheet_invoice.factor" id="timesheet_invoice_factor4" />
+  </data>
+</openerp>        

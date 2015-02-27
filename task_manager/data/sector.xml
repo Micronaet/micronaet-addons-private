@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">
+     <!--task.sector-->
+     <record model="task.sector" id="task_sector_accounting">
+        <field name="name">Accounting</field>
+        <field name="manager_id" eval="1" />
+    </record>
+    <record model="task.sector" id="task_sector_openerp">
+        <field name="name">Openerp</field>
+        <field name="manager_id" eval="1" />
+    </record>
+    <record model="task.sector" id="task_sector_software">
+        <field name="name">Software</field>
+        <field name="manager_id" eval="1" />
+    </record>
+    <record model="task.sector" id="task_sector_software_commercial">
+        <field name="name">Software commercial</field>
+        <field name="manager_id" eval="1" />
+    </record>
+    <record model="task.sector" id="task_sector_hardware">
+        <field name="name">Hardware</field>
+        <field name="manager_id" eval="1" />
+    </record>
+     <record model="task.sector" id="task_sector_offer">
+        <field name="name">Offer</field>
+        <field name="manager_id" eval="1" />
+    </record>
+    <record model="task.sector" id="task_sector_hosting">
+        <field name="name">Hosting</field>
+        <field name="manager_id" eval="1" />
+    </record>
+
+     <!--task.sector.category-->
+     <record model="task.sector.category" id="task_sector_accounting_support">
+        <field name="name">Support</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_accounting" />
+    </record>
+    <record model="task.sector.category" id="task_sector_accounting_sprix">
+        <field name="name">Sprix</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_accounting" />
+    </record>
+    <record model="task.sector.category" id="task_sector_accounting_analysis">
+        <field name="name">Analysis</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_accounting" />
+    </record>
+    <record model="task.sector.category" id="task_sector_accounting_report">
+        <field name="name">Report and print</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_accounting" />
+    </record>
+
+    <record model="task.sector.category" id="task_sector_software_support">
+        <field name="name">Support</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_software" />
+    </record>
+    <record model="task.sector.category" id="task_sector_software_bugs">
+        <field name="name">Bugs</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_software" />
+    </record>
+    <record model="task.sector.category" id="task_sector_software_analysis">
+        <field name="name">Analysis</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_software" />
+    </record>
+    <record model="task.sector.category" id="task_sector_software_request">
+        <field name="name">Dummy request</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_software" />
+    </record>
+
+    <record model="task.sector.category" id="task_sector_software_commercial_support">
+        <field name="name">Support</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_software_commercial" />
+    </record>
+    <record model="task.sector.category" id="task_sector_software_commercial_installation">
+        <field name="name">Installation</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_software_commercial" />
+    </record>
+    <record model="task.sector.category" id="task_sector_software_commercial_bug">
+        <field name="name">Bug</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_software_commercial" />
+    </record>
+    <record model="task.sector.category" id="task_sector_software_commercial_antivirus">
+        <field name="name">Antivirus</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_software_commercial" />
+    </record>
+
+    <record model="task.sector.category" id="task_sector_hardware_support">
+        <field name="name">Support</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_hardware" />
+    </record>
+    <record model="task.sector.category" id="task_sector_hardware_damage">
+        <field name="name">Damage</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_hardware" />
+    </record>
+    <record model="task.sector.category" id="task_sector_hardware_server">
+        <field name="name">Server</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_hardware" />
+    </record>
+    <record model="task.sector.category" id="task_sector_hardware_enhance">
+        <field name="name">Request</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_hardware" />
+    </record>
+
+     <record model="task.sector.category" id="task_sector_openerp_server">
+        <field name="name">Server problems</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_openerp" />
+    </record>
+    <record model="task.sector.category" id="task_sector_openerp_analysis">
+        <field name="name">Analysys</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_openerp" />
+    </record>
+    <record model="task.sector.category" id="task_sector_openerp_support">
+        <field name="name">Generic support</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_openerp" />
+    </record>
+    <record model="task.sector.category" id="task_sector_openerp_bugs">
+        <field name="name">Bugs</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_openerp" />
+    </record>
+    <record model="task.sector.category" id="task_sector_openerp_report">
+        <field name="name">Report</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_openerp" />
+    </record>
+
+    <record model="task.sector.category" id="task_sector_offer_openerp">
+        <field name="name">OpenERP</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_offer" />
+    </record>
+    <record model="task.sector.category" id="task_sector_offer_accounting">
+        <field name="name">Accounting</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_offer" />
+    </record>
+    <record model="task.sector.category" id="task_sector_offer_commercial_sw">
+        <field name="name">Commercial software</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_offer" />
+    </record>
+    <record model="task.sector.category" id="task_sector_offer_server">
+        <field name="name">Server</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_offer" />
+    </record>
+    <record model="task.sector.category" id="task_sector_offer_network">
+        <field name="name">Network</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_offer" />
+    </record>
+    <record model="task.sector.category" id="task_sector_offer_hardware">
+        <field name="name">Hardware</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_offer" />
+    </record>
+    <record model="task.sector.category" id="task_sector_offer_antivirus">
+        <field name="name">Antivirus</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_offer" />
+    </record>
+
+    <record model="task.sector.category" id="task_sector_hosting_support">
+        <field name="name">Support</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_hosting" />
+    </record>
+    <record model="task.sector.category" id="task_sector_hosting_web">
+        <field name="name">Web site</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_hosting" />
+    </record>
+    <record model="task.sector.category" id="task_sector_hosting_mail">
+        <field name="name">Mail</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_hosting" />
+    </record>
+    <record model="task.sector.category" id="task_sector_hosting_pec">
+        <field name="name">PEC</field>
+        <field name="sub_manager_id" eval="1" />
+        <field name="sector_id" ref="task_sector_hosting" />
+    </record>
+    <!--<delete model="hr_timesheet_invoice.factor" id="timesheet_invoice_factor1" />-->
+  </data>
+</openerp>        

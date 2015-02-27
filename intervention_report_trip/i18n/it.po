@@ -1,0 +1,234 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# 	* intervention_report_trip
+# <> <>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-06 14:24+0000\n"
+"PO-Revision-Date: 2013-06-06 16:29+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Total Km."
+msgstr "Total Km."
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Confirm"
+msgstr "Conferma"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "To date"
+msgstr "Alla data"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Group By..."
+msgstr "Raggruppa per..."
+
+#. module: intervention_report_trip
+#: model:ir.model,name:intervention_report_trip.model_hr_analytic_timesheet_trip
+msgid "HR timesheet trip"
+msgstr "HR viaggi foglio presenza"
+
+#. module: intervention_report_trip
+#: field:res.users,refund_user:0
+msgid "Refund user"
+msgstr "Rimborso utente"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "From this month"
+msgstr "Da questo mese"
+
+#. module: intervention_report_trip
+#: model:ir.actions.act_window,name:intervention_report_trip.action_generate_intervention_trip
+msgid "Group trip wizard"
+msgstr "Wizard raggruppa viaggi"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Re Confirm"
+msgstr "Riconferma"
+
+#. module: intervention_report_trip
+#: field:hr.analytic.timesheet.trip.step,name:0
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: intervention_report_trip
+#: field:hr.analytic.timesheet.trip.step,from_id:0
+msgid "From partner"
+msgstr "Dal partner"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip.wizard:0
+msgid "Create Trip"
+msgstr "Crea viaggio"
+
+#. module: intervention_report_trip
+#: model:ir.ui.menu,name:intervention_report_trip.menu_base_intervention_trip_generate_wizard
+msgid "Generate day trip"
+msgstr "Genera viaggio giornalieri"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+#: model:ir.actions.act_window,name:intervention_report_trip.action_view_hr_analytic_timesheet_trip
+msgid "Intervent trip"
+msgstr "Viaggio intervento"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Timesheet trip"
+msgstr "Viaggio foglio ore"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "User"
+msgstr "Utente"
+
+#. module: intervention_report_trip
+#: model:ir.ui.menu,name:intervention_report_trip.menu_base_intervention_trip_list_tree
+msgid "Trip list"
+msgstr "Lista viaggi"
+
+#. module: intervention_report_trip
+#: help:hr.analytic.timesheet.trip,refund_day:0
+msgid "If checked the itinerary will be reported in a report"
+msgstr "Se spuntato l'itinerario verrà riportato nella stampa"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Date"
+msgstr "Data"
+
+#. module: intervention_report_trip
+#: field:hr.analytic.timesheet.trip.step,to_id:0
+msgid "To partner"
+msgstr "Al partner"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "From date"
+msgstr "Dalla data"
+
+#. module: intervention_report_trip
+#: model:ir.model,name:intervention_report_trip.model_hr_analytic_timesheet_trip_wizard
+msgid "hr.analytic.timesheet.trip.wizard"
+msgstr "hr.analytic.timesheet.trip.wizard"
+
+#. module: intervention_report_trip
+#: field:hr.analytic.timesheet.trip.step,total_trip:0
+msgid "Distance"
+msgstr "Distanza"
+
+#. module: intervention_report_trip
+#: help:res.users,refund_user:0
+msgid "Used that have refund day on intervent"
+msgstr "Usato per rimporsare il giorno sull'intervento"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Re Draft"
+msgstr "Riavvia"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Intervent list"
+msgstr "Lista interventi"
+
+#. module: intervention_report_trip
+#: field:hr.analytic.timesheet.trip,step_ids:0
+#: model:ir.model,name:intervention_report_trip.model_hr_analytic_timesheet_trip_step
+msgid "Trip step"
+msgstr "Step viaggio"
+
+#. module: intervention_report_trip
+#: model:ir.ui.menu,name:intervention_report_trip.menu_base_intervention_trip_list
+msgid "Trips"
+msgstr "Viaggi"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Step list"
+msgstr "Lista step"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "My trip"
+msgstr "Viaggi personali"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Calculate steps"
+msgstr "Calcola gli step"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Manual distance"
+msgstr "Distanza manuale"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip.wizard:0
+msgid "Intervent report wizard"
+msgstr "Wizard lista interventi"
+
+#. module: intervention_report_trip
+#: field:hr.analytic.timesheet.trip.step,seq:0
+msgid "Sequence"
+msgstr "Sequenza"
+
+#. module: intervention_report_trip
+#: field:res.users,compute_office_trip:0
+msgid "Compute office trip"
+msgstr "Calcola viaggio ufficio"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+#: field:hr.analytic.timesheet.trip,refund_day:0
+msgid "Refund day"
+msgstr "Giorno rimborsato"
+
+#. module: intervention_report_trip
+#: help:res.users,compute_office_trip:0
+msgid ""
+"Compute office trip, all day will be tranfer in analytic trip for this user"
+msgstr ""
+"Calcola il viaggio, tutto il giorno verrà trasferito nel viaggio analitico "
+"per questo utente"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+#: model:ir.model,name:intervention_report_trip.model_res_users
+msgid "Users"
+msgstr "Utenti"
+
+#. module: intervention_report_trip
+#: model:ir.model,name:intervention_report_trip.model_hr_analytic_timesheet
+msgid "Timesheet Line"
+msgstr "Riga Timesheet"
+
+#. module: intervention_report_trip
+#: field:hr.analytic.timesheet.trip.step,trip_id:0
+msgid "Trip"
+msgstr "Viaggio"
+
+#. module: intervention_report_trip
+#: view:hr.analytic.timesheet.trip:0
+msgid "Manual km."
+msgstr "Manual km."
+
+#. module: intervention_report_trip
+#: help:hr.analytic.timesheet.trip.step,total_trip:0
+msgid "Distance in Km from google maps"
+msgstr "Distanza in Km da Google Maps"

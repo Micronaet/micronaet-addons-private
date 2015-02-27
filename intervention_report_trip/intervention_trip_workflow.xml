@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="workflow" id="wf_intervention_trip">
+            <field name="name">hr.analytic.timesheet.trip.workflow</field>
+            <field name="osv">hr.analytic.timesheet.trip</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <record model="workflow.activity" id="act_draft">
+            <field name="wkf_id" ref="wf_intervention_trip" />
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">intervention_trip_draft()</field>
+        </record>
+        <record model="workflow.activity" id="act_confirmed">
+            <field name="wkf_id" ref="wf_intervention_trip" />
+            <field name="name">confirmed</field>
+            <field name="kind">function</field>
+            <field name="action">intervention_trip_confirmed()</field>
+        </record>
+        <record model="workflow.activity" id="act_redraft">
+            <field name="wkf_id" ref="wf_intervention_trip" />
+            <field name="name">redraft</field>
+            <field name="kind">function</field>
+            <field name="action">intervention_trip_redraft()</field>
+        </record>
+
+        <record model="workflow.transition" id="t1">
+            <field name="act_from" ref="act_draft" />
+            <field name="act_to" ref="act_confirmed" />
+            <field name="signal">intervention_trip_confirmed</field>
+        </record>
+        <record model="workflow.transition" id="t2">
+            <field name="act_from" ref="act_confirmed" />
+            <field name="act_to" ref="act_redraft" />
+            <field name="signal">intervention_trip_redraft</field>
+        </record>
+        <record model="workflow.transition" id="t3">
+            <field name="act_from" ref="act_redraft" />
+            <field name="act_to" ref="act_confirmed" />
+            <field name="signal">intervention_trip_reconfirmed</field>
+        </record>
+    </data>
+</openerp>

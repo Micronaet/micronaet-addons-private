@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    <!--res.partner.web.type-->
+    <record id="res_partner_web_type_form" model="ir.ui.view">
+        <field name="name">res.partner.web.type.form</field>
+        <field name="model">res.partner.web.type</field>
+        <field name="arch" type="xml">
+            <form string="Partner" version="7.0">
+            <sheet>
+                <group>    
+                <field name="name"/>
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="res_partner_web_type_tree" model="ir.ui.view">
+        <field name="name">res.partner.web.type.tree</field>
+        <field name="model">res.partner.web.type</field>
+        <field name="arch" type="xml">            
+            <tree string="Partner" editable="bottom">
+                <field name="name"/>
+                <field name="note"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_res_partner_web_type" model="ir.actions.act_window">
+            <field name="name">Type of web</field>
+            <field name="res_model">res.partner.web.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="res_partner_web_type_tree"/>
+            <!--<field name="search_view_id" ref="hr_timesheet_line_search"/>
+            <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,'search_default_user_id':uid,'search_default_near_today':True}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to see intervent view.
+              </p><p>
+                List of intervent of all dependent
+              </p>
+            </field>-->
+        </record>
+    
+    <!--res.partner.web.password.type-->
+    <record id="res_partner_web_password_type_form" model="ir.ui.view">
+        <field name="name">res.partner.web.password.type.form</field>
+        <field name="model">res.partner.web.password.type</field>
+        <field name="arch" type="xml">
+            <form string="Type of password" version="7.0">
+            <sheet>
+                <group>    
+                <field name="name"/>
+                <field name="note"/>
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+     
+    <record id="res_partner_web_password_type_tree" model="ir.ui.view">
+        <field name="name">res.partner.web.password.type.tree</field>
+        <field name="model">res.partner.web.password.type</field>
+        <field name="arch" type="xml">
+            <tree string="Type of password" editable="bottom">
+                <field name="name"/>
+                <field name="note"/>
+            </tree>
+        </field>
+    </record>
+         
+    <record id="action_res_partner_web_password_type" model="ir.actions.act_window">
+            <field name="name">Password of web</field>
+            <field name="res_model">res.partner.web.password.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="res_partner_web_password_type_tree"/>
+    </record>
+
+    <!--res.partner.web-->
+    <record id="res_partner_web_form" model="ir.ui.view">
+        <field name="name">res.partner.web.form</field>
+        <field name="model">res.partner.web</field>
+        <field name="arch" type="xml">
+            <form string="Type of password" version="7.0">
+              <sheet>
+                <group colspan='4' col='4'>
+                <field name="name"/>
+                <field name="on_line"/>
+                <field name="partner_id" domain="[('is_provider','=', False)]"/>
+                <field name="hosting_id" domain="[('is_provider','=', True)]"/>
+                <field name="hosted"/>
+                <field name="active" attrs="{'invisible':[('hosted','=',False)]}"/>                                
+                <notebook colspan='4'>
+                    <page string="Info">
+                        <group colspan='4'>
+                            <field name="deadline"/>
+                            <field name="pay_date"/>
+                            <separator string='Informazioni Whois' colspan='4'/>
+                            <field name="status"/>
+                            <field name="create_domain"/>
+                            <field name="last_update"/>
+                            <field name="expire_date"/>
+                            <field name="contact_name"/>
+                            <field name="technical_contact"/>
+                            <field name="organization"/>
+                        </group>
+                    </page>
+                    <page string="Password">
+                        <group colspan='4'>
+                            <field name="password_ids" colspan='4' nolabel='1'/>
+                        </group>
+                    </page>
+                    <page string="Mail">
+                        <group>                            
+                            <field name="webmail" widget='url'/>
+                            <field name="webmail_admin" widget='url'/>
+                            <field name="mail_server_ids">
+                                <tree string="Server mail" editable="bottom">
+                                    <field name="protocollo"/>
+                                    <field name="name"/>
+                                    <field name="port"/>
+                                    <field name="ssl"/>
+                                    <field name="authentication"/>
+                                </tree>
+                            </field>
+                            <field name="mail_ids">
+                                <tree string="Mail" editable="bottom">
+                                    <field name="postmaster"/>
+                                    <field name="name"/>
+                                    <field name="account"/>
+                                    <field name="password"/>
+                                    <field name="note"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Whois">
+                        <group colspan='4'>
+                            <button name="button_whois" string="Get whois" type='object'/>
+                            <field name="whois" colspan='4' nolabel='1'/>    
+                        </group>
+                    </page>
+                    <page string="Note">
+                        <group colspan='4'>
+                            <field name="note" colspan='4' nolabel='1'/>
+                        </group>
+                    </page>                    
+                </notebook>
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="res_partner_web_tree" model="ir.ui.view">
+        <field name="name">res.partner.web.tree</field>
+        <field name="model">res.partner.web</field>
+        <field name="arch" type="xml">
+            <tree string="Type of password">
+                <field name="name"/>
+                <field name="note"/>
+                <field name="partner_id"/>
+                <field name="hosting_id"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="action_res_partner_web" model="ir.actions.act_window">
+            <field name="name">Web site</field>
+            <field name="res_model">res.partner.web</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="res_partner_web_tree"/>
+    </record>    
+
+    <!--res.partner.web.password-->
+
+    <record id="res_partner_web_password_form" model="ir.ui.view">
+        <field name="name">res.partner.web.password.form</field>
+        <field name="model">res.partner.web.password</field>
+        <field name="arch" type="xml">
+            <form string="Password" version="7.0">
+            <sheet>
+                <group colspan='4' col='4'>
+                <field name="name"/>
+                <field name="address" widget='url'/>
+                <field name="password"/>
+                <field name="type_id"/>
+                <newline/>
+                <separator string="Extra info" colspan='4'/>
+                <field name="extra_info" colspan='4' nolabel='1'/>
+                <separator string="Note" colspan='4'/>                
+                <field name="note" colspan='4' nolabel='1'/>
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="res_partner_web_password_tree" model="ir.ui.view">
+        <field name="name">res.partner.web.password.tree</field>
+        <field name="model">res.partner.web.password</field>
+        <field name="arch" type="xml">
+            <tree string="Password">
+                <field name="name"/>
+                <field name="address"/>
+                <field name="type_id"/>
+            </tree>
+        </field>
+    </record>
+
+<!--res.partner-->
+
+    <record id='res_partner_list_form' model='ir.ui.view'>
+        <field name='name'>res.partner.list.form</field>
+        <field name='model'>res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name='arch' type='xml'>
+        <xpath expr='/form/sheet/notebook/page[@string="Contacts"]' position='after'>
+            <page string='Web'>
+                <group>
+                <field name='is_provider' domain="[('is_provider','=',True)]"/>
+                <field name='web_ids' colspan='4' attrs='{"invisible":[("is_provider","=",True)]}'> <!-- context="{'default_partner_id':partner_id}"-->
+                    <tree string="Partner">
+                        <field name="partner_id" invisible='1'/>
+                        <field name="name"/>
+                        <field name="note"/>
+                        <field name="hosting_id"/>
+                    </tree>               
+                </field>
+                </group>
+                <field name='provider_web_ids' colspan='4' attrs='{"invisible":[("is_provider","=",False)]}'>
+                    <tree string="Partner">
+                        <field name="name"/>
+                        <field name="note"/>
+                        <field name="hosting_id"/>
+                    </tree>
+                </field>
+            </page>
+        </xpath>
+        </field>
+    </record>
+    
+    <!--Menuitem-->
+    <menuitem name="Web site" parent="base.menu_sales" id="menu_res_partner_web_root" sequence="20" />        
+        <!--<menuitem name="User" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_insert" action="action_view_hr_analytic_timesheet_insert" sequence="20" />        -->
+        
+        <menuitem name="Web site" parent="menu_res_partner_web_root" id="menu_res_partner_web_configuration_web" action="action_res_partner_web" sequence="10" /> 
+        <menuitem name="Configuration" parent="menu_res_partner_web_root" id="menu_res_partner_web_configuration" sequence="20" />        
+                            
+            <menuitem name="Web site type" parent="menu_res_partner_web_configuration" id="menu_res_partner_web_configuration_type" action="action_res_partner_web_type" sequence="10" />        
+            <menuitem name="Web site password" parent="menu_res_partner_web_configuration" id="menu_res_partner_web_configuration_password" action="action_res_partner_web_password_type" sequence="20" />        
+            
+    </data>
+</openerp>
+

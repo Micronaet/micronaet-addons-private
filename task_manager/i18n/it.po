@@ -1,0 +1,570 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# 	* task_manager
+# <> <>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-08 08:53+0000\n"
+"PO-Revision-Date: 2014-04-08 12:39+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Contact extra info"
+msgstr "Extra info contatto"
+
+#. module: task_manager
+#: help:task.activity,sector_id:0
+msgid "Split in sector the task list"
+msgstr "Divisi in settore la lista dei task"
+
+#. module: task_manager
+#: field:task.partner.mood,name:0
+msgid "Mood"
+msgstr "Umore"
+
+#. module: task_manager
+#: model:ir.model,name:task_manager.model_task_activity view:task.activity:0
+msgid "Task activity"
+msgstr "Attività"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Workers"
+msgstr "Lavoratore"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Group By..."
+msgstr "Raggruppa per..."
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "My task"
+msgstr "Miei task"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Child tasks:"
+msgstr "Task figli:"
+
+#. module: task_manager
+#: view:task.activity:0 selection:task.activity,state:0
+msgid "To do"
+msgstr "Da fare"
+
+#. module: task_manager
+#: field:task.activity,message_unread:0
+msgid "Unread Messages"
+msgstr "Messaggi non letti"
+
+#. module: task_manager
+#: field:task.activity,completed_date:0 selection:task.activity,state:0
+msgid "Completed"
+msgstr "Completato"
+
+#. module: task_manager
+#: field:task.activity,name:0
+msgid "Title"
+msgstr "Titolo"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Timesheet"
+msgstr "Foglio presenza"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Partner ref."
+msgstr "Rif. partner"
+
+#. module: task_manager
+#: field:task.activity,parent_id:0
+msgid "Parent activity"
+msgstr "Attività padre"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Open task"
+msgstr "Task aperti"
+
+#. module: task_manager
+#: field:task.activity,user_id:0 field:task.activity.message,user_id:0
+msgid "Create by"
+msgstr "Creato da"
+
+#. module: task_manager
+#: view:task.activity:0 field:task.activity,sector_id:0
+#: field:task.sector,name:0 field:task.sector.category,name:0
+#: field:task.sector.category,sector_id:0
+msgid "Sector"
+msgstr "Settore"
+
+#. module: task_manager
+#: view:task.activity:0 field:task.activity.message,task_id:0
+msgid "Task"
+msgstr "Attività"
+
+#. module: task_manager
+#: help:task.activity,manager_opt_in:0
+msgid "Send notification to manager of workflow work in progress"
+msgstr "Invia notifica al manager dell'avanzamento workflow"
+
+#. module: task_manager
+#: field:task.activity,message_ids:0
+msgid "Messages"
+msgstr "Messaggi"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Creators"
+msgstr "Creatori"
+
+#. module: task_manager
+#: help:task.activity,message_unread:0
+msgid "If checked new messages require your attention."
+msgstr "Se spuntato il nuovo messaggio richiede la vostra attenzione"
+
+#. module: task_manager
+#: model:ir.model,name:task_manager.model_task_media
+msgid "Task receive media"
+msgstr "Media (ricezione task)"
+
+#. module: task_manager
+#: help:task.activity,sector_category_id:0
+msgid "Split sector in a category list"
+msgstr "Divide il settore in una lista di categoria"
+
+#. module: task_manager
+#: help:task.activity,message_summary:0
+msgid ""
+"Holds the Chatter summary (number of messages, ...). This summary is "
+"directly in html format in order to be inserted in kanban views."
+msgstr ""
+"Holds the Chatter summary (number of messages, ...). This summary is "
+"directly in html format in order to be inserted in kanban views."
+
+#. module: task_manager
+#: help:task.activity.message,note:0
+msgid "Large detailed message"
+msgstr "Dettaglio messaggio"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "From date"
+msgstr "Dalla data"
+
+#. module: task_manager
+#: view:task.activity:0 field:task.activity,partner_id:0
+msgid "Partner"
+msgstr "Partner"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Re start"
+msgstr "Riavvia"
+
+#. module: task_manager
+#: field:task.activity,manager_opt_in:0
+msgid "Manager opt in"
+msgstr "Opt in (manager)"
+
+#. module: task_manager
+#: help:task.activity,obsolete:0
+msgid "Hide task for old elements that don't need to be showed"
+msgstr ""
+"Nascondi i task per elementi vecchi che non necessitano di essere più visti"
+
+#. module: task_manager
+#: field:task.activity,priority_id:0 field:task.media,name:0
+#: field:task.priority,name:0
+msgid "Priority"
+msgstr "Priorità"
+
+#. module: task_manager
+#: view:task.activity:0 field:task.activity,state:0
+#: field:task.activity.message,state:0
+msgid "State"
+msgstr "Stato"
+
+#. module: task_manager
+#: field:task.activity,message_follower_ids:0
+msgid "Followers"
+msgstr "Follower"
+
+#. module: task_manager
+#: help:task.activity,note:0
+msgid "Large description of activity"
+msgstr "Descrizione dettagliata attività"
+
+#. module: task_manager
+#: field:task.activity,to_recontact:0
+msgid "To recontact"
+msgstr "Da ricontattare"
+
+#. module: task_manager
+#: model:ir.model,name:task_manager.model_task_sector
+msgid "Task sector"
+msgstr "Settore attività"
+
+#. module: task_manager
+#: model:ir.model,name:task_manager.model_task_priority
+msgid "Task priority"
+msgstr "Priorità attività"
+
+#. module: task_manager
+#: help:task.activity,media_in_id:0
+msgid "Media that start tasks (ex.: phone)"
+msgstr "Media utilizzato per avvio task (es.: telefono)"
+
+#. module: task_manager
+#: help:task.sector,manager_id:0
+msgid "Set up also manager for task intervent"
+msgstr "Imposta anche il manager per l'intervento attività"
+
+#. module: task_manager
+#: field:task.activity,assigned_date:0
+msgid "Assigned date"
+msgstr "Data assegnamento"
+
+#. module: task_manager
+#: field:task.activity,deadline_date:0
+msgid "Deadline"
+msgstr "Scadenza"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Share a message..."
+msgstr "Condividi il messaggio..."
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Complete"
+msgstr "Completa"
+
+#. module: task_manager
+#: field:task.activity,contact_id:0
+msgid "Contact"
+msgstr "Contatto"
+
+#. module: task_manager
+#: field:task.sector,manager_id:0 field:task.sector.category,sub_manager_id:0
+msgid "Manager for the sector"
+msgstr "Manager per il settore"
+
+#. module: task_manager
+#: field:task.activity,manager_user_id:0
+msgid "Managed by"
+msgstr "Gestito da"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Only parent"
+msgstr "Solo le attività padre"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "To deadline date"
+msgstr "Alla data di scadenza"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Start Date"
+msgstr "Data avvio"
+
+#. module: task_manager
+#: field:task.activity,sector_category_id:0 field:task.sector,category_ids:0
+msgid "Category"
+msgstr "Categoria"
+
+#. module: task_manager
+#: view:task.activity:0 selection:task.activity,state:0
+msgid "Working"
+msgstr "In lavorazione"
+
+#. module: task_manager
+#: field:task.activity,media_out_id:0
+msgid "Response media"
+msgstr "Media per la risposta"
+
+#. module: task_manager
+#: view:task.activity:0 view:task.activity.message:0 field:task.media,note:0
+#: field:task.partner.mood,note:0 field:task.priority,note:0
+#: field:task.sector,note:0 field:task.sector.category,note:0
+msgid "Note"
+msgstr "Note"
+
+#. module: task_manager
+#: view:task.activity:0 view:task.activity.message:0
+#: selection:task.activity.message,state:0
+msgid "Internal"
+msgstr "Interna"
+
+#. module: task_manager
+#: selection:task.activity,state:0 selection:task.activity.message,state:0
+msgid "Draft"
+msgstr "Bozza"
+
+#. module: task_manager
+#: help:task.activity,max_duration:0
+msgid "Max time for coplete task, extra time ask help"
+msgstr ""
+"Tempo massimo per completare l'attività, per tempo superiore chiedere "
+"supporto"
+
+#. module: task_manager
+#: help:task.activity,to_recontact:0
+msgid "Call customer or he recall after?"
+msgstr "Richiamare il cliente in caso contrario richiama lui"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Re assigned"
+msgstr "Riassegna"
+
+#. module: task_manager
+#: field:task.activity,message_is_follower:0
+msgid "Is a Follower"
+msgstr "E' un follower"
+
+#. module: task_manager
+#: model:ir.model,name:task_manager.model_task_partner_mood
+msgid "Partner mood"
+msgstr "Umore partner"
+
+#. module: task_manager
+#: help:task.sector,note:0
+msgid "Note about sector"
+msgstr "Note relative al settore"
+
+#. module: task_manager
+#: field:task.activity,start_date:0 field:task.activity.message,date:0
+msgid "Creation date"
+msgstr "Data creazione"
+
+#. module: task_manager
+#: field:task.activity,message_summary:0
+msgid "Summary"
+msgstr "Riepilogo"
+
+#. module: task_manager
+#: help:task.media,note:0
+msgid "Note about media that generate task"
+msgstr "Note circa il media che ha generato il task"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Assign"
+msgstr "Assegna"
+
+#. module: task_manager
+#: field:task.activity,assigned_user_id:0
+msgid "Assigned to"
+msgstr "Assegnato a"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Linked activity"
+msgstr "Attività collegata"
+
+#. module: task_manager
+#: field:task.activity,task_ids:0
+msgid "Child activity"
+msgstr "Attività figlio"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Deadline Date"
+msgstr "Data scadenza"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Active parent"
+msgstr "Padri (attivi)"
+
+#. module: task_manager
+#: model:ir.ui.menu,name:task_manager.menu_base_task_manager
+msgid "Task Manager"
+msgstr "Gestore attività"
+
+#. module: task_manager
+#: selection:task.activity,state:0
+msgid "Assigned"
+msgstr "Assegnata"
+
+#. module: task_manager
+#: view:task.activity:0 view:task.activity.message:0
+#: selection:task.activity.message,state:0
+msgid "Done"
+msgstr "Fatta"
+
+#. module: task_manager
+#: help:task.partner.mood,note:0
+msgid "Note about partner mood"
+msgstr "Note circa l'umore del partner"
+
+#. module: task_manager
+#: view:task.activity:0 selection:task.activity,state:0
+msgid "Cancel"
+msgstr "Annulla"
+
+#. module: task_manager
+#: help:task.sector.category,sub_manager_id:0
+msgid "Set up also manager for task intervent, empty set sector manager"
+msgstr ""
+"Imposta anche il manager per le attività intervento, vuoto imposta il "
+"manager di settore"
+
+#. module: task_manager
+#: help:task.activity,customer_opt_in:0
+msgid "Send notification to customer of workflow work in progress"
+msgstr "Invia notifica al cliente dell'avanzamento lavori"
+
+#. module: task_manager
+#: field:task.activity,customer_opt_in:0
+msgid "Customer opt in"
+msgstr "Opt in (cliente)"
+
+#. module: task_manager
+#: model:ir.actions.act_window,name:task_manager.action_view_task_activity
+msgid "All tasks"
+msgstr "Tutte le attività"
+
+#. module: task_manager
+#: field:task.activity.message,note:0
+msgid "Details"
+msgstr "Dettagli"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "From deadline date"
+msgstr "Dalla data di scadenza"
+
+#. module: task_manager
+#: help:task.priority,note:0
+msgid "Note about priority"
+msgstr "Note circa la priorità"
+
+#. module: task_manager
+#: view:task.activity:0 field:task.activity,return_date:0
+msgid "Return"
+msgstr "Ritorna"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Returned"
+msgstr "Ritornata"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "To date"
+msgstr "Alla data"
+
+#. module: task_manager
+#: field:task.activity,sequence:0
+msgid "Ref."
+msgstr "Rif."
+
+#. module: task_manager
+#: model:ir.model,name:task_manager.model_task_sector_category
+msgid "Task sector category"
+msgstr "Settore categoria attività"
+
+#. module: task_manager
+#: view:task.activity:0 field:task.activity.message,name:0
+msgid "Message"
+msgstr "Messaggio"
+
+#. module: task_manager
+#: selection:task.activity,state:0
+msgid "Return to sender"
+msgstr "Ritornato al mittente"
+
+#. module: task_manager
+#: field:task.activity,todo_date:0
+msgid "To do date"
+msgstr "Data stato 'da fare'"
+
+#. module: task_manager
+#: field:task.activity,working_date:0
+msgid "Working date"
+msgstr "Data stato lavorazione"
+
+#. module: task_manager
+#: field:task.priority,seq:0
+msgid "Order"
+msgstr "Ordine"
+
+#. module: task_manager
+#: field:task.activity,max_duration:0
+msgid "Max duration"
+msgstr "Durata massima"
+
+#. module: task_manager
+#: field:task.activity,note:0
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: task_manager
+#: help:task.activity,parent_id:0
+msgid "Set a parent activity for structured tasks"
+msgstr "Imposta la attività padre per le attività strutturate"
+
+#. module: task_manager
+#: field:task.activity,media_in_id:0
+msgid "Contact media"
+msgstr "Media per il contatto"
+
+#. module: task_manager
+#: field:task.activity,partner_ref:0
+msgid "Partner reference"
+msgstr "Riferimento partner"
+
+#. module: task_manager
+#: help:task.activity,media_out_id:0
+msgid "Set the type of response (by phone, by intervent etc.)"
+msgstr "Imposta il tipo di risposta (per telefono, intervento, ecc)"
+
+#. module: task_manager
+#: field:task.activity,obsolete:0
+msgid "Obsolete"
+msgstr "Obsoleta"
+
+#. module: task_manager
+#: model:ir.ui.menu,name:task_manager.menu_base_task_manager_activity
+msgid "All task"
+msgstr "Tutte le attività"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Manager"
+msgstr "Manager"
+
+#. module: task_manager
+#: help:task.sector.category,note:0
+msgid "Note about sector category"
+msgstr "Note circa il settore categoria"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Workflow info"
+msgstr "Info workflow"
+
+#. module: task_manager
+#: model:ir.model,name:task_manager.model_task_activity_message
+#: view:task.activity.message:0
+msgid "Task activity message"
+msgstr "Messaggio attività"
+
+#. module: task_manager
+#: view:task.activity:0
+msgid "Messages:"
+msgstr "Messaggi:"

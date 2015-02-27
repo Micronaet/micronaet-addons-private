@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    <!-- res.users -->    
+    <record id='view_res_users_form_extra' model='ir.ui.view'>
+        <field name='name'>User trip field</field>
+        <field name='model'>res.users</field>
+        <field name='inherit_id' ref='base.view_users_form' />
+        <field name='arch' type='xml'>
+            <field name="signature" position="after"> 
+                <field name="compute_office_trip" /> 
+                <field name="refund_user" /> 
+            </field>
+        </field>
+    </record>
+
+    <!-- hr.analytic.timesheet -->    
+    
+    <record id='view_hr_analytic_timesheet_form_extra' model='ir.ui.view'>
+        <field name='name'>HR analytic timesheet form</field>
+        <field name='model'>hr.analytic.timesheet</field>
+        <field name='inherit_id' ref='intervention_report.view_hr_analytic_timesheet_form' />
+        <field name='arch' type='xml'>
+            <field name="to_invoice" position="after"> 
+                <field name="trip_id" attrs="{'invisible':[('extra_planned','=',False)]}"/>
+                <field name="extra_planned" invisible='1'/> 
+            </field>
+        </field>
+    </record>
+    
+    <record id='view_hr_analytic_timesheet_tree_extra' model='ir.ui.view'>
+        <field name='name'>HR analytic timesheet list</field>
+        <field name='model'>hr.analytic.timesheet</field>
+        <field name='inherit_id' ref='intervention_report.view_hr_analytic_timesheet_tree' />
+        <field name='arch' type='xml'>
+            <field name="mode" position="after"> 
+                <field name="trip_id" /> 
+            </field>
+        </field>
+    </record>
+    
+    <!-- hr.analytic.timesheet.trip -->    
+     <record id="hr_analytic_timesheet_trip_search" model="ir.ui.view">
+        <field name="name">hr.analytic.timesheet.trip.search</field>
+        <field name="model">hr.analytic.timesheet.trip</field>
+        <field name="arch" type="xml">
+            <search string="Timesheet trip">
+                <filter name="refund_day" string="Refund day" domain="[('refund_day','=',True),]" />
+                <filter name="manual_total" string="Manual distance" domain="[('manual_total','=',True),]" />
+                <field name="user_id" string="My trip" filter_domain="[('user_id','=',user_id)]"/>
+
+                <filter name="this_month" string="From this month" domain="[('date','&lt;',context_today().strftime('%%Y-%%m-01 00:00:00'))]" icon="terp-dolar"/>
+                <separator />
+                <field name="date" string="From date" filter_domain="[('date','&gt;=',self)]"/>
+                <field name="date" string="To date" filter_domain="[('date','&lt;=',self)]"/>
+                <field name="user_id" string="User" filter_domain="[('user_id','=',self)]"/>
+
+                <group expand="1" string="Group By...">
+                    <filter string="Users" icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
+                    <filter string="Date" icon="terp-go-month" domain="[]" context="{'group_by':'date'}"/>
+                </group>
+            </search>
+        </field>
+     </record>
+            
+    <record id='view_hr_analytic_timesheet_trip_form' model='ir.ui.view'>
+        <field name='name'>HR analytic timesheet trip</field>
+        <field name='model'>hr.analytic.timesheet.trip</field>
+        <field name='arch' type='xml'>
+            <form string="Intervent trip" version="7.0">
+                <header>
+                    <button name="intervention_trip_confirmed" string="Confirm" states="draft" icon="gtk-ok" />
+                    <button name="intervention_trip_reconfirmed" string="Re Confirm" states="redraft" icon="gtk-ok" />
+                    <button name="intervention_trip_redraft" string="Re Draft" states="confirmed" icon="gtk-go-back" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,redraft" readonly="1"/>
+                </header>
+                <sheet>
+                   <group colspan="4">
+                       <field name="name"/>
+                   </group>
+
+                   <group colspan="4" col="4">                   
+                      <field name="user_id" /> <!--on_change="on_change_create_name(user_id,date)"/>-->
+	                  <field name="date" /> <!-- on_change="on_change_create_name(user_id,date)"/>-->
+                   </group>
+
+                   <group colspan="4">
+	                  <field name="intervent_ids" context="{'form_view_ref':'intervention_report.view_hr_analytic_timesheet_form',}" >
+	                      <tree string="Intervent list" colors="grey:extra_planned">
+	                          <field name="date_start"/>
+	                          <field name="intervent_duration"/>
+	                          <field name="intervent_partner_id"/>
+	                          <field name="mode"/>
+	                          <field name="user_id"/>
+	                          <field name="ref"/>
+	                          <field name="google_from"/>
+	                          <field name="google_to"/>	                          
+	                          <field name="extra_planned" invisible="1" />	                          
+	                          <field name="state"/>
+	                      </tree>
+	                  </field>
+                   </group>
+                   <button name="calculate_step_list" string="Calculate steps" type="object" />
+                   <group colspan="4" col="4">
+	                      <field name="total_trip" readonly="1"/>
+	                      <field name="refund_day" />
+	                      <field name="manual_total" />
+	                      <field name="manual_total_trip" attrs="{'invisible':[('manual_total','=',False)],'required':[('manual_total','=',True)]}"/>
+
+                          <field name="step_ids" string="Step starting from office" colspan="4">
+	                          <tree string="Step list" colors="red:total_trip==0">
+	                              <field name="name"/>
+	                              <field name="from_id"/>
+	                              <field name="to_id"/>
+	                              <field name="total_trip"/>
+	                          </tree>
+	                          <form string="Step list">
+	                              <field name="name"/>
+	                              <field name="from_id"/>
+	                              <field name="to_id"/>
+	                              <field name="total_trip"/>
+	                          </form>
+                          </field>
+
+	                      <field name="total_trip_company" readonly="1"/>
+	                      <button name="%(action_view_intervent_create_report_wizard)d" string="Add new" type="action" context="{'trip_user_id':user_id,'trip_date':date}"/>
+	                      <newline/>
+	                      <field name="manual_total_company" /> 
+	                      <field name="manual_total_trip_company" attrs="{'invisible':[('manual_total_company','=',False)],'required':[('manual_total_company','=',True)]}"/>
+	                  
+	                      <field name="company_step_ids"  string="Step starting from company" colspan="4">
+	                          <tree string="Step list" colors="red:total_trip==0">
+	                              <field name="name"/>
+	                              <field name="from_id"/>
+	                              <field name="to_id"/>
+	                              <field name="total_trip"/>
+	                          </tree>
+	                          <form string="Step list">
+	                              <field name="name"/>
+	                              <field name="from_id"/>
+	                              <field name="to_id"/>
+	                              <field name="total_trip"/>
+	                          </form>
+	                      </field>
+                   </group>
+                </sheet>
+            </form>
+        </field>
+    </record>  
+
+    <record id='view_hr_analytic_timesheet_trip_tree' model='ir.ui.view'>
+        <field name='name'>HR analytic timesheet trip list</field>
+        <field name='model'>hr.analytic.timesheet.trip</field>
+        <field name='arch' type='xml'>
+            <tree string="Intervent trip" colors="green:manual_total">
+                <field name="name" />
+                <field name="date" /> 
+                <field name="user_id" /> 
+                <field name="refund_day" />
+                <field name="manual_total" /> 
+                <field name="manual_total_trip" sum="Manual km."/> 
+                <field name="total_trip" sum="Total Km."/> 
+                <field name="total_intervent" />
+                
+                <button name="intervention_trip_confirmed" string="Confirm" states="draft" icon="gtk-ok" />
+                <button name="intervention_trip_reconfirmed" string="Re Confirm" states="redraft" icon="gtk-ok" />
+                <button name="intervention_trip_redraft" string="Re Draft" states="confirmed" icon="gtk-go-back" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>  
+
+    <!--CALENDARS: -->
+    <!--<record model="ir.ui.view" id="view_hr_analytic_timesheet_calendar">
+        <field name="name">intervention.report.calendar</field>
+        <field name="model">hr.analytic.timesheet</field>
+        <field name="priority" eval="10"/>
+        <field name="arch" type="xml">
+            <calendar color="state" date_start="date_start" date_delay="intervent_duration" string="Intervention" mode="week">
+                <field name="intervent_partner_id"/>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="mode"/>
+            </calendar>
+        </field>
+    </record>      -->
+    <!--ACTION-->          
+    <record id="action_view_hr_analytic_timesheet_trip" model="ir.actions.act_window">
+            <field name="name">Intervent trip</field>
+            <field name="res_model">hr.analytic.timesheet.trip</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hr_analytic_timesheet_trip_tree"/>
+            <field name="search_view_id" ref="hr_analytic_timesheet_trip_search"/>            
+        </record>
+
+    <!-- Menu -->       
+    <!--<menuitem name="Trip manage" parent="hr.menu_hr_root" id="menu_base_intervention_trip_root" sequence="6" />-->
+        <menuitem name="Trips" 
+                  parent="intervention_report.menu_base_intervention_trip_root" 
+                  id="menu_base_intervention_trip_list"
+                  sequence="10" />
+
+        <menuitem name="Trip list" 
+                  parent="menu_base_intervention_trip_list" 
+                  id="menu_base_intervention_trip_list_tree" 
+                  action="action_view_hr_analytic_timesheet_trip" 
+                  sequence="20" />       
+    </data>
+</openerp>

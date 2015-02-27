@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    <!-- inherit view-->
+    <record id='view_task_activity_form_meeting' model='ir.ui.view'>
+        <field name='name'>task.activity.form.meeting</field>
+        <field name='model'>task.activity</field>
+        <field name='inherit_id' ref='task_manager.view_task_activity_form' />
+        <field name='arch' type='xml'>
+            <xpath expr="/form/sheet/notebook/page[@string='Message']" position="after">
+                <page string="Calendar">
+                    <group colspan="4" col="4">
+                        <field name="meeting_ids" nolabel="1" colspan="4">
+                            <tree string="Meeting">
+                                <field name="name"/>
+                                <field name="date"/>
+                                <field name="duration"/>
+                                <field name="user_id"/>                                
+                                <field name="location"/>
+                                <field name="description"/>
+                                <field name="state" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>    
+       </field>
+    </record>
+    
+    <record model="ir.ui.view" id="view_crm_meeting_task_form">
+        <field name="name">crm.meeting.task.form</field>
+        <field name="model">crm.meeting</field>
+        <field name="inherit_id" ref="base_calendar.view_crm_meeting_form"/>
+        <field name="arch" type="xml">
+            <field name="date" position="before">
+                <!--<label for="task_id" class="oe_edit_only"/>-->
+                <field name="task_id" readonly="1" attrs="{'invisible':[('task_id','=',False)]}"/>
+            </field>
+        </field>
+    </record>
+    </data>
+</openerp>

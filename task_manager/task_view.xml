@@ -1,0 +1,433 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    <!-- inherit view-->
+      <!--task.activity-->
+     <record id="view_task_activity_search" model="ir.ui.view">
+            <field name="name">task.activity.search</field>
+            <field name="model">task.activity</field>
+            <field name="arch" type="xml">
+                <search string="Timesheet">
+                    <field name="sequence"/>
+                    <field name="name"/>
+
+                    <field name="user_id"/>
+                    <field name="assigned_user_id"/>
+                    <field name="manager_user_id"/>
+
+                    <field name="partner_id"/>
+                    <field name="contact_id"/>
+                    <field name="partner_ref" string="Partner ref." filter_domain="[('partner_ref','ilike',self)]"/>
+
+                    <field name="start_date" string="From date" filter_domain="[('start_date','&gt;=',self)]"/>
+                    <field name="start_date" string="To date" filter_domain="[('start_date','&lt;=',self)]"/>
+                    <field name="deadline_date" string="From deadline date" filter_domain="[('deadline_date','&gt;=',self)]"/>
+                    <field name="deadline_date" string="To deadline date" filter_domain="[('deadline_date','&lt;=',self)]"/>
+                    <separator/>
+                
+                    <filter name="my_task" string="My task" domain="['|',('manager_user_id','=',uid),('assigned_user_id','=',uid),('state','not in',('cancel','completed',)),('parent_id','=',False)]" />
+                    <filter name="active" string="Open task" domain="[('state','not in',('cancel','completed',)),]" />
+                    <filter name="only_parent" string="Only parent" domain="[('parent_id','=',False)]" />
+                    <filter name="active_parent" string="Active parent" domain="[('state','not in',('cancel','completed',)),('parent_id','=',False)]" />
+                    <separator/>
+               
+                    <!--<filter name="today" string="Today" domain="[('date_start','&gt;=',context_today().strftime('%%Y-%%m-%%d 00:00:00')),('date_start','&lt;=',context_today().strftime('%%Y-%%m-%%d 23:59:59'))]" icon="terp-dolar"/>
+                    <filter name="near_today" string="Near today (+/-3 gg)" domain="[('date_start','&lt;',(context_today()+relativedelta(days=3)).strftime('%%Y-%%m-%%d 00:00:00')),('date_start','&gt;',(context_today()-relativedelta(days=3)).strftime('%%Y-%%m-%%d 00:00:00'))]" icon="terp-dolar"/>
+                    <filter name="this_year" string="This year" domain="[('date_start','&gt;=',context_today().strftime('%%Y-01-01 00:00:00')),('date_start','&lt;=',context_today().strftime('%%Y-12-31 23:59:59'))]" icon="terp-dolar"/>
+                    <separator/>-->
+                
+                    <group expand="0" string="Group By...">
+                        <filter string="Creators" icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
+                        <filter string="Workers" icon="terp-personal" domain="[]" context="{'group_by':'assigned_user_id'}"/>
+                        <filter string="Manager" icon="terp-personal" domain="[]" context="{'group_by':'manager_user_id'}"/>
+                        <filter string="Partner" name="partner_group" icon="terp-personal" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="State" icon="terp-personal" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Start Date" icon="terp-go-month" domain="[]" context="{'group_by':'start_date'}"/>
+                        <filter string="Deadline Date" icon="terp-go-month" domain="[]" context="{'group_by':'deadline_date'}"/>
+                        <filter string="Sector" icon="terp-go-month" domain="[]" context="{'group_by':'sector_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <!-- task.activity -->    
+    <record id='view_task_activity_form' model='ir.ui.view'>
+        <field name='name'>task.activity.form</field>
+        <field name='model'>task.activity</field>
+        <field name='priority' eval='5' />
+        <field name='arch' type='xml'>
+            <form string="Task activity" version="7.0">
+                <header>
+                    <button name="trigger_draft_todo" string="To do"  type="workflow" icon="gtk-go-forward" class="oe_highlight" states="draft" />
+
+                    <button name="trigger_todo_assigned" string="Assign" type="workflow" icon="STOCK_INDEX" states="todo" />
+                    <button name="trigger_todo_working" string="Working"  type="workflow" icon="gtk-execute" class="oe_highlight" states="todo" />
+                    <button name="trigger_todo_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="todo" />
+
+                    <button name="trigger_assigned_returned" string="Return"  type="workflow" icon="gtk-go-forward" states="assigned" />
+                    <button name="trigger_assigned_working" string="Working"  type="workflow" icon="gtk-execute" class="oe_highlight" states="assigned" />
+                    <button name="trigger_assigned_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="assigned" />
+
+                    <button name="trigger_returned_assigned" string="Re assigned" icon="STOCK_INDEX" states="returned" />
+                    <button name="trigger_returned_todo" string="To do"  type="workflow" icon="gtk-execute" class="oe_highlight" states="returned" />
+                    <button name="trigger_returned_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="returned" />
+
+                    <button name="trigger_working_returned" string="Returned"  type="workflow" icon="gtk-go-back" states="working" />
+                    <button name="trigger_working_completed" string="Complete"  type="workflow" icon="STOCK_APPLY" class="oe_highlight" states="working" />
+                    <button name="trigger_working_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="working" />
+
+                    <button name="trigger_completed_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="completed" />
+
+                    <button name="trigger_cancel_draft" string="Re start"  type="workflow" icon="gtk-refresh" states="cancel" />
+
+                    <field name="state" widget="statusbar" statusbar_visible="cancel,draft,todo,assigned,return,working,completed" readonly="1"/>
+                </header>
+                <sheet>
+                   <group colspan="4" col="6">
+                       <field name="name" colspan="4"/> 
+                       <field name="sequence" readonly="1" /> 
+
+                       <field name="deadline_date" /> 
+                       <field name="max_duration" widget="float_time"/> 
+                       <field name="priority" /> 
+                       <field name="partner_id" domain="[('is_company','=',True)]" /> 
+                       <field name="partner_ref" /> 
+                       <field name="contact_id" attrs="{'invisible':[('partner_id','=',False)]}" domain="[('parent_id','=',partner_id),('is_company','=',False)]" context="{'default_parent_id':partner_id,'default_is_company':False}"/> 
+
+                       <field name="sector_id" /> 
+                       <field name="sector_category_id" attrs="{'invisible':[('sector_id','=',False)]}" domain="[('sector_id','=',sector_id)]" /> 
+                       <field name="assigned_user_id" /> 
+                       <newline />
+                   </group>
+                   
+	                <notebook colspan="4">
+	                   <page string="Message">
+	                       <group colspan="4" col="4">
+                               <separator string="Messages:" colspan="4" />
+                               <field name="task_message_ids" colspan="4" nolabel="1">  
+                                   <tree string="Messages:" editable="bottom">
+                                        <field name="name" /> 
+                                        <field name="note" />
+                                        <button name="trigger_msg_draft_done" string="Done"  type="workflow" icon="gtk-ok" states="draft" />
+                                        <button name="trigger_msg_draft_internal" string="Internal"  type="workflow" icon="gtk-apply" states="draft" />
+                                        <field name="date" readonly="1"/>
+                                        <field name="user_id" readonly="1" /> 
+                                        <field name="state" reaonly="1"/>
+                                   </tree>
+                               </field>
+                           </group>
+                       </page>
+	                   <page string="Linked activity">
+	                       <group colspan="4" col="4">
+                               <field name="parent_id" domain="[('id','!=',active_id)]"/> 
+                               <separator string="Child tasks:" colspan="4" />
+                               <field name="task_ids" colspan="4" nolabel="1" context="{'default_partner_id':partner_id,'default_sector_id':sector_id,'default_sector_category_id':sector_category_id,'default_deadline_date':deadline_date,'default_manager_user_id':manager_user_id,'default_assigned_user_id':assigned_user_id,}">  
+                                   <tree string="Child tasks:">
+                                        <field name="name" /> 
+                                        <field name="deadline_date" /> 
+                                        <field name="priority" /> 
+                                        <field name="assigned_user_id" /> 
+                                        <!--Workflow-->
+                                        <button name="trigger_draft_todo" string="To do"  type="workflow" icon="gtk-go-forward" class="oe_highlight" states="draft" />
+
+                                        <button name="trigger_todo_assigned" string="Assign" type="workflow" icon="STOCK_INDEX" states="todo" />
+                                        <button name="trigger_todo_working" string="Working"  type="workflow" icon="gtk-execute" class="oe_highlight" states="todo" />
+                                        <button name="trigger_todo_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="todo" />
+
+                                        <button name="trigger_assigned_returned" string="Return"  type="workflow" icon="gtk-go-back" states="assigned" />
+                                        <button name="trigger_assigned_working" string="Working"  type="workflow" icon="gtk-execute" class="oe_highlight" states="assigned" />
+                                        <button name="trigger_assigned_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="assigned" />
+
+                                        <button name="trigger_returned_assigned" string="Re assigned" icon="STOCK_INDEX" states="returned" />
+                                        <button name="trigger_returned_todo" string="To do"  type="workflow" icon="gtk-go-forward" class="oe_highlight" states="returned" />
+                                        <button name="trigger_returned_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="returned" />
+
+                                        <button name="trigger_working_returned" string="Returned"  type="workflow" icon="gtk-go-back" states="working" />
+                                        <button name="trigger_working_completed" string="Complete"  type="workflow" icon="STOCK_APPLY" class="oe_highlight" states="working" />
+                                        <button name="trigger_working_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="working" />
+
+                                        <button name="trigger_completed_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="completed" />
+
+                                        <button name="trigger_cancel_draft" string="Re start"  type="workflow" icon="gtk-refresh" states="cancel" />
+
+                                        <field name="state" /> 
+                                   </tree>
+                               </field>
+                           </group>
+                        </page>
+	                   <page string="Contact extra info">
+	                       <group colspan="4" col="4">
+                               <field name="media_in_id" /> 
+                               <field name="media_out_id" /> 
+                               <field name="customer_opt_in" /> 
+                               <field name="manager_opt_in" /> 
+                               <field name="to_recontact" /> 
+                           </group>
+                       </page>        
+	                   <page string="Workflow info">
+	                       <group colspan="4" col="4">
+                               <field name="user_id" readonly="1" /> 
+                               <field name="manager_user_id" /> 
+        
+                               <field name="start_date" readonly="1"/> 
+                              <field name="todo_date" readonly="1" /> 
+         
+                               <field name="assigned_date" readonly="1" /> 
+                               <newline />
+               
+                               <field name="working_date" readonly="1" /> 
+                               <field name="return_date" readonly="1" /> 
+
+                               <field name="completed_date" readonly="1" /> 
+                               <field name="obsolete" /> 
+                           </group>
+                       </page>        
+                   </notebook>    
+                   <separator string="Note"/>
+                   <field name="note" colspan="4" nolabel="1"/> 
+	            </sheet>     
+	         	<div class="oe_chatter">
+		             <field name="message_follower_ids" widget="mail_followers" modifiers="{}"/>
+		             <field name="message_ids" widget="mail_thread" placeholder="Share a message..." modifiers="{}"/>
+	            </div>
+            </form>
+        </field>
+    </record>  
+    <record id='view_task_activity_tree' model='ir.ui.view'>
+        <field name='name'>task.activity.tree</field>
+        <field name='model'>task.activity</field>
+        <field name='priority' eval='20' />
+        <field name='arch' type='xml'>
+            <tree string="Task activity"><!--colors="red:deadline_date&lt;datetime.now().strftime('%%Y/%%mm/%%dd')">-->
+                <field name="sequence" />
+                <field name="name" /> 
+                <field name="obsolete" invisible="1" /> 
+                <!--<field name="start_date" /> -->
+                <field name="deadline_date" /> 
+                <field name="max_duration" widget="float_time"/> 
+                <field name="priority" /> 
+                <field name="to_recontact" /> 
+                <field name="partner_id" /> 
+                <field name="contact_id" /> 
+                <field name="assigned_user_id" /> 
+                <field name="sector_id" />                
+                <field name="sector_category_id" /> 
+                <!--Workflow-->
+                <button name="trigger_draft_todo" string="To do"  type="workflow" icon="gtk-go-forward" class="oe_highlight" states="draft" />
+
+                <button name="trigger_todo_assigned" string="Assign" type="workflow" icon="STOCK_INDEX" states="todo" />
+                <button name="trigger_todo_working" string="Working"  type="workflow" icon="gtk-execute" class="oe_highlight" states="todo" />
+                <button name="trigger_todo_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="todo" />
+
+                <button name="trigger_assigned_returned" string="Return"  type="workflow" icon="gtk-go-back" states="assigned" />
+                <button name="trigger_assigned_working" string="Working"  type="workflow" icon="gtk-execute" class="oe_highlight" states="assigned" />
+                <button name="trigger_assigned_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="assigned" />
+
+                <button name="trigger_returned_assigned" string="Re assigned" icon="STOCK_INDEX" states="returned" />
+                <button name="trigger_returned_todo" string="To do"  type="workflow" icon="gtk-go-forward" class="oe_highlight" states="returned" />
+                <button name="trigger_returned_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="returned" />
+
+                <button name="trigger_working_returned" string="Returned"  type="workflow" icon="gtk-go-back" states="working" />
+                <button name="trigger_working_completed" string="Complete"  type="workflow" icon="STOCK_APPLY" class="oe_highlight" states="working" />
+                <button name="trigger_working_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="working" />
+
+                <button name="trigger_completed_cancel" string="Cancel"  type="workflow" icon="gtk-cancel" states="completed" />
+
+                <button name="trigger_cancel_draft" string="Re start"  type="workflow" icon="gtk-refresh" states="cancel" />
+
+                <field name="state" /> 
+            </tree>
+        </field>
+    </record>  
+
+    <!--CALENDARS: -->
+    <record model="ir.ui.view" id="view_task_activity_calendar">
+        <field name="name">task.activity.calendar</field>
+        <field name="model">task.activity</field>
+        <field name="arch" type="xml">
+            <calendar color="assigned_user_id" date_start="deadline_date" string="Task" mode="week">
+                <field name="partner_id"/>
+                <field name="name"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+    
+    <!--ACTION-->          
+    <record id="action_view_task_activity" model="ir.actions.act_window">
+            <field name="name">All tasks</field>
+            <field name="res_model">task.activity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field> <!--,graph-->
+            <field name="view_id" ref="view_task_activity_tree"/> <!--Open in tree mode -->
+            <field name="context">{'search_default_active_parent':True}</field>
+        </record>
+    <record id="action_view_task_activity_my" model="ir.actions.act_window">
+            <field name="name">My tasks</field>
+            <field name="res_model">task.activity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_id" ref="view_task_activity_tree"/> 
+            <field name="context">{'search_default_active_parent':True,'search_default_partner_group':True}</field>
+        </record>
+
+    <!-- task.activity.message -->    
+    <record id='view_task_activity_message_form' model='ir.ui.view'>
+        <field name='name'>task.activity.message.form</field>
+        <field name='model'>task.activity.message</field>
+        <field name='arch' type='xml'>
+            <form string="Task activity message" version="7.0">
+                <header>
+                    <button name="trigger_msg_draft_done" string="Done" type="workflow" icon="gtk-ok" class="oe_highlight" states="draft" />
+                    <button name="trigger_msg_draft_internal" string="Internal" type="workflow" icon="gtk-go-forward" states="draft" />
+                    <field name="state" widget="statusbar" statusbar_visible="cancel,internal,done" readonly="1"/>
+                </header>
+                <sheet>
+                   <group colspan="4" col="4">
+                       <field name="name" colspan="4"/> 
+                       <field name="user_id"/> 
+                       <field name="date" readonly="1" /> 
+                       <field name="task_id" invisible="1" /> 
+                       <separator string="Note" colspan="4"/>
+                       <field name="note" colspan="4" nolabel="1"/>
+                   </group>
+               </sheet>
+            </form>
+      </field>
+   </record>             
+    <record id='view_task_activity_message_tree' model='ir.ui.view'>
+        <field name='name'>task.activity.message.tree</field>
+        <field name='model'>task.activity.message</field>
+        <field name='arch' type='xml'>
+            <tree string="Task activity message">
+               <field name="name" colspan="4"/> 
+               <field name="user_id"/> 
+               <field name="date" readonly="1" /> 
+               <field name="task_id" invisible="1" /> 
+               <field name="note" />
+               <button name="message_draft_done" string="Done" type="workflow" icon="gtk-ok" class="oe_highlight" states="draft" />
+               <button name="message_draft_internal" string="Internal" type="workflow" icon="STOCK_INDEX" states="draft" />
+               <field name="state" widget="statusbar" readonly="1"/>
+            </tree>
+      </field>
+   </record>
+
+    <!-- task.sector -->    
+    <record id='view_task_sector_form' model='ir.ui.view'>
+        <field name='name'>task.sector.form</field>
+        <field name='model'>task.sector</field>
+        <field name='arch' type='xml'>
+            <form string="Task sector" version="7.0">
+                <sheet>
+                   <group colspan="4" col="4">
+                       <field name="name" /> 
+                       <field name="manager_id"/> 
+                       <separator string="Note" colspan="4"/>
+                       <field name="note" colspan="4" nolabel="1"/>
+                   </group>
+               </sheet>
+            </form>
+      </field>
+   </record>             
+    <record id='view_task_sector_tree' model='ir.ui.view'>
+        <field name='name'>task.sector.tree</field>
+        <field name='model'>task.sector</field>
+        <field name='arch' type='xml'>
+            <tree string="Task sector">
+               <field name="name" /> 
+               <field name="manager_id" /> 
+            </tree>
+      </field>
+   </record>
+
+    <!-- task.partner.mood -->    
+    <record id='view_task_partner_mood_form' model='ir.ui.view'>
+        <field name='name'>task.partner.mood.form</field>
+        <field name='model'>task.partner.mood</field>
+        <field name='arch' type='xml'>
+            <form string="Partner mood" version="7.0">
+                <sheet>
+                   <group colspan="4" col="4">
+                       <field name="name" /> 
+                       <separator string="Note" colspan="4"/>
+                       <field name="note" colspan="4" nolabel="1"/>
+                   </group>
+               </sheet>
+            </form>
+      </field>
+   </record>             
+    <record id='view_task_partner_mood_tree' model='ir.ui.view'>
+        <field name='name'>task.partner.mood.tree</field>
+        <field name='model'>task.partner.mood</field>
+        <field name='arch' type='xml'>
+            <tree string="Partner mood">
+               <field name="name" /> 
+               <field name="note" />
+            </tree>
+      </field>
+   </record>
+
+    <!-- task.media -->    
+    <record id='view_task_media_form' model='ir.ui.view'>
+        <field name='name'>task.media.form</field>
+        <field name='model'>task.media</field>
+        <field name='arch' type='xml'>
+            <form string="Media" version="7.0">
+                <sheet>
+                   <group colspan="4" col="4">
+                       <field name="name" /> 
+                       <separator string="Note" colspan="4"/>
+                       <field name="note" colspan="4" nolabel="1"/>
+                   </group>
+               </sheet>
+            </form>
+      </field>
+   </record>             
+    <record id='view_task_media_tree' model='ir.ui.view'>
+        <field name='name'>task.media.tree</field>
+        <field name='model'>task.media</field>
+        <field name='arch' type='xml'>
+            <tree string="Media">
+               <field name="name" /> 
+               <field name="note" />
+            </tree>
+      </field>
+   </record>
+
+    <!-- task.sector -->    
+    <record id='view_task_sector_category_form' model='ir.ui.view'>
+        <field name='name'>task.sector.category.form</field>
+        <field name='model'>task.sector.category</field>
+        <field name='arch' type='xml'>
+            <form string="Task category" version="7.0">
+                <sheet>
+                   <group colspan="4" col="6">
+                       <field name="name" /> 
+                       <field name="sector_id" /> 
+                       <field name="sub_manager_id"/>                        
+                       <separator string="Note" colspan="6"/>
+                       <field name="note" colspan="6" nolabel="1"/>
+                   </group>
+               </sheet>
+            </form>
+      </field>
+   </record>             
+    <record id='view_task_sector_category_tree' model='ir.ui.view'>
+        <field name='name'>task.sector.category.tree</field>
+        <field name='model'>task.sector.category</field>
+        <field name='arch' type='xml'>
+            <tree string="Task category">
+               <field name="name" /> 
+               <field name="sector_id" /> 
+               <field name="sub_manager_id" /> 
+            </tree>
+      </field>
+   </record>
+                   
+       <!-- Menu -->              
+    <menuitem name="Task Manager" parent="mail.mail_feeds_main" id="menu_base_task_manager" sequence="0" />
+        <!--<menuitem name="My task" parent="menu_base_task_manager" id="menu_base_task_manager_activity_my" action="action_view_task_manager_my" sequence="10" />        -->
+        <menuitem name="My task" parent="menu_base_task_manager" id="menu_base_task_manager_activity_my" action="action_view_task_activity_my" sequence="10" />        
+        <menuitem name="All task" parent="menu_base_task_manager" id="menu_base_task_manager_activity" action="action_view_task_activity" sequence="20" />        
+    </data>
+</openerp>

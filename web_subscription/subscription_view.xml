@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+<!-- res_partner_web_subscription -->
+  
+    <record id="res_partner_web_subscription_form" model="ir.ui.view">
+        <field name="name">res.partner.web.subscription.form</field>
+        <field name="model">res.partner.web.subscription</field>
+        <field name="arch" type="xml">
+            <form string="Subscription" version="7.0">
+            <sheet>
+                <group>
+                    <field name="name"/>
+                    <field name="period"/>
+                    <field name="deadline"/>
+                    <field name="pay_date"/>
+                    <field name="amount"/>
+                    <field name="product_id"/>
+                    <field name="web_id"/>
+                </group>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="res_partner_web_subscription_tree" model="ir.ui.view">
+        <field name="name">res.partner.web.subscription.tree</field>
+        <field name="model">res.partner.web.subscription</field>
+        <field name="arch" type="xml">
+            <tree string="Subscription">
+                <field name="name"/>
+                <field name="period"/>
+                <field name="deadline"/>
+                <field name="pay_date"/>
+                <field name="amount"/>
+                <field name="product_id"/>
+                <field name="web_id"/>
+            </tree>
+        </field>
+    </record>
+
+<!-- Viste ereditate -->
+
+    <record id='res_partner_web_extrafield_form' model='ir.ui.view'>
+        <field name='name'>res.partner.web.extrafield.form</field>
+        <field name='model'>res.partner.web</field>
+        <field name="inherit_id" ref="web_manage.res_partner_web_form"/>
+        <field name='arch' type='xml'>
+        <xpath expr='//page[@string="Note"]' position='after'>
+            <page string='Subscription'>
+                <field name='subscription_ids' colspan='4'>
+                    <tree string="Subscription">
+                        <field name="name"/>
+                    </tree>
+                </field>
+            </page>
+        </xpath>
+        </field>
+    </record>
+
+    <record id='product_normal_extrafield_form' model='ir.ui.view'>
+        <field name='name'>product.normal.extrafield.form</field>
+        <field name='model'>product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name='arch' type='xml'>
+            <field name="sale_ok" position='after'>
+                <label string="E' periodico"/>
+                <field name="is_periodic"/>
+            </field>
+        </field>
+    </record>
+
+    </data>
+</openerp>

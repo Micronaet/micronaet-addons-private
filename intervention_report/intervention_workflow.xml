@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="workflow" id="wf_intervention">
+            <field name="name">hr.analytic.timesheet.workflow</field>
+            <field name="osv">hr.analytic.timesheet</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <record model="workflow.activity" id="act_draft">
+            <field name="wkf_id" ref="wf_intervention" />
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">intervention_draft()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_waiting">
+            <field name="wkf_id" ref="wf_intervention" />
+            <field name="name">waiting</field>
+            <field name="kind">function</field>
+            <field name="action">intervention_waiting()</field>
+        </record>
+        
+        <record model="workflow.activity" id="act_confirmed">
+            <field name="wkf_id" ref="wf_intervention" />
+            <field name="name">confirmed</field>
+            <field name="kind">function</field>
+            <field name="action">intervention_confirmed()</field>
+        </record>
+        
+        <record model="workflow.activity" id="act_report_close">
+            <field name="wkf_id" ref="wf_intervention" />
+            <field name="name">report_close</field>
+            <field name="kind">function</field>
+            <field name="action">intervention_report_close()</field>
+            <field name="flow_stop">True</field>
+        </record>
+
+        <record model="workflow.activity" id="act_close">
+            <field name="wkf_id" ref="wf_intervention" />
+            <field name="name">close</field>
+            <field name="kind">function</field>
+            <field name="action">intervention_close()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_cancel">
+            <field name="wkf_id" ref="wf_intervention" />
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">intervention_cancel()</field>
+        </record>
+
+        <record model="workflow.transition" id="t1">
+            <field name="act_from" ref="act_draft" />
+            <field name="act_to" ref="act_waiting" />
+            <field name="signal">intervention_waiting</field>
+        </record>
+        <record model="workflow.transition" id="t2">
+            <field name="act_from" ref="act_waiting" />
+            <field name="act_to" ref="act_confirmed" />
+            <field name="signal">intervention_waiting_confirmed</field>
+        </record>
+        <record model="workflow.transition" id="t3">
+            <field name="act_from" ref="act_draft" />
+            <field name="act_to" ref="act_confirmed" />
+            <field name="signal">intervention_confirmed</field>
+        </record>
+        <record model="workflow.transition" id="t4">
+            <field name="act_from" ref="act_confirmed" />
+            <field name="act_to" ref="act_close" />
+            <field name="signal">intervention_close</field>
+        </record>
+        <record model="workflow.transition" id="t4a">
+            <field name="act_from" ref="act_close" />
+            <field name="act_to" ref="act_report_close" />
+            <field name="signal">intervention_report_after_close</field>
+        </record>
+        <record model="workflow.transition" id="t5">
+            <field name="act_from" ref="act_confirmed" />
+            <field name="act_to" ref="act_report_close" />
+            <field name="signal">intervention_report_close</field>
+        </record>
+        <record model="workflow.transition" id="t6">
+            <field name="act_from" ref="act_confirmed" />
+            <field name="act_to" ref="act_cancel" />
+            <field name="signal">intervention_confirmed_cancel</field>
+        </record>
+        <record model="workflow.transition" id="t7">
+            <field name="act_from" ref="act_cancel" />
+            <field name="act_to" ref="act_draft" />
+            <field name="signal">intervention_draft</field>
+        </record>
+        <record model="workflow.transition" id="t8">
+            <field name="act_from" ref="act_waiting" />
+            <field name="act_to" ref="act_draft" />
+            <field name="signal">intervention_reschedule</field>
+        </record>
+        <record model="workflow.transition" id="t9">
+            <field name="act_from" ref="act_waiting" />
+            <field name="act_to" ref="act_cancel" />
+            <field name="signal">intervention_waiting_cancel</field>
+        </record>
+    </data>
+</openerp>

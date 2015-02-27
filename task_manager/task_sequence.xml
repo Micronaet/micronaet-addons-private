@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+        <!-- Task activity sequence: -->
+        <record model="ir.sequence.type" id="seq_task_activity_type">
+                <field name="name">Task Activity</field>
+                <field name="code">task.activity</field>
+
+        </record>
+        <record model="ir.sequence" id="seq_task_activity_number">
+                <field name="name">Task</field>
+                <field name="code">task.activity</field>
+                <field name="padding" eval="7" />
+                <field name="prefix">TASK</field>
+        </record>
+    </data>
+</openerp>
+

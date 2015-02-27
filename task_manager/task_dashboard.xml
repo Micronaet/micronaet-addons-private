@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+     <record model="ir.ui.view" id="view_intervention_report_state_graph">
+        <field name="name">Intervent per state</field>
+        <field name="model">intervention.report</field>
+        <field name="type">graph</field>
+        <field name="priority" eval="20" />
+        <field name="arch" type="xml">
+            <graph string="Intervent (hours) per state" type="bar">
+                <field name="state"/>
+                <field name="duration" operator="+" />
+                <field name="total" operator="+" />
+                <field name="trip_hour" operator="+" />
+                <field name="break_hour" operator="+" />
+            </graph>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_view_intervention_report_state_dashboard">
+        <field name="name">Intervent per state (this user, this month)</field>
+        <field name="res_model">intervention.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">graph,calendar,tree,form,</field>
+        <field name="domain">[('user_id','=',uid),('date_start','&gt;=',time.strftime('%Y-%m-01 00:00:00'))]</field> <!--TODO ,('date_start','&lt;',(datetime.datetime.today()+datetime.timedelta(month=1)).strftime('%Y-%m-01 00:00:00'))-->
+        <field name="context">{'graph_view_ref':'intervention_report.view_intervention_report_state_graph'}</field>
+    </record>
+
+
+       <!-- Form Dashboard-->
+       <record id="board_intervention_report_area" model="ir.ui.view">
+            <field name="name">Dashboard intervention</field>
+            <field name="model">board.board</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Intervention report">                
+                    <vpaned>
+                        <child1>
+                                <action colspan="4" name="%(action_view_intervention_report_state_dashboard)d" string="Intervent x state (current user, this month)" />
+                        </child1>
+                    </vpaned>                    
+                </form>
+            </field>
+        </record>
+
+        <!-- Action per chiamare le dashboard--> 
+        <record id="action_board_intervention_report_area" model="ir.actions.act_window">
+            <field name="name">Default dashboard</field>
+            <field name="res_model">board.board</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="board_intervention_report_area"/>
+        </record>
+        
+    <menuitem name="Intervention report" 
+              id="menu_base_intervention" 
+              sequence="5" 
+              action="action_board_intervention_report_area"
+              /> 
+  </data>
+</openerp>        

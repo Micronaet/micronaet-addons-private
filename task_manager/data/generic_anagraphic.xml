@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">    
+     <!--task.partner.mood-->
+     <record model="task.partner.mood" id="task_mood_hungry">
+        <field name="name">Hungry</field>
+    </record>
+     <record model="task.partner.mood" id="task_mood_normal">
+        <field name="name">Normal</field>
+    </record>
+     <record model="task.partner.mood" id="task_mood_happy">
+        <field name="name">Happy</field>
+    </record>
+
+     <!--task.media-->
+     <record model="task.media" id="task_media_phone">
+        <field name="name">Phone</field>
+    </record>
+     <record model="task.media" id="task_media_intervent">
+        <field name="name">Intervent</field>
+    </record>
+     <record model="task.media" id="task_media_mail">
+        <field name="name">Mail</field>
+    </record>
+     <record model="task.media" id="task_media_fax">
+        <field name="name">Fax</field>
+    </record>
+     <record model="task.media" id="task_media_sms">
+        <field name="name">Sms</field>
+    </record>
+     <record model="task.media" id="task_media_skype">
+        <field name="name">Skype</field>
+    </record>
+  </data>
+</openerp>        

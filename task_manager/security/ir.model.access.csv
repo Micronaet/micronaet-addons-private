@@ -1,0 +1,8 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_task_sector_user","task.sector","model_task_sector","base.group_user",1,1,1,1
+"access_task_sector_category_user","task.sector.category","model_task_sector_category","base.group_user",1,1,1,1
+"access_task_partner_mood_user","task.partner.mood","model_task_partner_mood","base.group_user",1,1,1,1
+"access_task_media_user","task.media","model_task_media","base.group_user",1,1,1,1
+"access_task_activity_user","task.activity","model_task_activity","base.group_user",1,1,1,1
+"access_task_activity_message_user","task.activity.message","model_task_activity_message","base.group_user",1,1,1,1
+

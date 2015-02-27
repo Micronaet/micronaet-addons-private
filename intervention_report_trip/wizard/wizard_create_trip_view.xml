@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="hr_analytic_timesheet_trip_wizard" model="ir.ui.view">
+            <field name="name">Group trip wizard</field>
+            <field name="model">hr.analytic.timesheet.trip.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Intervent report wizard">
+                     <group colspan="4">
+                           <field name="month" on_change="on_change_month(month)"/>
+                           <newline />
+                           <field name="from_date"/>
+                           <field name="to_date"/>
+                           <newline />
+                           <field name="all_user"/>
+                           <field name="user_id" attrs="{'required':[('all_user','=',False)],'invisible':[('all_user','=',True)]}"/>
+                            <button icon="gtk-ok" name="create_trip" string="Create Trip" type="object" />
+                     </group>  
+                </form>
+            </field>
+        </record>
+
+    <record id="action_generate_intervention_trip" model="ir.actions.act_window">
+            <field name="name">Group trip wizard</field>
+            <field name="res_model">hr.analytic.timesheet.trip.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="hr_analytic_timesheet_trip_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+       <!-- Menu -->       
+         <!--<menuitem name="Wizard" parent="menu_base_intervention_trip_root" id="menu_base_intervention_trip_wizard" sequence="10" /> -->
+             <menuitem name="Generate day trip" 
+                       parent="menu_base_intervention_trip_list" 
+                       id="menu_base_intervention_trip_generate_wizard" 
+                       action="action_generate_intervention_trip" 
+                       sequence="10" />
+    </data>
+</openerp>

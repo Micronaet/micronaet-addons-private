@@ -1,0 +1,193 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# 	* intervention_report_invoice
+# <> <>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-06 14:20+0000\n"
+"PO-Revision-Date: 2013-06-06 16:24+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: intervention_report_invoice
+#: view:account.invoice:0
+msgid "Confirmed"
+msgstr "Confermato"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "June"
+msgstr "Giugno"
+
+#. module: intervention_report_invoice
+#: model:ir.actions.act_window,name:intervention_report_invoice.action_generate_intervention_invoice
+msgid "Group account wizard"
+msgstr "Wizard raggruppa fatture"
+
+#. module: intervention_report_invoice
+#: field:account.invoice,to_invoice_summary:0
+msgid "Summary"
+msgstr "Riepilogo"
+
+#. module: intervention_report_invoice
+#: view:account.invoice.intervent.wizard:0
+msgid "Create Invoice"
+msgstr "Crea fattura"
+
+#. module: intervention_report_invoice
+#: view:account.invoice:0
+msgid "Draft"
+msgstr "Bozza"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "March"
+msgstr "Marzo"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "August"
+msgstr "Agosto"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "May"
+msgstr "Maggio"
+
+#. module: intervention_report_invoice
+#: model:ir.actions.act_window,name:intervention_report_invoice.action_view_account_invoice_intervent
+msgid "Invoice and intervent"
+msgstr "Fatture e interventi"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "July"
+msgstr "Luglio"
+
+#. module: intervention_report_invoice
+#: view:account.invoice:0 field:account.invoice,intervention_report_ids:0
+msgid "Intervents"
+msgstr "Interventi"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "February"
+msgstr "Febbraio"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "October"
+msgstr "Ottobre"
+
+#. module: intervention_report_invoice
+#: model:ir.ui.menu,name:intervention_report_invoice.menu_base_intervention_invoice_generate_account_invoice_wizard
+msgid "Generate month invoice"
+msgstr "Genera fattura mensile"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "January"
+msgstr "Gennaio"
+
+#. module: intervention_report_invoice
+#: model:ir.ui.menu,name:intervention_report_invoice.menu_account_invoice_intervent
+msgid "Invoice list"
+msgstr "Lista fatture"
+
+#. module: intervention_report_invoice
+#: view:account.invoice:0
+msgid "Intervent list"
+msgstr "Lista interventi"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "April"
+msgstr "Aprile"
+
+#. module: intervention_report_invoice
+#: field:account.invoice,to_invoice_total:0
+msgid "Total to invoice"
+msgstr "Totale fattura"
+
+#. module: intervention_report_invoice
+#: view:account.invoice:0
+msgid "Close with report"
+msgstr "Chiuso con report"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "November"
+msgstr "Novembre"
+
+#. module: intervention_report_invoice
+#: model:ir.model,name:intervention_report_invoice.model_account_invoice_intervent_wizard
+msgid "account.invoice.intervent.wizard"
+msgstr "account.invoice.intervent.wizard"
+
+#. module: intervention_report_invoice
+#: model:ir.ui.menu,name:intervention_report_invoice.menu_base_intervention_invoice_list
+msgid "Invoices"
+msgstr "Fatture"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "December"
+msgstr "Dicembre"
+
+#. module: intervention_report_invoice
+#: view:account.invoice:0
+msgid "Waiting"
+msgstr "In attesa"
+
+#. module: intervention_report_invoice
+#: field:account.invoice.intervent.wizard,month:0
+msgid "Month"
+msgstr "Mese"
+
+#. module: intervention_report_invoice
+#: selection:account.invoice.intervent.wizard,month:0
+msgid "September"
+msgstr "Settembre"
+
+#. module: intervention_report_invoice
+#: view:account.invoice:0
+msgid "Reschedule"
+msgstr "Rischedula"
+
+#. module: intervention_report_invoice
+#: model:ir.model,name:intervention_report_invoice.model_account_invoice
+msgid "Invoice"
+msgstr "Fattura"
+
+#. module: intervention_report_invoice
+#: field:account.invoice.intervent.wizard,year:0
+msgid "Year"
+msgstr "Anno"
+
+#. module: intervention_report_invoice
+#: view:account.invoice:0
+msgid "Cancel"
+msgstr "Annulla"
+
+#. module: intervention_report_invoice
+#: view:account.invoice:0
+msgid "Close"
+msgstr "Chiudi"
+
+#. module: intervention_report_invoice
+#: view:account.invoice.intervent.wizard:0
+msgid "Intervent account wizard"
+msgstr "Wizard fatture interventi"
+
+#. module: intervention_report_invoice
+#: model:ir.actions.report.xml,name:intervention_report_invoice.aeroo_intervent_report_state_id
+#: model:ir.actions.report.xml,name:intervention_report_invoice.aeroo_invoice_intervent_report_list
+msgid "Intervent list invoiced"
+msgstr "Lista interventi fatturati"

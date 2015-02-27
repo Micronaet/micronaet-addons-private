@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--Workflow:-->    
+        <record model="workflow" id="wkf_task_activity_message">
+            <field name="name">task.activity.message.workflow</field>
+            <field name="osv">task.activity.message</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <!--Activity:-->
+        <record model="workflow.activity" id="act_msg_draft">
+            <field name="wkf_id" ref="wkf_task_activity_message" />
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">message_draft()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_msg_done">
+            <field name="wkf_id" ref="wkf_task_activity_message" />
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">message_done()</field>
+        </record>
+        
+        <record model="workflow.activity" id="act_msg_internal">
+            <field name="wkf_id" ref="wkf_task_activity_message" />
+            <field name="name">internal</field>
+            <field name="kind">function</field>
+            <field name="action">message_internal()</field>
+        </record>
+
+        <!--Transactions:-->
+           <!--DRAFT-->
+        <record model="workflow.transition" id="message_draft_done">
+            <field name="act_from" ref="act_msg_draft" />
+            <field name="act_to" ref="act_msg_done" />
+            <field name="signal">trigger_msg_draft_done</field>
+        </record>
+
+           <!--TODO-->
+        <record model="workflow.transition" id="message_draft_internal">
+            <field name="act_from" ref="act_msg_draft" />
+            <field name="act_to" ref="act_msg_internal" />
+            <field name="signal">trigger_msg_draft_internal</field>
+        </record>
+    </data>
+</openerp>

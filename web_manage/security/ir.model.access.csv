@@ -1,0 +1,7 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_res_partner_web_type_user","res.partner.web.type","model_res_partner_web_type","base.group_user",1,1,1,1
+"access_res_partner_web_user","res.partner.web","model_res_partner_web","base.group_user",1,1,1,1
+"access_res_partner_web_password_user","res.partner.web.password","model_res_partner_web_password","base.group_user",1,1,1,1
+"access_res_partner_web_mail_user","res.partner.web.mail","model_res_partner_web_mail","base.group_user",1,1,1,1
+"access_res_partner_web_mail_server_user","res.partner.web.mail.server","model_res_partner_web_mail_server","base.group_user",1,1,1,1
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="wizard_intervent_report" model="ir.ui.view">
+            <field name="name">Intervent report wizard</field>
+            <field name="model">intervent.report.collection.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Intervent report wizard">
+                    <field name="month" on_change="on_change_month(month)"/>
+                    <newline />
+                    
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+
+                    <field name="is_intervent" />
+                    <field name="is_closed" />
+
+                    <field name="user_id"/>
+                    <field name="partner_id"/>
+                    
+                    
+                    <separator string="Print selected report:" />
+                    <field name="report_type"/>
+                    <button icon="gtk-cancel" special="cancel" string="Cancel"/>
+                    <button icon="gtk-ok" name="print_intervent_report" string="Print" type="object"/>
+
+                    <separator string="Partner list (for save PDF with previuous filter):" />
+                    <label string=" " colspan="2" />
+                    <button icon="gtk-ok" name="print_load_partner" string="Load partner" type="object"/>
+                    <button icon="gtk-ok" name="print_save_partner_report" string="Save report" type="object"/>
+                    <field name="partner_ids" colspan="4" nolabel="1">
+                       <tree string="Partner with intervent:">
+                          <field name="name"/>
+                          <field name="phone"/>
+                          <field name="city"/>
+                       </tree>
+                    </field>
+                </form>
+            </field>
+        </record>
+
+       <act_window name="Intervent report wizard"
+            res_model="intervent.report.collection.wizard"
+            src_model="intervention.report"
+            view_mode="form"
+            target="new"
+            key2="client_action_multi"
+            id="action_wizard_intervent_report"
+            view_id="wizard_intervent_report" 
+            context="{'default_from_date':time.strftime('%Y-%m-01 00:00:00')}" />
+    </data>
+</openerp>

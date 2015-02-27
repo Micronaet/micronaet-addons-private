@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <!--res.partner.web.type list-->
+
+        <record id='res_partner_web_type_joomla' model='res.partner.web.type'>
+            <field name='name'>Joomla</field>
+            <field name='note'>CMS Joomla</field>   
+        </record>
+
+        <record id='res_partner_web_type_php' model='res.partner.web.type'>
+            <field name='name'>PHP</field>
+            <field name='note'>Apache web server</field>
+        </record>
+
+        <record id='res_partner_web_type_asp' model='res.partner.web.type'>
+            <field name='name'>ASP</field>
+            <field name='note'>IIS web server</field>
+        </record>
+
+        <record id='res_partner_web_type_plone' model='res.partner.web.type'>
+            <field name='name'>Plone</field>
+        </record>
+
+        <record id='res_partner_web_type_openerp' model='res.partner.web.type'>
+            <field name='name'>OpenERP</field>
+            <field name='note'>OpenERP portal web site</field>
+        </record>
+
+    <!--res.partner.web.password.type list-->
+
+        <record id='res_partner_web_password_type_ftp' model='res.partner.web.password.type'>
+            <field name='name'>FTP</field>
+        </record>
+
+        <record id='res_partner_web_password_type_joomla' model='res.partner.web.password.type'>
+            <field name='name'>Joomla</field>
+            <field name='note'>Joomla administrator panel</field>
+        </record>
+
+        <record id='res_partner_web_password_type_mysql' model='res.partner.web.password.type'>
+            <field name='name'>MySQL</field>
+            <field name='note'>MySQL server administrator</field>
+        </record>
+
+        <record id='res_partner_web_password_type_postmaster' model='res.partner.web.password.type'>
+            <field name='name'>Postmaster</field>
+            <field name='note'>Mail manager</field>
+        </record>
+
+        <record id='res_partner_web_password_type_webmin' model='res.partner.web.password.type'>
+            <field name='name'>Webmin</field>
+            <field name='note'>Webmin web site manager</field>
+        </record>
+
+    </data>
+</openerp>

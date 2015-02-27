@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="1">
+        <record id="windows_7_profes" model="res.partner.server.os">
+            <field name="name">Windows 7 Professional</field>
+        </record>
+        
+        <record id="windows_8_profes" model="res.partner.server.os">
+            <field name="name">Windows 8 Professional</field>
+        </record>
+            
+        <record id="windows_xp" model="res.partner.server.os">
+            <field name="name">Windows XP</field>
+        </record>
+
+        <record id="win_2000_sbs" model="res.partner.server.os">
+            <field name="name">Windows 2000 Small Business</field>
+        </record>
+
+        <record id="win_2003_sbs" model="res.partner.server.os">
+            <field name="name">Windows 2003 Small Business</field>
+        </record>
+
+        <record id="win_2000_server" model="res.partner.server.os">
+            <field name="name">Windows 2000 Server</field>
+        </record>
+
+        <record id="win_2003_server" model="res.partner.server.os">
+            <field name="name">Windows 2003 Server</field>
+        </record>
+        
+        <record id="win_2008_server" model="res.partner.server.os">
+            <field name="name">Windows 2008 Server</field>
+        </record>
+
+        <record id="ubu_804_server" model="res.partner.server.os">
+            <field name="name">Ubuntu 8.04 Server</field>
+        </record>
+        
+        <record id="ubu_1004_server" model="res.partner.server.os">
+            <field name="name">Ubuntu 10.04 Server</field>
+        </record>
+        
+        <record id="ubu_1204_server" model="res.partner.server.os">
+            <field name="name">Ubuntu 12.04 Server</field>
+        </record>
+        
+        <record id="ubu_804_desktop" model="res.partner.server.os">
+            <field name="name">Ubuntu 8.04 Desktop</field>
+        </record>
+        
+        <record id="ubu_1004_desktop" model="res.partner.server.os">
+            <field name="name">Ubuntu 10.04 Desktop</field>
+        </record>
+        
+        <record id="ubu_1204_desktop" model="res.partner.server.os">
+            <field name="name">Ubuntu 12.04 Desktop</field>
+        </record>        
+    </data>
+</openerp>

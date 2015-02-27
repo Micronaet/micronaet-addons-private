@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    <!-- inherit view-->
+    <record id='view_task_activity_form_quotation' model='ir.ui.view'>
+        <field name='name'>task.activity.form.quotation</field>
+        <field name='model'>task.activity</field>
+        <field name='inherit_id' ref='task_manager.view_task_activity_form' />
+        <field name='arch' type='xml'>
+            <xpath expr="/form/sheet/notebook/page[@string='Message']" position="before">
+                <page string="Quotations">
+                    <group colspan="4" col="4">
+                        <button name="create_quotation" string="New quotation" type="object" />                
+                        <newline />
+                        <field name="quotation_ids" nolabel="1" colspan="4">
+                        </field>
+                    </group>
+                </page>
+            </xpath>    
+       </field>
+    </record>
+
+    <record id='view_order_form_task' model='ir.ui.view'>
+        <field name='name'>sale.order.form.quotation</field>
+        <field name='model'>sale.order</field>
+        <field name='inherit_id' ref='sale.view_order_form' />
+        <field name='arch' type='xml'>
+            <field name="partner_id" position="after">
+                <field name="task_id" />
+            </field>
+       </field>
+    </record>
+            
+    </data>
+</openerp>

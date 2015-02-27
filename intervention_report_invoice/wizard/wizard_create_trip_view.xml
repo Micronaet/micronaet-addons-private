@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data><!--noupdate="1"-->
+        <record id="hr_analytic_timesheet_invoice_wizard" model="ir.ui.view">
+            <field name="name">Group invoice wizard</field>
+            <field name="model">account.invoice.intervent.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Intervent account wizard">
+                     <group colspan="4">
+                         <field name="month"/>                         
+                         <field name="year"/>
+                         <button icon="gtk-ok" name="create_invoice" string="Create Invoice" type="object" />
+                     </group>  
+                </form>
+            </field>
+        </record>
+
+    <record id="action_generate_intervention_invoice" model="ir.actions.act_window">
+            <field name="name">Group account wizard</field>
+            <field name="res_model">account.invoice.intervent.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="hr_analytic_timesheet_invoice_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+       <!-- Menu -->       
+         <menuitem name="Generate month invoice" 
+                   parent="menu_base_intervention_invoice_list" 
+                   id="menu_base_intervention_invoice_generate_account_invoice_wizard" 
+                   action="action_generate_intervention_invoice" 
+                   sequence="10" /> 
+    </data>
+</openerp>

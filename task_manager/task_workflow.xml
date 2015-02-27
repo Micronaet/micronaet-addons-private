@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--Workflow:-->    
+        <record model="workflow" id="wkf_task_manager">
+            <field name="name">task.activity.workflow</field>
+            <field name="osv">task.activity</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <!--Activity:-->
+        <record model="workflow.activity" id="act_draft">
+            <field name="wkf_id" ref="wkf_task_manager" />
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">activity_draft()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_todo">
+            <field name="wkf_id" ref="wkf_task_manager" />
+            <field name="name">todo</field>
+            <field name="kind">function</field>
+            <field name="action">activity_todo()</field>
+        </record>
+        
+        <record model="workflow.activity" id="act_assigned">
+            <field name="wkf_id" ref="wkf_task_manager" />
+            <field name="name">assigned</field>
+            <field name="kind">function</field>
+            <field name="action">activity_assigned()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_returned">
+            <field name="wkf_id" ref="wkf_task_manager" />
+            <field name="name">returned</field>
+            <field name="kind">function</field>
+            <field name="action">activity_returned()</field>
+        </record>
+        
+        <record model="workflow.activity" id="act_working">
+            <field name="wkf_id" ref="wkf_task_manager" />
+            <field name="name">working</field>
+            <field name="kind">function</field>
+            <field name="action">activity_working()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_completed">
+            <field name="wkf_id" ref="wkf_task_manager" />
+            <field name="name">completed</field>
+            <field name="kind">function</field>
+            <field name="action">activity_completed()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_cancel">
+            <field name="wkf_id" ref="wkf_task_manager" />
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">activity_cancel()</field>
+        </record>
+
+        <!--Transactions:-->
+           <!--DRAFT-->
+        <record model="workflow.transition" id="T1A">
+            <field name="act_from" ref="act_draft" />
+            <field name="act_to" ref="act_todo" />
+            <field name="signal">trigger_draft_todo</field>
+        </record>
+
+           <!--TODO-->
+        <record model="workflow.transition" id="T2A">
+            <field name="act_from" ref="act_todo" />
+            <field name="act_to" ref="act_assigned" />
+            <field name="signal">trigger_todo_assigned</field>
+        </record>
+        <record model="workflow.transition" id="T2B">
+            <field name="act_from" ref="act_todo" />
+            <field name="act_to" ref="act_working" />
+            <field name="signal">trigger_todo_working</field>
+        </record>
+        <record model="workflow.transition" id="T2X">
+            <field name="act_from" ref="act_todo" />
+            <field name="act_to" ref="act_cancel" />
+            <field name="signal">trigger_todo_cancel</field>
+        </record>
+
+           <!--ASSIGNED-->
+        <record model="workflow.transition" id="T3A">
+            <field name="act_from" ref="act_assigned" />
+            <field name="act_to" ref="act_working" />
+            <field name="signal">trigger_assigned_working</field>
+        </record>
+        <record model="workflow.transition" id="T3B">
+            <field name="act_from" ref="act_assigned" />
+            <field name="act_to" ref="act_returned" />
+            <field name="signal">trigger_assigned_returned</field>
+        </record>
+        <record model="workflow.transition" id="T3X">
+            <field name="act_from" ref="act_assigned" />
+            <field name="act_to" ref="act_cancel" />
+            <field name="signal">trigger_assigned_cancel</field>
+        </record>
+
+        <record model="workflow.transition" id="T6A">
+            <field name="act_from" ref="act_returned" />
+            <field name="act_to" ref="act_todo" />
+            <field name="signal">trigger_returned_todo</field>
+        </record>
+        <record model="workflow.transition" id="T6B">
+            <field name="act_from" ref="act_returned" />
+            <field name="act_to" ref="act_assigned" />
+            <field name="signal">trigger_returned_assigned</field>
+        </record>
+        <record model="workflow.transition" id="T6X">
+            <field name="act_from" ref="act_returned" />
+            <field name="act_to" ref="act_cancel" />
+            <field name="signal">trigger_returned_cancel</field>
+        </record>
+
+        <record model="workflow.transition" id="T4A">
+            <field name="act_from" ref="act_working" />
+            <field name="act_to" ref="act_completed" />
+            <field name="signal">trigger_working_completed</field>
+        </record>
+        <record model="workflow.transition" id="T4B">
+            <field name="act_from" ref="act_working" />
+            <field name="act_to" ref="act_returned" />
+            <field name="signal">trigger_working_returned</field>
+        </record>
+        <record model="workflow.transition" id="T4X">
+            <field name="act_from" ref="act_working" />
+            <field name="act_to" ref="act_cancel" />
+            <field name="signal">trigger_working_cancel</field>
+        </record>
+
+        <record model="workflow.transition" id="T5X">
+            <field name="act_from" ref="act_completed" />
+            <field name="act_to" ref="act_cancel" />
+            <field name="signal">trigger_completed_cancel</field>
+        </record>
+        
+        <record model="workflow.transition" id="T7A">
+            <field name="act_from" ref="act_cancel" />
+            <field name="act_to" ref="act_draft" />
+            <field name="signal">trigger_cancel_draft</field>
+        </record>                
+    </data>
+</openerp>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id='view_hr_analytic_timesheet_profit_tree' model='ir.ui.view'>
+            <field name='name'>HR intervent profit</field>
+            <field name='model'>hr.analytic.timesheet</field>
+            <field name='inherit_id' ref='intervention_report.view_hr_analytic_timesheet_tree' />
+            <field name='arch' type='xml'>
+               <field name="to_invoice" position="after">
+                    <field name="intervent_total" widget="float_time" />
+                    <field name="profit" sum="Total" />                   
+               </field>
+            </field>
+        </record>
+
+        <record id='view_hr_analytic_timesheet_profit_form' model='ir.ui.view'>
+            <field name='name'>HR intervent profit</field>
+            <field name='model'>hr.analytic.timesheet</field>
+            <field name='inherit_id' ref='intervention_report.view_hr_analytic_timesheet_form' />
+            <field name='arch' type='xml'>
+                <field name="amount" position="after">
+                    <field name="profit" />
+                </field>
+            </field>
+        </record>    
+    </data>
+</openerp>
