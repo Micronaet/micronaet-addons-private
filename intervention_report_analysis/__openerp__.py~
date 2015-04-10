@@ -40,9 +40,9 @@
     'demo_xml': [],
     'update_xml': [
         #'security/ir.model.access.csv',
-        'analysys_view.xml',  
+        'analysis_view.xml',  
+        'report/status_webkit.xml',
         #'wizard/wizard_create_trip_view.xml',                    
-        #'report/report_intervent_state.xml',
         ],
     'active': False,
     'installable': True,

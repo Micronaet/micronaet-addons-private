@@ -29,7 +29,7 @@ import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv, expression, orm
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from openerp import SUPERUSER_ID, api
+from openerp import SUPERUSER_ID
 from openerp import tools
 from openerp.report import report_sxw
 from openerp.tools.translate import _
@@ -43,22 +43,50 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 _logger = logging.getLogger(__name__)
 
 class report_webkit_html(report_sxw.rml_parse):    
+    partner = {}
+    
     def __init__(self, cr, uid, name, context):
-        super(report_webkit_html, self).__init__(cr, uid, name, context=context)
+        super(report_webkit_html, self).__init__(
+            cr, uid, name, context=context)
         self.localcontext.update({
             'time': time,
             'cr': cr,
             'uid': uid,
-            #'jump_is_all_zero': self._jump_is_all_zero,
+            'load_data': self._load_data,
         })
 
-    """def _jump_is_all_zero(self, row, data=None):
-    """
+    def _load_data(self, data=None):
+        ''' Load all data for analytic report
+        '''
+        
+        # Reset global variables:
+        self.partner = {}
+        # Search all intervent in period:
+        int_pool = self.pool.get('hr.nalytic.intervent')
+
+        # Search depend on filter:
+        domain = []
+        if data['from_date']:
+            domain.append(('date','>=',data['from_date']))
+        if data['to_date']:
+            domain.append(('date','<',data['to_date']))
+
+        if data.get('user_id', False):
+            domain.append(('user_id','=',data['user_id']))
+        if data.get('partner_id', False):
+            domain.append(('partner_id','=',data['partner_id']))
+            
+        int_ids = int_pool.search(self.cr, self.uid, domain)
+        
+        for intervention in int_pool.browse(cr, uid, int_ids):
+            
+        
+        return ''
 
 report_sxw.report_sxw(
     'report.webkitinterventstatus',
-    'hr.timesheet', 
+    'hr.analytic.timesheet', 
     'addons/intervention_report_analysis/report/status_webkit.mako',
     parser=report_webkit_html
-)
+    )
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

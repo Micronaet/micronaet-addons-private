@@ -20,5 +20,5 @@
 ###############################################################################
 
 
-from . import intervention_status_wizard
+import intervention_status_wizard
 

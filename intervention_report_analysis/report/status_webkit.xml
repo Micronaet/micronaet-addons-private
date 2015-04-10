@@ -62,9 +62,9 @@ thead{
             <field  name="name">Intervent analysis report</field>
         </record>
         <report
-            id="webkit_status_report"
+            id="webkit_itervention_analytic_analysis_report"
             auto="False"
-            model="hr.timesheet"
+            model="hr.analytic.timesheet"
             name="webkitinterventstatus"
             file="intervention_report_analysis/report/status_webkit.mako"
             string="Intervention analysis status"

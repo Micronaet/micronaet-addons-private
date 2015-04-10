@@ -116,7 +116,7 @@
 </head>
 <body>
    <% setLang('it_IT') %>
-   <% load_data(data) %>
+   <% start_up(data) %>
    <!--Start loop for design table for product and material status: -->
    <table class="list_table">      
        <!-- ################## HEADER ################################### -->

@@ -20,7 +20,7 @@
 ###############################################################################
 
 
-from . import analysis
-from . import report
-from . import wizard
+import analysis
+import report
+import wizard
 
