@@ -13,6 +13,24 @@
         p {
            margin:2px;
         }
+
+        .partner {
+            font-size: 13px;          
+            font-weight: bold;  
+            margin-top: 15px; 
+            padding-left: 3px; 
+        }
+        .type_account {
+            font-size: 11px;          
+            font-weight: bold;  
+            padding-left: 8px; 
+        }
+        .account {
+            font-size: 9px;          
+            padding-left: 13px; 
+        }
+        
+
         h2 {
             font-size:13px;            
         }
@@ -115,45 +133,101 @@
     </style>
 </head>
 <body>
-   <% setLang('it_IT') %>
-
    <% old_partner = False %>
+   <% opened_header = False %>
+   <% row_pending = False %>
    
-   %for orer, item in load_data(data):
+   %for order, item in load_data(data):
+       <% need_header = False %>           
+       
        <!--Check break partner code:-->
-       %if not old_partner or old_partner != item.intervent_partner_id.id:
-           %if old_partner:
+       %if old_partner != item.intervent_partner_id.id:
+           <% need_header = True %>           
+           <% old_partner = item.intervent_partner_id.id %>
+           <% old_type = False %>
+           <% old_account = False %>
+           <% old_user = False %>
+           <p class='partner'>
+               ${item.intervent_partner_id.name|entity}
+           </p>
+       %endif
+
+       <!-- Check break Contract / Generic account-->
+       %if old_type != order[1]:
+           <% need_header = True %>           
+           <% old_type = order[1] %>
+           <% old_account = False %>
+           <% old_user = False %>
+           <p class='type_account'>
+               ${order[1]|entity}
+           </p>
+       %endif
+
+       <!-- Check break analytic account-->
+       %if order[1] == 'Contratti' and old_account != item.account_id.id:
+           <% need_header = True %>           
+           <% old_account = item.account_id.id %>
+           <% old_user = False %>
+           <p class='account'>
+               ${item.account_id.name|entity}
+           </p>
+       %endif
+
+       %if need_header: 
+           %if opened_header:
                </table>
            %endif    
-           
-
-           <% old_partner = item.intervent_partner_id.id %>
-           <p>
-           ${item.intervent_partner_id.name|entity}
-           </p>               
-
+           <% opened_header = True %>
            <table class="list_table">      
-               <!-- ################## HEADER ################################### -->
                <thead>
                    <tr>
-                       <th class='description'>Cliente</th>
                        <th class='description'>Utente</th>
-                       <th class='description'></th>
+                       <th class='description'>#</th>
                        <th class='description'></th>
                        <th class='description'></th>
                    </tr>
-               </thead>
-       %endif
-           <!-- ################## BODY ##################################### -->
-           <tbody>
+               </thead>                   
+       %endif                      
+       
+       %if old_user == item.user_id.name:
+           <!--Increment totals-->
+           <% total_number += 1 %>
+           <% row_pending = True %>
+           
+       %else:
+           <!--First element:-->
+           %if not old_user:
+               <% old_user = item.user_id.name %>
+               <% total_number = 0 %>
+           %else:
+               
+               <!-- Write row with totals:-->           
                <tr>
-                   <td class='description'>Cliente</td>
-                   <td class='description'>Utente</td>
-                   <td class='description'></td>
+                   <td class='description'>${item.user_id.name|entity}</td>
+                   <td class='description'>${total_number|entity}</td>
                    <td class='description'></td>
                    <td class='description'></td>
                </tr>    
-           </tbody>
+               <!-- reset counters:-->
+               <% old_user = item.user_id.name %>
+               <% total_number = 0 %>
+               <% row_pending = False %>
+           %endif    
+       %endif    
+
    %endfor
+   %if row_pending:
+       <tr>
+           <td class='description'>${item.user_id.name|entity}</td>
+           <td class='description'></td>
+           <td class='description'></td>
+           <td class='description'></td>
+       </tr>    
+   %endif    
+
+   <!--Last close-->
+   %if opened_header:
+       </table>
+   %endif    
 </body>
 </html>

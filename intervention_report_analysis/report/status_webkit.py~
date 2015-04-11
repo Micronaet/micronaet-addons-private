@@ -87,9 +87,10 @@ class report_webkit_html(report_sxw.rml_parse):
             #self.partner[intervention.intervent_partner_id].append(
             #    intervention)
             order = (
-                item.intervent_partner_id.name, 
-                item.account_id.name,
-                item.user_id.name,
+                item.intervent_partner_id.name, # Partner
+                'partner' if item.account_id.partner_id else 'generic', # With partner
+                item.account_id.name, # Analytic account
+                item.user_id.name, # Users
                 )
             items.append((order, item))
         return sorted(items)            

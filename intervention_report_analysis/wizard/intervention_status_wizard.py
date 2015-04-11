@@ -72,7 +72,7 @@ class intervention_status_wizard(osv.osv_memory):
         }
         
     _defaults = {
-        'from_date': lambda *x: datetime.now().strftime("%Y-%m-%d"),
+        'from_date': lambda *x: (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d"),
         'to_date': lambda *x: datetime.now().strftime("%Y-%m-%d"),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
