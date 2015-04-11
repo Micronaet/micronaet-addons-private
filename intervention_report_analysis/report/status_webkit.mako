@@ -116,29 +116,47 @@
 </head>
 <body>
    <% setLang('it_IT') %>
-   <% load_data(data) %>
-   <!--Start loop for design table for product and material status: -->
-   <table class="list_table">      
-       <!-- ################## HEADER ################################### -->
-       <thead>
-           <tr>
-               <th class='description'>Cliente</th>
-               <th class='description'>Utente</th>
-               <th class='description'></th>
-               <th class='description'></th>
-               <th class='description'></th>
-           </tr>
-       </thead>
-       <!-- ################## BODY ##################################### -->
-       <tbody>
-           <tr>
-               <td class='description'>Cliente</td>
-               <td class='description'>Utente</td>
-               <td class='description'></td>
-               <td class='description'></td>
-               <td class='description'></td>
-           </tr>    
-       </tbody>
-     
+
+   <% old_partner = False %>
+   
+   %for orer, item in load_data(data):
+       <!--Check break partner code:-->
+       %if not old_partner or old_partner != item.intervent_partner_id.id:
+           %if old_partner:
+               </table>
+           %endif    
+           
+
+           <% old_partner = item.intervent_partner_id.id %>
+           <% old_account = item.account_id.id %>
+           <% old_user = item.user_id.id %>
+           
+           <p>
+           ${item.intervent_partner_id.name|entity}
+           </p>               
+
+           <table class="list_table">      
+               <!-- ################## HEADER ################################### -->
+               <thead>
+                   <tr>
+                       <th class='description'>Conto analtico</th>
+                       <th class='description'>Utente</th>
+                       <th class='description'></th>
+                       <th class='description'></th>
+                       <th class='description'></th>
+                   </tr>
+               </thead>
+       %endif
+           <!-- ################## BODY ##################################### -->
+           <tbody>
+               <tr>
+                   <td class='description'><% item.acount_id.name|entity%></td>
+                   <td class='description'></td>
+                   <td class='description'></td>
+                   <td class='description'></td>
+                   <td class='description'></td>
+               </tr>    
+           </tbody>
+   %endfor
 </body>
 </html>

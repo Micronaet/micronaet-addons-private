@@ -43,6 +43,7 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 _logger = logging.getLogger(__name__)
 
 class report_webkit_html(report_sxw.rml_parse):    
+    # Global parameter for manage report data:
     partner = {}
     
     def __init__(self, cr, uid, name, context):
@@ -61,10 +62,11 @@ class report_webkit_html(report_sxw.rml_parse):
         
         # Reset global variables:
         self.partner = {}
+        
         # Search all intervent in period:
-        int_pool = self.pool.get('hr.nalytic.intervent')
+        int_pool = self.pool.get('hr.analytic.timesheet')
 
-        # Search depend on filter:
+        # Search depend on filter domain:
         domain = []
         if data['from_date']:
             domain.append(('date','>=',data['from_date']))
@@ -75,13 +77,22 @@ class report_webkit_html(report_sxw.rml_parse):
             domain.append(('user_id','=',data['user_id']))
         if data.get('partner_id', False):
             domain.append(('partner_id','=',data['partner_id']))
-            
         int_ids = int_pool.search(self.cr, self.uid, domain)
         
-        for intervention in int_pool.browse(cr, uid, int_ids):
-            
-        
-        return ''
+        # Start analyse data intervent:
+        items = []
+        for item in int_pool.browse(self.cr, self.uid, int_ids):
+            #if intervention.intervent_partner_id not in self.partner:
+            #    self.partner[intervention.intervent_partner_id] = []#{} # user
+            #self.partner[intervention.intervent_partner_id].append(
+            #    intervention)
+            order = (
+                item.intervent_partner_id.name, 
+                item.account_id.name,
+                item.user_id.name,
+                )
+            items.append((order, item))
+        return sorted(items)            
 
 report_sxw.report_sxw(
     'report.webkitinterventstatus',

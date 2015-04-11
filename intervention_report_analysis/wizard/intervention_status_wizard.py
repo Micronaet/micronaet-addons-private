@@ -55,8 +55,8 @@ class intervention_status_wizard(osv.osv_memory):
         datas = {}
         datas['from_date'] = wiz_proxy.from_date
         datas['to_date'] = wiz_proxy.to_date
-        datas['user_id'] = wiz_proxy.user_id or False
-        datas['partner_id'] = wiz_proxy.partner_id or False
+        datas['user_id'] = wiz_proxy.user_id.id or False
+        datas['partner_id'] = wiz_proxy.partner_id.id or False
 
         return {
             'type': 'ir.actions.report.xml',

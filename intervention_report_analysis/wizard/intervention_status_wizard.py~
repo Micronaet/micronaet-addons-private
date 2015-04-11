@@ -57,7 +57,7 @@ class intervention_status_wizard(osv.osv_memory):
         datas['to_date'] = wiz_proxy.to_date
         datas['user_id'] = wiz_proxy.user_id or False
         datas['partner_id'] = wiz_proxy.partner_id or False
-        import pdb; pdb.set_trace()
+
         return {
             'type': 'ir.actions.report.xml',
             'report_name': 'webkitinterventstatus',
