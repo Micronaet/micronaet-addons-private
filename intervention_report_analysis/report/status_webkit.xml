@@ -23,7 +23,7 @@
     </head>
     <body style="border:0; margin: 0;" onload="subst()">
     <% setLang(company.partner_id.lang or "it_IT") %>
-    <h3>Piano dei consumi</h3><br/>
+    <h3>Analisi interventi</h3><br/>
     </body>
 </html>]]>
 </field>

@@ -198,7 +198,8 @@
            <!--First element:-->
            %if not old_user:
                <% old_user = item.user_id.name %>
-               <% total_number = 0 %>
+               <% total_number = 1 %>
+               <% row_pending = True %>
            %else:
                
                <!-- Write row with totals:-->           
