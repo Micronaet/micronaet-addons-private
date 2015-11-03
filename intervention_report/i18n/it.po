@@ -1,20 +1,21 @@
 # Translation of OpenERP Server.
 # This file contains the translation of the following modules:
 # 	* intervention_report
-# <> <>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-06 14:07+0000\n"
-"PO-Revision-Date: 2013-06-06 17:46+0200\n"
+"POT-Creation-Date: 2015-11-03 16:16+0000\n"
+"PO-Revision-Date: 2015-11-03 17:18+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #. module: intervention_report
 #: field:hr.analytic.timesheet,intervent_duration:0
@@ -71,7 +72,7 @@ msgstr "Azienda"
 #. module: intervention_report
 #: view:hr.analytic.timesheet:0
 msgid "Timesheet"
-msgstr "Foglio presenza"
+msgstr "Timesheet"
 
 #. module: intervention_report
 #: field:hr.analytic.timesheet,intervent_partner_id:0
@@ -144,6 +145,11 @@ msgid "Warranty"
 msgstr "Garanzia"
 
 #. module: intervention_report
+#: field:hr.analytic.timesheet,account_hour_status:0
+msgid "Account status"
+msgstr "Stato commessa"
+
+#. module: intervention_report
 #: view:hr.analytic.timesheet:0
 msgid "Group By..."
 msgstr "Raggruppa per..."
@@ -188,6 +194,7 @@ msgstr "Precedente"
 
 #. module: intervention_report
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet
+#: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_extra
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_insert
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_location
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_my
@@ -272,14 +279,19 @@ msgid "Insert intervent"
 msgstr "Inserisci intervento"
 
 #. module: intervention_report
+#: help:hr.analytic.timesheet,not_in_report:0
+msgid "It's not printed in monthly report"
+msgstr "It's not printed in monthly report"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,internal_note:0
+msgid "Note for save some impression, no comunication to customer"
+msgstr "Note for save some impression, no comunication to customer"
+
+#. module: intervention_report
 #: model:hr_timesheet_invoice.factor,name:intervention_report.gratis_intervent_0
 msgid "Gratis"
 msgstr "Gratuito"
-
-#. module: intervention_report
-#: model:ir.actions.report.xml,name:intervention_report.aeroo_intervent_report_state_id
-msgid "Intervent report x state"
-msgstr "Lista rapporti intervento"
 
 #. module: intervention_report
 #: view:hr.analytic.timesheet:0
@@ -325,6 +337,11 @@ msgid "Manual"
 msgstr "Manuale"
 
 #. module: intervention_report
+#: field:hr.analytic.timesheet,not_in_report:0
+msgid "Not in report"
+msgstr "Not in report"
+
+#. module: intervention_report
 #: view:hr.analytic.timesheet:0
 msgid "This year"
 msgstr "Anno attuale"
@@ -344,13 +361,6 @@ msgstr "Chiuso con rapportino"
 #: field:hr.analytic.timesheet,internal_note:0
 msgid "Internal note"
 msgstr "Note interne"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,internal_note:0
-msgid "Note for save some impression, no comunuication to customer"
-msgstr ""
-"Note per indicare alcune impressioni, non vengono comunicate al cliente "
-"finale"
 
 #. module: intervention_report
 #: help:res.partner,has_contract:0
@@ -455,7 +465,7 @@ msgstr "Durata pause"
 #. module: intervention_report
 #: selection:hr.analytic.timesheet.trip.wizard,month:0
 msgid "August"
-msgstr "Augosto"
+msgstr "Agosto"
 
 #. module: intervention_report
 #: help:hr.analytic.timesheet,manual_total_internal:0
@@ -497,6 +507,7 @@ msgid "Is a Follower"
 msgstr "E' un follower"
 
 #. module: intervention_report
+#: field:hr.analytic.timesheet,user_name:0
 #: field:hr.analytic.timesheet.trip.wizard,user_id:0
 #: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_insert
 msgid "User"
@@ -701,7 +712,7 @@ msgstr ""
 #. module: intervention_report
 #: model:email.template,subject:intervention_report.email_template_timesheet_intervent
 msgid "${object.name} Rif: ${object.ref or 'n/a'})"
-msgstr "${object.name} Rif: ${object.ref or 'n/a'})"
+msgstr "${object.name} Rif: ${object.ref or 'n/a'}"
 
 #. module: intervention_report
 #: field:hr.analytic.timesheet.trip.wizard,all_user:0
@@ -814,6 +825,12 @@ msgid "May"
 msgstr "Maggio"
 
 #. module: intervention_report
+#: view:hr.analytic.timesheet:0 field:hr.analytic.timesheet,extra_planned:0
+#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_extra
+msgid "Extra Planned"
+msgstr "Extra Planned"
+
+#. module: intervention_report
 #: field:hr.analytic.timesheet.trip.wizard,to_date:0
 msgid "To date (<)"
 msgstr "Alla data (<)"
@@ -849,6 +866,11 @@ msgid "Default Contract"
 msgstr "Contratto di default"
 
 #. module: intervention_report
+#: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet_extra
+msgid "Intervent extra planned"
+msgstr "Intervent extra planned"
+
+#. module: intervention_report
 #: selection:hr.analytic.timesheet.trip.wizard,month:0
 msgid "February"
 msgstr "Febbraio"
@@ -862,6 +884,11 @@ msgstr "Nome"
 #: view:hr.analytic.timesheet:0
 msgid "Check month"
 msgstr "Controllo mese"
+
+#. module: intervention_report
+#: constraint:hr.analytic.timesheet:0
+msgid "You cannot modify an entry in a Confirmed/Done timesheet !"
+msgstr "You cannot modify an entry in a Confirmed/Done timesheet !"
 
 #. module: intervention_report
 #: selection:hr.analytic.timesheet.trip.wizard,month:0
