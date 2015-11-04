@@ -58,25 +58,28 @@ class report_webkit_html(report_sxw.rml_parse):
 
     def _load_data(self, data=None):
         ''' Load all data for analytic report
+            Search all intervent in period
         '''
         
         # Reset global variables:
         self.partner = {}
         
-        # Search all intervent in period:
+        # Pool used:
         int_pool = self.pool.get('hr.analytic.timesheet')
 
+        # -------------------------------
         # Search depend on filter domain:
+        # -------------------------------
         domain = []
         if data['from_date']:
-            domain.append(('date','>=',data['from_date']))
+            domain.append(('date', '>=', data['from_date']))
         if data['to_date']:
-            domain.append(('date','<',data['to_date']))
+            domain.append(('date', '<', data['to_date']))
 
         if data.get('user_id', False):
-            domain.append(('user_id','=',data['user_id']))
+            domain.append(('user_id', '=', data['user_id']))
         if data.get('partner_id', False):
-            domain.append(('partner_id','=',data['partner_id']))
+            domain.append(('partner_id', '=', data['partner_id']))
         int_ids = int_pool.search(self.cr, self.uid, domain)
         
         # Start analyse data intervent:
@@ -86,7 +89,7 @@ class report_webkit_html(report_sxw.rml_parse):
             #    self.partner[intervention.intervent_partner_id] = []#{} # user
             #self.partner[intervention.intervent_partner_id].append(
             #    intervention)
-            order = (
+            order = ( # key for order elements:
                 item.intervent_partner_id.name, # Partner
                 'Contratti' if item.account_id.partner_id else 'Generico', # With partner
                 item.account_id.name, # Analytic account

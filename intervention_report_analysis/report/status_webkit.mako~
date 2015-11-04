@@ -1,6 +1,6 @@
 <html>
 <head>
-    <style type="text/css">
+    <!--<style type="text/css">
         ${css}
 
         /*Colori utilizzati:
@@ -130,105 +130,90 @@
         .nopb {
             page-break-inside: avoid;
            }
-    </style>
+    </style>-->
 </head>
 <body>
-   <% old_partner = False %>
-   <% opened_header = False %>
-   <% row_pending = False %>
+   <!--List of totalizer of the report:-->
+   <% total_number = 0 %>
    
-   %for order, item in load_data(data):
-       <% need_header = False %>           
+   <!--List of level of the report:-->
+   <% level_partner = False %>
+   <% level_type = False %>
+   <% level_account = False %>
+   <% level_user = False %>
+   <% break_level = False %>
+   
+   <table>
+   <!--Master loop:-->
+   %for key, item in load_data(data):
        
-       <!--Check break partner code:-->
-       %if old_partner != item.intervent_partner_id.id:
-           <% need_header = True %>           
-           <% old_partner = item.intervent_partner_id.id %>
-           <% old_type = False %>
-           <% old_account = False %>
-           <% old_user = False %>
-           <p class='partner'>
-               ${item.intervent_partner_id.name|entity}
-           </p>
-       %endif
-
-       <!-- Check break Contract / Generic account-->
-       %if old_type != order[1]:
-           <% need_header = True %>           
-           <% old_type = order[1] %>
-           <% old_account = False %>
-           <% old_user = False %>
-           <p class='type_account'>
-               ${order[1]|entity}
-           </p>
-       %endif
-
-       <!-- Check break analytic account-->
-       %if order[1] == 'Contratti' and old_account != item.account_id.id:
-           <% need_header = True %>           
-           <% old_account = item.account_id.id %>
-           <% old_user = False %>
-           <p class='account'>
-               ${item.account_id.name|entity}
-           </p>
-       %endif
-
-       %if need_header: 
-           %if opened_header:
-               </table>
-           %endif    
-           <% opened_header = True %>
-           <table class="list_table">      
-               <thead>
-                   <tr>
-                       <th class='description'>Utente</th>
-                       <th class='description'>#</th>
-                       <th class='description'></th>
-                       <th class='description'></th>
-                   </tr>
-               </thead>                   
-       %endif                      
-       
-       %if old_user == item.user_id.name:
-           <!--Increment totals-->
-           <% total_number += 1 %>
-           <% row_pending = True %>
-           
-       %else:
-           <!--First element:-->
-           %if not old_user:
-               <% old_user = item.user_id.name %>
-               <% total_number = 1 %>
-               <% row_pending = True %>
-           %else:
-               
-               <!-- Write row with totals:-->           
-               <tr>
-                   <td class='description'>${item.user_id.name|entity}</td>
-                   <td class='description'>${total_number|entity}</td>
-                   <td class='description'></td>
-                   <td class='description'></td>
-               </tr>    
-               <!-- reset counters:-->
-               <% old_user = item.user_id.name %>
-               <% total_number = 0 %>
-               <% row_pending = False %>
-           %endif    
-       %endif    
-
-   %endfor
-   %if row_pending:
+       <% total_number += 1 %>
        <tr>
-           <td class='description'>${item.user_id.name|entity}</td>
-           <td class='description'></td>
-           <td class='description'></td>
-           <td class='description'></td>
-       </tr>    
-   %endif    
+          <td>
+           %if level_partner != item.intervent_partner_id.id:
+               <% break_level = 'partner' %>
+               <% level_partner = item.intervent_partner_id.id %>
+               <% level_type = False %>
+               <% level_account = False %>
+               <% level_user = False %>
+               ${item.intervent_partner_id.name|entity}
+           %endif    
+          </td>
+          <td>
+           %if level_type != key[1]:
+               %if not break_level:               
+                   <% break_level = 'type' %>
+               %endif    
+               <% level_type = key[1] %>
+               <% level_account = False %>
+               <% level_user = False %>
+               ${key[1]|entity}
+           %endif    
+          </td>
+          <td>
+           %if level_account != item.account_id.id:
+               %if not break_level:               
+                   <% break_level = 'account' %>
+               %endif    
+               <% level_account = item.account_id.id %>
+               <% level_user = False %>
+               ${item.account_id.name|entity}
+           %endif    
+          <td>
+          <td>
+           %if level_user != item.user_id.id:
+               %if not break_level:               
+                   <% break_level = 'user' %>
+               %endif    
+               <% level_user = item.user_id.id %>
+               ${item.user_id.name|entity}
+           %endif    
+          </td>
+          <td>
+               ${total_number|entity}
+          </td>          
+          <td>
+               ${item.intervent_duration|entity}
+          </td>          
+          <td>
+               ${item.manual_total|entity}               
+               ${item.intervent_total|entity}
+          </td>          
+          <td>
+               ${item.manual_total_internal|entity}
+               ${item.unit_amount|entity}
+          </td>          
+          <td>
+               ${item.trip_hour|entity}
+          </td>
+          
+          <td>
+               ${break_level|entity}
+               <% break_level = False %>
+          </td>          
+       <tr>
+   %endfor
 
-   <!--Last close-->
-   %if opened_header:
-       </table>
-   %endif    
+   </table>
 </body>
 </html>
