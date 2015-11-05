@@ -19,14 +19,12 @@
 #
 ###############################################################################
 
-
 {
     'name': 'Intervention analysis',
     'version': '0.1',
     'category': 'Report',
     'description': """
-        Add extra element for analysis in intervention report
-        
+        Add extra element for analysis in intervention report        
         """,
     'author': 'Micronaet s.r.l.',
     'website': 'http://www.micronaet.it',

@@ -25,8 +25,7 @@
     'version': '0.1',
     'category': 'Report',
     'description': """
-        Add extra element for analysis in intervention report
-        
+        Add extra element for analysis in intervention report        
         """,
     'author': 'Micronaet s.r.l.',
     'website': 'http://www.micronaet.it',
@@ -42,7 +41,7 @@
         #'security/ir.model.access.csv',
         'analysis_view.xml',  
         'report/status_webkit.xml',
-        #'wizard/wizard_create_trip_view.xml',                    
+        'wizard/intervention_status_wizard.xml',                    
         ],
     'active': False,
     'installable': True,

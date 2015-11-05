@@ -1,5 +1,62 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <record model="ir.ui.view" id="view_account_analytic_account_analysis_form">
+            <field name="name">account.analytic.account.analysis.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form" />
+            <field name="arch" type="xml">
+                <group name="main" position="after">
+                    <notebook>
+                        <page string='Extra info'>
+                            <group colspan="4" col="4">
+                                <field name="from_date" />
+                                <field name="to_date" />
+                                <field name="hour_cost" />
+                                <field name="total_amount" />
+                                <field name="hour_cost_customer" readonly="1"/>
+                            </group>
+                        </page>
+                        
+                        <page string='Distribution'>                    
+                            <group colspan="4" col="4">
+                                <field name="distribution_ids">
+                                    <tree string="Distribution" editable="bottom">        
+                                        <field name="user_id" />
+                                        <field name="account_id" invisible="1" />
+                                        <field name="percentual" />
+                                    </tree>                    
+                                    <form string="Distribution" editable="bottom">        
+                                        <field name="user_id" />
+                                        <field name="account_id" invisible="1" />
+                                        <field name="percentual" />
+                                    </form>                    
+                                </field>
+                            </group>
+                        </page>
+                        
+                        <page string='Invoice'>                    
+                            <group colspan="4" col="4">
+                                <field name="invoice_ids">
+                                    <tree string="Invoice" editable="bottom">        
+                                        <field name="name" />
+                                        <field name="total_amount" />
+                                        <field name="hour" />
+                                        <field name="date_invoice" />
+                                    </tree>                    
+                                    <form string="Invoice" editable="bottom">        
+                                        <field name="name" />
+                                        <field name="total_amount" />
+                                        <field name="hour" />
+                                        <field name="date_invoice" />
+                                    </form>                    
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </group>
+            </field>
+        </record>
+        
     </data>
 </openerp>

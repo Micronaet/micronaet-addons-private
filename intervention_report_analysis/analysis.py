@@ -33,12 +33,78 @@ from openerp import tools
 from openerp.tools.translate import _
 from openerp.tools.float_utils import float_round as round
 from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT, 
-    DEFAULT_SERVER_DATETIME_FORMAT, 
-    DATETIME_FORMATS_MAP, 
-    float_compare)
+    DEFAULT_SERVER_DATETIME_FORMAT, DATETIME_FORMATS_MAP, float_compare)
 
 
 _logger = logging.getLogger(__name__)
 
+class account_analytic_account(orm.Model):
+    ''' Add extra info for account
+    '''
+    _inherit = 'account.analytic.account'
 
+    _columns = {
+        # Amount:
+        'total_amount': fields.float('Total amount', 
+            digits=(16, 2), 
+            help='Total amount of contract'), 
+        'hour_cost': fields.float('Hour cost', 
+            digits=(16, 2),
+            help='Hour cost (total / number of hours)'), 
+        'hour_cost_customer': fields.related(
+            'partner_id', 'hour_cost', type='float', digits=(16, 2), 
+            string='Customer hour cost'),
+
+        # Date period:
+        'from_date': fields.date('From'),
+        'to_date': fields.date('To'),
+        }
+
+class account_analytic_account_distribution(orm.Model):
+    ''' Distribution of hour
+    '''
+    _name = 'account.analytic.account.distribution'
+    _description = 'User distribution for contract'
+    _rec_name = 'user_id'
+    
+    _columns = {
+        'user_id': fields.many2one('res.users', 'Users', required=True),
+        'account_id': fields.many2one(
+            'account.analytic.account', 'Account'),
+        'percentual': fields.float('Hour cost', 
+            digits=(8, 2), help='Percentual on total hour'), 
+        }
+
+class account_analytic_account_invoice(orm.Model):
+    ''' Invoice for account
+    '''
+    _name = 'account.analytic.account.invoice'
+    _description = 'Invoice extra for contract'
+    _rec_name = 'name'
+    
+    _columns = {
+        'name': fields.char('Invoice ref.', size=40),
+        'total_amount': fields.float('Total amount', digits=(16, 2)), 
+        'hour': fields.float('Hour cost', digits=(16, 2),
+            help='Number of hours'), 
+
+        'account_id': fields.many2one('account.analytic.account', 'Account'),
+        'invoice_id': fields.many2one('account.invoice', 'Invoice'),
+        'date_invoice': fields.related(
+            'invoice_id', 'date_invoice', 'Invoice date', type='date'),
+        }
+
+class account_analytic_account(orm.Model):
+    ''' Add *many relation
+    '''
+    _inherit = 'account.analytic.account'
+    
+    _columns = {
+        'distribution_ids': fields.one2many(
+            'account.analytic.account.distribution', 'account_id', 
+            'Distribution'),
+        'invoice_ids': fields.one2many(
+            'account.analytic.account.invoice', 'account_id', 
+            'Invoice'),      
+        }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
