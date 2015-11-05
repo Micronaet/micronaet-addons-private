@@ -93,8 +93,8 @@ class account_analytic_account_invoice(orm.Model):
         'account_id': fields.many2one('account.analytic.account', 'Account', 
             required=True),
         'invoice_id': fields.many2one('account.invoice', 'Invoice'),
-        'date_invoice': fields.related(
-            'invoice_id', 'date_invoice', 'Invoice date', type='date'),
+        #'date_invoice': fields.related(
+        #    'invoice_id', 'date_invoice', 'Invoice date', type='date'),
         }
 
 class account_analytic_account(orm.Model):
