@@ -84,11 +84,14 @@ class account_analytic_account_invoice(orm.Model):
     
     _columns = {
         'name': fields.char('Invoice ref.', size=40),
-        'total_amount': fields.float('Total amount', digits=(16, 2)), 
-        'hour': fields.float('Hour cost', digits=(16, 2),
+        'hour': fields.float('Hour', digits=(16, 2),
             help='Number of hours'), 
+        'hour_cost': fields.float('Hour cost', digits=(16, 2),
+            help='Number of hours'), 
+        'total_amount': fields.float('Total amount', digits=(16, 2)), 
 
-        'account_id': fields.many2one('account.analytic.account', 'Account'),
+        'account_id': fields.many2one('account.analytic.account', 'Account', 
+            required=True),
         'invoice_id': fields.many2one('account.invoice', 'Invoice'),
         'date_invoice': fields.related(
             'invoice_id', 'date_invoice', 'Invoice date', type='date'),
@@ -107,4 +110,15 @@ class account_analytic_account(orm.Model):
             'account.analytic.account.invoice', 'account_id', 
             'Invoice'),      
         }
+        
+class account_invoice(orm.Model):
+    ''' Add *many relation
+    '''
+    _inherit = 'account.invoice'
+    
+    _columns = {
+        'analytic_invoice_ids': fields.one2many(
+            'account.analytic.account.invoice', 'invoice_id', 
+            'Analytic Invoice'),
+        }        
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
