@@ -41,14 +41,14 @@
                                         <field name="hour" />
                                         <field name="hour_cost" />
                                         <field name="total_amount" />
-                                        <field name="date_invoice" />
+                                        <!--<field name="date_invoice" />-->
                                     </tree>                    
                                     <form string="Invoice">
                                         <field name="name" />
                                         <field name="hour" />
                                         <field name="hour_cost" />
                                         <field name="total_amount" />
-                                        <field name="date_invoice" />
+                                        <!--<field name="date_invoice" />-->
                                     </form>                    
                                 </field>
                             </group>
@@ -73,7 +73,6 @@
                                         <field name="hour" />
                                         <field name="hour_cost" />
                                         <field name="total_amount" />
-                                        <field name="date_invoice" />
                                     </tree>                    
                                     <form string="Invoice">        
                                         <field name="name" />
@@ -82,7 +81,6 @@
                                         <field name="hour" />
                                         <field name="hour_cost" />
                                         <field name="total_amount" />
-                                        <field name="date_invoice" />
                                     </form>               
                                 </field>
                             </group>
