@@ -171,7 +171,7 @@
            old_value['partner'] = item.intervent_partner_id.id
            old_value['type'] = key[1]
            old_value['account'] = item.account_id.id
-           old_value['user'] != item.user_id.id
+           old_value['user'] = item.user_id.id
            %>
        %endif
        
@@ -192,19 +192,19 @@
            %endif
        %endif
 
-       <!--Write total if break level:
+       <!--Write total if break level:-->
        %if break_level:
            ${write_total(total, break_level, new_table=break_level == 'partner')}
-       %endif    -->
+       %endif
        
        <!--Partner level:-->
        %if break_level == 'partner':               
            <% 
            # Reset old value:
            old_value['partner'] = item.intervent_partner_id.id
-           old_value['type'] = False
-           old_value['account'] = False
-           old_value['user'] = False 
+           old_value['type'] = key[1]
+           old_value['account'] = item.account_id.id
+           old_value['user'] = item.user_id.id
 
            # Reset counters:
            dict_operation(total['number'], 0, 'set')
@@ -221,8 +221,8 @@
            <%
            # Reset old value
            old_value['type'] = key[1]
-           old_value['account'] = False
-           old_value['user'] = False
+           old_value['account'] = item.account_id.id
+           old_value['user'] = item.user_id.id
 
            # Reset counters:
            total['number']['type'] = 1
@@ -241,12 +241,12 @@
            <% 
            # Reset old value
            old_value['account'] = item.account_id.id
-           old_value['user'] = False 
+           old_value['user'] = item.user_id.id
  
            # Reset counters:
            total['number']['account'] = 1
            total['number']['user'] = 1
-           %> 
+           %>
        %endif  
        %if i == 1 or break_level:
            <td>${item.account_id.name|entity}</td>
