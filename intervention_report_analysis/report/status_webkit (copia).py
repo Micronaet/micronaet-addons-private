@@ -61,20 +61,18 @@ class report_webkit_html(report_sxw.rml_parse):
             'dict_operation': self.dict_operation,
         })
 
-    def dict_operation(self, data, value, operation='add'
-            #, modify_list=None
-            ):
+    def dict_operation(self, data, value, operation='add', modify_list=None):
         ''' Dict add value to all keys:
         '''
-        #if modify_list is None:
-        #    modify_list = ()
+        if modify_list is None:
+            modify_list = ()
             
         for k in data:
-            #if modify_list and (k in modify_list):
-            if operation == 'add':
-                data[k] += value
-            elif operation == 'set':   
-                data[k] = value
+            if modify_list and (k in modify_list):
+                if operation == 'add':
+                    data[k] += value
+                elif operation == 'set':   
+                    data[k] = value
         return 
         
     def table_start(self, ):
@@ -92,15 +90,15 @@ class report_webkit_html(report_sxw.rml_parse):
         '''        
         return '''
             <tr>
-                <th>Cliente</th>
-                <th>Tipo</th>
-                <th>Conto</th>
-                <th>Utente</th>
-                <th>Data</th>
-                <th>Ore</th>
-                <th>Ore totali</th>
-                <th>Ore interne</th>
-                <th>Viaggio</th>
+                <td>Cliente</td>
+                <td>Tipo</td>
+                <td>Conto</td>
+                <td>Utente</td>
+                <td>Data</td>
+                <td>Ore</td>
+                <td>Ore totali</td>
+                <td>Ore interne</td>
+                <td>Viaggio</td>
             </tr>''' # Last 5 cols for value
             
     def write_total(self, total, break_level, new_table=False):

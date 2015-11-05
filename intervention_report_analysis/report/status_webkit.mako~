@@ -11,79 +11,79 @@
         */
 
         p {
-           margin:2px;
-        }
+            margin: 2px;
+            }
 
         .partner {
             font-size: 13px;          
             font-weight: bold;  
             margin-top: 15px; 
             padding-left: 3px; 
-        }
+            }
         .type_account {
             font-size: 11px;          
             font-weight: bold;  
             padding-left: 8px; 
-        }
+            }
         .account {
             font-size: 9px;          
             padding-left: 13px; 
-        }
+            }
         
 
         h2 {
-            font-size:13px;            
-        }
+            font-size: 13px;            
+            }
 
         .red {
-            background-color:#ffd5d5;
+            background-color: #ffd5d5;
             /*A70010;*/
-            font-weight:bold;
-        }
+            font-weight: bold;
+            }
         .blu {
-            background-color:#d5e9ff;
+            background-color: #d5e9ff;
             /*363AA7;*/
-            font-weight:bold;
-        }
+            font-weight: bold;
+            }
         .green {
-            background-color:#ade3b8;
+            background-color: #ade3b8;
             /*004E00;*/
-            font-weight:bold;
-        }
+            font-weight: bold;
+            }
         .yellow {
-            background-color:#fffccc;
+            background-color: #fffccc;
             /*004E00;*/
-            font-weight:bold;
-        }
+            font-weight: bold;
+            }
         
         .right {
             text-align:right;         
-        }
+            }
         .center {
-            text-align:center;
-        }
+            text-align: center;
+            }
         .left {
-            text-align:left;
-        }
+            text-align: left;
+            }
         .even {
             background-color: #efeff8;
-        }
+            }
         .odd {
             background-color: #FFFFFF;
-        }
+            }
         
         .total {
             font-size:11px;          
-            font-weight:bold;  
+            font-weight: bold;  
             padding:4px;
             background-color: #f6cf3b;
-        }
+            }
         
         .center_line {
-            text-align:center; 
-            border:1px solid #000; 
-            padding:3px;
-        }
+            text-align: center; 
+            border: 1px solid #000; 
+            padding: 3px;
+            }
 
         table.list_table {
             border:1px solid #000;             
@@ -91,45 +91,45 @@
             margin:0px;                        
             cellspacing:0px;
             cellpadding:0px;
-            border-collapse:collapse;
+            border-collapse: collapse;
             
             /*Non funziona il paginate*/
             -fs-table-paginate: paginate;
-        }
+            }
 
         table.list_table tr, table.list_table tr td {
-            page-break-inside:avoid;
-        }        
+            page-break-inside: avoid;
+            }        
         
         thead tr th{
-            text-align:center;
-            font-size:10px;
-            border:1px solid #000; 
-            background:#7c7bad;            
-        }
+            text-align: center;
+            font-size: 10px;
+            border: 1px solid #000; 
+            background: #7c7bad;            
+            }
         thead {
             display: table-header-group;
             }
             
         tbody tr td{
-            text-align:center;
-            font-size:10px;
-            border:1px solid #000; 
-        }
+            text-align: center;
+            font-size: 10px;
+            border: 1px solid #000; 
+            }
         .description{
-              width:250px;
-              text-align:left;
-        }
+            width: 250px;
+            text-align: left;
+            }
         .data{
-              width:50px;
-              vertical-align:top;
-              font-size:8px;          
-              font-weight:normal;
-              /*color: #000000;*/
-        }
+            width: 50px;
+            vertical-align: top;
+            font-size: 8px;          
+            font-weight: normal;
+            /*color: #000000;*/
+            }
         .nopb {
             page-break-inside: avoid;
-           }
+            }
     </style>
 </head>
 <body>
@@ -256,9 +256,9 @@
            total['trip']['account'] = item.trip_hour
            total['trip']['user'] = item.trip_hour
 
-           total['trip']['type'] = item.unit_amount
-           total['trip']['account'] = item.unit_amount
-           total['trip']['user'] = item.unit_amount
+           total['internal']['type'] = item.unit_amount
+           total['internal']['account'] = item.unit_amount
+           total['internal']['user'] = item.unit_amount
            %>
        %endif
        %if i == 1 or break_level and break_level in ('partner', 'type'): 
@@ -287,8 +287,8 @@
            total['trip']['account'] = item.trip_hour
            total['trip']['user'] = item.trip_hour
 
-           total['trip']['account'] = item.unit_amount
-           total['trip']['user'] = item.unit_amount
+           total['internal']['account'] = item.unit_amount
+           total['internal']['user'] = item.unit_amount
            %>
        %endif  
        %if i == 1 or break_level and break_level in ('partner', 'type', 'account'):
@@ -312,7 +312,7 @@
 
            total['trip']['user'] = item.trip_hour
 
-           total['trip']['user'] = item.unit_amount
+           total['internal']['user'] = item.unit_amount
            %> 
        %endif
        %if i == 1 or break_level and break_level in ('partner', 'type', 'account', 'user'):

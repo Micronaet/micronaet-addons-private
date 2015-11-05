@@ -11,125 +11,125 @@
         */
 
         p {
-            margin: 2px;
-            }
+           margin:2px;
+        }
 
         .partner {
             font-size: 13px;          
             font-weight: bold;  
             margin-top: 15px; 
             padding-left: 3px; 
-            }
+        }
         .type_account {
             font-size: 11px;          
             font-weight: bold;  
             padding-left: 8px; 
-            }
+        }
         .account {
             font-size: 9px;          
             padding-left: 13px; 
-            }
+        }
         
 
         h2 {
-            font-size: 13px;            
-            }
+            font-size:13px;            
+        }
 
         .red {
-            background-color: #ffd5d5;
+            background-color:#ffd5d5;
             /*A70010;*/
-            font-weight: bold;
-            }
+            font-weight:bold;
+        }
         .blu {
-            background-color: #d5e9ff;
+            background-color:#d5e9ff;
             /*363AA7;*/
-            font-weight: bold;
-            }
+            font-weight:bold;
+        }
         .green {
-            background-color: #ade3b8;
+            background-color:#ade3b8;
             /*004E00;*/
-            font-weight: bold;
-            }
+            font-weight:bold;
+        }
         .yellow {
-            background-color: #fffccc;
+            background-color:#fffccc;
             /*004E00;*/
-            font-weight: bold;
-            }
+            font-weight:bold;
+        }
         
         .right {
             text-align:right;         
-            }
+        }
         .center {
-            text-align: center;
-            }
+            text-align:center;
+        }
         .left {
-            text-align: left;
-            }
+            text-align:left;
+        }
         .even {
             background-color: #efeff8;
-            }
+        }
         .odd {
             background-color: #FFFFFF;
-            }
+        }
         
         .total {
-            font-size: 11px;          
-            font-weight: bold;  
-            padding: 4px;
+            font-size:11px;          
+            font-weight:bold;  
+            padding:4px;
             background-color: #f6cf3b;
-            }
+        }
         
         .center_line {
-            text-align: center; 
-            border: 1px solid #000; 
-            padding: 3px;
-            }
+            text-align:center; 
+            border:1px solid #000; 
+            padding:3px;
+        }
 
         table.list_table {
-            border: 1px solid #000;             
-            padding: 0px;
-            margin: 0px;                        
-            cellspacing: 0px;
-            cellpadding: 0px;
-            border-collapse: collapse;
+            border:1px solid #000;             
+            padding:0px;
+            margin:0px;                        
+            cellspacing:0px;
+            cellpadding:0px;
+            border-collapse:collapse;
             
             /*Non funziona il paginate*/
             -fs-table-paginate: paginate;
-            }
+        }
 
         table.list_table tr, table.list_table tr td {
-            page-break-inside: avoid;
-            }        
+            page-break-inside:avoid;
+        }        
         
         thead tr th{
-            text-align: center;
-            font-size: 10px;
-            border: 1px solid #000; 
-            background: #7c7bad;            
-            }
+            text-align:center;
+            font-size:10px;
+            border:1px solid #000; 
+            background:#7c7bad;            
+        }
         thead {
             display: table-header-group;
             }
             
         tbody tr td{
-            text-align: center;
-            font-size: 10px;
-            border: 1px solid #000; 
-            }
+            text-align:center;
+            font-size:10px;
+            border:1px solid #000; 
+        }
         .description{
-            width: 250px;
-            text-align: left;
-            }
+              width:250px;
+              text-align:left;
+        }
         .data{
-            width: 50px;
-            vertical-align: top;
-            font-size: 8px;          
-            font-weight: normal;
-            /*color: #000000;*/
-            }
+              width:50px;
+              vertical-align:top;
+              font-size:8px;          
+              font-weight:normal;
+              /*color: #000000;*/
+        }
         .nopb {
             page-break-inside: avoid;
-            }
+           }
     </style>
 </head>
 <body>
@@ -240,25 +240,20 @@
            old_value['user'] = item.user_id.id
 
            # Reset counters:
-           total['number']['type'] = 1
-           total['number']['account'] = 1
-           total['number']['user'] = 1
+           dict_operation(total['number'], 1, 'set', 
+               ('type', 'account', 'user'))
            
-           total['hour']['type'] = item.intervent_duration
-           total['hour']['account'] = item.intervent_duration
-           total['hour']['user'] = item.intervent_duration
+           dict_operation(total['hour'], item.intervent_duration, 'set', 
+               ('type', 'account', 'user'))
 
-           total['hour_total']['type'] = item.intervent_total
-           total['hour_total']['account'] = item.intervent_total
-           total['hour_total']['user'] = item.intervent_total
+           dict_operation(total['hour_total'], item.intervent_total, 'set', 
+               ('type', 'account', 'user'))
 
-           total['trip']['type'] = item.trip_hour
-           total['trip']['account'] = item.trip_hour
-           total['trip']['user'] = item.trip_hour
+           dict_operation(total['trip'], item.trip_hour, 'set', 
+               ('type', 'account', 'user'))
 
-           total['internal']['type'] = item.unit_amount
-           total['internal']['account'] = item.unit_amount
-           total['internal']['user'] = item.unit_amount
+           dict_operation(total['internal'], item.unit_amount, 'set', 
+               ('type', 'account', 'user'))
            %>
        %endif
        %if i == 1 or break_level and break_level in ('partner', 'type'): 
@@ -275,20 +270,20 @@
            old_value['user'] = item.user_id.id
  
            # Reset counters:
-           total['number']['account'] = 1
-           total['number']['user'] = 1
+           dict_operation(total['number'], 1, 'set', 
+               ('account', 'user'))
+           
+           dict_operation(total['hour'], item.intervent_duration, 'set', 
+               ('account', 'user'))
 
-           total['hour']['account'] = item.intervent_duration
-           total['hour']['user'] = item.intervent_duration
+           dict_operation(total['hour_total'], item.intervent_total, 'set', 
+               ('account', 'user'))
 
-           total['hour_total']['account'] = item.intervent_total
-           total['hour_total']['user'] = item.intervent_total
+           dict_operation(total['trip'], item.trip_hour, 'set', 
+               ('account', 'user'))
 
-           total['trip']['account'] = item.trip_hour
-           total['trip']['user'] = item.trip_hour
-
-           total['internal']['account'] = item.unit_amount
-           total['internal']['user'] = item.unit_amount
+           dict_operation(total['internal'], item.unit_amount, 'set', 
+               ('account', 'user'))
            %>
        %endif  
        %if i == 1 or break_level and break_level in ('partner', 'type', 'account'):
@@ -304,15 +299,20 @@
            old_value['user'] = item.user_id.id
 
            # Reset counters:
-           total['number']['user'] = 1 
+           dict_operation(total['number'], 1, 'set', 
+               ('user'))
+           
+           dict_operation(total['hour'], item.intervent_duration, 'set', 
+               ('user'))
 
-           total['hour']['user'] = item.intervent_duration
+           dict_operation(total['hour_total'], item.intervent_total, 'set', 
+               ('user'))
 
-           total['hour_total']['user'] = item.intervent_total
+           dict_operation(total['trip'], item.trip_hour, 'set', 
+               ('user'))
 
-           total['trip']['user'] = item.trip_hour
-
-           total['internal']['user'] = item.unit_amount
+           dict_operation(total['internal'], item.unit_amount, 'set', 
+               ('user'))
            %> 
        %endif
        %if i == 1 or break_level and break_level in ('partner', 'type', 'account', 'user'):

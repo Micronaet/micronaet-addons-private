@@ -61,10 +61,16 @@ class report_webkit_html(report_sxw.rml_parse):
             'dict_operation': self.dict_operation,
         })
 
-    def dict_operation(self, data, value, operation='add'):
+    def dict_operation(self, data, value, operation='add'
+            #, modify_list=None
+            ):
         ''' Dict add value to all keys:
         '''
+        #if modify_list is None:
+        #    modify_list = ()
+            
         for k in data:
+            #if modify_list and (k in modify_list):
             if operation == 'add':
                 data[k] += value
             elif operation == 'set':   
@@ -86,15 +92,15 @@ class report_webkit_html(report_sxw.rml_parse):
         '''        
         return '''
             <tr>
-                <td>Cliente</td>
-                <td>Tipo</td>
-                <td>Conto</td>
-                <td>Utente</td>
-                <td>Data</td>
-                <td>Ore</td>
-                <td>Ore totali</td>
-                <td>Ore interne</td>
-                <td>Viaggio</td>
+                <th>Cliente</th>
+                <th>Tipo</th>
+                <th>Conto</th>
+                <th>Utente</th>
+                <th>Data</th>
+                <th>Ore</th>
+                <th>Ore totali</th>
+                <th>Ore interne</th>
+                <th>Viaggio</th>
             </tr>''' # Last 5 cols for value
             
     def write_total(self, total, break_level, new_table=False):
@@ -142,15 +148,18 @@ class report_webkit_html(report_sxw.rml_parse):
         # -------------------------------
         domain = []
         if data['from_date']:
-            domain.append(('date', '>=', data['from_date']))
+            domain.append(
+                ('date_start', '>=', '%s 00:00:00' % data['from_date']))
         if data['to_date']:
-            domain.append(('date', '<', data['to_date']))
+            domain.append(
+                ('date_start', '<', '%s 00:00:00' % data['to_date']))
 
         if data.get('user_id', False):
             domain.append(('user_id', '=', data['user_id']))
         if data.get('partner_id', False):
             domain.append(('partner_id', '=', data['partner_id']))
-        int_ids = int_pool.search(self.cr, self.uid, domain)
+        int_ids = int_pool.search(
+            self.cr, self.uid, domain)
         
         # Start analyse data intervent:
         items = []
@@ -164,6 +173,7 @@ class report_webkit_html(report_sxw.rml_parse):
                 'Contratti' if item.account_id.partner_id else 'Generico', # With partner
                 item.account_id.name, # Analytic account
                 item.user_id.name, # Users
+                item.date_start, # Date
                 )
             items.append((order, item))
         return sorted(items)            
