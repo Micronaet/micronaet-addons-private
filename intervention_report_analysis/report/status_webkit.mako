@@ -161,7 +161,6 @@
        <!--Update counters:-->
        <%        
        i += 1
-       dict_operation(total['number'], 1, 'add') 
        break_level = False
        %>
 
@@ -193,10 +192,16 @@
        %endif
 
        <!--Write total if break level:-->
-       %if break_level:
+       %if break_level and  break_level in ('partner', 'type', 'account'):
            ${write_total(total, break_level, new_table=break_level == 'partner')}
        %endif
-       
+
+       <!--Update here total:-->
+       <% 
+       dict_operation(total['number'], 1, 'add') # number
+       dict_operation(total['hour'], item.intervent_duration, 'add') # total duration
+       %>
+
        <!--Partner level:-->
        %if break_level == 'partner':               
            <% 
@@ -207,10 +212,11 @@
            old_value['user'] = item.user_id.id
 
            # Reset counters:
-           dict_operation(total['number'], 0, 'set')
+           dict_operation(total['number'], 1, 'set')
+           dict_operation(total['hour'], 1, 'set')
            %>
        %endif  
-       %if i == 1 or break_level:
+       %if i == 1 or break_level and break_level in ('partner'):
            <tr><td>${item.intervent_partner_id.name|entity}</td>
        %else:
            <tr><td>&nbsp;</td>                   
@@ -228,9 +234,13 @@
            total['number']['type'] = 1
            total['number']['account'] = 1
            total['number']['user'] = 1
+           
+           total['hour']['type'] = item.intervent_duration
+           total['hour']['account'] = item.intervent_duration
+           total['hour']['user'] = item.intervent_duration
            %>
        %endif
-       %if i == 1 or break_level: 
+       %if i == 1 or break_level and break_level in ('partner', 'type'): 
            <td>${key[1]|entity}</td>
        %else:
            <td>&nbsp;</td>                   
@@ -246,9 +256,12 @@
            # Reset counters:
            total['number']['account'] = 1
            total['number']['user'] = 1
+
+           total['hour']['account'] = item.intervent_duration
+           total['hour']['user'] = item.intervent_duration
            %>
        %endif  
-       %if i == 1 or break_level:
+       %if i == 1 or break_level and break_level in ('partner', 'type', 'account'):
            <td>${item.account_id.name|entity}</td>
        %else:
            <td>&nbsp;</td>                   
@@ -262,9 +275,11 @@
 
            # Reset counters:
            total['number']['user'] = 1 
+
+           total['hour']['user'] = item.intervent_duration
            %> 
        %endif
-       %if i == 1 or break_level:
+       %if i == 1 or break_level and break_level in ('partner', 'type', 'account', 'user'):
            <td>${item.user_id.name|entity}</td>
        %else:
            <td>&nbsp;</td>                   
@@ -293,8 +308,8 @@
            ${item.trip_hour|entity}
       </td>
       
-      <!-- Extra line for total-->
-      <td></td><td></td><td></td><td></td><td></td></tr>
+      <!-- Extra line for total ${break_level|entity}-->
+      </tr>
    %endfor
    %if not start:
        ${write_total(total, 'partner', new_table=False)}
