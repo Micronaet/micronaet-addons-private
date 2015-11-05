@@ -80,7 +80,6 @@ class report_webkit_html(report_sxw.rml_parse):
                 <td>Conto</td>
                 <td>Utente</td>
                 <td>Data</td>
-                <td>#</td>
                 <td>Ore</td>
                 <td>Ore totali</td>
                 <td>Ore interne</td>
@@ -94,21 +93,23 @@ class report_webkit_html(report_sxw.rml_parse):
                 <td>Valore</td>                
             </tr>'''
             
-    def write_total(self, total, new_table=False):
+    def write_total(self, total, break_level, new_table=False):
         ''' Format and return total HTML table row 
-            self
-            total: dict of all totals
+            self: instance object
+            break_level: values used are partner, type, account, user 
+            total: dict of all totals for every element
         '''
+        
         return '%s%s%s%s%s' % (
             '''
             <tr>
-                <td colspan='10'>Totali:</td>
-                <td>%(user)s</td>
+                <td colspan='9'>Totali:</td>
+                <td>%s</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-            </tr>''' % total,
+            </tr>''' % (total[break_level], ),
             self.table_end() if new_table else '',
             self.table_start() if new_table else '',
             self.write_header() if new_table else '',

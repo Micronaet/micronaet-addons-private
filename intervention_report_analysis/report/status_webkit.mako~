@@ -136,12 +136,50 @@
    <!--List of totalizer of the report:-->
    <% 
    total = {
-       'row': 0,
-       'partner': 0, 
-       'type': 0 ,
-   	   'account': 0,
-   	   'user': 0, 
-       }
+       # Total of intervent:
+       'number': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },
+           
+       # Total of hour invoiced:    
+       'hour': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },
+       
+       # Total of hour discounted (or difference)    
+       'free': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },    
+       
+       # Total of hour todo    
+       'todo': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },
+        
+       # Amount of hour valorized    
+       'value': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },        
    %>
    
    <!--List of level of the report:-->
@@ -171,17 +209,21 @@
    
           <!--Partner level:-->
            %if level_partner != item.intervent_partner_id.id:
+               <% 
+               # Break level setup:
+               break_level = 'partner'
+               %>
+
                %if start:
                    <% 
                    start = False 
                    %>
                %else:
-                   ${write_total(total)}
+                   ${write_total(total, break_level, new_table=True)}
                %endif
                    
                <% 
-               # Break level setup:
-               break_level = 'partner'
+               # Reset old value:
                level_partner = item.intervent_partner_id.id
                level_type = False
                level_account = False

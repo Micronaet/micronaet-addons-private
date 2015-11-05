@@ -136,12 +136,50 @@
    <!--List of totalizer of the report:-->
    <% 
    total = {
-       'row': 0,
-       'partner': 0, 
-       'type': 0 ,
-   	   'account': 0,
-   	   'user': 0, 
-       }
+       # Total of intervent:
+       'number': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },
+           
+       # Total of hour invoiced:    
+       'hour': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },
+       
+       # Total of hour discounted (or difference)    
+       'free': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },    
+       
+       # Total of hour todo    
+       'todo': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },
+        
+       # Amount of hour valorized    
+       'value': {
+           'row': 0,
+           'partner': 0, 
+           'type': 0 ,
+       	   'account': 0,
+       	   'user': 0, 
+           },        
    %>
    
    <!--List of level of the report:-->
@@ -162,36 +200,40 @@
    %for key, item in load_data(data):       
        <% 
        # Total number used:
-       total['row'] += 1 
-       total['partner'] += 1
-       total['type'] += 1
-       total['account'] += 1
-       total['user'] += 1
+       total['number']['row'] += 1 
+       total['number']['partner'] += 1
+       total['number']['type'] += 1
+       total['number']['account'] += 1
+       total['number']['user'] += 1
        %>
    
           <!--Partner level:-->
            %if level_partner != item.intervent_partner_id.id:
+               <% 
+               # Break level setup:
+               break_level = 'partner'
+               %>
+
                %if start:
                    <% 
                    start = False 
                    %>
                %else:
-                   ${write_total(total, new_table=True)}
+                   ${write_total(total, break_level, new_table=True)}
                %endif
                    
                <% 
-               # Break level setup:
-               break_level = 'partner'
+               # Reset old value:
                level_partner = item.intervent_partner_id.id
                level_type = False
                level_account = False
                level_user = False 
 
                # Reset counters:
-               total['partner'] = 1
-               total['type'] = 1
-               total['account'] = 1
-               total['user'] = 1
+               total['number']['partner'] = 1
+               total['number']['type'] = 1
+               total['number']['account'] = 1
+               total['number']['user'] = 1
                %>
                <tr><td>
                       ${item.intervent_partner_id.name|entity}
@@ -214,9 +256,9 @@
                level_user = False
 
                # Reset counters:
-               total['type'] = 1
-               total['account'] = 1
-               total['user'] = 1
+               total['number']['type'] = 1
+               total['number']['account'] = 1
+               total['number']['user'] = 1
                %> 
 
                ${key[1][:3]|entity}
@@ -236,8 +278,8 @@
                level_user = False 
 
                # Reset counters:
-               total['account'] = 1
-               total['user'] = 1
+               total['number']['account'] = 1
+               total['number']['user'] = 1
                %> 
 
                ${item.account_id.name|entity}
@@ -256,7 +298,7 @@
                level_user = item.user_id.id
 
                # Reset counters:
-               total['user'] = 1 
+               total['number']['user'] = 1 
                %> 
 
                ${item.user_id.name|entity}
@@ -268,10 +310,6 @@
                ${item.date_start|entity}
           </td>      
               
-          <td>
-               [${total['row']|entity} - ${total['partner']|entity} - ${total['type']|entity} - ${total['account']|entity} - ${total['user']|entity}]
-          </td>
-          
           <td>
                ${item.intervent_duration|entity}
           </td>          
