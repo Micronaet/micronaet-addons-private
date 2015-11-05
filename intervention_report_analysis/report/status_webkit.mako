@@ -1,6 +1,6 @@
 <html>
 <head>
-    <!--<style type="text/css">
+    <style type="text/css">
         ${css}
 
         /*Colori utilizzati:
@@ -130,90 +130,174 @@
         .nopb {
             page-break-inside: avoid;
            }
-    </style>-->
+    </style>
 </head>
 <body>
    <!--List of totalizer of the report:-->
-   <% total_number = 0 %>
+   <% 
+   total = {
+       'row': 0,
+       'partner': 0, 
+       'type': 0 ,
+   	   'account': 0,
+   	   'user': 0, 
+       }
+   %>
    
    <!--List of level of the report:-->
-   <% level_partner = False %>
-   <% level_type = False %>
-   <% level_account = False %>
-   <% level_user = False %>
-   <% break_level = False %>
+   <% 
+   start = True
    
-   <table>
+   level_partner = False
+   level_type = False
+   level_account = False
+   level_user = False
+   break_level = False 
+   %>
+   
+   ${table_start()}
+   ${write_header()}
+   
    <!--Master loop:-->
-   %for key, item in load_data(data):
-       
-       <% total_number += 1 %>
-       <tr>
-          <td>
+   %for key, item in load_data(data):       
+       <% 
+       # Total number used:
+       total['row'] += 1 
+       total['partner'] += 1
+       total['type'] += 1
+       total['account'] += 1
+       total['user'] += 1
+       %>
+   
+          <!--Partner level:-->
            %if level_partner != item.intervent_partner_id.id:
-               <% break_level = 'partner' %>
-               <% level_partner = item.intervent_partner_id.id %>
-               <% level_type = False %>
-               <% level_account = False %>
-               <% level_user = False %>
-               ${item.intervent_partner_id.name|entity}
+               %if start:
+                   <% 
+                   start = False 
+                   %>
+               %else:
+                   ${write_total(total, new_table=True)}
+               %endif
+                   
+               <% 
+               # Break level setup:
+               break_level = 'partner'
+               level_partner = item.intervent_partner_id.id
+               level_type = False
+               level_account = False
+               level_user = False 
+
+               # Reset counters:
+               total['partner'] = 1
+               total['type'] = 1
+               total['account'] = 1
+               total['user'] = 1
+               %>
+               <tr><td>
+                      ${item.intervent_partner_id.name|entity}
+                   </td>
+           %else:
+               <tr><td>&nbsp;</td>                   
            %endif    
-          </td>
+          
+          <!--Type level:-->
           <td>
            %if level_type != key[1]:
                %if not break_level:               
                    <% break_level = 'type' %>
                %endif    
-               <% level_type = key[1] %>
-               <% level_account = False %>
-               <% level_user = False %>
-               ${key[1]|entity}
+
+               <% 
+               # Break level setup:
+               level_type = key[1]
+               level_account = False
+               level_user = False
+
+               # Reset counters:
+               total['type'] = 1
+               total['account'] = 1
+               total['user'] = 1
+               %> 
+
+               ${key[1][:3]|entity}
            %endif    
           </td>
+          
+          <!--Account level:-->
           <td>
            %if level_account != item.account_id.id:
                %if not break_level:               
                    <% break_level = 'account' %>
                %endif    
-               <% level_account = item.account_id.id %>
-               <% level_user = False %>
+
+               <% 
+               # Break level setup:
+               level_account = item.account_id.id
+               level_user = False 
+
+               # Reset counters:
+               total['account'] = 1
+               total['user'] = 1
+               %> 
+
                ${item.account_id.name|entity}
            %endif    
-          <td>
+          </td>
+          
+          <!--User level:-->
           <td>
            %if level_user != item.user_id.id:
                %if not break_level:               
                    <% break_level = 'user' %>
                %endif    
-               <% level_user = item.user_id.id %>
+
+               <% 
+               # Break level setup:
+               level_user = item.user_id.id
+
+               # Reset counters:
+               total['user'] = 1 
+               %> 
+
                ${item.user_id.name|entity}
            %endif    
           </td>
+          
+          <!--Data elements:-->
           <td>
-               ${total_number|entity}
-          </td>          
+               ${item.date_start|entity}
+          </td>      
+              
+          <td>
+               [${total['row']|entity} - ${total['partner']|entity} - ${total['type']|entity} - ${total['account']|entity} - ${total['user']|entity}]
+          </td>
+          
           <td>
                ${item.intervent_duration|entity}
           </td>          
+          
           <td>
                ${item.manual_total|entity}               
                ${item.intervent_total|entity}
           </td>          
+          
           <td>
                ${item.manual_total_internal|entity}
                ${item.unit_amount|entity}
           </td>          
+          
           <td>
                ${item.trip_hour|entity}
           </td>
           
-          <td>
-               ${break_level|entity}
+          <!-- Extra line for total-->
+          <td></td><td></td><td></td><td></td><td></td></tr>
+
+           %if break_level:                   
                <% break_level = False %>
-          </td>          
-       <tr>
+           %endif
    %endfor
 
-   </table>
+   ${table_end()}
 </body>
 </html>

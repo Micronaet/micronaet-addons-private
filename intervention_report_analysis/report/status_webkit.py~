@@ -54,7 +54,66 @@ class report_webkit_html(report_sxw.rml_parse):
             'cr': cr,
             'uid': uid,
             'load_data': self._load_data,
+            'write_header': self.write_header,
+            'write_total': self.write_total,
+            'table_start': self.table_start,
+            'table_end': self.table_end,
         })
+
+    def table_start(self, ):
+        ''' Start table element
+        '''
+        return '<table class="list_table">'
+    
+    def table_end(self, ):
+        ''' End table element
+        '''
+        return '</table>'
+        
+    def write_header(self, ):
+        ''' Return HTML code for header
+        '''        
+        return '''
+            <tr>
+                <td>Cliente</td>
+                <td>Tipo</td>
+                <td>Conto</td>
+                <td>Utente</td>
+                <td>Data</td>
+                <td>#</td>
+                <td>Ore</td>
+                <td>Ore totali</td>
+                <td>Ore interne</td>
+                <td>Viaggio</td>
+                
+                <!--Colonne per i totali-->
+                <td>#</td>
+                <td>H</td>
+                <td>Prosp.</td>
+                <td>Sconto</td>
+                <td>Valore</td>                
+            </tr>'''
+            
+    def write_total(self, total, new_table=False):
+        ''' Format and return total HTML table row 
+            self
+            total: dict of all totals
+        '''
+        return '%s%s%s%s%s' % (
+            '''
+            <tr>
+                <td colspan='10'>Totali:</td>
+                <td>%(user)s</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>''' % total,
+            self.table_end() if new_table else '',
+            self.table_start() if new_table else '',
+            self.write_header() if new_table else '',
+            '<br/>'  if new_table else ''
+            )
 
     def _load_data(self, data=None):
         ''' Load all data for analytic report
@@ -89,7 +148,7 @@ class report_webkit_html(report_sxw.rml_parse):
             #    self.partner[intervention.intervent_partner_id] = []#{} # user
             #self.partner[intervention.intervent_partner_id].append(
             #    intervention)
-            order = (
+            order = ( # key for order elements:
                 item.intervent_partner_id.name, # Partner
                 'Contratti' if item.account_id.partner_id else 'Generico', # With partner
                 item.account_id.name, # Analytic account
