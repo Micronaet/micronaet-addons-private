@@ -110,15 +110,18 @@ class report_webkit_html(report_sxw.rml_parse):
                 %s
                 <td></td>
                 %s
-                <td></td>
-                <td></td>
-                <td></td>
+                %s
+                %s
+                %s
             </tr>''' % ( 
-                '<td># %(partner)s - %(type)s - %(account)s</td>' % total['number'], # - %(user)s
-                '<td>H. %(partner)s - %(type)s - %(account)s' % total['hour'], # - %(user)s              
+                '<td>%(partner)s - %(type)s - %(account)s</td>' % total['number'], # - %(user)s
+                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total['hour'],
+                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total['hour_total'],
+                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total['internal'],                
+                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total['trip'],
                 ),
             self.table_end() if new_table else '',
-            '<p/>'  if new_table else '',
+            '<br />'  if new_table else '',
             self.table_start() if new_table else '',
             self.write_header() if new_table else '',
             )

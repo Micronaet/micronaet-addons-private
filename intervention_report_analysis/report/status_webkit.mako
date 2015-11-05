@@ -139,11 +139,13 @@
    total = {
        'number': dict.fromkeys(levels, 0),
        'hour': dict.fromkeys(levels, 0),
+       'hour_total': dict.fromkeys(levels, 0), # invoiced
+       'internal': dict.fromkeys(levels, 0),
+       'trip': dict.fromkeys(levels, 0),
        'free': dict.fromkeys(levels, 0),
        'todo': dict.fromkeys(levels, 0),
        'value': dict.fromkeys(levels, 0),          
        }
-
    old_value = dict.fromkeys(levels, False)
    %>
    
@@ -152,6 +154,7 @@
    # Variables:
    i = 0
    break_level = False   
+   float_format = '%2.2f'
    %>
    
    ${table_start()}
@@ -199,7 +202,10 @@
        <!--Update here total:-->
        <% 
        dict_operation(total['number'], 1, 'add') # number
-       dict_operation(total['hour'], item.intervent_duration, 'add') # total duration
+       dict_operation(total['hour'], item.intervent_duration, 'add') # total net intevent
+       dict_operation(total['hour_total'], item.intervent_total, 'add') # total invoiced
+       dict_operation(total['trip'], item.trip_hour, 'add') # trip
+       dict_operation(total['internal'], item.unit_amount, 'add') # internal
        %>
 
        <!--Partner level:-->
@@ -213,7 +219,10 @@
 
            # Reset counters:
            dict_operation(total['number'], 1, 'set')
-           dict_operation(total['hour'], 1, 'set')
+           dict_operation(total['hour'], item.intervent_duration, 'set')
+           dict_operation(total['hour_total'], item.intervent_total, 'set')
+           dict_operation(total['trip'], item.trip_hour, 'set')
+           dict_operation(total['internal'], item.unit_amount, 'set')
            %>
        %endif  
        %if i == 1 or break_level and break_level in ('partner'):
@@ -238,6 +247,18 @@
            total['hour']['type'] = item.intervent_duration
            total['hour']['account'] = item.intervent_duration
            total['hour']['user'] = item.intervent_duration
+
+           total['hour_total']['type'] = item.intervent_total
+           total['hour_total']['account'] = item.intervent_total
+           total['hour_total']['user'] = item.intervent_total
+
+           total['trip']['type'] = item.trip_hour
+           total['trip']['account'] = item.trip_hour
+           total['trip']['user'] = item.trip_hour
+
+           total['internal']['type'] = item.unit_amount
+           total['internal']['account'] = item.unit_amount
+           total['internal']['user'] = item.unit_amount
            %>
        %endif
        %if i == 1 or break_level and break_level in ('partner', 'type'): 
@@ -259,6 +280,15 @@
 
            total['hour']['account'] = item.intervent_duration
            total['hour']['user'] = item.intervent_duration
+
+           total['hour_total']['account'] = item.intervent_total
+           total['hour_total']['user'] = item.intervent_total
+
+           total['trip']['account'] = item.trip_hour
+           total['trip']['user'] = item.trip_hour
+
+           total['internal']['account'] = item.unit_amount
+           total['internal']['user'] = item.unit_amount
            %>
        %endif  
        %if i == 1 or break_level and break_level in ('partner', 'type', 'account'):
@@ -277,6 +307,12 @@
            total['number']['user'] = 1 
 
            total['hour']['user'] = item.intervent_duration
+
+           total['hour_total']['user'] = item.intervent_total
+
+           total['trip']['user'] = item.trip_hour
+
+           total['internal']['user'] = item.unit_amount
            %> 
        %endif
        %if i == 1 or break_level and break_level in ('partner', 'type', 'account', 'user'):
@@ -291,21 +327,21 @@
       </td>      
           
       <td>
-           ${item.intervent_duration|entity}
+           ${float_format % item.intervent_duration|entity}
       </td>          
       
       <td>
-           ${item.manual_total|entity}               
-           ${item.intervent_total|entity}
+           ${'(man.)' if item.manual_total else ''|entity}
+           ${float_format % item.intervent_total|entity}
       </td>          
       
       <td>
-           ${item.manual_total_internal|entity}
-           ${item.unit_amount|entity}
+           ${'(man.)' if item.manual_total_internal else ''|entity}
+           ${float_format % item.unit_amount|entity}
       </td>          
       
       <td>
-           ${item.trip_hour|entity}
+           ${float_format % item.trip_hour|entity}
       </td>
       
       <!-- Extra line for total ${break_level|entity}-->
