@@ -20,15 +20,13 @@
                         
                         <page string='Distribution'>                    
                             <group colspan="4" col="4">
-                                <field name="distribution_ids">
+                                <field name="distribution_ids" nolabel="1">
                                     <tree string="Distribution" editable="bottom">        
                                         <field name="user_id" />
-                                        <field name="account_id" invisible="1" />
                                         <field name="percentual" />
                                     </tree>                    
-                                    <form string="Distribution" editable="bottom">        
+                                    <form string="Distribution" editable="bottom" nolabel="1">
                                         <field name="user_id" />
-                                        <field name="account_id" invisible="1" />
                                         <field name="percentual" />
                                     </form>                    
                                 </field>
