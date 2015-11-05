@@ -148,12 +148,9 @@
    <!--List of level of the report:-->
    <% 
    start = True
-   
-   level_partner = False
-   level_type = False
-   level_account = False
-   level_user = False
    break_level = False 
+   
+   level = dict.fromkeys(elements[1:], False)
    %>
    
    ${table_start()}
@@ -164,7 +161,7 @@
        <% dict_operation(total['number'], 1, 'add') %>
    
           <!--Partner level:-->
-           %if level_partner != item.intervent_partner_id.id:
+           %if level['partner'] != item.intervent_partner_id.id:
                <% 
                # Break level setup:
                break_level = 'partner'
@@ -180,10 +177,10 @@
                    
                <% 
                # Reset old value:
-               level_partner = item.intervent_partner_id.id
-               level_type = False
-               level_account = False
-               level_user = False 
+               level['partner'] = item.intervent_partner_id.id
+               level['type'] = False
+               level['account'] = False
+               level['user'] = False 
 
                # Reset counters:
                total['number']['partner'] = 1
@@ -199,7 +196,7 @@
            %endif    
           
           <!--Type level:-->
-           %if level_type != key[1]:
+           %if level['type'] != key[1]:
                <% 
                # Break level setup:
                %>
@@ -211,9 +208,9 @@
 
                <%
                # Reset old value
-               level_type = key[1]
-               level_account = False
-               level_user = False
+               level['type'] = key[1]
+               level['account'] = False
+               level['user'] = False
 
                # Reset counters:
                total['number']['type'] = 1
@@ -230,15 +227,15 @@
           
           <!--Account level:-->
           <td>
-           %if level_account != item.account_id.id:
+           %if level['account'] != item.account_id.id:
                %if not break_level:               
                    <% break_level = 'account' %>
                %endif    
 
                <% 
                # Break level setup:
-               level_account = item.account_id.id
-               level_user = False 
+               level['account'] = item.account_id.id
+               level['user'] = False 
 
                # Reset counters:
                total['number']['account'] = 1
@@ -251,14 +248,14 @@
           
           <!--User level:-->
           <td>
-           %if level_user != item.user_id.id:
+           %if level['user'] != item.user_id.id:
                %if not break_level:               
                    <% break_level = 'user' %>
                %endif    
 
                <% 
                # Break level setup:
-               level_user = item.user_id.id
+               level['user'] = item.user_id.id
 
                # Reset counters:
                total['number']['user'] = 1 
