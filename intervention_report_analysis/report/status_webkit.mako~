@@ -179,7 +179,8 @@
            'type': 0 ,
        	   'account': 0,
        	   'user': 0, 
-           },        
+           },
+       }
    %>
    
    <!--List of level of the report:-->
@@ -198,14 +199,7 @@
    
    <!--Master loop:-->
    %for key, item in load_data(data):       
-       <% 
-       # Total number used:
-       total['row'] += 1 
-       total['partner'] += 1
-       total['type'] += 1
-       total['account'] += 1
-       total['user'] += 1
-       %>
+       <% dict_operation(total['number'], 1, 'add') %>
    
           <!--Partner level:-->
            %if level_partner != item.intervent_partner_id.id:
@@ -214,7 +208,7 @@
                break_level = 'partner'
                %>
 
-               %if start:
+               %if start: # no total if is the fist line:
                    <% 
                    start = False 
                    %>
@@ -230,10 +224,10 @@
                level_user = False 
 
                # Reset counters:
-               total['partner'] = 1
-               total['type'] = 1
-               total['account'] = 1
-               total['user'] = 1
+               total['number']['partner'] = 1
+               total['number']['type'] = 1
+               total['number']['account'] = 1
+               total['number']['user'] = 1
                %>
                <tr><td>
                       ${item.intervent_partner_id.name|entity}
@@ -243,27 +237,34 @@
            %endif    
           
           <!--Type level:-->
-          <td>
            %if level_type != key[1]:
-               %if not break_level:               
-                   <% break_level = 'type' %>
-               %endif    
-
                <% 
                # Break level setup:
+               %>
+               
+               %if not break_level:               
+                   <% break_level = 'type' %>
+                   <!--${write_total(total, break_level, new_table=False)}-->
+               %endif    
+
+               <%
+               # Reset old value
                level_type = key[1]
                level_account = False
                level_user = False
 
                # Reset counters:
-               total['type'] = 1
-               total['account'] = 1
-               total['user'] = 1
+               total['number']['type'] = 1
+               total['number']['account'] = 1
+               total['number']['user'] = 1
                %> 
 
-               ${key[1][:3]|entity}
+               <td>
+                   ${key[1][:3]|entity}
+               </td>
+           %else:
+               <td>&nbsp;</td>                   
            %endif    
-          </td>
           
           <!--Account level:-->
           <td>
@@ -278,8 +279,8 @@
                level_user = False 
 
                # Reset counters:
-               total['account'] = 1
-               total['user'] = 1
+               total['number']['account'] = 1
+               total['number']['user'] = 1
                %> 
 
                ${item.account_id.name|entity}
@@ -298,7 +299,7 @@
                level_user = item.user_id.id
 
                # Reset counters:
-               total['user'] = 1 
+               total['number']['user'] = 1 
                %> 
 
                ${item.user_id.name|entity}
@@ -310,10 +311,6 @@
                ${item.date_start|entity}
           </td>      
               
-          <td>
-               [${total['row']|entity} - ${total['partner']|entity} - ${total['type']|entity} - ${total['account']|entity} - ${total['user']|entity}]
-          </td>
-          
           <td>
                ${item.intervent_duration|entity}
           </td>          
@@ -339,6 +336,9 @@
                <% break_level = False %>
            %endif
    %endfor
+   %if not start:
+       ${write_total(total, 'partner', new_table=False)}
+   %endif    
 
    ${table_end()}
 </body>

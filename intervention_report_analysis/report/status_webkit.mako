@@ -135,51 +135,14 @@
 <body>
    <!--List of totalizer of the report:-->
    <% 
+   elements = ('row', 'partner', 'type', 'account', 'user')
    total = {
-       # Total of intervent:
-       'number': {
-           'row': 0,
-           'partner': 0, 
-           'type': 0 ,
-       	   'account': 0,
-       	   'user': 0, 
-           },
-           
-       # Total of hour invoiced:    
-       'hour': {
-           'row': 0,
-           'partner': 0, 
-           'type': 0 ,
-       	   'account': 0,
-       	   'user': 0, 
-           },
-       
-       # Total of hour discounted (or difference)    
-       'free': {
-           'row': 0,
-           'partner': 0, 
-           'type': 0 ,
-       	   'account': 0,
-       	   'user': 0, 
-           },    
-       
-       # Total of hour todo    
-       'todo': {
-           'row': 0,
-           'partner': 0, 
-           'type': 0 ,
-       	   'account': 0,
-       	   'user': 0, 
-           },
-        
-       # Amount of hour valorized    
-       'value': {
-           'row': 0,
-           'partner': 0, 
-           'type': 0 ,
-       	   'account': 0,
-       	   'user': 0, 
-           },        
+       'number': dict.fromkeys(elements, 0),
+       'hour': dict.fromkeys(elements, 0),
+       'free': dict.fromkeys(elements, 0),
+       'todo': dict.fromkeys(elements, 0),
+       'value': dict.fromkeys(elements, 0),          
+       }
    %>
    
    <!--List of level of the report:-->
@@ -198,14 +161,7 @@
    
    <!--Master loop:-->
    %for key, item in load_data(data):       
-       <% 
-       # Total number used:
-       total['number']['row'] += 1 
-       total['number']['partner'] += 1
-       total['number']['type'] += 1
-       total['number']['account'] += 1
-       total['number']['user'] += 1
-       %>
+       <% dict_operation(total['number'], 1, 'add') %>
    
           <!--Partner level:-->
            %if level_partner != item.intervent_partner_id.id:
@@ -214,7 +170,7 @@
                break_level = 'partner'
                %>
 
-               %if start:
+               %if start: # no total if is the fist line:
                    <% 
                    start = False 
                    %>
@@ -243,14 +199,18 @@
            %endif    
           
           <!--Type level:-->
-          <td>
            %if level_type != key[1]:
-               %if not break_level:               
-                   <% break_level = 'type' %>
-               %endif    
-
                <% 
                # Break level setup:
+               %>
+               
+               %if not break_level:               
+                   <% break_level = 'type' %>
+                   <!--${write_total(total, break_level, new_table=False)}-->
+               %endif    
+
+               <%
+               # Reset old value
                level_type = key[1]
                level_account = False
                level_user = False
@@ -261,9 +221,12 @@
                total['number']['user'] = 1
                %> 
 
-               ${key[1][:3]|entity}
+               <td>
+                   ${key[1][:3]|entity}
+               </td>
+           %else:
+               <td>&nbsp;</td>                   
            %endif    
-          </td>
           
           <!--Account level:-->
           <td>
@@ -335,6 +298,9 @@
                <% break_level = False %>
            %endif
    %endfor
+   %if not start:
+       ${write_total(total, 'partner', new_table=False)}
+   %endif    
 
    ${table_end()}
 </body>
