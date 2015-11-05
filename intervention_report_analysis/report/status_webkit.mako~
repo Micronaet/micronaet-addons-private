@@ -135,22 +135,23 @@
 <body>
    <!--List of totalizer of the report:-->
    <% 
-   elements = ('row', 'partner', 'type', 'account', 'user')
+   levels = ('partner', 'type', 'account', 'user')
    total = {
-       'number': dict.fromkeys(elements, 0),
-       'hour': dict.fromkeys(elements, 0),
-       'free': dict.fromkeys(elements, 0),
-       'todo': dict.fromkeys(elements, 0),
-       'value': dict.fromkeys(elements, 0),          
+       'number': dict.fromkeys(levels, 0),
+       'hour': dict.fromkeys(levels, 0),
+       'free': dict.fromkeys(levels, 0),
+       'todo': dict.fromkeys(levels, 0),
+       'value': dict.fromkeys(levels, 0),          
        }
    %>
    
    <!--List of level of the report:-->
    <% 
+   i = 0
    start = True
    break_level = False 
    
-   level = dict.fromkeys(elements[1:], False)
+   level = dict.fromkeys(levels, False)
    %>
    
    ${table_start()}
@@ -158,9 +159,10 @@
    
    <!--Master loop:-->
    %for key, item in load_data(data):       
-       <% dict_operation(total['number'], 1, 'add') %>
+           <% dict_operation(total['number'], 1, 'add') %>
+           <% i += 1 %>
    
-          <!--Partner level:-->
+           <!--Partner level:-->
            %if level['partner'] != item.intervent_partner_id.id:
                <% 
                # Break level setup:
@@ -183,10 +185,7 @@
                level['user'] = False 
 
                # Reset counters:
-               total['number']['partner'] = 1
-               total['number']['type'] = 1
-               total['number']['account'] = 1
-               total['number']['user'] = 1
+               dict_operation(total['number'] = 0
                %>
                <tr><td>
                       ${item.intervent_partner_id.name|entity}

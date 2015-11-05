@@ -135,22 +135,23 @@
 <body>
    <!--List of totalizer of the report:-->
    <% 
-   elements = ('row', 'partner', 'type', 'account', 'user')
+   levels = ('partner', 'type', 'account', 'user')
    total = {
-       'number': dict.fromkeys(elements, 0),
-       'hour': dict.fromkeys(elements, 0),
-       'free': dict.fromkeys(elements, 0),
-       'todo': dict.fromkeys(elements, 0),
-       'value': dict.fromkeys(elements, 0),          
+       'number': dict.fromkeys(levels, 0),
+       'hour': dict.fromkeys(levels, 0),
+       'free': dict.fromkeys(levels, 0),
+       'todo': dict.fromkeys(levels, 0),
+       'value': dict.fromkeys(levels, 0),          
        }
    %>
    
    <!--List of level of the report:-->
    <% 
+   i = 0
    start = True
    break_level = False 
    
-   level = dict.fromkeys(elements[1:], False)
+   level = dict.fromkeys(levels, False)
    %>
    
    ${table_start()}
@@ -158,142 +159,140 @@
    
    <!--Master loop:-->
    %for key, item in load_data(data):       
+       <% i += 1 %>
        <% dict_operation(total['number'], 1, 'add') %>
-   
-          <!--Partner level:-->
-           %if level['partner'] != item.intervent_partner_id.id:
-               <% 
-               # Break level setup:
-               break_level = 'partner'
-               %>
 
-               %if start: # no total if is the fist line:
-                   <% 
-                   start = False 
-                   %>
-               %else:
-                   ${write_total(total, break_level, new_table=True)}
-               %endif
-                   
-               <% 
-               # Reset old value:
-               level['partner'] = item.intervent_partner_id.id
-               level['type'] = False
-               level['account'] = False
-               level['user'] = False 
+       <!--Partner level:-->
+       %if level['partner'] != item.intervent_partner_id.id:
+           <% 
+           # Break level setup:
+           break_level = 'partner'
+           %>
 
-               # Reset counters:
-               total['number']['partner'] = 1
-               total['number']['type'] = 1
-               total['number']['account'] = 1
-               total['number']['user'] = 1
+           %if start: # no total if is the fist line:
+               <% 
+               start = False 
                %>
-               <tr><td>
-                      ${item.intervent_partner_id.name|entity}
-                   </td>
            %else:
-               <tr><td>&nbsp;</td>                   
-           %endif    
-          
-          <!--Type level:-->
-           %if level['type'] != key[1]:
-               <% 
-               # Break level setup:
-               %>
-               
-               %if not break_level:               
-                   <% break_level = 'type' %>
-                   <!--${write_total(total, break_level, new_table=False)}-->
-               %endif    
-
-               <%
-               # Reset old value
-               level['type'] = key[1]
-               level['account'] = False
-               level['user'] = False
-
-               # Reset counters:
-               total['number']['type'] = 1
-               total['number']['account'] = 1
-               total['number']['user'] = 1
-               %> 
-
-               <td>
-                   ${key[1][:3]|entity}
-               </td>
-           %else:
-               <td>&nbsp;</td>                   
-           %endif    
-          
-          <!--Account level:-->
-          <td>
-           %if level['account'] != item.account_id.id:
-               %if not break_level:               
-                   <% break_level = 'account' %>
-               %endif    
-
-               <% 
-               # Break level setup:
-               level['account'] = item.account_id.id
-               level['user'] = False 
-
-               # Reset counters:
-               total['number']['account'] = 1
-               total['number']['user'] = 1
-               %> 
-
-               ${item.account_id.name|entity}
-           %endif    
-          </td>
-          
-          <!--User level:-->
-          <td>
-           %if level['user'] != item.user_id.id:
-               %if not break_level:               
-                   <% break_level = 'user' %>
-               %endif    
-
-               <% 
-               # Break level setup:
-               level['user'] = item.user_id.id
-
-               # Reset counters:
-               total['number']['user'] = 1 
-               %> 
-
-               ${item.user_id.name|entity}
-           %endif    
-          </td>
-          
-          <!--Data elements:-->
-          <td>
-               ${item.date_start|entity}
-          </td>      
-              
-          <td>
-               ${item.intervent_duration|entity}
-          </td>          
-          
-          <td>
-               ${item.manual_total|entity}               
-               ${item.intervent_total|entity}
-          </td>          
-          
-          <td>
-               ${item.manual_total_internal|entity}
-               ${item.unit_amount|entity}
-          </td>          
-          
-          <td>
-               ${item.trip_hour|entity}
-          </td>
-          
-          <!-- Extra line for total-->
-          <td></td><td></td><td></td><td></td><td></td></tr>
-
-           %if break_level:                   
-               <% break_level = False %>
+               ${write_total(total, break_level, new_table=True)}
            %endif
+               
+           <% 
+           # Reset old value:
+           level['partner'] = item.intervent_partner_id.id
+           level['type'] = False
+           level['account'] = False
+           level['user'] = False 
+
+           # Reset counters:
+           dict_operation(total['number'] = 0
+           %>
+           <tr><td>
+                  ${item.intervent_partner_id.name|entity}
+               </td>
+       %else:
+           <tr><td>&nbsp;</td>                   
+       %endif    
+      
+      <!--Type level:-->
+       %if level['type'] != key[1]:
+           <% 
+           # Break level setup:
+           %>
+           
+           %if not break_level:               
+               <% break_level = 'type' %>
+               <!--${write_total(total, break_level, new_table=False)}-->
+           %endif    
+
+           <%
+           # Reset old value
+           level['type'] = key[1]
+           level['account'] = False
+           level['user'] = False
+
+           # Reset counters:
+           total['number']['type'] = 1
+           total['number']['account'] = 1
+           total['number']['user'] = 1
+           %> 
+
+           <td>
+               ${key[1][:3]|entity}
+           </td>
+       %else:
+           <td>&nbsp;</td>                   
+       %endif    
+      
+      <!--Account level:-->
+      <td>
+       %if level['account'] != item.account_id.id:
+           %if not break_level:               
+               <% break_level = 'account' %>
+           %endif    
+
+           <% 
+           # Break level setup:
+           level['account'] = item.account_id.id
+           level['user'] = False 
+
+           # Reset counters:
+           total['number']['account'] = 1
+           total['number']['user'] = 1
+           %> 
+
+           ${item.account_id.name|entity}
+       %endif    
+      </td>
+      
+      <!--User level:-->
+      <td>
+       %if level['user'] != item.user_id.id:
+           %if not break_level:               
+               <% break_level = 'user' %>
+           %endif    
+
+           <% 
+           # Break level setup:
+           level['user'] = item.user_id.id
+
+           # Reset counters:
+           total['number']['user'] = 1 
+           %> 
+
+           ${item.user_id.name|entity}
+       %endif    
+      </td>
+      
+      <!--Data elements:-->
+      <td>
+           ${item.date_start|entity}
+      </td>      
+          
+      <td>
+           ${item.intervent_duration|entity}
+      </td>          
+      
+      <td>
+           ${item.manual_total|entity}               
+           ${item.intervent_total|entity}
+      </td>          
+      
+      <td>
+           ${item.manual_total_internal|entity}
+           ${item.unit_amount|entity}
+      </td>          
+      
+      <td>
+           ${item.trip_hour|entity}
+      </td>
+      
+      <!-- Extra line for total-->
+      <td></td><td></td><td></td><td></td><td></td></tr>
+
+       %if break_level:                   
+           <% break_level = False %>
+       %endif
    %endfor
    %if not start:
        ${write_total(total, 'partner', new_table=False)}
