@@ -61,11 +61,11 @@ class intervention_status_account_wizard(osv.osv):
         # Date:
         if item_proxy.from_date:
             domain.append(
-                ('intervent_date', '>=', '%s 00:00:00' % item_proxy.from_date))
+                ('date_start', '>=', '%s 00:00:00' % item_proxy.from_date))
 
         if item_proxy.to_date:
             domain.append(
-                ('intervent_date', '<', '%s 23:59:59' % item_proxy.to_date))
+                ('date_start', '<', '%s 23:59:59' % item_proxy.to_date))
 
         # Selection:
         #if item_proxy.mode:
