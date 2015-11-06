@@ -9,6 +9,7 @@
                 <form string="Analysis wizard" version="7.0">
                    <header>
                        <button string="Cancel" special="cancel" />
+                       <button name="action_find" string="Find" type="object" icon="gtk-jump-to" class="oe_highlight" />
                        <button name="action_change" string="Force" type="object" icon="gtk-jump-to" class="oe_highlight" />
                    </header>                   
                    <group colspan="4" col="4">
@@ -17,8 +18,8 @@
                         <field name="new_account_id" />
                         <field name="log_date" />                        
                         <notebook colspan="4"> 
-                          <group colspan="4" col="4">
                             <page string="Filter:">
+                              <group colspan="4" col="4">
                                 <field name="description" colspan="4"/>
                                                    
                                 <field name="from_date" />
@@ -28,8 +29,10 @@
                                 <field name="user_id" />
                                 <field name="intervent_partner_id" />
                                 <!--<field name="mode" />-->
+                              </group>  
                             </page>
                             <page string="Intervent:">
+                              <group colspan="4" col="4">
                                 <field name="intervent_ids">
                                     <tree string="Intervent" editable="bottom">
                                          <field name="date_start" />
@@ -39,8 +42,8 @@
                                          <field name="mode" />
                                          <field name="user_id" />
                                          <field name="account_id" />
-                                         <field name="interven_total" sum="Total" />
-                                         <field name="trip_required" />
+                                         <field name="intervent_total" sum="Total" />
+                                         <field name="trip_require" />
                                          <field name="to_invoice" />
                                          <field name="state" />                                         
                                     </tree>
@@ -54,18 +57,17 @@
                                              <field name="mode" />
                                              <field name="user_id" />
                                              <field name="account_id" />
-                                             <field name="interven_total" sum="Total" />
-                                             <field name="trip_required" />
+                                             <field name="intervent_total" sum="Total" />
+                                             <field name="trip_require" />
                                              <field name="to_invoice" />
                                              <field name="state" />                                         
                                           </group>   
                                       </sheet>   
                                     </form>
                                 </field>
+                              </group> 
                             </page>
-                          <group colspan="4" col="4">
                         </notebook>
-
                         <separator string="Note" colspan="4" />
                         <field name="note" colspan="4"/>
                    </group>
