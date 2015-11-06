@@ -82,18 +82,19 @@ class intervention_status_account_force(osv.osv):
             description += _(
                 'User filter: %s') % item_proxy.user_id.name 
             domain.append(
-                ('user_id', '<', item_proxy.user_id.id))
+                ('user_id', '=', item_proxy.user_id.id))
 
         if item_proxy.account_id:
-            description += _('Description filter: %s') % item_proxy.description 
+            description += _(
+                'Account filter: %s') % item_proxy.account_id.name 
             domain.append(
-                ('account_id', '<', item_proxy.account_id.id))
+                ('account_id', '=', item_proxy.account_id.id))
                 
         if item_proxy.intervent_partner_id:
             description += _(
                 'Partner filter: %s') % item_proxy.intervent_partner_id.name 
             domain.append(
-                ('intervent_partner_id', '<', item_proxy.intervent_partner.id))
+                ('intervent_partner_id', '=', item_proxy.intervent_partner.id))
         
         return domain, description        
         
@@ -103,16 +104,18 @@ class intervention_status_account_force(osv.osv):
         domain, note = self.get_domain(cr, uid, ids, context=context)
 
         ts_pool = self.pool.get('hr.analytic.timesheet')
-        # TODO
-        intervent_ids = self.search(cr, uid, domain, context=context)
+        intervent_ids = ts_pool.search(cr, uid, domain, context=context)
         if intervent_ids: 
             # Update parent:
             self.write(cr, uid, ids, {
                 'note': note, # filter description
                 'finded': True, # show the button
                 }, context=context)
-                
-                
+             
+            # Update intervent:
+            ts_pool.write(cr, uid, intervent_ids, {
+                'force_operation_id': ids[0],
+                }, context=context)
         else:
             self.write(cr, uid, ids, {
                 'note': _('No record found try to change filter'),
@@ -135,6 +138,7 @@ class intervention_status_account_force(osv.osv):
             'Force to Account', required=True),
         'log_date': fields.datetime('Log date for operation'),
         'finded': fields.boolean('Finded'),
+        'force_user_id': fields.many2one('res.users', 'Force user'),
         'note': fields.text('Note'),
     
         # Filter fields:
@@ -151,6 +155,7 @@ class intervention_status_account_force(osv.osv):
         }
         
     _defaults = {    
+        'force_user_id': lambda(s, cr, uid, ctx): uid,    
         'log_date': lambda *x: datetime.now().strftime(
             DEFAULT_SERVER_DATETIME_FORMAT),
         }    

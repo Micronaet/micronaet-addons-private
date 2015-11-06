@@ -2,7 +2,28 @@
 <openerp>
     <data>
        <!-- hr.intervent.account.force -->
-       <record id="hr_intervent_account_wizard_view" model="ir.ui.view">
+       <record id="hr_intervent_account_wizard_tree_view" model="ir.ui.view">
+          <field name="name">Intervention change account</field>
+          <field name="model">hr.intervent.account.force</field>
+          <field name="arch" type="xml">
+             <tree string="String">
+                <field name="new_account_id" />
+                <field name="log_date" />                        
+                <field name="force_user_id" />
+                
+                <!--filter:-->
+                <field name="name" />                                   
+                <field name="from_date" />
+                <field name="to_date" />                
+                <field name="account_id" />
+                <field name="user_id" />
+                <field name="intervent_partner_id" />
+                <!--<field name="mode" />-->
+             </tree>
+          </field>
+      </record>
+
+      <record id="hr_intervent_account_wizard_form_view" model="ir.ui.view">
             <field name="name">Intervention change account</field>
             <field name="model">hr.intervent.account.force</field>
             <field name="arch" type="xml">
@@ -16,6 +37,7 @@
                         <separator string="Log operation:" colspan="4" />
                         <field name="new_account_id" />
                         <field name="log_date" />                        
+                        <field name="force_user_id" />
                         <notebook colspan="4"> 
                             <page string="Filter:">
                               <group colspan="4" col="4">
@@ -77,13 +99,24 @@
             </field>
       </record>
 
-    <act_window
-        id="act_force_account_change_wizard"
-        name="Force account change"
-        view_mode="form"
-        target="new"
-        res_model="hr.intervent.account.force"
-        key2="client_action_multi"
-        src_model="hr.analytic.timesheet"/>
+      <record model="ir.actions.act_window" id="action_hr_intervent_account_wizard">
+          <field name="name">Force account</field>
+          <field name="res_model">hr.intervent.account.force</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">tree,form</field>
+          <field name="view_id" ref="hr_intervent_account_wizard_tree_view"/>
+          <field name="context">{}</field>
+          <field name="domain">[]</field>          
+      </record>
+            
+      <menuitem 
+          parent="hr.menu_hr_configuration" 
+          id="menuitem_hr_intervent_account_wizard" 
+          action="action_hr_intervent_account_wizard"
+          string="Force account"
+          name="Force account"
+          sequence="20"
+          />
+
     </data>
 </openerp>
