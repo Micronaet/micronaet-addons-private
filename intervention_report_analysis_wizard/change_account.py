@@ -40,63 +40,83 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
-class intervention_status_account_wizard(osv.osv_memory):
-    ''' Wizard for change account
+class intervention_status_account_wizard(osv.osv):
+    ''' Force operation object
     '''    
-    _name = 'hr.intervent.account.wizard'
-    _description = 'Intervention analysis wizard'
+    _name = 'hr.intervent.account.force'
+    _description = 'Force intervention analysis'
 
-    def action_change(self, cr, uid, ids, context=None):
-        ''' Force changing of account
-        ''' 
-        
-        wiz_proxy = self.browse(cr, uid, ids)[0]
+    def get_domain(self, cr, uid, ids, context=None):
+        ''' Utility for get name of domain from selected element in record:
+        '''
+        item_proxy = self.browse(cr, uid, ids)[0]
 
         domain = []
 
         # Text:
-        if wiz_proxy.name:
+        if item_proxy.description:
             domain.append(
-                ('name', 'ilike', wiz_proxy.name))
+                ('name', 'ilike', item_proxy.description))
 
         # Date:
-        if wiz_proxy.from_date:
+        if item_proxy.from_date:
             domain.append(
-                ('intervent_date', '>=', '%s 00:00:00' % wiz_proxy.from_date))
+                ('intervent_date', '>=', '%s 00:00:00' % item_proxy.from_date))
 
-        if wiz_proxy.to_date:
+        if item_proxy.to_date:
             domain.append(
-                ('intervent_date', '<', '%s 23:59:59' % wiz_proxy.to_date))
+                ('intervent_date', '<', '%s 23:59:59' % item_proxy.to_date))
 
         # Selection:
-        #if wiz_proxy.mode:
+        #if item_proxy.mode:
         #    domain.append(
-        #        ('mode', '<', wiz_proxy.mode))
+        #        ('mode', '<', item_proxy.mode))
 
         # Relation:
-        if wiz_proxy.user_id:
+        if item_proxy.user_id:
             domain.append(
-                ('user_id', '<', wiz_proxy.user_id.id))
+                ('user_id', '<', item_proxy.user_id.id))
 
-        if wiz_proxy.account_id:
+        if item_proxy.account_id:
             domain.append(
-                ('account_id', '<', wiz_proxy.account_id.id))
+                ('account_id', '<', item_proxy.account_id.id))
                 
-        if wiz_proxy.intervent_partner_id:
+        if item_proxy.intervent_partner_id:
             domain.append(
-                ('intervent_partner_id', '<', wiz_proxy.intervent_partner.id))
-
-        # Search list of 
-        intervent_pool = self.pool.get('hr.analytic.timesheet')
+                ('intervent_partner_id', '<', item_proxy.intervent_partner.id))
         
-        # Return on list updated record:
-        return {
-            # TODO
-            }
+        return domain        
+        
+    def action_find(self, cr, uid, ids, context=None):
+        ''' Find record of selected elements:
+        ''' 
+        domain = self.get_domain(cr, uid, ids, context=context)
+
+        # Search list of record with domain passed: 
+        # TODO
+        intervent_pool = self.pool.get('hr.analytic.timesheet')
+        return True
+        
+    def action_change(self, cr, uid, ids, context=None):
+        ''' Force changing of account
+        ''' 
+        domain = self.get_domain(cr, uid, ids, context=context)
+
+        # TODO
+        return True
+        
         
     _columns = {
-        'name': fields.char('Name', size=256), 
+        # Log fields:
+        'name': fields.char('Name of operation', size=256, required=True),
+        'new_account_id': fields.many2one('account.analytic.account', 
+            'Force to Account', required=True),
+        'log_date': fields.datetime('Log date for operation'),
+        'note': fields.text('Note'),
     
+        # Filter fields:
+        'description': fields.char('Description', size=256),
+
         'from_date': fields.date('From date >='),
         'to_date': fields.date('To date <'),
         
@@ -105,9 +125,11 @@ class intervention_status_account_wizard(osv.osv_memory):
         'user_id': fields.many2one('res.users', 'User'),
         'account_id': fields.many2one('account.analytic.account', 'Account'),
         'intervent_partner_id': fields.many2one('res.partner', 'Partner'),
-
-        'new_account_id': fields.many2one('account.analytic.account', 
-            'Force to Account', required=True),
         }
+        
+    _defaults = {    
+        'log_date': lambda *x: datetime.now().strftime(
+            DEFAULT_SERVER_DATETIME_FORMAT),
+        }    
     
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

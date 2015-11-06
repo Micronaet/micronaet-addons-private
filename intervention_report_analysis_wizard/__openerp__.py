@@ -36,7 +36,7 @@
     'init_xml': [],
     'demo_xml': [],
     'update_xml': [
-        'wizard/change_wizard_view.xml',
+        'change_view.xml',
         ],
     'active': False,
     'installable': True,

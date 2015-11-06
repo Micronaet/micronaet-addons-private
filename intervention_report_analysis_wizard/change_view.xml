@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
-       <!-- hr.intervent.account.wizard -->
+       <!-- hr.intervent.account.force -->
        <record id="hr_intervent_account_wizard_view" model="ir.ui.view">
             <field name="name">Intervention change account</field>
-            <field name="model">hr.intervent.account.wizard</field>
+            <field name="model">hr.intervent.account.force</field>
             <field name="arch" type="xml">
                 <form string="Analysis wizard" version="7.0">
                    <header>
@@ -34,7 +34,7 @@
         name="Force account change"
         view_mode="form"
         target="new"
-        res_model="hr.intervent.account.wizard"
+        res_model="hr.intervent.account.force"
         key2="client_action_multi"
         src_model="hr.analytic.timesheet"/>
     </data>
