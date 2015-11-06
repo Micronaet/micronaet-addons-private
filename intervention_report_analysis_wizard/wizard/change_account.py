@@ -69,9 +69,9 @@ class intervention_status_account_wizard(osv.osv_memory):
                 ('intervent_date', '<', '%s 23:59:59' % wiz_proxy.to_date))
 
         # Selection:
-        if wiz_proxy.mode:
-            domain.append(
-                ('mode', '<', wiz_proxy.mode))
+        #if wiz_proxy.mode:
+        #    domain.append(
+        #        ('mode', '<', wiz_proxy.mode))
 
         # Relation:
         if wiz_proxy.user_id:
@@ -100,7 +100,7 @@ class intervention_status_account_wizard(osv.osv_memory):
         'from_date': fields.date('From date >='),
         'to_date': fields.date('To date <'),
         
-        'mode': fields.selection(, 'Mode'),
+        #'mode': fields.selection('Mode'),
             
         'user_id': fields.many2one('res.users', 'User'),
         'account_id': fields.many2one('account.analytic.account', 'Account'),

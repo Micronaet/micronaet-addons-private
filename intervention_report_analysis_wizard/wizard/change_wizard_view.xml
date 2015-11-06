@@ -2,7 +2,7 @@
 <openerp>
     <data>
        <!-- hr.intervent.account.wizard -->
-       <record id="hr_hr_intervent_account_wizard_view" model="ir.ui.view">
+       <record id="hr_intervent_account_wizard_view" model="ir.ui.view">
             <field name="name">Intervention change account</field>
             <field name="model">hr.intervent.account.wizard</field>
             <field name="arch" type="xml">
@@ -23,7 +23,7 @@
                         <field name="account_id" />
                         <field name="user_id" />
                         <field name="intervent_partner_id" />
-                        <field name="mode" />
+                        <!--<field name="mode" />-->
                    </group>
                 </form>
             </field>
@@ -34,7 +34,7 @@
         name="Force account change"
         view_mode="form"
         target="new"
-        res_model="hr.intervent.wizard"
+        res_model="hr.intervent.account.wizard"
         key2="client_action_multi"
         src_model="hr.analytic.timesheet"/>
     </data>
