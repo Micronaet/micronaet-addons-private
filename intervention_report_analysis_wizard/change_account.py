@@ -40,7 +40,7 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
-class intervention_status_account_wizard(osv.osv):
+class intervention_status_account_force(osv.osv):
     ''' Force operation object
     '''    
     _name = 'hr.intervent.account.force'
@@ -52,55 +52,77 @@ class intervention_status_account_wizard(osv.osv):
         item_proxy = self.browse(cr, uid, ids)[0]
 
         domain = []
+        description = ''
 
         # Text:
-        if item_proxy.description:
+        if item_proxy.name:
+            description += _('Description filter %s') % item_proxy.name 
             domain.append(
-                ('name', 'ilike', item_proxy.description))
+                ('name', 'ilike', item_proxy.name))
 
         # Date:
         if item_proxy.from_date:
+            description += _('Date filter >= %s') % item_proxy.from_date 
             domain.append(
                 ('date_start', '>=', '%s 00:00:00' % item_proxy.from_date))
 
         if item_proxy.to_date:
+            description += _('Date filter < %s') % item_proxy.to_date 
             domain.append(
                 ('date_start', '<', '%s 23:59:59' % item_proxy.to_date))
 
         # Selection:
         #if item_proxy.mode:
+        #    description += _('Mode filter: %s') % item_proxy.mode 
         #    domain.append(
         #        ('mode', '<', item_proxy.mode))
 
         # Relation:
         if item_proxy.user_id:
+            description += _(
+                'User filter: %s') % item_proxy.user_id.name 
             domain.append(
                 ('user_id', '<', item_proxy.user_id.id))
 
         if item_proxy.account_id:
+            description += _('Description filter: %s') % item_proxy.description 
             domain.append(
                 ('account_id', '<', item_proxy.account_id.id))
                 
         if item_proxy.intervent_partner_id:
+            description += _(
+                'Partner filter: %s') % item_proxy.intervent_partner_id.name 
             domain.append(
                 ('intervent_partner_id', '<', item_proxy.intervent_partner.id))
         
-        return domain        
+        return domain, description        
         
     def action_find(self, cr, uid, ids, context=None):
         ''' Find record of selected elements:
         ''' 
-        domain = self.get_domain(cr, uid, ids, context=context)
+        domain, note = self.get_domain(cr, uid, ids, context=context)
 
-        # Search list of record with domain passed: 
+        ts_pool = self.pool.get('hr.analytic.timesheet')
         # TODO
-        intervent_pool = self.pool.get('hr.analytic.timesheet')
+        intervent_ids = self.search(cr, uid, domain, context=context)
+        if intervent_ids: 
+            # Update parent:
+            self.write(cr, uid, ids, {
+                'note': note, # filter description
+                'finded': True, # show the button
+                }, context=context)
+                
+                
+        else:
+            self.write(cr, uid, ids, {
+                'note': _('No record found try to change filter'),
+                }, context=context)        
         return True
         
     def action_change(self, cr, uid, ids, context=None):
         ''' Force changing of account
         ''' 
-        domain = self.get_domain(cr, uid, ids, context=context)
+        domain, note = self.get_domain(cr, uid, ids, context=context)
 
         # TODO
         return True
@@ -108,14 +130,15 @@ class intervention_status_account_wizard(osv.osv):
         
     _columns = {
         # Log fields:
-        'name': fields.char('Name of operation', size=256, required=True),
+        #'name': fields.char('Name of operation', size=256, required=True),
         'new_account_id': fields.many2one('account.analytic.account', 
             'Force to Account', required=True),
         'log_date': fields.datetime('Log date for operation'),
+        'finded': fields.boolean('Finded'),
         'note': fields.text('Note'),
     
         # Filter fields:
-        'description': fields.char('Description', size=256),
+        'name': fields.char('Description', size=256),
 
         'from_date': fields.date('From date >='),
         'to_date': fields.date('To date <'),
@@ -142,14 +165,14 @@ class hr_analytic_timesheet(osv.osv):
             'Force operation', ondelete='set null'),
         }
 
-class intervention_status_account_wizard(osv.osv):
+class intervention_status_account_force(osv.osv):
     ''' *many fields
     '''    
     _inherit = 'hr.intervent.account.force'
     
     _columns = {
-        'intervent_ids': fields.many2one('hr.analytic.timesheet', 
-            'force_operation_id', 'Intervent'),
+        'intervent_ids': fields.one2many('hr.analytic.timesheet', 
+            'force_operation_id', 'Intervent', readonly=True),
         }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

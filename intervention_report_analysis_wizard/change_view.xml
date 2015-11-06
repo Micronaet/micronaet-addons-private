@@ -10,17 +10,16 @@
                    <header>
                        <button string="Cancel" special="cancel" />
                        <button name="action_find" string="Find" type="object" icon="gtk-jump-to" class="oe_highlight" />
-                       <button name="action_change" string="Force" type="object" icon="gtk-jump-to" class="oe_highlight" />
+                       <button name="action_change" string="Force" type="object" icon="gtk-jump-to" class="oe_highlight" attrs="{'invisible': [('finded','=',False)]}" />
                    </header>                   
                    <group colspan="4" col="4">
                         <separator string="Log operation:" colspan="4" />
-                        <field name="name" colspan="4"/>
                         <field name="new_account_id" />
                         <field name="log_date" />                        
                         <notebook colspan="4"> 
                             <page string="Filter:">
                               <group colspan="4" col="4">
-                                <field name="description" colspan="4"/>
+                                <field name="name" colspan="4"/>
                                                    
                                 <field name="from_date" />
                                 <field name="to_date" />
@@ -29,27 +28,13 @@
                                 <field name="user_id" />
                                 <field name="intervent_partner_id" />
                                 <!--<field name="mode" />-->
+                                <field name="finded" invisible="1" />
                               </group>  
                             </page>
                             <page string="Intervent:">
-                              <group colspan="4" col="4">
-                                <field name="intervent_ids">
-                                    <tree string="Intervent" editable="bottom">
-                                         <field name="date_start" />
-                                         <field name="ref" />
-                                         <field name="name" />
-                                         <field name="intervent_partner_id" />
-                                         <field name="mode" />
-                                         <field name="user_id" />
-                                         <field name="account_id" />
-                                         <field name="intervent_total" sum="Total" />
-                                         <field name="trip_require" />
-                                         <field name="to_invoice" />
-                                         <field name="state" />                                         
-                                    </tree>
-                                    <form version="7.0" string="Intervent">
-                                      <sheet>
-                                         <group colspan="4" col="4">
+                                <group colspan="4" col="4">
+                                    <field name="intervent_ids" nolabel="1">
+                                        <tree string="Intervent" editable="bottom">
                                              <field name="date_start" />
                                              <field name="ref" />
                                              <field name="name" />
@@ -60,12 +45,29 @@
                                              <field name="intervent_total" sum="Total" />
                                              <field name="trip_require" />
                                              <field name="to_invoice" />
+                                             <field name="invoice_id" />
                                              <field name="state" />                                         
-                                          </group>   
-                                      </sheet>   
-                                    </form>
-                                </field>
-                              </group> 
+                                        </tree>
+                                        <form version="7.0" string="Intervent">
+                                          <sheet>
+                                             <group colspan="4" col="4">
+                                                 <field name="date_start" />
+                                                 <field name="ref" />
+                                                 <field name="name" />
+                                                 <field name="intervent_partner_id" />
+                                                 <field name="mode" />
+                                                 <field name="user_id" />
+                                                 <field name="account_id" />
+                                                 <field name="intervent_total" sum="Total" />
+                                                 <field name="trip_require" />
+                                                 <field name="to_invoice" />
+                                                 <field name="invoice_id" />
+                                                 <field name="state" />                                         
+                                              </group>   
+                                          </sheet>   
+                                        </form>
+                                    </field>
+                                </group> 
                             </page>
                         </notebook>
                         <separator string="Note" colspan="4" />
