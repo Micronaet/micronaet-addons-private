@@ -115,7 +115,6 @@ class report_webkit_html(report_sxw.rml_parse):
             break_level: values used are partner, type, account, user 
             total: dict of all totals for every element
         '''
-        print header
         return '%s%s%s%s%s' % (
             '''
             <tr>
