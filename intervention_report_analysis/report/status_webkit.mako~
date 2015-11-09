@@ -185,7 +185,7 @@
            header_data['account'] = item.account_id.name if item.account_id else '#ERR'
            #header['user'] = item.user_id.name
            %>
-           ${table_start(header)}
+           ${table_start(header_data)}
            ${write_header()}   
        %endif
        
