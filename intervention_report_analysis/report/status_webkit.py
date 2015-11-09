@@ -77,10 +77,16 @@ class report_webkit_html(report_sxw.rml_parse):
                 data[k] = value
         return 
         
-    def table_start(self, ):
-        ''' Start table element
+    def table_start(self, header=None):
+        ''' Start table element passing header list values
         '''
-        return '<table class="list_table">'
+        if header is None:
+            return '<p>#Partner ERR</p><table class="list_table">'
+        else:   
+            return '''
+                <p>%(partner)s</p>
+                    <table class="list_table">
+                ''' % header
     
     def table_end(self, ):
         ''' End table element
@@ -92,7 +98,6 @@ class report_webkit_html(report_sxw.rml_parse):
         '''        
         return '''
             <tr>
-                <th>Cliente</th>
                 <th>Tipo</th>
                 <th>Conto</th>
                 <th>Utente</th>
@@ -101,18 +106,20 @@ class report_webkit_html(report_sxw.rml_parse):
                 <th>Ore totali</th>
                 <th>Ore interne</th>
                 <th>Viaggio</th>
-            </tr>''' # Last 5 cols for value
+            </tr>''' # Last 5 cols for value    # <th>Cliente</th>
+
             
-    def write_total(self, total, break_level, new_table=False):
+    def write_total(self, total, break_level, header=None, new_table=False):    
         ''' Format and return total HTML table row 
             self: instance object
             break_level: values used are partner, type, account, user 
             total: dict of all totals for every element
         '''
+        print header
         return '%s%s%s%s%s' % (
             '''
             <tr>
-                <td colspan='3'>Totali:</td>
+                <td colspan='2'>Totali:</td>
                 %s
                 <td></td>
                 %s
@@ -120,15 +127,20 @@ class report_webkit_html(report_sxw.rml_parse):
                 %s
                 %s
             </tr>''' % ( 
-                '<td>%(partner)s - %(type)s - %(account)s</td>' % total['number'], # - %(user)s
-                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total['hour'],
-                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total['hour_total'],
-                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total['internal'],                
-                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total['trip'],
+                '<td>%(partner)s - %(type)s - %(account)s</td>' % total[
+                    'number'], # - %(user)s
+                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total[
+                    'hour'],
+                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total[
+                    'hour_total'],
+                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total[
+                    'internal'],
+                '<td>%(partner)2.2f - %(type)2.2f - %(account)2.2f' % total[
+                    'trip'],
                 ),
             self.table_end() if new_table else '',
             '<br />'  if new_table else '',
-            self.table_start() if new_table else '',
+            self.table_start(header) if new_table else '',
             self.write_header() if new_table else '',
             )
 

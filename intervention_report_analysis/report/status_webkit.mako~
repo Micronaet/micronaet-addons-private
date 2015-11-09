@@ -10,6 +10,10 @@
           #444242 grigio scuro
         */
 
+        body {
+            font-family: Arial, 'Times New Roman', Times, serif;
+            font-size: 13px;
+            }
         p {
             margin: 2px;
             }
@@ -73,9 +77,9 @@
             }
         
         .total {
-            font-size:11px;          
+            font-size: 11px;          
             font-weight: bold;  
-            padding:4px;
+            padding: 4px;
             background-color: #f6cf3b;
             }
         
@@ -86,11 +90,11 @@
             }
 
         table.list_table {
-            border:1px solid #000;             
-            padding:0px;
-            margin:0px;                        
-            cellspacing:0px;
-            cellpadding:0px;
+            border: 1px solid #000;             
+            padding: 0px;
+            margin: 0px;                        
+            cellspacing: 0px;
+            cellpadding: 0px;
             border-collapse: collapse;
             
             /*Non funziona il paginate*/
@@ -101,17 +105,18 @@
             page-break-inside: avoid;
             }        
         
-        thead tr th{
+        tr th{
             text-align: center;
             font-size: 10px;
             border: 1px solid #000; 
             background: #7c7bad;            
+            color: #FFFFFF;            
             }
         thead {
             display: table-header-group;
             }
             
-        tbody tr td{
+        tr td{
             text-align: center;
             font-size: 10px;
             border: 1px solid #000; 
@@ -146,7 +151,8 @@
        'todo': dict.fromkeys(levels, 0),
        'value': dict.fromkeys(levels, 0),          
        }
-   old_value = dict.fromkeys(levels, False)
+   old_data = dict.fromkeys(levels, False)
+   header_data = dict.fromkeys(levels, False)
    %>
    
    <!--List of level of the report:-->
@@ -157,8 +163,6 @@
    float_format = '%2.2f'
    %>
    
-   ${table_start()}
-   ${write_header()}   
    <!--Master loop:-->
    %for key, item in load_data(data):
        <!--Update counters:-->
@@ -170,33 +174,53 @@
        <!--First loop-->
        %if i == 1: # First line:
            <% 
-           old_value['partner'] = item.intervent_partner_id.id
-           old_value['type'] = key[1]
-           old_value['account'] = item.account_id.id
-           old_value['user'] = item.user_id.id
+           old_data['partner'] = item.intervent_partner_id.id
+           old_data['type'] = key[1]
+           old_data['account'] = item.account_id.id
+           old_data['user'] = item.user_id.id
+           
+           # TODO Header elements for write table header elements:<<<<<<<<<<<<<
+           header_data['partner'] = item.intervent_partner_id.name or '#ERR'
+           header_data['type'] = key[1]
+           header_data['account'] = item.account_id.name if item.account_id else '#ERR'
+           #header['user'] = item.user_id.name
            %>
+           ${table_start(header)}
+           ${write_header()}   
        %endif
        
        <!--Break check:-->       
-       %if old_value['partner'] != item.intervent_partner_id.id:
-           <% break_level = 'partner' %>
+       %if old_data['partner'] != item.intervent_partner_id.id:
+           <% 
+           break_level = 'partner' 
+           header_data['partner'] = item.intervent_partner_id.name or '#ERR'
+           %>
        %else:
-           %if old_value['type'] != key[1]:
-               <% break_level = 'type' %>
+           %if old_data['type'] != key[1]:
+               <% 
+               break_level = 'type' 
+               header_data['type'] = key[1]
+               %>
            %else:
-               %if old_value['account'] != item.account_id.id:
-                   <% break_level = 'account' %>
+               %if old_data['account'] != item.account_id.id:
+                   <% 
+                   break_level = 'account' 
+                   header_data['account'] = item.account_id.name if item.account_id else '#ERR'
+                   %>
                %else:
-                   %if old_value['user'] != item.user_id.id:
-                       <% break_level = 'user' %>
+                   %if old_data['user'] != item.user_id.id:
+                       <% 
+                       break_level = 'user' 
+                       #header['user'] = item.user_id.name
+                       %>
                    %endif
                %endif
            %endif
        %endif
 
        <!--Write total if break level:-->
-       %if break_level and  break_level in ('partner', 'type', 'account'):
-           ${write_total(total, break_level, new_table=break_level == 'partner')}
+       %if break_level and break_level in ('partner', 'type', 'account'):
+           ${write_total(total, break_level, header_data, new_table=break_level == 'partner')}
        %endif
 
        <!--Update here total:-->
@@ -212,10 +236,10 @@
        %if break_level == 'partner':               
            <% 
            # Reset old value:
-           old_value['partner'] = item.intervent_partner_id.id
-           old_value['type'] = key[1]
-           old_value['account'] = item.account_id.id
-           old_value['user'] = item.user_id.id
+           old_data['partner'] = item.intervent_partner_id.id
+           old_data['type'] = key[1]
+           old_data['account'] = item.account_id.id
+           old_data['user'] = item.user_id.id
 
            # Reset counters:
            dict_operation(total['number'], 1, 'set')
@@ -225,19 +249,22 @@
            dict_operation(total['internal'], item.unit_amount, 'set')
            %>
        %endif  
+       <!--
+       WRITE IN TABLE CHANGE (when total detail are writed)
        %if i == 1 or break_level and break_level in ('partner'):
            <tr><td>${item.intervent_partner_id.name|entity}</td>
        %else:
            <tr><td>&nbsp;</td>                   
        %endif
+       -->
       
        <!--Type level:-->
        %if break_level == 'type':
            <%
            # Reset old value
-           old_value['type'] = key[1]
-           old_value['account'] = item.account_id.id
-           old_value['user'] = item.user_id.id
+           old_data['type'] = key[1]
+           old_data['account'] = item.account_id.id
+           old_data['user'] = item.user_id.id
 
            # Reset counters:
            total['number']['type'] = 1
@@ -271,8 +298,8 @@
        %if break_level == 'account':
            <% 
            # Reset old value
-           old_value['account'] = item.account_id.id
-           old_value['user'] = item.user_id.id
+           old_data['account'] = item.account_id.id
+           old_data['user'] = item.user_id.id
  
            # Reset counters:
            total['number']['account'] = 1
@@ -301,7 +328,7 @@
        %if break_level == 'user':
            <% 
            # Reset old value
-           old_value['user'] = item.user_id.id
+           old_data['user'] = item.user_id.id
 
            # Reset counters:
            total['number']['user'] = 1 
@@ -347,8 +374,9 @@
       <!-- Extra line for total ${break_level|entity}-->
       </tr>
    %endfor
+   <!--TODO start!?!?!?-->
    %if not start:
-       ${write_total(total, 'partner', new_table=False)}
+       ${write_total(total, 'partner', None, new_table=False)}
    %endif    
 
    ${table_end()}
