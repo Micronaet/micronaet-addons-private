@@ -96,7 +96,7 @@
             cellspacing: 0px;
             cellpadding: 0px;
             border-collapse: collapse;
-            
+
             /*Non funziona il paginate*/
             -fs-table-paginate: paginate;
             }
