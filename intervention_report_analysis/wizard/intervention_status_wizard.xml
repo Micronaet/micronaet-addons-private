@@ -29,5 +29,20 @@
         res_model="hr.intervent.wizard"
         key2="client_action_multi"
         src_model="hr.analytic.timesheet"/>
+        
+    <record model="ir.actions.act_window" id="action_hr_intervent_wizard_menu_form">
+        <field name="name">Intervent analysys</field>
+        <field name="res_model">hr.intervent.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="hr_intervent_wizard_view"/>
+    </record>    
+    <menuitem 
+        parent="intervention_report.menu_base_intervention_report"
+        id="menu_hr_intervent_wizard_menu_form" 
+        action="action_hr_intervent_wizard_menu_form"
+        />
+    
     </data>
 </openerp>
