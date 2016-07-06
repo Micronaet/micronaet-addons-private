@@ -182,5 +182,5 @@ class Parser(report_sxw.rml_parse):
         
         # write last total:
         if i:
-            res.append(('total', level, totals))
+            res.append(('total', level, totals[0])) # TODO
         return res
