@@ -100,23 +100,73 @@ class Parser(report_sxw.rml_parse):
             0.0, # user
             ]
             
-        old = [
+        levels = [
             False, # customer
             False, # type
             False, # account
             False, # user
             ]
+        i = 0    
+        for item in items:
+            i += 1
+
+            # for readability:
+            type_data = \
+                'Contratti' if item.account_id.partner_id else 'Generico'   
             
-        for item in items:            
-            if item.partner_id.id != old[0]: # break partner
-                # write record totals:
-                res.append(('total', totals))
+            # -----------------------------------------------------------------      
+            # Break level check:
+            # -----------------------------------------------------------------      
+            level = 'nothing'
+            
+            # break partner (or first record)
+            if levels[0] != item.partner_id.id or i == 1:           
+                level = 'partner' # set break level partner
+
+                if i != 1: # write record totals (no first record)
+                    res.append(('total', level, totals[1]))
                 
-            res.append(('data', item))
+                # save all current level starting from partner:
+                levels[0] = item.partner_id.id
+                levels[1] = type_data
+                levels[2] = item.account_id.name
+                levels[3] = item.user_id.name
+                
+                # reset all totals
+                totals[1] = 0.0
+                totals[2] = 0.0
+                totals[3] = 0.0
+                totals[4] = 0.0
+            
+            # break type: 
+            if levels[1] != type_data:
+                level = 'type' # set break level type
+                res.append(('total', level, totals[2]))
+                
+                # save all current level starting from partner:
+                levels[1] = type_data
+                levels[2] = item.account_id.name
+                levels[3] = item.user_id.name
+                
+                # reset all totals
+                totals[2] = 0.0
+                totals[3] = 0.0
+                totals[4] = 0.0
+
+            # break account:
+            
+            # break user:
+            
+            # update with current totals:
+            totals[1] += item.intervent_total
+            totals[2] += item.intervent_total
+            totals[3] += item.intervent_total
+            totals[4] += item.intervent_total
+
+            # write data line:
+            res.append(('data', level, item))
         
         # write last total:
-        res.append(('total', totals))
-            
-            
-                
+        if i:
+            res.append(('total', level, totals))
         return res
