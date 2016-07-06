@@ -1,0 +1,122 @@
+##############################################################################
+#
+# Copyright (c) 2008-2010 SIA "KN dati". (http://kndati.lv) All Rights Reserved.
+#                    General contacts <info@kndati.lv>
+#
+# WARNING: This program as such is intended to be used by professional
+# programmers who take the whole responsability of assessing all potential
+# consequences resulting from its eventual inadequacies and bugs
+# End users who are looking for a ready-to-use solution with commercial
+# garantees and support are strongly adviced to contract a Free Software
+# Service Company
+#
+# This program is Free Software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+##############################################################################
+
+from report import report_sxw
+from report.report_sxw import rml_parse
+
+class Parser(report_sxw.rml_parse):
+    def __init__(self, cr, uid, name, context):
+        super(Parser, self).__init__(cr, uid, name, context)
+        self.localcontext.update({
+            'get_objects': self.get_objects,
+            'get_filter': self.get_filter,
+            })
+    
+    def get_filter(self, data=None):
+        ''' Get filter from data dict
+        '''
+        
+        return ''
+                
+    def get_objects(self, data=None):
+        ''' Load data filtered from dict
+        '''
+        ''' Load all data for analytic report
+            Search all intervent in period
+        '''
+        # Readability:
+        cr = self.cr
+        uid = self.uid
+        context = {}
+        
+        # Pool used:
+        int_pool = self.pool.get('hr.analytic.timesheet')
+
+        # -------------------------------
+        # Search depend on filter domain:
+        # -------------------------------
+        domain = []
+        if data['from_date']:
+            domain.append(
+                ('date_start', '>=', '%s 00:00:00' % data['from_date']))
+        if data['to_date']:
+            domain.append(
+                ('date_start', '<', '%s 00:00:00' % data['to_date']))
+
+        if data.get('user_id', False):
+            domain.append(('user_id', '=', data['user_id']))
+        if data.get('partner_id', False):
+            domain.append(('partner_id', '=', data['partner_id']))
+        int_ids = int_pool.search(cr, uid, domain, context=context)
+        
+        # Sorted with key:
+        items = sorted(
+            # List of intervent in list:
+            [item for item in int_pool.browse(
+                cr, uid, int_ids, context=context)], 
+                
+            # Key order:    
+            key = lambda item: (
+                item.intervent_partner_id.name, # Partner
+                'Contratti' if item.account_id.partner_id else 'Generico', # With partner
+                item.account_id.name, # Analytic account
+                item.user_id.name, # Users
+                item.date_start, # Date
+                ))
+        
+        # Prepare data list:    
+        res = []
+        
+        totals = [
+            0, # # of intervent
+            0.0, # customer
+            0.0, # type
+            0.0, # account
+            0.0, # user
+            ]
+            
+        old = [
+            False, # customer
+            False, # type
+            False, # account
+            False, # user
+            ]
+            
+        for item in items:            
+            if item.partner_id.id != old[0]: # break partner
+                # write record totals:
+                res.append(('total', totals))
+                
+            res.append(('data', item))
+        
+        # write last total:
+        res.append(('total', totals))
+            
+            
+                
+        return res

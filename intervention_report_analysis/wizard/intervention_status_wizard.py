@@ -60,7 +60,7 @@ class intervention_status_wizard(osv.osv_memory):
 
         return {
             'type': 'ir.actions.report.xml',
-            'report_name': 'webkitinterventstatus',
+            'report_name': 'intervent_status_report',#'webkitinterventstatus',
             'datas': datas,
         }
         

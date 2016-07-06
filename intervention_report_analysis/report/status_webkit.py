@@ -187,7 +187,7 @@ class report_webkit_html(report_sxw.rml_parse):
                 item.date_start, # Date
                 )
             items.append((order, item))
-        return sorted(items)            
+        return sorted(items)
 
 report_sxw.report_sxw(
     'report.webkitinterventstatus',
