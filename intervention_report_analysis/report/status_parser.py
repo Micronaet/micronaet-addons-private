@@ -76,7 +76,7 @@ class Parser(report_sxw.rml_parse):
         if data.get('user_id', False):
             domain.append(('user_id', '=', data['user_id']))
         if data.get('partner_id', False):
-            domain.append(('partner_id', '=', data['partner_id']))
+            domain.append(('intervent_partner_id', '=', data['partner_id']))
         int_ids = int_pool.search(cr, uid, domain, context=context)
         
         # Sorted with key:
