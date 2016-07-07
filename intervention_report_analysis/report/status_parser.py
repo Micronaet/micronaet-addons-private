@@ -220,10 +220,6 @@ class Parser(report_sxw.rml_parse):
                     # -----------
                     # Do nothing (no totals)
                 
-            # Add total block:
-            if level != 'nothing' and i != 1:
-                res.append(('total', level, tuple(totals)))
-                
             # -----------------------------------------------------------------
             # update with current totals:
             # -----------------------------------------------------------------
