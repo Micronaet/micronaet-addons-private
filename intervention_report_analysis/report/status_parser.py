@@ -163,45 +163,47 @@ class Parser(report_sxw.rml_parse):
             # -----------
             # break type: 
             # -----------
-            if olds[1] != type_data:
-                level = 'type' # set break level type
-                
-                # save all current level starting from partner:
-                olds[1] = type_data
-                olds[2] = account_id
-                olds[3] = user_id
-                
-                # reset all totals
-                totals[1] = 0.0
-                totals[2] = 0.0
-                #totals[3] = 0.0
+            else:
+                if olds[1] != type_data:
+                    level = 'type' # set break level type
+                    
+                    # save all current level starting from partner:
+                    olds[1] = type_data
+                    olds[2] = account_id
+                    olds[3] = user_id
+                    
+                    # reset all totals
+                    totals[1] = 0.0
+                    totals[2] = 0.0
+                    #totals[3] = 0.0
 
-                totals[7] = 0.0
-                totals[8] = 0.0
-                #totals[9] = 0.0
+                    totals[7] = 0.0
+                    totals[8] = 0.0
+                    #totals[9] = 0.0
+                else:    
 
-            # --------------
-            # break account:
-            # --------------
-            if olds[2] != account_id:
-                level = 'account' # set break level type
-                
-                # save all current level starting from partner:
-                olds[2] = account_id
-                olds[3] = user_id
-                
-                # reset all totals
-                totals[2] = 0.0
-                #totals[3] = 0.0
-            
-                totals[8] = 0.0
-                #totals[9] = 0.0
+                    # --------------
+                    # break account:
+                    # --------------
+                    if olds[2] != account_id:
+                        level = 'account' # set break level type
+                        
+                        # save all current level starting from partner:
+                        olds[2] = account_id
+                        olds[3] = user_id
+                        
+                        # reset all totals
+                        totals[2] = 0.0
+                        #totals[3] = 0.0
+                    
+                        totals[8] = 0.0
+                        #totals[9] = 0.0
 
-            # -----------
-            # break user:
-            # -----------
-            # Do nothing (no totals)
-            
+                    # -----------
+                    # break user:
+                    # -----------
+                    # Do nothing (no totals)
+                
             # Add total block:
             if level != 'nothing' and i != 1:
                 res.append(('total', level, tuple(totals)))
