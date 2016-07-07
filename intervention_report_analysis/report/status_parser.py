@@ -84,7 +84,7 @@ class Parser(report_sxw.rml_parse):
             # Key order:    
             key = lambda item: (
                 item.intervent_partner_id.name, # Partner
-                'Contratti' if item.account_id.partner_id else 'Generico', # With partner
+                'Contratti' if item.account_id.partner_id else 'Generico',
                 item.account_id.name, # Analytic account
                 item.user_id.name, # Users
                 item.date_start, # Date
