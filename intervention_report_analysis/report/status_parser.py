@@ -110,7 +110,7 @@ class Parser(report_sxw.rml_parse):
             0.0, # user            
             ]
             
-        levels = [
+        olds = [
             False, # customer
             False, # type
             False, # account
@@ -132,18 +132,17 @@ class Parser(report_sxw.rml_parse):
             # -----------------------------------------------------------------      
             level = 'nothing'
             
+            # -------------------------------
             # break partner (or first record)
-            if levels[0] != partner_id or i == 1:           
+            # -------------------------------
+            if olds[0] != partner_id or i == 1:           
                 level = 'partner' # set break level partner
-
-                if i != 1: # write record totals (no first record)
-                    res.append(('total', level, tuple(totals)))
                 
                 # save all current level starting from partner:
-                levels[0] = partner_id
-                levels[1] = type_data
-                levels[2] = account_id
-                levels[3] = user_id
+                olds[0] = partner_id
+                olds[1] = type_data
+                olds[2] = account_id
+                olds[3] = user_id
                 
                 # reset all totals
                 totals[0] = 0.0
@@ -156,15 +155,16 @@ class Parser(report_sxw.rml_parse):
                 totals[8] = 0.0
                 totals[9] = 0.0
             
+            # -----------
             # break type: 
-            if levels[1] != type_data:
+            # -----------
+            if olds[1] != type_data:
                 level = 'type' # set break level type
-                res.append(('total', level, tuple(totals)))
                 
                 # save all current level starting from partner:
-                levels[1] = type_data
-                levels[2] = account_id
-                levels[3] = user_id
+                olds[1] = type_data
+                olds[2] = account_id
+                olds[3] = user_id
                 
                 # reset all totals
                 totals[1] = 0.0
@@ -175,14 +175,15 @@ class Parser(report_sxw.rml_parse):
                 totals[8] = 0.0
                 totals[9] = 0.0
 
+            # --------------
             # break account:
-            if levels[2] != account_id:
+            # --------------
+            if olds[2] != account_id:
                 level = 'account' # set break level type
-                res.append(('total', level, tuple(totals)))
                 
                 # save all current level starting from partner:
-                levels[2] = account_id
-                levels[3] = user_id
+                olds[2] = account_id
+                olds[3] = user_id
                 
                 # reset all totals
                 totals[2] = 0.0
@@ -191,10 +192,17 @@ class Parser(report_sxw.rml_parse):
                 totals[8] = 0.0
                 totals[9] = 0.0
 
+            # -----------
             # break user:
+            # -----------
             # Do nothing (no totals)
             
+            if level != 'nothing' and i != 1:
+                res.append(('total', level, tuple(totals)))
+                
+            # -----------------------------------------------------------------
             # update with current totals:
+            # -----------------------------------------------------------------
             intervent_total = item.intervent_total
             intervent_invoiced = \
                 intervent_total * item.to_invoice.factor / 100.0
