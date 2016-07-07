@@ -60,6 +60,7 @@ class Parser(report_sxw.rml_parse):
         # -------------------------------
         # Search depend on filter domain:
         # -------------------------------
+        detailed = data.get('detailed', True)
         domain = []
         if data['from_date']:
             domain.append(
@@ -97,6 +98,7 @@ class Parser(report_sxw.rml_parse):
             0.0, # type
             0.0, # account
             0.0, # user
+            False, # previous record
             0, # # of intervent
             ]
             
@@ -106,7 +108,7 @@ class Parser(report_sxw.rml_parse):
             False, # account
             False, # user
             ]
-        i = 0    
+        i = 0
         for item in items:
             i += 1
 
@@ -176,12 +178,15 @@ class Parser(report_sxw.rml_parse):
             totals[0] += item.intervent_total
             totals[1] += item.intervent_total
             totals[2] += item.intervent_total
-            totals[3] += item.intervent_total
+            #totals[3] += item.intervent_total XXX not used for not
+            totals[4] = item # previous record
+            #totals[5] += item.intervent_total XXX counter not used
 
             # write data line:
-            res.append(('data', level, item))
+            if detailed:
+                res.append(('data', level, item))
         
         # write last total:
         if i:
-            res.append(('total', level, totals[0])) # TODO
+            res.append(('total', level, tuple(totals))) # TODO
         return res

@@ -53,6 +53,7 @@ class intervention_status_wizard(osv.osv_memory):
         wiz_proxy = self.browse(cr, uid, ids)[0]
 
         datas = {}
+        datas['detailed'] = wiz_proxy.detailed
         datas['from_date'] = wiz_proxy.from_date
         datas['to_date'] = wiz_proxy.to_date
         datas['user_id'] = wiz_proxy.user_id.id or False
@@ -69,10 +70,12 @@ class intervention_status_wizard(osv.osv_memory):
         'to_date': fields.date('To date <', required=True),
         'user_id': fields.many2one('res.users', 'User'),
         'partner_id': fields.many2one('res.partner', 'Partner'),
+        'detailed': fields.boolean('Detailed'),
         }
         
     _defaults = {
         'from_date': lambda *x: (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d"),
         'to_date': lambda *x: datetime.now().strftime("%Y-%m-%d"),
+        'detailed': lambda *x: True,
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
