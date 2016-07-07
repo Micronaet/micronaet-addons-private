@@ -148,12 +148,12 @@ class Parser(report_sxw.rml_parse):
                 totals[0] = 0.0
                 totals[1] = 0.0
                 totals[2] = 0.0
-                totals[3] = 0.0
+                #totals[3] = 0.0
 
                 totals[6] = 0.0
                 totals[7] = 0.0
                 totals[8] = 0.0
-                totals[9] = 0.0
+                #totals[9] = 0.0
             
             # -----------
             # break type: 
@@ -169,11 +169,11 @@ class Parser(report_sxw.rml_parse):
                 # reset all totals
                 totals[1] = 0.0
                 totals[2] = 0.0
-                totals[3] = 0.0
+                #totals[3] = 0.0
 
                 totals[7] = 0.0
                 totals[8] = 0.0
-                totals[9] = 0.0
+                #totals[9] = 0.0
 
             # --------------
             # break account:
@@ -187,25 +187,28 @@ class Parser(report_sxw.rml_parse):
                 
                 # reset all totals
                 totals[2] = 0.0
-                totals[3] = 0.0
+                #totals[3] = 0.0
             
                 totals[8] = 0.0
-                totals[9] = 0.0
+                #totals[9] = 0.0
 
             # -----------
             # break user:
             # -----------
             # Do nothing (no totals)
             
+            # Add total block:
             if level != 'nothing' and i != 1:
                 res.append(('total', level, tuple(totals)))
                 
             # -----------------------------------------------------------------
             # update with current totals:
             # -----------------------------------------------------------------
+            # Readability:
             intervent_total = item.intervent_total
             intervent_invoiced = \
                 intervent_total * item.to_invoice.factor / 100.0
+
             totals[0] += intervent_total
             totals[1] += intervent_total
             totals[2] += intervent_total
