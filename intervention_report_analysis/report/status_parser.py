@@ -68,6 +68,10 @@ class Parser(report_sxw.rml_parse):
         if data['to_date']:
             domain.append(
                 ('date_start', '<', '%s 00:00:00' % data['to_date']))
+                
+        # TODO add filter for stat
+        # TODO add filter for extra documents
+        # TODO add filter for remove micronaet        
 
         if data.get('user_id', False):
             domain.append(('user_id', '=', data['user_id']))
@@ -116,6 +120,7 @@ class Parser(report_sxw.rml_parse):
             False, # account
             False, # user
             ]
+            
         i = 0
         for item in items:
             i += 1
@@ -131,7 +136,7 @@ class Parser(report_sxw.rml_parse):
             # Break level check:
             # -----------------------------------------------------------------      
             level = 'nothing'
-            
+
             # -------------------------------
             # break partner (or first record)
             # -------------------------------
