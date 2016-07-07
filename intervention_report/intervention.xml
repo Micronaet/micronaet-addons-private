@@ -136,7 +136,7 @@
                        <field name="name" on_change="on_change_name(name,intervention_request)"/>
                    </group>
                    <group colspan="4" col="4">                   
-                      <field name="intervent_partner_id" on_change="on_change_partner(intervent_partner_id,account_id)" domain="[('is_company','=',True)]" context="{'default_is_company':True}"/>
+                      <field name="intervent_partner_id" on_change="on_change_partner(intervent_partner_id,account_id)" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}"/>
                       <!--<field name="partner_id" on_change="on_change_partner(partner_id,account_id)"/>-->
 	                  <field name="mode" on_change="on_change_mode(mode)"/>
 	                  
