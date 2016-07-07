@@ -94,12 +94,20 @@ class Parser(report_sxw.rml_parse):
         res = []
         
         totals = [
+            # Total evaulated:
             0.0, # customer
             0.0, # type
             0.0, # account
             0.0, # user
+            
             False, # previous record
             0, # # of intervent
+            
+            # Total invoiced:
+            0.0, # customer
+            0.0, # type
+            0.0, # account
+            0.0, # user            
             ]
             
         levels = [
@@ -142,6 +150,11 @@ class Parser(report_sxw.rml_parse):
                 totals[1] = 0.0
                 totals[2] = 0.0
                 totals[3] = 0.0
+
+                totals[6] = 0.0
+                totals[7] = 0.0
+                totals[8] = 0.0
+                totals[9] = 0.0
             
             # break type: 
             if levels[1] != type_data:
@@ -158,6 +171,10 @@ class Parser(report_sxw.rml_parse):
                 totals[2] = 0.0
                 totals[3] = 0.0
 
+                totals[7] = 0.0
+                totals[8] = 0.0
+                totals[9] = 0.0
+
             # break account:
             if levels[2] != account_id:
                 level = 'account' # set break level type
@@ -171,16 +188,27 @@ class Parser(report_sxw.rml_parse):
                 totals[2] = 0.0
                 totals[3] = 0.0
             
+                totals[8] = 0.0
+                totals[9] = 0.0
+
             # break user:
             # Do nothing (no totals)
             
             # update with current totals:
-            totals[0] += item.intervent_total
-            totals[1] += item.intervent_total
-            totals[2] += item.intervent_total
-            #totals[3] += item.intervent_total XXX not used for not
+            intervent_total = item.intervent_total
+            intervent_invoiced = \
+                intervent_total * item.to_invoice.factor / 100.0
+            totals[0] += intervent_total
+            totals[1] += intervent_total
+            totals[2] += intervent_total
+            #totals[3] += intervent_total XXX not used for not
             totals[4] = item # previous record
             #totals[5] += item.intervent_total XXX counter not used
+
+            totals[6] += intervent_invoiced
+            totals[7] += intervent_invoiced
+            totals[8] += intervent_invoiced
+            #totals[9] += intervent_invoiced
 
             # write data line:
             if detailed:
