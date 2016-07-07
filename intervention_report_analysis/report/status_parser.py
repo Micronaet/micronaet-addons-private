@@ -128,6 +128,7 @@ class Parser(report_sxw.rml_parse):
             
         # Master loop:
         i = 0
+        import pdb; pdb.set_trace()
         for item in items:
             i += 1
 
