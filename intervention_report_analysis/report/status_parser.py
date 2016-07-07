@@ -149,6 +149,10 @@ class Parser(report_sxw.rml_parse):
             if olds[0] != partner_id or i == 1:           
                 level = 'partner' # set break level partner
                 
+                # Total block:
+                if i != 1: # no for first line:
+                    res.append(('total', level, tuple(totals)))
+                
                 # save all current level starting from partner:
                 olds[0] = partner_id
                 olds[1] = type_data
@@ -172,6 +176,9 @@ class Parser(report_sxw.rml_parse):
             else:
                 if olds[1] != type_data:
                     level = 'type' # set break level type
+
+                    # Total block:
+                    res.append(('total', level, tuple(totals)))
                     
                     # save all current level starting from partner:
                     olds[1] = type_data
@@ -193,6 +200,9 @@ class Parser(report_sxw.rml_parse):
                     # --------------
                     if olds[2] != account_id:
                         level = 'account' # set break level type
+
+                        # Total block:
+                        res.append(('total', level, tuple(totals)))
                         
                         # save all current level starting from partner:
                         olds[2] = account_id
