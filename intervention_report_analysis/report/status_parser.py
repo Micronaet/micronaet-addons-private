@@ -57,9 +57,9 @@ class Parser(report_sxw.rml_parse):
         # Pool used:
         int_pool = self.pool.get('hr.analytic.timesheet')
 
-        # -------------------------------
+        # ---------------------------------------------------------------------
         # Search depend on filter domain:
-        # -------------------------------
+        # ---------------------------------------------------------------------
         detailed = data.get('detailed', True)
         domain = []
         if data['from_date']:
@@ -79,7 +79,9 @@ class Parser(report_sxw.rml_parse):
             domain.append(('intervent_partner_id', '=', data['partner_id']))
         int_ids = int_pool.search(cr, uid, domain, context=context)
         
+        # ---------------------------------------------------------------------
         # Sorted with key:
+        # ---------------------------------------------------------------------
         items = sorted(
             # List of intervent in list:
             [item for item in int_pool.browse(
@@ -94,7 +96,10 @@ class Parser(report_sxw.rml_parse):
                 item.date_start, # Date
                 ))
         
+        # ---------------------------------------------------------------------
         # Prepare data list:    
+        # ---------------------------------------------------------------------
+        # Init operations:
         res = []
         
         totals = [
@@ -121,14 +126,15 @@ class Parser(report_sxw.rml_parse):
             False, # user
             ]
             
+        # Master loop:
         i = 0
         for item in items:
             i += 1
 
-            # for readability:
-            partner_id = item.partner_id.id
-            type_data = \
-                'Contratti' if item.account_id.partner_id else 'Generico'   
+            # Readability:
+            partner_id = item.intervent_partner_id.id
+            type_data = 'Contratti' if \
+                item.account_id.intervent_partner_id else 'Generico'   
             account_id = item.account_id.id
             user_id = item.user_id.id
             
