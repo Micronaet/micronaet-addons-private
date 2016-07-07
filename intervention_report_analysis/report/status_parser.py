@@ -135,7 +135,7 @@ class Parser(report_sxw.rml_parse):
             # Readability:
             partner_id = item.intervent_partner_id.id
             type_data = 'Contratti' if \
-                item.account_id.intervent_partner_id else 'Generico'   
+                item.account_id.partner_id else 'Generico'   
             account_id = item.account_id.id
             user_id = item.user_id.id
             
