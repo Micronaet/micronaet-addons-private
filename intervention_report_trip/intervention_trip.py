@@ -211,8 +211,14 @@ class hr_analytic_timesheet_trip(osv.osv):
                 return None
 
         import urllib    
-        query=distance_query(origin, destination)
-        response = eval(urllib.urlopen(query).read())
+        query = distance_query(origin, destination)
+        try:
+            response = eval(urllib.urlopen(query).read())
+        except:
+            raise osv.except_osv(
+                _('Google error'), 
+                _('Error asking: %s' %s query),
+                )
         try:
             distance_km = response['rows'][0]['elements'][0]['distance']['value'] / 1000.0  # km
             return distance_km
