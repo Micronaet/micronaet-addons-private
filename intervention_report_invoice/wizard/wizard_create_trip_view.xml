@@ -13,8 +13,8 @@
                      <sheet>
                          <group colspan="4" col="4">
                              <separator string="Period selection:" colspan="4"/>
-                             <field name="month"/>                         
-                             <field name="year"/>
+                             <field name="month" on_change="onchange_date_search_invoice(month, year)"/>
+                             <field name="year" on_change="onchange_date_search_invoice(month, year)"/>
                              <separator string="Intervent:" colspan="4"/>
                              <field name="invoice_id" />
                          </group>  

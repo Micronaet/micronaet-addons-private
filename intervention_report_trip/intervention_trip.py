@@ -217,7 +217,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         except:
             raise osv.except_osv(
                 _('Google error'), 
-                _('Error asking: %s' %s query),
+                _('Error asking: %s' % query),
                 )
         try:
             distance_km = response['rows'][0]['elements'][0]['distance']['value'] / 1000.0  # km

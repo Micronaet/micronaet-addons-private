@@ -32,6 +32,27 @@ class account_invoice_intervent_wizard(osv.osv_memory):
     '''
     _name = 'account.invoice.intervent.wizard'
 
+    # Onchange:
+    def onchange_date_search_invoice(self, cr, uid, ids, month, year, 
+            context=None)
+        ''' Set domain depend on filter
+        '''    
+        res = {}
+        res['domain'] = {}
+        
+        next_month = int(month) + 1
+        if next_month == 13:
+            next_month = 1
+
+        from_date = '%s-%s-01' % (year, month)
+        to_date = '%s-%s-01' % (year, next_month)
+                
+        res['domain']['invoice_id'] = [
+            ('date_invoice', '>=', from_date),
+            ('date_invoice', '<', to_date),
+            ]
+        return res
+        
     # Button function:
     def create_intervent_list(self, cr, uid, ids, context=None):
         ''' Create list of intervent depend on selection
@@ -93,6 +114,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         return True
 
     _columns = {
+        'invoice_id': fields.many2one('account.invoice', 'Invoice'),
         'year': fields.integer('Year', required=True),
         'month': fields.selection([
             ('01', 'January'),
@@ -115,7 +137,6 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         'month': lambda *a: '%02d' % (
             int(datetime.now().strftime('%m')) - 1) if \
                 datetime.now().strftime('%m') != '01' else '12',
-        'invoice_id': fields.many2one('account.invoice', 'Invoice'),
         }
 account_invoice_intervent_wizard()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
