@@ -20,6 +20,7 @@
                              <field name="invoice_id" />
                              <separator string="Statistic:" colspan="4"/>
                              <field name="user_id" />
+                             <field name="mode" />
                          </group>  
                      </sheet>    
                 </form>

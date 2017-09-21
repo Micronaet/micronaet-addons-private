@@ -311,6 +311,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         month = wiz_proxy.month
         year = wiz_proxy.year
         user_id = wiz_proxy.user_id.id
+        mode = wiz_proxy.mode
 
         filename = '~/Scrivania/statistic_%s_%s.xlsx' % (
             wiz_proxy.year,
@@ -351,8 +352,8 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         self.write_xlsx_line(
             WS_all, 0, [
                 u'Cliente',
-                u'Conto Analitico,
-                u'Utente,
+                u'Conto Analitico',
+                u'Utente',
                 u'Numero commessa',
                 u'Richiesta',
                 u'Data inizio',
@@ -385,14 +386,25 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         format_text = self.get_xls_format('text', WB)
 
         # Generate domain for period:
-        intervent_ids = intervent_pool.search(cr, uid, [
+        domain = [
             ('date_start', '>=', '%s 00:00:00' % from_date),
             ('date_start', '<', '%s 00:00:00' % to_date),
-            ], context=context)
+            ]
+        if user_id:
+            domain.append(('user_id', '=', user_id))
+                
+        intervent_ids = intervent_pool.search(cr, uid, domain, context=context)
         
-        row_all = 0    
-        for intervent in intervent_pool.browse(cr, uid, intervent_ids, 
-                context=context):                
+        row_all = 0
+        for intervent in sorted(intervent_pool.browse(cr, uid, intervent_ids, 
+                context=context), key=lambda x: (
+                    x.intervent_partner_id.name if \
+                        x.intervent_partner_id else False, 
+                    x.account_id.name,
+                    x.user_id.name,
+                    #x.ref,
+                    x.date_start,
+                    )):                
             row_all += 1      
             account = intervent.account_id
             user = intervent.user_id
@@ -409,10 +421,10 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                     intervent.intervention_request,                    
                     intervent.date_start,
                     #intervent.mode,
-                    (intervent.trip_hour if intervent.trip_require \
-                        else '/', format_number),
-                    (intervent.break_hour if intervent.break_require \
-                        else '/', format_number),
+                    intervent.trip_hour if intervent.trip_require \
+                        else '/',
+                    intervent.break_hour if intervent.break_require \
+                        else '/',
                     
                     intervent.intervent_duration, # total intervent
                     intervent.intervent_total, # manual
@@ -423,10 +435,16 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             if account not in intervent_db:
                 _logger.warning('Account was closed: %s' % account.name)                               
                 intervent_db[account] = {} 
-            if user not in intervent_db[account]:
-                intervent_db[account][user] = total
-            else:
-                intervent_db[account][user] += total
+            if mode == 'summary':
+                if '/' in intervent_db[account]:
+                    intervent_db[account]['/'] += total
+                else:    
+                    intervent_db[account]['/'] = total
+            else: # 'detaued'
+                if user in intervent_db[account]:
+                    intervent_db[account][user] += total
+                else:
+                    intervent_db[account][user] = total
                 
             # Populate database:
                 
@@ -437,7 +455,11 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         # Generate report:
         # ----------------
         row = 0        
-        for account in intervent_db: # TODO Sorted
+        for account in sorted(intervent_db, 
+                key=lambda x: (
+                    x.partner_id.name if x.partner_id else False,
+                    x.name,
+                    )):
             for user in intervent_db[account]:
                 row += 1                    
                 self.write_xlsx_line(
@@ -445,7 +467,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                         account.partner_id.name,
                         account.name,
                         u'Dati commessa',
-                        user.name,
+                        user if mode == 'summary' else user.name,
                         intervent_db[account][user],
                         u'Fabb. H.',
                         u'Scost.',
@@ -639,6 +661,11 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         'invoice_id': fields.many2one('account.invoice', 'Invoice'),
         'user_id': fields.many2one('res.users', 'User'),
         'year': fields.integer('Year', required=True),
+        'mode': fields.selection([
+            ('summary', 'Summary'),
+            ('detailed', 'Detailed'),
+            ], 'Mode', required=True),
+            
         'month': fields.selection([
             ('01', 'January'),
             ('02', 'February'),
@@ -660,6 +687,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         'month': lambda *a: '%02d' % (
             int(datetime.now().strftime('%m')) - 1) if \
                 datetime.now().strftime('%m') != '01' else '12',
+        'mode': lambda *x: 'summary',
         }
 account_invoice_intervent_wizard()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
