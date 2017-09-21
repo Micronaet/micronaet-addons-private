@@ -33,20 +33,21 @@ class account_invoice_intervent_wizard(osv.osv_memory):
     _name = 'account.invoice.intervent.wizard'
 
     # Onchange:
-    def onchange_date_search_invoice(self, cr, uid, ids, month, year, 
-            context=None)
+    def onchange_date_search_invoice(self, cr, uid, ids, month, year,
+            context=None):
         ''' Set domain depend on filter
         '''    
         res = {}
         res['domain'] = {}
         
+        # Generate month filter:
         next_month = int(month) + 1
         if next_month == 13:
             next_month = 1
-
         from_date = '%s-%s-01' % (year, month)
         to_date = '%s-%s-01' % (year, next_month)
                 
+        # Set domain for invoice:        
         res['domain']['invoice_id'] = [
             ('date_invoice', '>=', from_date),
             ('date_invoice', '<', to_date),
