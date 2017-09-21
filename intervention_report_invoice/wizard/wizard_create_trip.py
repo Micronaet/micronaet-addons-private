@@ -21,6 +21,7 @@
 #
 ##############################################################################
 
+import xlsxwriter
 from osv import fields, osv
 from datetime import datetime
 
@@ -30,9 +31,206 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         Create invoice and link intervent list for print report
         Create XLSX report for sent intervent list
     '''
-    _name = 'account.invoice.intervent.wizard'
+    _name = 'account.invoice.intervent.wizard'   
+    _xls_format_db = {}
 
+    # -------------------------------------------------------------------------
+    # Utility:    
+    # -------------------------------------------------------------------------
+    def get_xls_format(self, mode, WB=None, num_format='#,##0'):  
+        ''' Database for format cells
+            first call is with mode not present and WB pased
+            next call with only mode
+        '''
+        # if not present generate database for format:
+        if not mode or not self._xls_format_db:
+            self._xls_format_db = {
+                'title' : WB.add_format({
+                    'bold': True, 
+                    'font_name': 'Courier 10 pitch', # 'Arial'
+                    'font_size': 11,
+                    'align': 'left',
+                    }),
+                'header': WB.add_format({
+                    'bold': True, 
+                    'font_color': 'black',
+                    'font_name': 'Courier 10 pitch', # 'Arial'
+                    'font_size': 9,
+                    'align': 'center',
+                    'valign': 'vcenter',
+                    'bg_color': '#cfcfcf', # gray
+                    'border': 1,
+                    #'text_wrap': True,
+                    }),
+                'text': WB.add_format({
+                    'font_color': 'black',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    }),
+                'text_center': WB.add_format({
+                    'font_color': 'black',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'center',
+                    'border': 1,
+                    }),
+                    
+                # -------------------------------------------------------------
+                # With text color:
+                # -------------------------------------------------------------
+                'bg_red': WB.add_format({
+                    'bold': True, 
+                    'font_color': 'black',
+                    'bg_color': '#ff420e',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    }),
+                'bg_green': WB.add_format({
+                    'bold': True, 
+                    'font_color': 'black',
+                    'bg_color': '#99cc66',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    }),
+                'bg_order': WB.add_format({
+                    'bold': True, 
+                    'font_color': 'black',
+                    'bg_color': '#cc9900',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'right',
+                    'border': 1,
+                    'num_format': num_format,
+                    }),
+
+                # -------------------------------------------------------------
+                # With text color:
+                # -------------------------------------------------------------
+                'text_black': WB.add_format({
+                    'font_color': 'black',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    'text_wrap': True
+                    }),
+                'text_blue': WB.add_format({
+                    'font_color': 'blue',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    'text_wrap': True
+                    }),
+                'text_red': WB.add_format({
+                    'font_color': '#ff420e',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    'text_wrap': True
+                    }),
+                'text_green': WB.add_format({
+                    'font_color': '#328238', ##99cc66
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    'text_wrap': True
+                    }),
+
+                'text_grey': WB.add_format({
+                    'font_color': '#eeeeee',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    }),                
+                'text_wrap': WB.add_format({
+                    'font_color': 'black',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    'text_wrap': True,
+                    }),
+
+                'text_bg_yellow': WB.add_format({
+                    'bold': True, 
+                    'font_color': 'black',
+                    'bg_color': '#ffff99',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'border': 1,
+                    }),
+                    
+                'number': WB.add_format({
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'right',
+                    'border': 1,
+                    'num_format': num_format,
+                    }),
+                'number_blue': WB.add_format({
+                    'font_color': 'blue',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'right',
+                    'border': 1,
+                    'num_format': num_format,
+                    }),
+                'text_total': WB.add_format({
+                    'bold': True, 
+                    'font_color': 'black',
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'left',
+                    'bg_color': '#DDDDDD',
+                    'border': 1,
+                    #'text_wrap': True,
+                    }),
+                'number_total': WB.add_format({
+                    'bold': True, 
+                    'font_name': 'Courier 10 pitch',
+                    'font_size': 9,
+                    'align': 'right',
+                    'bg_color': '#DDDDDD',
+                    'border': 1,
+                    'num_format': num_format,
+                    }),
+                }
+        return self._xls_format_db.get(mode, False)
+
+    def write_xlsx_line(self, WS, row, line, format_default=False):
+        ''' Write cell, the row
+        '''
+        col = -1
+        for item in line:
+            col += 1
+            format_type = format_default # use default
+            if type(item) in (tuple, list):
+                if len(item) == 2: # case: (value, format)
+                    value, format_type = item
+                else: # case: (value) >> use default format
+                    value = item[0]
+            else: # case: value >> use default format
+                value = item
+            if format_type:
+                WS.write(row, col, value, format_type)
+            else:    
+                WS.write(row, col, value)            
+        return True        
+    
+    # -------------------------------------------------------------------------
     # Onchange:
+    # -------------------------------------------------------------------------
     def onchange_date_search_invoice(self, cr, uid, ids, month, year,
             context=None):
         ''' Set domain depend on filter
@@ -54,11 +252,62 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             ]
         return res
         
+    # -------------------------------------------------------------------------
     # Button function:
+    # -------------------------------------------------------------------------
     def create_intervent_list(self, cr, uid, ids, context=None):
         ''' Create list of intervent depend on selection
         ''' 
-        # TODO
+        # Read paremeters:
+        wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
+        # TODO read parameters:
+        
+        filename = '/home/thebrush/Scrivania/intervent.xlsx' # TODO change (one per invoice)
+        
+        WB = xlsxwriter.Workbook(filename)
+        WS = WB.add_worksheet('Interventi')
+        # ---------------------------------------------------------------------
+        # 0. Set column dimension:
+        # ---------------------------------------------------------------------
+        #WS.set_column('A:A', 19)
+        #WS.merge_range(row, 0, row, 12, '') # merge cell
+
+        # ---------------------------------------------------------------------
+        # 1. Partner header:
+        # ---------------------------------------------------------------------
+        #WS.write_rich_string(row, col, *record)
+        format_title = self.get_xls_format('title', WB)
+        self.write_xlsx_line(
+            WS, 0, [
+                'Partner:',
+                # TODO nome partner
+                ], format_title)
+        
+        # ---------------------------------------------------------------------
+        # 2. Header title:
+        # ---------------------------------------------------------------------
+        format_header = self.get_xls_format('header', WB)
+        self.write_xlsx_line(
+            WS, 1, [
+                u'Commessa',
+                u'Num.',
+                u'Data', 
+                u'Richiesta',
+                u'Tecnico',
+                u'Oggetto', 
+                u'Modalità',
+                u'Traferta',
+                u'Pausa',
+                u'Effettivo',
+                u'Fatturato',            
+                ], format_header)
+
+        
+        # TODO print intervento:
+        row = 2
+        
+        # End operations:
+        WB.close()
         return True
         
     def create_invoice(self, cr, uid, ids, context=None):
