@@ -24,6 +24,7 @@
 from osv import fields, osv
 from datetime import datetime
 
+
 class account_invoice_intervent_wizard(osv.osv_memory):
     ''' Wizard: 
         Create invoice and link intervent list for print report
@@ -32,6 +33,12 @@ class account_invoice_intervent_wizard(osv.osv_memory):
     _name = 'account.invoice.intervent.wizard'
 
     # Button function:
+    def create_intervent_list(self, cr, uid, ids, context=None):
+        ''' Create list of intervent depend on selection
+        ''' 
+        # TODO
+        return True
+        
     def create_invoice(self, cr, uid, ids, context=None):
         ''' Create trip for choosen month for all partner in the list
         '''
@@ -106,10 +113,9 @@ class account_invoice_intervent_wizard(osv.osv_memory):
     _defaults = {
         'year': lambda *a:int(datetime.now().strftime('%Y')),
         'month': lambda *a: '%02d' % (
-            int(datetime.now().strftime('%m'))-1) if \
+            int(datetime.now().strftime('%m')) - 1) if \
                 datetime.now().strftime('%m') != '01' else '12',
-        
-        #'year': lambda *a: True,
+        'invoice_id': fields.many2one('account.invoice', 'Invoice'),
         }
 account_invoice_intervent_wizard()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
