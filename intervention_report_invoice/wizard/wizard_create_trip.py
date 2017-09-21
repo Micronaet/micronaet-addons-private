@@ -62,7 +62,8 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             if partner.id not in partner_invoice:
                 invoice_ids = invoice_pool.search(cr, uid, [
                     ('partner_id','=', partner.id),
-                    ('date_invoice','=','%s-01'%(intervent.date_start[:7])),
+                    ('date_invoice', '=', '%s-01' % (
+                        intervent.date_start[:7])),
                     ], context=context)
                 if invoice_ids:
                     partner_invoice[partner.id] = \
@@ -72,7 +73,8 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                         invoice_pool.create(cr, uid, {
                             'name': partner.name,
                             #wiz_proxy.month,wiz_proxy.year) ,
-                            'date_invoice': '%s-01'%(intervent.date_start[:7]),
+                            'date_invoice': '%s-01' % (
+                                intervent.date_start[:7]),
                             'partner_id': partner.id,
                             'account_id': \
                                 partner.property_account_receivable.id,
