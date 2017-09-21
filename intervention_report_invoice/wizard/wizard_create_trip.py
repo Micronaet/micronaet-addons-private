@@ -261,15 +261,29 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         # Read paremeters:
         wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
         # TODO read parameters:
+
+        # TODO loop invoice:        
         
-        filename = '/home/thebrush/Scrivania/intervent.xlsx' # TODO change (one per invoice)
+        # ---------------------------------------------------------------------
+        # Open file XSLX:
+        # ---------------------------------------------------------------------
+        invoice = wiz_proxy.invoice_id # TODO exist!!!!!!
+        filename = '/home/thebrush/Scrivania/intervent_%s_%s_%s.xlsx' % (
+            wiz_proxy.year,
+            wiz_proxy.month,
+            invoice.partner_id.name,
+            )
         
         WB = xlsxwriter.Workbook(filename)
-        WS = WB.add_worksheet('Interventi')
+        WS = WB.add_worksheet('Interventi %s-%s' % (
+            wiz_proxy.year,
+            wiz_proxy.month,
+            ))
+            
         # ---------------------------------------------------------------------
         # 0. Set column dimension:
         # ---------------------------------------------------------------------
-        #WS.set_column('A:A', 19)
+        WS.set_column('A:A', 20)
         #WS.merge_range(row, 0, row, 12, '') # merge cell
 
         # ---------------------------------------------------------------------
@@ -284,11 +298,11 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 ], format_title)
         
         # ---------------------------------------------------------------------
-        # 2. Header title:
+        # 3. Header title:
         # ---------------------------------------------------------------------
         format_header = self.get_xls_format('header', WB)
         self.write_xlsx_line(
-            WS, 1, [
+            WS, 2, [
                 u'Commessa',
                 u'Num.',
                 u'Data', 
@@ -301,11 +315,42 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 u'Effettivo',
                 u'Fatturato',            
                 ], format_header)
-
         
-        # TODO print intervento:
+        # ---------------------------------------------------------------------
+        # 3. Table: list of intervent
+        # ---------------------------------------------------------------------
         row = 2
         
+        for intervent in invoice.intervention_report_ids:
+            row += 1
+            request = intervent.intervention_request or ''
+            if request == 'Nuovo evento':
+                request = intevent.name
+                
+            factor = intervent.to_invoice.factor / 100.0
+            trip_h = intervent.trip_hour if intervent.trip_require else 0.0
+            break_h = intervent.break_hour if intervent.break_require else 0.0
+            if intervent.manual_total:
+                total = factor * intervent.intervent_total
+            else: # calculated:
+                total = factor * intervent.intervent_duration + trip_h - \
+                    break_h
+                    
+            self.write_xlsx_line(
+                WS, row, [
+                    intervent.account_id.name,
+                    intervent.ref,
+                    intervent.date_start,
+                    intervent.intervention_request,
+                    intervent.user_id.name,
+                    request,
+                    intervent.mode,
+                    intervent.trip_hour if intervent.trip_require else 'Nessuna',
+                    intervent.break_hour if intervent.break_require else 'Nessuna',
+                    intervent.intervent_total,
+                    total,  
+                    ], format_header)
+          
         # End operations:
         WB.close()
         return True
