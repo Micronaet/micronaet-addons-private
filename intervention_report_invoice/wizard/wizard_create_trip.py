@@ -351,10 +351,16 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         self.write_xlsx_line(
             WS_all, 0, [
                 u'Cliente',
-                u'Commessa',
-                u'Dati commessa',
-                u'Utente',                
-                # TODO
+                u'Conto Analitico,
+                u'Utente,
+                u'Numero commessa',
+                u'Richiesta',
+                u'Data inizio',
+                u'Viaggio',
+                u'Pausa',
+                u'Durata',
+                u'Totale manuale',
+                u'Subtotale',                
                 ], format_header)
         
         # ---------------------------------------------------------------------
@@ -397,12 +403,20 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             self.write_xlsx_line(
                 WS_all, row_all, [
                     intervent.intervent_partner_id.name,
+                    account.name,
+                    intervent.user_id.name,
                     intervent.ref,
+                    intervent.intervention_request,                    
                     intervent.date_start,
+                    #intervent.mode,
+                    (intervent.trip_hour if intervent.trip_require \
+                        else '/', format_number),
+                    (intervent.break_hour if intervent.break_require \
+                        else '/', format_number),
+                    
                     intervent.intervent_duration, # total intervent
                     intervent.intervent_total, # manual
                     total,
-                    # TODO 
                     ], format_text)
 
             # Collect data:
