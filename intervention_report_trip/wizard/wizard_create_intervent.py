@@ -38,15 +38,19 @@ class intervent_report_create_wizard(osv.osv_memory):
         #    else: 
         #        return oggetto.create 
         
-        item_id = self.pool.get("account.analytic.account").search(cr, uid, [('code', '=', 'EXPLAN')], context=context)
+        item_id = self.pool.get("account.analytic.account").search(cr, uid, [
+            ('code', '=', 'EXPLAN'),
+            ], context=context)
         if item_id:
             return item_id[0]
         else:
-            item_id=self.pool.get("account.analytic.account").create(cr, uid, {'name':'Conto Explan', 
-                                                                       'type':'normal',
-                                                                       'use_timesheets':True,
-                                                                       'code':'EXPLAN',
-                                                                       }, context=context)
+            item_id = self.pool.get("account.analytic.account").create(
+                cr, uid, {
+                   'name':'Conto Explan', 
+                   'type':'normal',
+                   'use_timesheets':True,
+                   'code':'EXPLAN',
+                   }, context=context)
             return item_id
             
     def button_create(self, cr, uid, ids, context=None):
