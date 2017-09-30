@@ -43,6 +43,61 @@ class account_analytic_account(orm.Model):
     '''
     _inherit = 'account.analytic.account'
 
+    def onchange_cost_parameter(self, cr, uid, ids, hour_cost, total_amount, 
+            total_hours, field='hour_cost', context=None):
+        ''' Calculate 2 value depend on change element         
+        '''
+        if field == 'total_amount':
+            if total_hours: 
+                hour_cost = total_amount / total_hours
+            elif hour_cost:
+                total_hours = total_amount / hour_cost
+            else: # hour_cost = 0
+                total_hours = 0
+        elif field == 'total_hours':
+            if hour_cost:
+                total_amount = hour_cost * total_hours
+            else: # no hour_cost
+                if total_hours:
+                    hour_cost = total_amount / total_hours
+                else:
+                    hour_cost = 0
+        else: # 'hour_cost':
+            if total_hours:
+                total_amount = total_hours * hour_cost
+            else:
+                if hour_cost:
+                    total_hours = total_amount / hour_cost
+                else:
+                    total_hours = 0  
+        return {
+            'value': {
+                'total_amount': total_amount,
+                'total_hours': total_hours,
+                'hour_cost': hour_cost,
+                },
+            }
+
+    # -------------------------------------------------------------------------
+    # Function fields:
+    # -------------------------------------------------------------------------
+    def _get_done_hour_total(self, cr, uid, ids, fields, args, context=None):
+        ''' Fields function for calculate 
+        '''
+        res = {}
+        ts_pool = self.pool.get('hr.analytic.timesheet')
+        ts_ids = ts_pool.search(cr, uid, [
+            ('account_id', 'in', ids),
+            ], context=context)
+        for ts in ts_pool.browse(cr, uid, ts_ids, context=context):
+            invoiced_hour = 0.0
+            account_id = ts.account_id.id
+            if account_id in res:
+                res[account_id] += invoiced_hour 
+            else:  
+                res[account_id] = invoiced_hour         
+        return res
+        
     _columns = {
         # Amount:
         'total_amount': fields.float('Total amount', 
@@ -53,8 +108,13 @@ class account_analytic_account(orm.Model):
             help='Hour cost (total / number of hours)'), 
         'hour_cost_customer': fields.related(
             'partner_id', 'hour_cost', type='float', digits=(16, 2), 
-            string='Customer hour cost'),
+            string='Customer hour cost', 
+            help='Remember starndar customer hour cost'),
 
+        'hour_done': fields.function(
+            _get_done_hour_total, method=True,
+            type='float', string='Done hour', store=False), 
+                        
         # Date period:
         'from_date': fields.date('From'),
         'to_date': fields.date('To'),
@@ -71,7 +131,7 @@ class account_analytic_account_distribution(orm.Model):
         'user_id': fields.many2one('res.users', 'Users', required=True),
         'account_id': fields.many2one(
             'account.analytic.account', 'Account'),
-        'percentual': fields.float('Hour cost', 
+        'percentual': fields.float('% of hours', 
             digits=(8, 2), help='Percentual on total hour'), 
         }
 

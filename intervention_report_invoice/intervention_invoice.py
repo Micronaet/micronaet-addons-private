@@ -64,11 +64,20 @@ class account_invoice(osv.osv):
         return res
         
     _columns = {
-        'intervention_report_ids':fields.one2many('hr.analytic.timesheet', 'invoice_id', 'Intervents', required=False),
+        'intervention_report_ids':fields.one2many('hr.analytic.timesheet', 
+            'invoice_id', 'Intervents'),
         
-        'to_invoice_total': fields.function(_function_summary_intervent, method=True, type='float', digits=(16, 2), string='Total to invoice (h)', store=False, multi=True),
-        'to_invoice_total_price': fields.function(_function_summary_intervent, method=True, type='float', digits=(16, 2), string='Total to invoice (€)', store=False, multi=True),
-        'to_invoice_summary': fields.function(_function_summary_intervent, method=True, type='text', string='Summary', store=False, multi=True),
+        'to_invoice_total': fields.function(
+            _function_summary_intervent, method=True, type='float', 
+            digits=(16, 2), string='Total to invoice (h)', store=False, 
+            multi=True),
+        'to_invoice_total_price': fields.function(
+            _function_summary_intervent, method=True, type='float', 
+            digits=(16, 2), string='Total to invoice (€)', 
+            store=False, multi=True),
+        'to_invoice_summary': fields.function(_function_summary_intervent, 
+            method=True, type='text', string='Summary', store=False, 
+            multi=True),
         'comment': fields.text('Internal comment'),
-    }
+        }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

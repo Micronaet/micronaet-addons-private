@@ -32,6 +32,7 @@
     'depends': [
         'base',
         'intervention_report',
+        'intervention_report_invoice',
         'report_webkit',
         'report_aeroo',
         ],

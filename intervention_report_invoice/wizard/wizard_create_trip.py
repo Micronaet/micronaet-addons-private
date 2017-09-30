@@ -317,7 +317,8 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             wiz_proxy.year,
             wiz_proxy.month,
             )
-        filename = os.path.expanduser(filename)    
+        filename = os.path.expanduser(filename)   
+        _logger.info('Export filename: %s' % filename) 
 
         WB = xlsxwriter.Workbook(filename)
         WS = WB.add_worksheet('Statistica %s-%s' % (

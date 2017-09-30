@@ -28,29 +28,32 @@
 ##############################################################################
 
 {
-    'name' : 'Intervention Report Invoice',
-    'version' : '0.1',
-    'category' : 'Report',
-    'description' : """ Link intervent to a new created invoice for month for
-                        customer
-                    """,
-    'author' : 'Micronaet s.r.l.',
-    'website' : 'http://www.micronaet.it',
-    'license' : 'AGPL-3',
-    'depends' : ['base',
-                 'intervention_report',
-                 'report_aeroo',
-                 'report_aeroo_ooo',
-                ],
-    'init_xml' : [],
-    'demo_xml' : [],
-    'update_xml' : [#'security/ir.model.access.csv',
-                    'intervention_invoice.xml',  
-                    'wizard/wizard_create_trip_view.xml',                    
-                    'report/report_intervent_state.xml',
-                    ],
+    'name': 'Intervention Report Invoice',
+    'version': '0.1',
+    'category': 'Report',
+    'description': """ 
+        Link intervent to a new created invoice for month for
+        customer
+        """,
+    'author': 'Micronaet s.r.l.',
+    'website': 'http://www.micronaet.it',
+    'license': 'AGPL-3',
+    'depends': [
+        'base',
+        'intervention_report',
+        'report_aeroo',
+        'report_aeroo_ooo',
+        ],
+    'init_xml': [],
+    'demo_xml': [],
+    'update_xml': [
+        #'security/ir.model.access.csv',
+        'intervention_invoice.xml',  
+        'wizard/wizard_create_trip_view.xml',                    
+        'report/report_intervent_state.xml',
+        ],
     'active': False,
     'installable': True,
-}
+    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

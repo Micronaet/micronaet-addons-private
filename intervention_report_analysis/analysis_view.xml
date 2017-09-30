@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <record id='view_account_analytic_account_add_fields_onchange' model='ir.ui.view'>
+            <field name='name'>Account extra onchange</field>
+            <field name='model'>account.analytic.account</field>
+            <field name="inherit_id" ref="intervention_report.view_account_analytic_account_add_fields"/>
+            <field name='arch' type='xml'>
+                <field name="total_hours" position="attributes">
+                    <attribute name="on_change">onchange_cost_parameter(hour_cost, total_amount, total_hours, 'total_hours')</attribute>
+                </field>
+            </field>
+        </record>        
         <record model="ir.ui.view" id="view_account_analytic_account_analysis_form">
             <field name="name">account.analytic.account.analysis.form</field>
             <field name="model">account.analytic.account</field>
@@ -12,9 +22,10 @@
                             <group colspan="4" col="4">
                                 <field name="from_date" />
                                 <field name="to_date" />
-                                <field name="hour_cost" />
-                                <field name="total_amount" />
+                                <field name="hour_cost" on_change="onchange_cost_parameter(hour_cost, total_amount, total_hours, 'hour_cost')"/>
+                                <field name="total_amount" on_change="onchange_cost_parameter(hour_cost, total_amount, total_hours, 'total_amount')" />
                                 <field name="hour_cost_customer" readonly="1"/>
+                                <field name="hour_done" readonly="1" />
                             </group>
                         </page>
                         
