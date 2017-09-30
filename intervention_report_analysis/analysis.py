@@ -84,18 +84,15 @@ class account_analytic_account(orm.Model):
     def _get_done_hour_total(self, cr, uid, ids, fields, args, context=None):
         ''' Fields function for calculate 
         '''
-        res = {}
+        res = dict.fromkeys(ids, 0)
         ts_pool = self.pool.get('hr.analytic.timesheet')
         ts_ids = ts_pool.search(cr, uid, [
             ('account_id', 'in', ids),
             ], context=context)
         for ts in ts_pool.browse(cr, uid, ts_ids, context=context):
-            invoiced_hour = 0.0
+            invoiced_hour = ts_pool.get_total_h_2_invoice(ts, no_factor=True)
             account_id = ts.account_id.id
-            if account_id in res:
-                res[account_id] += invoiced_hour 
-            else:  
-                res[account_id] = invoiced_hour         
+            res[account_id] += invoiced_hour 
         return res
         
     _columns = {

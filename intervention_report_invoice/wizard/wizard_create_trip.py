@@ -259,19 +259,6 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             '%s-%s-01' % (year, month),
             '%s-%02d-01' % (next_year, next_month),
             )
-
-    def get_total_h_2_invoice(self, intervent):
-        ''' Calculate total for intevent: 
-        '''
-        factor = intervent.to_invoice.factor / 100.0
-        if intervent.manual_total:
-            total = factor * intervent.intervent_total
-        else: # calculated:
-            trip_h = intervent.trip_hour if intervent.trip_require else 0.0
-            break_h = intervent.break_hour if intervent.break_require else 0.0
-            total = factor * (
-                intervent.intervent_duration + trip_h - break_h)
-        return total
         
     # -------------------------------------------------------------------------
     # Onchange:
@@ -411,7 +398,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             user = intervent.user_id
                           
             # 1. Write detail
-            total = self.get_total_h_2_invoice(intervent)
+            total = intervent_pool.get_total_h_2_invoice(intervent)
             
             self.write_xlsx_line(
                 WS_all, row_all, [
@@ -486,6 +473,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         ''' Create list of intervent depend on selection
         ''' 
         # Pool used:
+        intervent_pool = self.pool.get('hr.analytic.timesheet')
         invoice_pool = self.pool.get('account.invoice')    
 
         # Read paremeters:
@@ -592,7 +580,8 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                         (intervent.break_hour if intervent.break_require \
                             else '/', format_number),
                         (intervent.intervent_total, format_number),
-                        (self.get_total_h_2_invoice(intervent), format_number),  
+                        (intervent_pool.get_total_h_2_invoice(
+                            intervent), format_number),  
                         ], format_text)
               
             # End operations:

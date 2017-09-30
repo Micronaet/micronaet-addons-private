@@ -40,6 +40,7 @@
     'license': 'AGPL-3',
     'depends': [
         'base',
+        'hr',
         'intervention_report',
         'report_aeroo',
         'report_aeroo_ooo',

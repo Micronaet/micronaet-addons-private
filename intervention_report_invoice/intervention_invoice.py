@@ -22,10 +22,31 @@
 
 from osv import osv, fields
 
+class hr_analytic_timesheet(osv.osv):
+    ''' Extra fields for account.invoice
+    '''
+    _inherit = 'hr.analytic.timesheet'
+    
+    def get_total_h_2_invoice(self, intervent, no_factor=False):
+        ''' Calculate total for intevent: 
+        '''
+        if no_factor:
+            factor = 1.0
+        else:
+            factor = intervent.to_invoice.factor / 100.0
+
+        if intervent.manual_total:
+            total = factor * intervent.intervent_total
+        else: # calculated:
+            trip_h = intervent.trip_hour if intervent.trip_require else 0.0
+            break_h = intervent.break_hour if intervent.break_require else 0.0
+            total = factor * (
+                intervent.intervent_duration + trip_h - break_h)
+        return total
+
 class account_invoice(osv.osv):
     ''' Extra fields for account.invoice
     '''
-    _name='account.invoice'
     _inherit='account.invoice'
     
     def _function_summary_intervent(self, cr, uid, ids, fields, param, context=None):
