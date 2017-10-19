@@ -132,26 +132,23 @@
                     <field name="state" widget="statusbar" statusbar_visible="cancel,draft,waiting,confirmed,close,reported" readonly="1"/>
                 </header>
                 <sheet>
-                   <group colspan="4">
-                       <field name="name" on_change="on_change_name(name,intervention_request)"/>
-                   </group>
                    <group colspan="4" col="4">                   
+                      <field name="name" on_change="on_change_name(name,intervention_request)" colspan="4"/>
+                   
                       <field name="intervent_partner_id" on_change="on_change_partner(intervent_partner_id,account_id)" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}"/>
                       <!--<field name="partner_id" on_change="on_change_partner(partner_id,account_id)"/>-->
 	                  <field name="mode" on_change="on_change_mode(mode)"/>
 	                  
                       <field name="user_id" on_change="on_change_user_id(user_id)" required="1"/>
 	                  <field name="ref" />
-                   </group>
 
-                   <group colspan="4">
                   	  <!--<field name="date" invisible="1"/> NOT NECESSARY: on_change="on_change_date(date)" modifiers="{'required': true}"/>-->
 	                  <field name="account_id" required="1" context="{'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',intervent_partner_id)]" on_change="on_change_account(account_id,intervent_partner_id,user_id)" />
 	                  <field name="account_hour_status" readonly="1" attrs="{'invisible': [('account_hour_status','=',False)]}" />
-                  	  <newline />
-                   </group>
-	                  
-                   <group colspan="4" col="4">
+
+                      <field name="request_by" />
+                      <field name="request_reference" />
+
 	                  <field name="date_start" required="1" />
                       <field name="intervent_duration" widget="float_time" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)" required="1" /> 
                       <!--<field name="date_end" /> -->
@@ -161,42 +158,41 @@
 
 	                  <field name="manual_total_internal" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
                       <field name="unit_amount" widget="float_time" string="Internal total (eff.)" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)" attrs="{'required':[('manual_total_internal','=',True)]}" help="Internal purpose, not visible for customers" />
-
 	                
-	                <notebook colspan="4">
-	                   <page string="Map route">
-	                       <group colspan="4" col="4">
-	                           <field name="google_from" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" />
-	                           <field name="google_to" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" />	                           
-	                          
-	                           <field name="trip_require" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
-	                           <field name="trip_hour" widget="float_time" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/> 
-	                           <newline />
-	                           <field name="break_require" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
-	                           <field name="break_hour"  widget="float_time" attrs="{'invisible':[('break_require','=',False)],'required':[('break_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/> 
-	                           <newline />
-	                       </group>
-	                   </page>
-	                   <page string="Description">
-	                       <label for="intervention_request" />
-	                       <field name="intervention_request" />
-	                       <label for="intervention" />
-	                       <field name="intervention" />
-	                       <label for="internal_note" />
-	                       <field name="internal_note" />
-	                   </page>
-	                   <page string="Accounting">
-	                       <group colspan="4" col="4">
-	                           <field name="product_uom_id" on_change="on_change_unit_amount(product_id,unit_amount,False,product_uom_id,journal_id)" /> 
-	                           <field name="journal_id" invisible="1" required="1"/> 
-	                           <field name="amount" />
-                               <field name="product_id" domain="[('type','=','service')]" on_change="on_change_unit_amount(product_id,unit_amount,False,product_uom_id,journal_id)" invisible="1" required="1" />
-	     	                   <field name="to_invoice" />
-	                           <field name="general_account_id" invisible="1" required="1" />
-	     	                   <field name="not_in_report" />
-	                       </group> 
-	                   </page>
-	                </notebook>        
+                      <notebook colspan="4">
+	                       <page string="Map route">
+	                           <group colspan="4" col="4">
+	                               <field name="google_from" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" />
+	                               <field name="google_to" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" />	                           
+	                              
+	                               <field name="trip_require" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
+	                               <field name="trip_hour" widget="float_time" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/> 
+	                               <newline />
+	                               <field name="break_require" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
+	                               <field name="break_hour"  widget="float_time" attrs="{'invisible':[('break_require','=',False)],'required':[('break_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/> 
+	                               <newline />
+	                           </group>
+	                       </page>
+	                       <page string="Description">
+	                           <label for="intervention_request" />
+	                           <field name="intervention_request" />
+	                           <label for="intervention" />
+	                           <field name="intervention" />
+	                           <label for="internal_note" />
+	                           <field name="internal_note" />
+	                       </page>
+	                       <page string="Accounting">
+	                           <group colspan="4" col="4">
+	                               <field name="product_uom_id" on_change="on_change_unit_amount(product_id,unit_amount,False,product_uom_id,journal_id)" /> 
+	                               <field name="journal_id" invisible="1" required="1"/> 
+	                               <field name="amount" />
+                                   <field name="product_id" domain="[('type','=','service')]" on_change="on_change_unit_amount(product_id,unit_amount,False,product_uom_id,journal_id)" invisible="1" required="1" />
+	         	                   <field name="to_invoice" />
+	                               <field name="general_account_id" invisible="1" required="1" />
+	         	                   <field name="not_in_report" />
+	                           </group> 
+	                       </page>
+	                  </notebook>        
 	               </group> 
 	            </sheet>     
 	         	<div class="oe_chatter">

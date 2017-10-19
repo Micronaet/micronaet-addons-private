@@ -294,6 +294,12 @@ class hr_analytic_timesheet_extra(osv.osv):
             help='If intervention is split in 2 part for break'),
         'break_hour': fields.float('Break hour', digits=(16, 6), 
             help='Duration of break'),
+        'request_by':fields.char('Request by', size=100, 
+            help='List of people that request intervent'
+            ),
+        'request_reference':fields.char('Request reference', size=200, 
+            help='Reference for request (asana link, mail ecc.)',
+            ),            
         
         # Function fields (populated only in view not in DB:    
         'account_hour_status': fields.char('Account status', size=40),
