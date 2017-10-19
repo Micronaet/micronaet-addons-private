@@ -145,6 +145,7 @@
                   	  <!--<field name="date" invisible="1"/> NOT NECESSARY: on_change="on_change_date(date)" modifiers="{'required': true}"/>-->
 	                  <field name="account_id" colspan="4" required="1" context="{'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',intervent_partner_id)]" on_change="on_change_account(account_id,intervent_partner_id,user_id)" />
 	                  <field name="account_hour_status" readonly="1" attrs="{'invisible': [('account_hour_status','=',False)]}" />
+	                  <newline/>
 
                       <field name="request_by" />
                       <field name="request_reference" />
