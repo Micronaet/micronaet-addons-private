@@ -329,6 +329,7 @@ class hr_analytic_timesheet_extra(osv.osv):
         'mode':fields.selection([
             ('phone','Phone'),
             ('customer','Customer address'),
+            ('passenger','Customer (passenger)'),
             ('connection','Tele assistence'),
             ('company','Company address'),],'Mode', select=True, required=True,readonly=False),
         'state':fields.selection([
