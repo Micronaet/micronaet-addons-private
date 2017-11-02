@@ -325,13 +325,15 @@ class hr_analytic_timesheet_extra(osv.osv):
         #'type_id':fields.many2one('intervention.type', 'Type', required=False),  
         # TODO valutare se è il caso di tenere un prodotto per il settore
         #'sector_id':fields.many2one('intervention.sector', 'Sector', required=False, help = "List of sector of intervent, used in sector study for division of activity intervents"),
-        'not_in_report':fields.boolean('Not in report', required=False, help = "It's not printed in monthly report"),
+        'not_in_report':fields.boolean('Not in report', 
+            help = "It's not printed in monthly report"),
         'mode':fields.selection([
             ('phone','Phone'),
             ('customer','Customer address'),
             ('passenger','Customer (passenger)'),
             ('connection','Tele assistence'),
-            ('company','Company address'),],'Mode', select=True, required=True,readonly=False),
+            ('company','Company address'),
+            ], 'Mode', select=True, required=True),
         'state':fields.selection([
             ('cancel', 'Cancelled'),               # Appointment cancel
             ('draft', 'Draft'),                    # Intervent / appointment marked on agenda
