@@ -472,14 +472,6 @@ class account_invoice_intervent_wizard(osv.osv_memory):
     def create_intervent_list(self, cr, uid, ids, context=None):
         ''' Create list of intervent depend on selection
         ''' 
-        # Parameters:
-        smb_root = '~/filestore/samba/intervent'
-        smb_root = os.path.expanduser(smb_root)
-        try:
-            os.system('mkdir -p %s' % smb_root)
-        except:
-            _logger.error('Cannot create folder: %s' % smb_root)    
-        
         # Pool used:
         intervent_pool = self.pool.get('hr.analytic.timesheet')
         invoice_pool = self.pool.get('account.invoice')    
@@ -491,7 +483,14 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         month = wiz_proxy.month
         invoice_id = wiz_proxy.invoice_id.id
         #user_id = wiz_proxy.user_id.id
-        #mode = wiz_proxy.mode
+
+        # Parameters:
+        smb_root = '~/filestore/samba/intervent/%s_%s' % (year, month)
+        smb_root = os.path.expanduser(smb_root)        
+        try:
+            os.system('mkdir -p %s' % smb_root)
+        except:
+            _logger.error('Cannot create folder: %s' % smb_root)    
 
         if invoice_id:
             invoice_ids = [invoice_id]                
@@ -508,12 +507,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             # Open file XSLX:
             # -----------------------------------------------------------------
             name = invoice.partner_id.name if invoice.partner_id else 'Manca'            
-            filename = os.path.join(smb_root, 'Interventi_%s_%s_%s.xlsx' % (
-                year,
-                month,
-                name,
-                ))
-            
+            filename = os.path.join(smb_root, 'Interventi_%s.xlsx' % name)            
             WB = xlsxwriter.Workbook(filename)
 
             # Format used:                
@@ -552,16 +546,14 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             # -----------------------------------------------------------------
             #WS.write_rich_string(row, col, *record)
             # Sheet Intervent:
-            self.write_xlsx_line(
-                WS, 0, [
-                    'Interventi (dettaglio): %s' % name,
-                    ], format_title)
+            self.write_xlsx_line(WS, 0, [
+                'Interventi (dettaglio): %s' % name,
+                ], format_title)
 
             # Sheet Contract:
-            self.write_xlsx_line(
-                WS_c, 0, [
-                    'Contratti (sommario): %s' % name,
-                    ], format_title)
+            self.write_xlsx_line(WS_c, 0, [
+                'Contratti (sommario): %s' % name,
+                ], format_title)
             
             # -----------------------------------------------------------------
             # 2. Header title:
