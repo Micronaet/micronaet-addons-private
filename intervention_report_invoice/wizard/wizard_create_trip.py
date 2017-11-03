@@ -636,11 +636,8 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             # End operations:
             WB.close()
             
-        # File zip with folder:
-        # TODO
-        
-        # Return ZIP file
-        # TODO 
+        # File zip with folder: # TODO         
+        # Return ZIP file # TODO 
         return True
         
     def create_invoice(self, cr, uid, ids, context=None):
