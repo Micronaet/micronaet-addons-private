@@ -86,6 +86,14 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'align': 'left',
                 'border': 1,
                 }),
+            'text_total': WB.add_format({
+                'bold': True, 
+                'font_color': 'black',
+                'font_name': 'Courier 10 pitch',
+                'font_size': 9,
+                'align': 'right',
+                'border': 0,
+                }),
             'text_center': WB.add_format({
                 'font_color': 'black',
                 'font_name': 'Courier 10 pitch',
@@ -514,6 +522,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             format_title = self.get_xls_format('title', WB)
             format_header = self.get_xls_format('header', WB)
             format_text = self.get_xls_format('text', WB)
+            format_text_total = self.get_xls_format('text_total', WB)
             format_center = self.get_xls_format('text_center', WB)
             format_number = self.get_xls_format('number', WB)
                 
@@ -591,11 +600,13 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             # -----------------------------------------------------------------
             row = 2
             res = {}
+            final_total = 0.0
             for intervent in invoice.intervention_report_ids:
                 row += 1
                 request = intervent.intervention_request or ''
                 total = intervent_pool.get_total_h_2_invoice(
                     intervent)
+                final_total += total    
                 if request == 'Nuovo evento':
                     request = intevent.name
                 self.write_xlsx_line(
@@ -619,6 +630,14 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                     res[intervent.account_id] = total
                 else:    
                     res[intervent.account_id] += total
+           
+            # Write total
+            self.write_xlsx_line(
+                WS, row + 1, [
+                    '', '', '', '', '', '', '', '', '', '', 
+                    ('Totale', format_text_total), 
+                    (final_total, format_text_total),
+                    ], format_text_total)
                         
             # Summary mode need write after total:                    
             row = 2
