@@ -634,7 +634,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             # Write total
             self.write_xlsx_line(
                 WS, row + 1, [
-                    '', '', '', '', '', '', '', '', '', '', 
+                    u'', u'', u'', u'', u'', u'', u'', u'', u'', u'', 
                     ('Totale', format_text_total), 
                     (final_total, format_text_total),
                     ], format_text_total)
