@@ -556,12 +556,12 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             #WS.write_rich_string(row, col, *record)
             # Sheet Intervent:
             self.write_xlsx_line(WS, 0, [
-                'Interventi (dettaglio): %s' % name,
+                u'Interventi (dettaglio): %s' % name,
                 ], format_title)
 
             # Sheet Contract:
             self.write_xlsx_line(WS_c, 0, [
-                'Contratti (sommario): %s' % name,
+                u'Contratti (sommario): %s' % name,
                 ], format_title)
             
             # -----------------------------------------------------------------
@@ -576,7 +576,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                     u'Richiesta',
                     u'Tecnico',
                     u'Oggetto', 
-                    u'Modalità',
+                    u'Modalita\'',
                     u'Fatturabile',
                     u'Traferta',
                     u'Pausa',
@@ -638,6 +638,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                     ('Totale', format_text_total), 
                     (final_total, format_text_total),
                     ], format_text_total)
+            #WS.write_formula(row + 1, 10, 'SUM(), format_text_total)
                         
             # Summary mode need write after total:                    
             row = 2
