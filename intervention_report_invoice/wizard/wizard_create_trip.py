@@ -535,9 +535,11 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             WS.set_column('C:C', 20)
             WS.set_column('D:D', 30)
             WS.set_column('E:E', 15)
-            WS.set_column('F:F', 30)
-            WS.set_column('G:G', 15)
+            WS.set_column('F:F', 30) # Subject
+            WS.set_column('G:G', 30) # Description
             WS.set_column('H:H', 15)
+            WS.set_column('I:I', 15)
+            # 4 col standard
             
             # Sheet Contract:
             WS_c = WB.add_worksheet('Contratti %s-%s' % (year, month))
@@ -576,6 +578,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                     u'Richiesta',
                     u'Tecnico',
                     u'Oggetto', 
+                    u'Dettaglio', 
                     u'Modalita\'',
                     u'Fatturabile',
                     u'Traferta',
@@ -617,6 +620,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                         intervent.intervention_request,
                         intervent.user_id.name,
                         request,
+                        intervent.intervention,
                         (intervent.mode, format_center),
                         (intervent.to_invoice.name, format_center),
                         (intervent.trip_hour if intervent.trip_require \
