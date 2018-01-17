@@ -151,7 +151,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 todo = account_pool.get_account_distribution(
                     user_id, from_date, to_date, account)
                 if user_id and user_id not in [
-                        item.id for item in account.distribution_ids]:
+                        item.user_id.id for item in account.distribution_ids]:
                     continue
                 res[account] = [0.0, todo]
         
