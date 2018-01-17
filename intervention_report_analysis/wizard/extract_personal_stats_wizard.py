@@ -214,7 +214,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         # Layout setup:        
         excel_pool.column_width(WS_name, [25, 40, 10, 10, 10, 10])
-        import pdb; pdb.set_trace()
+        
+        # Generate format used:
         f_title = excel_pool.get_format('title')
         f_header = excel_pool.get_format('header')
 
@@ -222,7 +223,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         row = 0
         excel_pool.write_xls_line(WS_name, row, [
             'Report: Data [%s - %s]' % (from_date, to_date),  
-            ], 'title')
+            ], f_title)
         row += 1    
         excel_pool.write_xls_line(WS_name, row, [
             'Utente: %s Conto: %s  - Contratti: %s' % (
@@ -230,7 +231,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 account_name,
                 'SI' if contract else 'NO',
                 ),
-            ])
+            ], f_title)
         row += 1    
         excel_pool.write_xls_line(WS_name, row, [
             'Totale a pagamento: %s' % my_total,
@@ -270,7 +271,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 widget_float_time(data[2], float_time), 
                 widget_float_time(data[3], float_time), 
                 ])
-        import pdb; pdb.set_trace()        
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', 
             context=context)
