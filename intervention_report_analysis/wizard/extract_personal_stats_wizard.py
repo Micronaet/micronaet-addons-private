@@ -143,7 +143,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         res = {}
         domain = [
-            #('account_id.is_extra_report', '=', False),
+            ('account_id.is_extra_report', '=', False),
             ]
         # Period:
         if from_date:
