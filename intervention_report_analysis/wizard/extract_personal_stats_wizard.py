@@ -214,6 +214,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         # Layout setup:        
         excel_pool.column_width(WS_name, [25, 40, 10, 10, 10, 10])
+        f_title = excel_pool.get_format('title')
+        f_header = excel_pool.get_format('header')
 
         # Title:
         row = 0
@@ -231,7 +233,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         row += 1    
         excel_pool.write_xls_line(WS_name, row, [
             'Totale a pagamento: %s' % my_total,
-            ], 'title')
+            ], f_title)
         
         # Header:
         row += 2
@@ -245,7 +247,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Ore pag.',             
             'Ore grat.',
             'Ore fatt.',
-            ], 'header')
+            ], f_header)
         
         # Write data:
         for account in sorted(
