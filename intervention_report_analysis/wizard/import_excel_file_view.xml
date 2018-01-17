@@ -32,10 +32,10 @@
           <field name="model">account.analytic.account</field>
           <field name="inherit_id" ref="view_account_analytic_account_analysis_form" />
           <field name="arch" type="xml">      
-              <xpath expr="//tree/field[@name='extract_excel_status']" position="after">
+              <xpath expr="//tree/button[@name='extract_excel_status']" position="after">
                   <button name="%(action_account_analytic_account_invoice_xlsx_import_wizard)d" string="Import XLSX file" type="action" />
               </xpath>
-              <xpath expr="//form/field[@name='extract_excel_status']" position="after">
+              <xpath expr="//form/button[@name='extract_excel_status']" position="after">
                   <button name="%(action_account_analytic_account_invoice_xlsx_import_wizard)d" string="Import XLSX file" type="action" />
               </xpath>
           </field>
