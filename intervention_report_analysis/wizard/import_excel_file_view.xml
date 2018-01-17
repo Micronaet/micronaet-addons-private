@@ -3,7 +3,7 @@
     <data>
        <!-- account.analytic.account.invoice.xlsx.import -->
        <record id="account_analytic_account_invoice_xlsx_import_wizard_view" model="ir.ui.view">
-            <field name="name"></field>
+            <field name="name">Import XLSX intervent invoice</field>
             <field name="model">account.analytic.account.invoice.xlsx.import</field>
             <field name="arch" type="xml">
                 <form string="Wizard" version="7.0">
