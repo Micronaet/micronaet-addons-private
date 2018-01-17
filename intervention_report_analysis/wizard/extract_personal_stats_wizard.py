@@ -248,7 +248,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Write data:
         for account in sorted(
                 res, key=lambda x: (
-                    0 if res[x][1] else 1, 
+                    0 if res[x][0] else 1, 
                     x.partner_id.name,
                     x.name,
                     )):
