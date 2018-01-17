@@ -157,16 +157,18 @@ class account_analytic_account_invoice(orm.Model):
             'Cliente',
             'Data', 
             'Numero', 
+            'Utente',
             'Oggetto',
             'Descrizione',
             'H tot.',
             'H fatt.', # da inserire
             ])
         excel_pool.column_width(WS_name, [
-            0,
+            1,
             40,
             20,
             20,
+            30,
             30,
             50,
             20,
@@ -186,13 +188,17 @@ class account_analytic_account_invoice(orm.Model):
             ('account_id', '=', current_proxy.account_id.id),
             ], context=context)
         row = 0
-        for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
+        for intervent in sorted(
+                ts_pool.browse(cr, uid, ts_ids, context=context),
+                key=lambda x: (x.date_start, x.user_id.name)
+                ):
             row += 1
             excel_pool.write_xls_line(WS_name, row, [
                 intervent.id, 
                 intervent.intervent_partner_id.name,
                 intervent.date_start, 
                 intervent.ref, 
+                intervent.user_id.name,
                 intervent.name,
                 intervent.intervention,
                 intervent.unit_amount,
