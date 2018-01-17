@@ -139,10 +139,76 @@ class account_analytic_account_invoice(orm.Model):
     _description = 'Invoice extra for contract'
     _rec_name = 'name'
     
+    def extract_excel_status(self, cr, uid, ids, context=None):
+        ''' Extract XLS status for intervent for this month and for
+            this account analitic
+        '''
+        assert len(ids) == 1, 'Works only with one record a time'
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]    
+        
+        # Pool used:
+        excel_pool = self.pool.get('excel.writer')
+        ts_pool = self.pool.get('hr.analytic.timesheet')        
+        
+        WS_name = _('Fatturazione extra')
+        excel_pool.create_worksheet(WS_name)
+        excel_pool.write_xls_line(WS_name, 0, [
+            'ID', 
+            'Cliente',
+            'Data', 
+            'Numero', 
+            'Oggetto',
+            'Descrizione',
+            'H tot.',
+            'H fatt.', # da inserire
+            ])
+        excel_pool.column_width(WS_name, [
+            0,
+            40,
+            20,
+            20,
+            30,
+            50,
+            20,
+            20,
+            ])
+        
+        date = current_proxy.date
+        # Start or end month:
+        from_date = '%s01' % date[:8]
+        date_dt = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
+        date_dt += relativedelta(months=1)
+        to_date = '%s01' % date_dt.strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
+        
+        ts_ids = account_pool.search(cr, uid, [
+            ('date_start', '>=', from_date),
+            ('date_start', '<', to_date),
+            ('account_id', '=', current_proxy.account_id.id),
+            ], context=context)
+        row = 0
+        for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
+            row += 1
+            excel_pool.write_xls_line(WS_name, row, [
+                intervent.id, 
+                intervent.intervent_partner_id.name,
+                intervent.date_start, 
+                intervent.ref, 
+                intervent.name,
+                intervent.intervention,
+                intervent.unit_amount,
+                '', # da inserire
+                ])
+        return excel_pool.return_attachment(
+            cr, uid, 'Interventi da valutare', 
+            'intervent.xlsx', version='7.0', context=context)
+        
     _columns = {
-        'name': fields.char('Invoice ref.', size=40),
-        'hour': fields.float('Hour', digits=(16, 2),
-            help='Number of hours'), 
+        'date': fields.date('Date', required=True),
+        'name': fields.char('Invoice ref.', size=40, required=True),
+        'hour_removed': fields.float('Hour covered', digits=(16, 2),
+            help='Number of hours coveder (removed from contract)'), 
+        'hour': fields.float('Hour invoiced', digits=(16, 2),
+            help='Number of hours invoiced (sometimes is not all)'), 
         'hour_cost': fields.float('Hour cost', digits=(16, 2),
             help='Number of hours'), 
         'total_amount': fields.float('Total amount', digits=(16, 2)), 
@@ -152,6 +218,7 @@ class account_analytic_account_invoice(orm.Model):
         'invoice_id': fields.many2one('account.invoice', 'Invoice'),
         #'date_invoice': fields.related(
         #    'invoice_id', 'date_invoice', 'Invoice date', type='date'),
+        #'note': fields.text('Note'),
         }
 
 class account_analytic_account(orm.Model):

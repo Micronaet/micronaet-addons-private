@@ -48,18 +48,24 @@
                             <group colspan="4" col="4">
                                 <field name="invoice_ids" nolabel="1">
                                     <tree string="Invoice" editable="bottom">        
+                                        <field name="date" />
                                         <field name="name" />
+                                        <field name="hour_removed" />
                                         <field name="hour" />
                                         <field name="hour_cost" />
                                         <field name="total_amount" />
                                         <!--<field name="date_invoice" />-->
+                                        <button name="extract_excel_status" string="Extract Excel status" type="object" icon="terp-go-month"/>
                                     </tree>                    
                                     <form string="Invoice">
+                                        <field name="date" />
                                         <field name="name" />
+                                        <field name="hour_removed" />
                                         <field name="hour" />
                                         <field name="hour_cost" />
                                         <field name="total_amount" />
                                         <!--<field name="date_invoice" />-->
+                                        <button name="extract_excel_status" string="Extract Excel status" type="object" icon="terp-go-month"/>
                                     </form>                    
                                 </field>
                             </group>
