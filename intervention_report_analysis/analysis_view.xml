@@ -147,7 +147,15 @@
             <menuitem 
                 parent="menu_statistic_root" 
                 id="menu_account_contract_distribution_form" 
-                action="action_account_contract_form"/>
+                action="action_account_contract_form"
+                sequence="10"
+                />
+            <menuitem 
+                parent="menu_statistic_root" 
+                id="menu_account_contract_distribution_graph" 
+                action="action_contract_distribution"
+                sequence="20"
+                />
             
         
     </data>
