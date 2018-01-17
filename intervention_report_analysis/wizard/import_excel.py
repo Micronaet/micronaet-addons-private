@@ -75,7 +75,7 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
         f = open(filename, 'wb')
         f.write(b64_file)
         f.close()
-                    
+
         # ---------------------------------------------------------------------
         # Load force name (for web publish)
         # ---------------------------------------------------------------------
