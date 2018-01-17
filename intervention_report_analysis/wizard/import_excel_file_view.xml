@@ -23,7 +23,7 @@
           <field name="view_type">form</field>
           <field name="view_mode">form</field>
           <field name="target">new</field>
-          <field name="view_id" ref="account_analytic_account_invoice_xlsx_import"/>
+          <field name="view_id" ref="account_analytic_account_invoice_xlsx_import_wizard_view"/>
       </record>      
 
       <!--Update view-->
