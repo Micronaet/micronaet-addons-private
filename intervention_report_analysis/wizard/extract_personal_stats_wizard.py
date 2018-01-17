@@ -284,7 +284,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
     _defaults = {
         'contract': lambda *x: True,
-        'float_hour': lambda *x: True,
+        'float_time': lambda *x: True,
         'user_id': lambda s, cr, uid, ctx: uid,
         'from_date': lambda *x: datetime.now().strftime('%Y-%m-01'),
         'to_date': lambda *x: (
