@@ -169,11 +169,17 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 if user_id and user_id not in [
                         item.user_id.id for item in account.distribution_ids]:
                     continue
-                res[account] = [0.0, todo]
+                res[account] = [
+                    todo,
+                    0.0, # done pay
+                    0.0, # done gratis
+                    0.0, # invoiced                    
+                    ]
         
         # ---------------------------------------------------------------------        
         # Collect statistics:
         # ---------------------------------------------------------------------        
+        my_total = 0.0
         ts_ids = ts_pool.search(cr, uid, domain, context=context)
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
             account = intervent.account_id
@@ -181,10 +187,20 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 todo = account_pool.get_account_distribution(
                     user_id, from_date, to_date, account)
                 # Total hour, todo
-                res[account] = [0.0, todo]
-            res[account][0] += intervent.unit_amount # Total hour
-            # TODO check to_invoice parameter
-        
+                res[account] = [
+                    todo,
+                    0.0, 
+                    0.0, 
+                    0.0, 
+                    ]
+            if invervent.to_invoice == 100:
+                res[account][1] += intervent.unit_amount # Total hour invoiced
+                my_total += intervent.unit_amount
+            else:    
+                res[account][2] += intervent.unit_amount # Total hour gratis
+            res[account][3] += intervent.extra_invoiced_total # Extra invoiced
+            my_total += intervent.extra_invoiced_total
+            
         WS_name = _('Statistiche')
         excel_pool.create_worksheet(WS_name)
 
@@ -212,7 +228,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Cliente',
             'H. tot.',
             'Fabbisogno',
-            'Ore fatte',             
+            'Ore pag.',             
+            'Ore grat.',
+            'Ore fatt.',
             ])
         
         # Write data:
@@ -229,10 +247,16 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 account.name, 
                 account.partner_id.name,
                 account.total_hours,
-                widget_float_time(data[1] or 0), 
-                widget_float_time(data[0]), 
+                widget_float_time(data[0]), # account todo
+                widget_float_time(data[1]), 
+                widget_float_time(data[2]), 
+                widget_float_time(data[3]), 
                 ])
-        
+        row += 2
+        excel_pool.write_xls_line(WS_name, 1, [
+            'Totale a pagamento: %s' % my_total,
+            ])
+                
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', 
             context=context)
