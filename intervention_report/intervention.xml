@@ -189,7 +189,7 @@
 	                               <field name="amount" />
                                    <field name="product_id" domain="[('type','=','service')]" on_change="on_change_unit_amount(product_id,unit_amount,False,product_uom_id,journal_id)" invisible="1" required="1" />
 	         	                   <field name="to_invoice" />
-	         	                   <field name="extra_invoiced_total" />
+	         	                   <field name="extra_invoiced_total"  widget="float_time" />
 	                               <field name="general_account_id" invisible="1" required="1" />
 	         	                   <field name="not_in_report" />
 	                           </group> 
