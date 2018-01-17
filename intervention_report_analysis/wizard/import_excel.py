@@ -59,15 +59,15 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
         
         # Pool used:
         ts_pool = self.pool.get('hr.analytic.timesheet')
-        import pdb; pdb.set_trace()
         # ---------------------------------------------------------------------
         # Save file passed:
         # ---------------------------------------------------------------------
-        if not wiz_browse.file:
+        if not wiz_browse.xls_file:
             raise osv.except_osv(
                 _('No file:'), 
                 _('Please pass a XLSX file for import data'),
                 )
+        import pdb; pdb.set_trace()
         b64_file = base64.decodestring(wiz_browse.xls_file)
         now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         filename = '/tmp/TS_%s.xlsx' % now.replace(':', '_').replace('-', '_')
