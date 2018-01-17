@@ -219,6 +219,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         f_title = excel_pool.get_format('title')
         f_header = excel_pool.get_format('header')
         f_text = excel_pool.get_format('text') 
+        f_text_right = excel_pool.get_format('text_right') 
 
         # Title:
         row = 0
@@ -262,8 +263,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             row += 1
             data = res[account]
             excel_pool.write_xls_line(WS_name, row, [
-                account.partner_id.name,
-                account.name, 
+                (account.partner_id.name, f_text),
+                (account.name, f_text), 
                 account.hour_done,
                 account.total_hours,
                 
@@ -271,7 +272,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 widget_float_time(data[1], float_time), 
                 widget_float_time(data[2], float_time), 
                 widget_float_time(data[3], float_time), 
-                ], f_text)
+                ], f_text_right)
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', 
             context=context)
