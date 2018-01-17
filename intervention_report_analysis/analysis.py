@@ -179,6 +179,7 @@ class account_analytic_account_invoice(orm.Model):
             'H tot.',
             'H fatt.', # da inserire
             ])
+
         excel_pool.column_width(WS_name, [
             1,
             30,

@@ -96,6 +96,20 @@ class AccountDistributionStatsWizard(orm.TransientModel):
     def action_print(self, cr, uid, ids, context=None):
         ''' Event for button done
         '''
+        # ---------------------------------------------------------------------
+        # UTILITY:
+        # ---------------------------------------------------------------------
+        def widget_float_time(value):
+            ''' Change float in HH:MM format
+            '''
+            approx = 0.001            
+            if not value:
+                return '0:00'
+            
+            hour = int(value)
+            minute = int((value - hour + approx) * 60.0)    
+            return '%:%02d' % (hour, minute)
+                
         if context is None: 
             context = {}        
         
@@ -192,11 +206,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Conto analitico', 
             'Cliente',
             'Fabbisogno',
-            'Ore fatte', 
+            'Ore fatte',             
             ])
         
         # Write data:
-        row = 2
+        row = 3
         for account in sorted(
                 res, key=lambda x: (0 if res[x][1] else 1, x.name)):
             row += 1
@@ -204,8 +218,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.write_xls_line(WS_name, row, [
                 account.name, 
                 account.partner_id.name,
-                data[1] or '', 
-                data[0], 
+                widget_float_time(data[1] or 0), 
+                widget_float_time(data[0]), 
                 ])
         
         return excel_pool.return_attachment(
