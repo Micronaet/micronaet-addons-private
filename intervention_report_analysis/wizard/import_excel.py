@@ -24,6 +24,7 @@
 import os
 import sys
 import logging
+import base64
 import openerp
 import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv, expression, orm
