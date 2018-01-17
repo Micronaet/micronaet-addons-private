@@ -143,9 +143,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             account_ids = account_pool.search(cr, uid, [
                 ('distribution_ids', '!=', False),
                 ('state', 'in', ('draft', 'open')),
-                ]                
+                ], context=context)         
             for account in account_pool.browse(
-                    cr, uid, account_ids, context=context):    
+                    cr, uid, account_ids, context=context):
                 # for user filter check if user is in distribution:
                 todo = self.get_account_distribution(
                     user_id, from_date, to_date, account)
