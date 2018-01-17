@@ -106,11 +106,9 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
         
         model_pool = self.pool.get('ir.model.data')
         view_tree_id = model_pool.get_object_reference(cr, uid, 
-            'intervention_report', 
-            'view_hr_analytic_timesheet_tree')[1]
+            'intervention_report', 'view_hr_analytic_timesheet_tree')[1]
         view_form_id = model_pool.get_object_reference(cr, uid, 
-            'intervention_report', 
-            'intervention_report.view_hr_analytic_timesheet_form')[1]
+            'intervention_report', 'view_hr_analytic_timesheet_form')[1]
 
         return {
             'type': 'ir.actions.act_window',
