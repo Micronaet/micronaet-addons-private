@@ -20,4 +20,5 @@
 ###############################################################################
 import intervention_status_wizard
 import import_excel
+import extract_personal_stats_wizard
 
