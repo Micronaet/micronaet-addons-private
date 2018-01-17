@@ -213,7 +213,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         #                               EXCEL:
         # ---------------------------------------------------------------------
         # Layout setup:        
-        excel_pool.column_width(WS_name, [40, 25, 10, 10, 10, 10])
+        excel_pool.column_width(WS_name, [25, 40, 10, 10, 10, 10])
 
         # Title:
         row = 0
