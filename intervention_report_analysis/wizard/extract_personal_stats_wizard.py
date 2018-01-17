@@ -213,7 +213,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         #                               EXCEL:
         # ---------------------------------------------------------------------
         # Layout setup:        
-        excel_pool.column_width(WS_name, [25, 40, 10, 10, 10, 10])
+        excel_pool.column_width(WS_name, [25, 40, 10, 10, 10, 10, 10, 10])
         
         # Generate format used:
         f_title = excel_pool.get_format('title')
@@ -263,7 +263,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             row += 1
             data = res[account]
             excel_pool.write_xls_line(WS_name, row, [
-                (account.partner_id.name, f_text),
+                (account.partner_id.name or _('GENERICO'), f_text),
                 (account.name, f_text), 
                 widget_float_time(account.hour_done, float_time),
                 widget_float_time(account.total_hours, float_time),
