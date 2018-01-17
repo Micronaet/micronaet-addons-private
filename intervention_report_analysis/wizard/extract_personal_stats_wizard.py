@@ -218,6 +218,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Generate format used:
         f_title = excel_pool.get_format('title')
         f_header = excel_pool.get_format('header')
+        f_text = excel_pool.get_format('text') 
 
         # Title:
         row = 0
@@ -270,7 +271,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 widget_float_time(data[1], float_time), 
                 widget_float_time(data[2], float_time), 
                 widget_float_time(data[3], float_time), 
-                ])
+                ], f_text)
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', 
             context=context)
