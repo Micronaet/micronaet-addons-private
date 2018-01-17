@@ -35,7 +35,7 @@
         'intervention_report_invoice',
         'report_webkit',
         'report_aeroo',
-        'excel_writer', # Extract XLSX file
+        'excel_export', # Extract XLSX file
         ],
     'init_xml': [],
     'demo_xml': [],
