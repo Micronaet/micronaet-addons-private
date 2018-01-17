@@ -63,6 +63,9 @@ class AccountAnalyticAccount(orm.Model):
         days = (to_dt - from_dt).days 
 
         # Account period:
+        if not account.from_date or not account.to_date:
+            return 0.0
+
         account_from_dt = datetime.strptime(
             account.from_date, DEFAULT_SERVER_DATE_FORMAT)
         account_to_dt = datetime.strptime(
