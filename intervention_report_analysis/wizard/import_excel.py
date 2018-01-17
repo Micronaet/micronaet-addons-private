@@ -92,7 +92,6 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
         WS = WB.sheet_by_index(0)
 
         res = []
-        import pdb; pdb.set_trace()
         for row in range(row_start, WS.nrows):
             try:
                 item_id = int(WS.cell(row, 0).value)
@@ -111,7 +110,7 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
             'view_type': 'form',
             'view_mode': 'tree,form',
             #'res_id': 1,
-            'res_model': 'hr.analytic.intervent',
+            'res_model': 'hr.analytic.timesheet',
             'view_id': False,
             'views': [(False, 'tree'), (False, 'form')],
             'domain': [('id', 'in', res)],
