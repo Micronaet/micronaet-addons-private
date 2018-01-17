@@ -193,7 +193,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     0.0, 
                     0.0, 
                     ]
-            if invervent.to_invoice == 100:
+            if intervent.to_invoice.factor == 100:
                 res[account][1] += intervent.unit_amount # Total hour invoiced
                 my_total += intervent.unit_amount
             else:    
