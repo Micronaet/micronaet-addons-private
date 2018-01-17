@@ -139,11 +139,12 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         if partner_id:
             domain.append(
                 ('intervent_partner_id', '=', partner_id))
-        if contract:
+        if contract:         
             account_ids = account_pool.search(cr, uid, [
                 ('distribution_ids', '!=', False),
                 ('state', 'in', ('draft', 'open')),
                 ], context=context)         
+            import pdb; pdb.set_trace()    
             for account in account_pool.browse(
                     cr, uid, account_ids, context=context):
                 # for user filter check if user is in distribution:
