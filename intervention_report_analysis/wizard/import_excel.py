@@ -94,7 +94,10 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
         res = []
         import pdb; pdb.set_trace()
         for row in range(row_start, WS.nrows):
-            item_id = WS.cell(row, 0).value
+            try:
+                item_id = int(WS.cell(row, 0).value)
+            except:
+                continue # jump not float lines    
             extra_invoiced_total = WS.cell(row, 9).value
             if extra_invoiced_total and item_id:
                 ts_pool.write(cr, uid, item_id, {
