@@ -107,6 +107,29 @@
                 </xpath>
             </field>
         </record>
+        
+        <!--Statisti view / action:-->
+        <record model="ir.ui.view" id="view_contract_distribution_graph">
+            <field name="name">account.analytic.account.distribution.graph</field>
+            <field name="model">account.analytic.account.distribution</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="Distribution" type="pie">
+                    <field name="account_id"/>
+                    <field name="user_id" />
+                    <field name="percentual" operator="+"/>
+                </graph>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_contract_distribution">
+            <field name="name">Distribution</field>
+            <field name="res_model">account.analytic.account.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,tree,form</field>
+            <field name="view_id" ref="view_contract_distribution_graph"/>
+            <field name="context">{}</field>
+            <field name="domain">[('account_id.state', 'in', ('draft', 'open'))]</field>
+        </record>
         <record model="ir.actions.act_window" id="action_account_contract_form">
             <field name="name">Contract with distribution</field>
             <field name="res_model">account.analytic.account</field>
