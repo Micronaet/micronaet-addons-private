@@ -302,7 +302,7 @@ class hr_analytic_timesheet_extra(osv.osv):
             help='Duration of break'),
 
         'extra_invoiced_total': fields.float('Duration of extra invoiced', 
-            digits=(16, 6), 
+            digits=(16, 3), 
             help = 'Extra invoiced of this contract intervent'),
 
         'request_by':fields.char('Request by', size=100, 
