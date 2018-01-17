@@ -265,8 +265,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.write_xls_line(WS_name, row, [
                 (account.partner_id.name, f_text),
                 (account.name, f_text), 
-                account.hour_done,
-                account.total_hours,
+                widget_float_time(account.hour_done, float_time),
+                widget_float_time(account.total_hours, float_time),
                 
                 widget_float_time(data[0], float_time), # account todo
                 widget_float_time(data[1], float_time), 
