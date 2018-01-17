@@ -175,8 +175,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
             account = intervent.account_id
             if account not in res:
+                todo = account_pool.get_account_distribution(
+                    user_id, from_date, to_date, account)
                 # Total hour, todo
-                res[account] = [0.0, 0.0]
+                res[account] = [0.0, todo]
             res[account][0] += intervent.unit_amount # Total hour
             # TODO check to_invoice parameter
         
@@ -187,7 +189,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         #                               EXCEL:
         # ---------------------------------------------------------------------
         # Layout setup:        
-        excel_pool.column_width(WS_name, [40, 25, 25, 10, 10])
+        excel_pool.column_width(WS_name, [40, 25, 10, 10, 10])
 
         # Title:
         excel_pool.write_xls_line(WS_name, 0, [
