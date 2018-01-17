@@ -215,7 +215,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         #                               EXCEL:
         # ---------------------------------------------------------------------
         # Layout setup:        
-        excel_pool.column_width(WS_name, [25, 40, 10, 10, 10, 10, 10, 10])
+        excel_pool.column_width(WS_name, [25, 40, 20, 10, 10, 10, 10, 10, 10])
         
         # ---------------------------------------------------------------------
         # Generate format used:
@@ -254,6 +254,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         excel_pool.write_xls_line(WS_name, row, [
             'Cliente',
             'Conto analitico', 
+            'Periodo',
             'H. fatte',
             'H. tot.',
             
@@ -303,6 +304,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.write_xls_line(WS_name, row, [
                 (account.partner_id.name or _('GENERICO'), f_text),
                 (account.name, f_text), 
+                ('[%s - %s]' % (
+                    account.from_date or '', 
+                    account.to_date or '',
+                    ), f_text), 
                 (widget_float_time(account.hour_done, float_time), 
                     account_h_format),
                 (widget_float_time(account.total_hours, float_time), 
