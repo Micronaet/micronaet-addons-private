@@ -68,7 +68,7 @@ class AccountAnalyticAccount(orm.Model):
         account_to_dt = datetime.strptime(
             account.to_date, DEFAULT_SERVER_DATE_FORMAT)
         # start day yet included
-        account_days = (account_to_dt - account_from_dt).days 
+        account_days = (account_to_dt - account_from_dt).days + 1 # start day
         
         if not account_days:
             _logger.error('No period in account!')            
@@ -144,7 +144,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 ('distribution_ids', '!=', False),
                 ('state', 'in', ('draft', 'open')),
                 ], context=context)         
-            import pdb; pdb.set_trace()    
             for account in account_pool.browse(
                     cr, uid, account_ids, context=context):
                 # for user filter check if user is in distribution:
