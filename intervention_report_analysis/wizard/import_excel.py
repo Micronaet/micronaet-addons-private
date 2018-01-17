@@ -55,15 +55,64 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
         if context is None: 
             context = {}        
         
-        wizard_browse = self.browse(cr, uid, ids, context=context)[0]
-        #extra_invoiced_total        
-        # Save XLSX bin file
+        wiz_browse = self.browse(cr, uid, ids, context=context)[0]
         
-        # Parse and update intervent:
-        
+        # Pool used:
+        ts_pool = self.pool.get('hr.analytic.timesheet')
+        import pdb; pdb.set_trace()
+        # ---------------------------------------------------------------------
+        # Save file passed:
+        # ---------------------------------------------------------------------
+        if not wiz_browse.file:
+            raise osv.except_osv(
+                _('No file:'), 
+                _('Please pass a XLSX file for import data'),
+                )
+        b64_file = base64.decodestring(wiz_browse.xls_file)
+        now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        filename = '/tmp/TS_%s.xlsx' % now.replace(':', '_').replace('-', '_')
+        f = open(filename, 'wb')
+        f.write(b64_file)
+        f.close()
+                    
+        # ---------------------------------------------------------------------
+        # Load force name (for web publish)
+        # ---------------------------------------------------------------------
+        # Parameters:    
+        row_start = 1
+        try:
+            WB = xlrd.open_workbook(filename)
+        except:
+            raise osv.except_osv(
+                _('Error XLSX'), 
+                _('Cannot read XLS file: %s' % filename),
+                )
+                
+        WS = WB.sheet_by_index(0)
+
+        res = []
+        for row in range(row_start - 1, WS.nrows): # -1 for update at start
+            item_id = WS.cell(row, 0).value
+            extra_invoiced_total = WS.cell(row, 9).value
+            if extra_invoiced_total and item_id:
+                ts_pool.write(cr, uid, item_id, {
+                    'extra_invoiced_total': extra_invoiced_total,
+                    }, context=context)
+                res.append(item_id)
         
         return {
-            'type': 'ir.actions.act_window_close'
+            'type': 'ir.actions.act_window',
+            'name': _('Updated intervent'),
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            #'res_id': 1,
+            'res_model': 'hr.analytic.intervent',
+            'view_id': False
+            'views': [(False, 'tree'), (False, 'form')],
+            'domain': [('id', 'in', res)],
+            'context': context,
+            'target': 'current', # 'new'
+            'nodestroy': False,
             }
 
     _columns = {
