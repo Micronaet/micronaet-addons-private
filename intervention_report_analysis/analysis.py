@@ -180,7 +180,7 @@ class account_analytic_account_invoice(orm.Model):
         date_dt += relativedelta(months=1)
         to_date = '%s01' % date_dt.strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
         
-        ts_ids = account_pool.search(cr, uid, [
+        ts_ids = ts_pool.search(cr, uid, [
             ('date_start', '>=', from_date),
             ('date_start', '<', to_date),
             ('account_id', '=', current_proxy.account_id.id),
