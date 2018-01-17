@@ -142,7 +142,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         if contract:
             account_ids = account_pool.search(cr, uid, [
                 ('distribution_ids', '!=', False),
-                ('state', 'in', ('draft', 'open'),
+                ('state', 'in', ('draft', 'open')),
                 ]                
             for account in account_pool.browse(
                     cr, uid, account_ids, context=context):    
