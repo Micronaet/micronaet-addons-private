@@ -23,7 +23,7 @@
                         <field name="account_id" domain="[('type', '!=', 'view')]"/>
                         
                         <field name="contract" />
-                        <field name="float_hour" />
+                        <field name="float_time" />
                    </group>
                 </form>
             </field>

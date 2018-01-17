@@ -139,7 +139,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         partner_name = wiz_browse.partner_id.name or _('Nessuno')
         
         contract = wiz_browse.contract
-        float_hour = wiz_browse.float_hour
+        float_time = wiz_browse.float_time
         
         res = {}
         domain = []
@@ -270,7 +270,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
     _columns = {
         'contract': fields.boolean('With contract', 
             help='Always add also contract with distribution'),
-        'float_hour': fields.boolean('Formatted hour', 
+        'float_time': fields.boolean('Formatted hour', 
             help='If checked print hour in HH:MM format'),
         'from_date': fields.date('From date >= ', required=True),
         'to_date': fields.date('To date <', required=True),
