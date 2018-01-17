@@ -35,10 +35,12 @@
                                     <tree string="Distribution" editable="bottom">        
                                         <field name="user_id" />
                                         <field name="percentual" sum="total"/>
+                                        <field name="hour" sum="total"/>
                                     </tree>                    
                                     <form string="Distribution">
                                         <field name="user_id" />
                                         <field name="percentual" />
+                                        <field name="hour" />
                                     </form>                    
                                 </field>
                             </group>

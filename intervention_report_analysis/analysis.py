@@ -124,12 +124,27 @@ class account_analytic_account_distribution(orm.Model):
     _description = 'User distribution for contract'
     _rec_name = 'user_id'
     
+    def _get_total_hours(self, cr, uid, ids, fields, args, context=None):
+        ''' Fields function for calculate 
+        '''
+        res = {}
+        for dist in self.browse(cr, uid, ids, context=context):
+            total_hours = dist.account_id.total_hours
+            if total_hours:
+                res[dist.id] = dist.percentual * total_hours / 100.0
+            else:    
+                res[dist.id] = 0
+        return res         
+        
     _columns = {
         'user_id': fields.many2one('res.users', 'Users', required=True),
         'account_id': fields.many2one(
             'account.analytic.account', 'Account'),
         'percentual': fields.float('% of hours', 
             digits=(8, 2), help='Percentual on total hour'), 
+        'hour': fields.function(
+            _get_total_hours, method=True, 
+            type='float', string='Tot. H.', store=False, readonly=True), 
         }
 
 class account_analytic_account_invoice(orm.Model):
