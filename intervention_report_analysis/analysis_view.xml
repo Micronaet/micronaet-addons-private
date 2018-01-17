@@ -34,7 +34,7 @@
                                 <field name="distribution_ids" nolabel="1">
                                     <tree string="Distribution" editable="bottom">        
                                         <field name="user_id" />
-                                        <field name="percentual" />
+                                        <field name="percentual" sum="total"/>
                                     </tree>                    
                                     <form string="Distribution">
                                         <field name="user_id" />
@@ -87,7 +87,7 @@
                                         <field name="name" />
                                         <field name="account_id"
                                           domain="[('type','in',['normal','contract']),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',parent.partner_id)]" />
-                                        <field name="hour" />
+                                        <field name="hour" sum="total"/>
                                         <field name="hour_cost" />
                                         <field name="total_amount" />
                                     </tree>                    
