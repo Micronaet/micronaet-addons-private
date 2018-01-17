@@ -165,14 +165,14 @@ class account_analytic_account_invoice(orm.Model):
             ])
         excel_pool.column_width(WS_name, [
             1,
-            40,
-            20,
-            20,
             30,
+            20,
+            10,
+            20,
             30,
             50,
-            20,
-            20,
+            10,
+            10,
             ])
         
         date = current_proxy.date
