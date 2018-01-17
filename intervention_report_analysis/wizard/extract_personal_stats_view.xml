@@ -18,8 +18,8 @@
                    
                         <separator string="Relation" colspan="4"/>
                         <field name="user_id" />
-                        <field name="partner_id" />                        
-                        <field name="account_id" />
+                        <field name="partner_id" domain="[('is_company', '=', True)]" />                        
+                        <field name="account_id" domain="[('type', '!=', 'view')]"/>
                         <field name="contract" />
                    </group>
                 </form>
