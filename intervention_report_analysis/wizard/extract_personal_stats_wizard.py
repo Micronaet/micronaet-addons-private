@@ -116,7 +116,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             return '%s:%02d' % (hour, minute)
                 
         if context is None: 
-            context = {}        
+            context = {} 
+       
+        yellow_rate = 0.9    
         
         wiz_browse = self.browse(cr, uid, ids, context=context)[0]
         
@@ -215,11 +217,19 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Layout setup:        
         excel_pool.column_width(WS_name, [25, 40, 10, 10, 10, 10, 10, 10])
         
+        # ---------------------------------------------------------------------
         # Generate format used:
+        # ---------------------------------------------------------------------
+        # Text:
         f_title = excel_pool.get_format('title')
         f_header = excel_pool.get_format('header')
         f_text = excel_pool.get_format('text') 
+        
+        # Number:
         f_text_right = excel_pool.get_format('text_right') 
+        f_red_number = excel_pool.get_format('bg_red_number') 
+        f_yellow_number = excel_pool.get_format('bg_yellow_number') 
+        f_green_number = excel_pool.get_format('bg_green_number') 
 
         # Title:
         row = 0
@@ -262,16 +272,27 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     )):
             row += 1
             data = res[account]
+            h_todo, h_pay, h_no_pay, h_invoice = data
+            h_done = h_pay + h_no_pay
+                        
+            # TODO remove invoiced hours from total contract done
+            if h_done > h_todo:
+                h_format = f_red_number
+            elif h_done / h_todo >= yellow_rate:
+                h_format = f_yellow_number
+            else:    
+                h_format = f_green_number            
+            
             excel_pool.write_xls_line(WS_name, row, [
                 (account.partner_id.name or _('GENERICO'), f_text),
                 (account.name, f_text), 
                 widget_float_time(account.hour_done, float_time),
                 widget_float_time(account.total_hours, float_time),
                 
-                widget_float_time(data[0], float_time), # account todo
-                widget_float_time(data[1], float_time), 
-                widget_float_time(data[2], float_time), 
-                widget_float_time(data[3], float_time), 
+                (widget_float_time(h_todo, float_time), h_format),
+                (widget_float_time(h_pay, float_time), h_format), 
+                (widget_float_time(h_no_pay, float_time), h_format), 
+                widget_float_time(h_invoice, float_time), 
                 ], f_text_right)
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', 
