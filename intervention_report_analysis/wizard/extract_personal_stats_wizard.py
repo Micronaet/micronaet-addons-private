@@ -102,10 +102,12 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         # UTILITY:
         # ---------------------------------------------------------------------
-        def widget_float_time(value):
+        def widget_float_time(value, use_format=True):
             ''' Change float in HH:MM format
             '''
-            approx = 0.001            
+            if not use_format:
+                return value # as is
+            approx = 0.001
             if not value:
                 return ''#'0:00'
             
@@ -137,6 +139,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         partner_name = wiz_browse.partner_id.name or _('Nessuno')
         
         contract = wiz_browse.contract
+        float_hour = wiz_browse.float_hour
         
         res = {}
         domain = []
@@ -254,10 +257,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 account.name, 
                 account.partner_id.name,
                 account.total_hours,
-                widget_float_time(data[0]), # account todo
-                widget_float_time(data[1]), 
-                widget_float_time(data[2]), 
-                widget_float_time(data[3]), 
+                widget_float_time(data[0], float_time), # account todo
+                widget_float_time(data[1], float_time), 
+                widget_float_time(data[2], float_time), 
+                widget_float_time(data[3], float_time), 
                 ])
                 
         return excel_pool.return_attachment(
