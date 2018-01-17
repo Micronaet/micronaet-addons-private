@@ -38,10 +38,10 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
-class HrAnalyticTimesheet(orm.Model):
-    """ Model name: HrAnalyticTimesheet
+class AccountAnalyticAccount(orm.Model):
+    """ Model name: Account 
     """    
-    _inherit = 'hr.analytic.timesheet'
+    _inherit = 'account.analytic.account'
     
     # -------------------------------------------------------------------------
     # Utility:
