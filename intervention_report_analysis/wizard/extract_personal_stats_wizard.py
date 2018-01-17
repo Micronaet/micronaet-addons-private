@@ -235,6 +235,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         f_title = excel_pool.get_format('title')
         f_header = excel_pool.get_format('header')
         f_text = excel_pool.get_format('text') 
+        f_red_text = excel_pool.get_format('bg_red') 
+        f_yellow_text = excel_pool.get_format('bg_yellow') 
+        f_green_text = excel_pool.get_format('bg_green') 
         
         # Number:
         f_text_right = excel_pool.get_format('text_right') 
@@ -279,6 +282,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ], f_header)
         
         # Write data:
+        now = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
         for account in sorted(
                 res, key=lambda x: (
                     0 if res[x][0] else 1, 
@@ -293,19 +297,24 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             h_done = h_pay + h_no_pay
             
             # Account:
+            account_from = account.from_date
+            account_to = account.to_date
             account_h_todo = account.total_hours
             account_h_done = account.hour_done
                         
             # TODO remove invoiced hours from total contract done
-            if not h_todo:
-                h_format = f_text_right                
-            elif h_done > h_todo:
-                h_format = f_red_number
-            elif h_done / h_todo >= yellow_rate:
-                h_format = f_yellow_number
-            else:    
-                h_format = f_green_number            
-
+            # -----------------------------------------------------------------
+            # Color test:
+            # -----------------------------------------------------------------
+            # Date period:
+            if account_to and account_to < now:
+                date_format = f_red_text
+            elif account_from and account_from >= now:
+                date_format = f_yellow_text                
+            else:
+                date_format = f_text                
+            
+            # Account H.:
             if not account_h_todo:
                 account_h_format = f_text_right                
             elif account_h_done > account_h_todo:
@@ -314,6 +323,16 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 account_h_format = f_yellow_number
             else:    
                 account_h_format = f_green_number            
+
+            # Intervent H.:
+            if not h_todo:
+                h_format = f_text_right                
+            elif h_done > h_todo:
+                h_format = f_red_number
+            elif h_done / h_todo >= yellow_rate:
+                h_format = f_yellow_number
+            else:    
+                h_format = f_green_number            
             
             excel_pool.write_xls_line(WS_name, row, [
                 (account.partner_id.name or _('GENERICO'), f_text),
@@ -321,7 +340,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 ('[%s - %s]' % (
                     widget_date(account.from_date), 
                     widget_date(account.to_date),
-                    ), f_text), 
+                    ), date_format), 
                 (widget_float_time(account.hour_done, float_time), 
                     account_h_format),
                 (widget_float_time(account.total_hours, float_time), 
