@@ -140,7 +140,7 @@ class account_analytic_account_distribution(orm.Model):
         'user_id': fields.many2one('res.users', 'Users', required=True),
         'account_id': fields.many2one(
             'account.analytic.account', 'Account'),
-        'percentual': fields.float('% of hours', 
+        'percentual': fields.float('% of hours', required=True,
             digits=(8, 2), help='Percentual on total hour'), 
         'hour': fields.function(
             _get_total_hours, method=True, 
