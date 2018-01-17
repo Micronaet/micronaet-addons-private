@@ -107,7 +107,7 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
             'view_mode': 'tree,form',
             #'res_id': 1,
             'res_model': 'hr.analytic.intervent',
-            'view_id': False
+            'view_id': False,
             'views': [(False, 'tree'), (False, 'form')],
             'domain': [('id', 'in', res)],
             'context': context,
