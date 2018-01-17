@@ -219,7 +219,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         row = 0
         excel_pool.write_xls_line(WS_name, row, [
             'Report: Data [%s - %s]' % (from_date, to_date),  
-            ])
+            ], 'title')
         row += 1    
         excel_pool.write_xls_line(WS_name, row, [
             'Utente: %s Conto: %s  - Contratti: %s' % (
@@ -231,7 +231,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         row += 1    
         excel_pool.write_xls_line(WS_name, row, [
             'Totale a pagamento: %s' % my_total,
-            ])
+            ], 'title')
         
         # Header:
         row += 2
@@ -245,7 +245,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Ore pag.',             
             'Ore grat.',
             'Ore fatt.',
-            ])
+            ], 'header')
         
         # Write data:
         for account in sorted(
