@@ -104,7 +104,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             '''
             approx = 0.001            
             if not value:
-                return '0:00'
+                return ''#'0:00'
             
             hour = int(value)
             minute = int((value - hour + approx) * 60.0)    
