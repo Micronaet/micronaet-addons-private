@@ -104,6 +104,14 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
                     }, context=context)
                 res.append(item_id)
         
+        model_pool = self.pool.get('ir.model.data')
+        view_tree_id = model_pool.get_object_reference(cr, uid, 
+            'intervention_report', 
+            'view_hr_analytic_timesheet_tree')[1]
+        view_form_id = model_pool.get_object_reference(cr, uid, 
+            'intervention_report', 
+            'intervention_report.view_hr_analytic_timesheet_form')[1]
+
         return {
             'type': 'ir.actions.act_window',
             'name': _('Updated intervent'),
@@ -111,8 +119,8 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
             'view_mode': 'tree,form',
             #'res_id': 1,
             'res_model': 'hr.analytic.timesheet',
-            'view_id': False,
-            'views': [(False, 'tree'), (False, 'form')],
+            'view_id': view_tree_id,
+            'views': [(view_tree_id, 'tree'), (view_form_id, 'form')],
             'domain': [('id', 'in', res)],
             'context': context,
             'target': 'current', # 'new'
