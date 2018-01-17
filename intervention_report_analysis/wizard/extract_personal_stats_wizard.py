@@ -158,7 +158,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Collect statistics:
         # ---------------------------------------------------------------------        
         ts_ids = ts_pool.search(cr, uid, domain, context=context)
-        for intervent ts_pool.browse(cr, uid, ts_ids, context=context):
+        for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
             account = intervent.account_id
             if account not in res:
                 # Total hour, todo
