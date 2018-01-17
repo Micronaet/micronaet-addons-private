@@ -102,6 +102,17 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         # UTILITY:
         # ---------------------------------------------------------------------
+        def widget_date(value):
+            ''' Change float in DD-MM-YYYY
+            '''
+            if not value:
+                return ''
+            return '%s/%s/%s' % (
+                value[8:10],
+                value[5:7],
+                value[:4],
+                )
+                
         def widget_float_time(value, use_format=True):
             ''' Change float in HH:MM format
             '''
@@ -234,7 +245,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Title:
         row = 0
         excel_pool.write_xls_line(WS_name, row, [
-            'Report: Data [%s - %s]' % (from_date, to_date),  
+            'Report: Data [%s - %s]' % (
+                widget_date(from_date), 
+                widget_date(to_date),
+                ),  
             ], f_title)
         row += 1    
         excel_pool.write_xls_line(WS_name, row, [
@@ -305,8 +319,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (account.partner_id.name or _('GENERICO'), f_text),
                 (account.name, f_text), 
                 ('[%s - %s]' % (
-                    account.from_date or '', 
-                    account.to_date or '',
+                    widget_date(account.from_date), 
+                    widget_date(account.to_date),
                     ), f_text), 
                 (widget_float_time(account.hour_done, float_time), 
                     account_h_format),
