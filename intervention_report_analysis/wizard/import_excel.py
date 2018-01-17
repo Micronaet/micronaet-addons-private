@@ -69,7 +69,6 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
                 _('No file:'), 
                 _('Please pass a XLSX file for import data'),
                 )
-        import pdb; pdb.set_trace()
         b64_file = base64.decodestring(wiz_browse.xls_file)
         now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         filename = '/tmp/TS_%s.xlsx' % now.replace(':', '_').replace('-', '_')
@@ -93,7 +92,8 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
         WS = WB.sheet_by_index(0)
 
         res = []
-        for row in range(row_start - 1, WS.nrows): # -1 for update at start
+        import pdb; pdb.set_trace()
+        for row in range(row_start, WS.nrows):
             item_id = WS.cell(row, 0).value
             extra_invoiced_total = WS.cell(row, 9).value
             if extra_invoiced_total and item_id:
