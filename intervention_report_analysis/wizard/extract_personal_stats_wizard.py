@@ -108,7 +108,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             
             hour = int(value)
             minute = int((value - hour + approx) * 60.0)    
-            return '%:%02d' % (hour, minute)
+            return '%s:%02d' % (hour, minute)
                 
         if context is None: 
             context = {}        
