@@ -173,7 +173,6 @@ class account_analytic_account_invoice(orm.Model):
             20,
             ])
         
-        import pdb; pdb.set_trace()
         date = current_proxy.date
         # Start or end month:
         from_date = '%s01' % date[:8]
