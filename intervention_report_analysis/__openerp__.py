@@ -45,6 +45,7 @@
         'report/status_webkit.xml',
         'report/status_intervent.xml',
         'wizard/intervention_status_wizard.xml',                    
+        'wizard/import_excel_file_view.xml',
         ],
     'active': False,
     'installable': True,

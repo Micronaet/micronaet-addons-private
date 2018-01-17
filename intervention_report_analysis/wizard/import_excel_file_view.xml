@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       <!-- account.analytic.account.invoice.xlsx.import -->
+       <record id="account_analytic_account_invoice_xlsx_import_wizard_view" model="ir.ui.view">
+            <field name="name"></field>
+            <field name="model">account.analytic.account.invoice.xlsx.import</field>
+            <field name="arch" type="xml">
+                <form string="Wizard" version="7.0">
+                   <header>
+                       <button string="Cancel" special="cancel" />
+                       <button name="action_import" string="Import XLSX" type="object" icon="gtk-jump-to" class="oe_highlight" />
+                   </header>                   
+                   <group colspan="4" col="4">
+                        <field name="xls_file" />
+                   </group>
+                </form>
+            </field>
+      </record>
+      <record model="ir.actions.act_window" id="action_account_analytic_account_invoice_xlsx_import_wizard">
+          <field name="name">Import XLSX file</field>
+          <field name="res_model">account.analytic.account.invoice.xlsx.import</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form</field>
+          <field name="target">new</field>
+          <field name="view_id" ref="account_analytic_account_invoice_xlsx_import"/>
+      </record>      
+
+      <!--Update view-->
+      <record model="ir.ui.view" id="view_account_analytic_account_analysis_form">
+          <field name="name">account.analytic.account.analysis.form</field>
+          <field name="model">account.analytic.account</field>
+          <field name="inherit_id" ref="analytic.view_account_analytic_account_form" />
+          <field name="arch" type="xml">      
+              <xpath expr="//tree/field[@name='extract_excel_status']" position="after">
+                  <button name="%(action_account_analytic_account_invoice_xlsx_import_wizard)d" string="Import XLSX file" type="action" />
+              </xpath>
+              <xpath expr="//form/field[@name='extract_excel_status']" position="after">
+                  <button name="%(action_account_analytic_account_invoice_xlsx_import_wizard)d" string="Import XLSX file" type="action" />
+              </xpath>
+          </field>
+      </record>             
+    </data>
+</openerp>
