@@ -87,7 +87,7 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
             raise osv.except_osv(
                 _('Error XLSX'), 
                 _('Cannot read XLS file: %s' % filename),
-                )                
+                )
         WS = WB.sheet_by_index(0)
 
         res = []
