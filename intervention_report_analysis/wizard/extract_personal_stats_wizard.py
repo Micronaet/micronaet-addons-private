@@ -272,8 +272,14 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     )):
             row += 1
             data = res[account]
+            
+            # Intervent:
             h_todo, h_pay, h_no_pay, h_invoice = data
             h_done = h_pay + h_no_pay
+            
+            # Account:
+            account_h_todo = account.total_hours
+            account_h_done = account.hour_done
                         
             # TODO remove invoiced hours from total contract done
             if not h_todo:
@@ -284,12 +290,23 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 h_format = f_yellow_number
             else:    
                 h_format = f_green_number            
+
+            if not account_h_todo:
+                account_h_format = f_text_right                
+            elif account_done > account_todo:
+                aaccounth_format = f_red_number
+            elif account_h_done / account_h_todo >= yellow_rate:
+                account_h_format = f_yellow_number
+            else:    
+                account_h_format = f_green_number            
             
             excel_pool.write_xls_line(WS_name, row, [
                 (account.partner_id.name or _('GENERICO'), f_text),
                 (account.name, f_text), 
-                widget_float_time(account.hour_done, float_time),
-                widget_float_time(account.total_hours, float_time),
+                (widget_float_time(account.hour_done, float_time), 
+                    account_h_format),
+                (widget_float_time(account.total_hours, float_time), 
+                    account_h_format),
                 
                 (widget_float_time(h_todo, float_time), h_format),
                 (widget_float_time(h_pay, float_time), h_format), 
