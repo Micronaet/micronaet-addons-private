@@ -191,7 +191,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         excel_pool.write_xls_line(WS_name, 2, [
             'Conto analitico', 
             'Cliente',
-            'Fabbisogno', 
+            'Fabbisogno',
             'Ore fatte', 
             ])
         
