@@ -160,6 +160,7 @@ class account_analytic_account_invoice(orm.Model):
             'Utente',
             'Oggetto',
             'Descrizione',
+            'Fatturazione',
             'H tot.',
             'H fatt.', # da inserire
             ])
@@ -171,6 +172,7 @@ class account_analytic_account_invoice(orm.Model):
             20,
             30,
             50,
+            20,
             10,
             10,
             ])
@@ -200,6 +202,7 @@ class account_analytic_account_invoice(orm.Model):
                 intervent.ref, 
                 intervent.user_id.name,
                 intervent.name,
+                intervent.to_invoice.name,
                 intervent.intervention,
                 intervent.unit_amount,
                 '', # da inserire
