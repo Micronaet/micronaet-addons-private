@@ -300,6 +300,11 @@ class hr_analytic_timesheet_extra(osv.osv):
             help='If intervention is split in 2 part for break'),
         'break_hour': fields.float('Break hour', digits=(16, 6), 
             help='Duration of break'),
+
+        'extra_invoiced_total': fields.float('Duration of extra invoiced', 
+            digits=(16, 6), 
+            help = 'Extra invoiced of this contract intervent'),
+
         'request_by':fields.char('Request by', size=100, 
             help='List of people that request intervent'
             ),

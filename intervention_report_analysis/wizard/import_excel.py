@@ -56,7 +56,7 @@ class AccountAnalyticAccountInvoiceXLSXImport(orm.TransientModel):
             context = {}        
         
         wizard_browse = self.browse(cr, uid, ids, context=context)[0]
-        
+        #extra_invoiced_total        
         # Save XLSX bin file
         
         # Parse and update intervent:
