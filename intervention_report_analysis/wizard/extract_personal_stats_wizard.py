@@ -267,6 +267,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
     _columns = {
         'contract': fields.boolean('With contract', 
             help='Always add also contract with distribution'),
+        'float_hour': fields.boolean('Formatted hour', 
+            help='If checked print hour in HH:MM format'),
         'from_date': fields.date('From date >= ', required=True),
         'to_date': fields.date('To date <', required=True),
         'account_id': fields.many2one(
@@ -279,6 +281,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
     _defaults = {
         'contract': lambda *x: True,
+        'float_hour': lambda *x: True,
         'user_id': lambda s, cr, uid, ctx: uid,
         'from_date': lambda *x: datetime.now().strftime('%Y-%m-01'),
         'to_date': lambda *x: (
