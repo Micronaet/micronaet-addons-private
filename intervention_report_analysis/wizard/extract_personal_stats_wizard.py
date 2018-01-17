@@ -205,7 +205,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         excel_pool.write_xls_line(WS_name, 3, [
             'Conto analitico', 
             'Cliente',
-            'Tipo',
+            'H. tot.',
             'Fabbisogno',
             'Ore fatte',             
             ])
@@ -219,7 +219,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.write_xls_line(WS_name, row, [
                 account.name, 
                 account.partner_id.name,
-                account.to_invoice.name,
+                account.total_hours,
                 widget_float_time(data[1] or 0), 
                 widget_float_time(data[0]), 
                 ])
