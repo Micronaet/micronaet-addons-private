@@ -293,8 +293,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
 
             if not account_h_todo:
                 account_h_format = f_text_right                
-            elif account_done > account_todo:
-                aaccounth_format = f_red_number
+            elif account_h_done > account_h_todo:
+                account_h_format = f_red_number
             elif account_h_done / account_h_todo >= yellow_rate:
                 account_h_format = f_yellow_number
             else:    
