@@ -211,22 +211,26 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         excel_pool.column_width(WS_name, [40, 25, 10, 10, 10])
 
         # Title:
-        excel_pool.write_xls_line(WS_name, 0, [
+        row = 0
+        excel_pool.write_xls_line(WS_name, row, [
             'Report: Data [%s - %s]' % (from_date, to_date),  
             ])
-        excel_pool.write_xls_line(WS_name, 1, [
+        row += 1    
+        excel_pool.write_xls_line(WS_name, row, [
             'Utente: %s Conto: %s  - Contratti: %s' % (
                 user_name, 
                 account_name,
                 'SI' if contract else 'NO',
                 ),
             ])
-        excel_pool.write_xls_line(WS_name, 2, [
+        row += 1    
+        excel_pool.write_xls_line(WS_name, row, [
             'Totale a pagamento: %s' % my_total,
             ])
         
         # Header:
-        excel_pool.write_xls_line(WS_name, 4, [
+        row += 2
+        excel_pool.write_xls_line(WS_name, row, [
             'Conto analitico', 
             'Cliente',
             'H. tot.',
@@ -238,7 +242,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
 
         
         # Write data:
-        row = 3
         for account in sorted(
                 res, key=lambda x: (
                     0 if res[x][1] else 1, 
