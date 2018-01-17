@@ -199,9 +199,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         row = 2
         for account in sorted(
                 res, key=lambda x: (0 if res[x][1] else 1, x.name)):
-            row += 1    
+            row += 1
             data = res[account]
-            excel_pool.write_xls_line(WS_name, 0, [
+            excel_pool.write_xls_line(WS_name, row, [
                 account.name, 
                 account.partner_id.name,
                 data[1] or '', 
