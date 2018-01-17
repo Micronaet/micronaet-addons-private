@@ -276,7 +276,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             h_done = h_pay + h_no_pay
                         
             # TODO remove invoiced hours from total contract done
-            if h_done > h_todo:
+            if not h_todo:
+                h_format = f_text_right                
+            elif h_done > h_todo:
                 h_format = f_red_number
             elif h_done / h_todo >= yellow_rate:
                 h_format = f_yellow_number
