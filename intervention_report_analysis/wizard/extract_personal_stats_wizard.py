@@ -59,16 +59,16 @@ class AccountAnalyticAccount(orm.Model):
             from_date, DEFAULT_SERVER_DATE_FORMAT)
         to_dt = datetime.strptime(
             to_date, DEFAULT_SERVER_DATE_FORMAT)
-        period = to_dt - from_dt
-        days = period.days + 1 # start day
+        # start day yet included    
+        days = (to_dt - from_dt).days 
 
         # Account period:
         account_from_dt = datetime.strptime(
             account.from_date, DEFAULT_SERVER_DATE_FORMAT)
         account_to_dt = datetime.strptime(
             account.to_date, DEFAULT_SERVER_DATE_FORMAT)
-        account_period = to_dt - from_dt
-        account_days = period.days + 1 # start day
+        # start day yet included
+        account_days = (account_to_dt - account_from_dt).days 
         
         if not account_days:
             _logger.error('No period in account!')            
