@@ -213,7 +213,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Write data:
         row = 3
         for account in sorted(
-                res, key=lambda x: (0 if res[x][1] else 1, x.name)):
+                res, key=lambda x: (
+                    0 if res[x][1] else 1, 
+                    x.partner_id.name,
+                    x.name,
+                    )):
             row += 1
             data = res[account]
             excel_pool.write_xls_line(WS_name, row, [
