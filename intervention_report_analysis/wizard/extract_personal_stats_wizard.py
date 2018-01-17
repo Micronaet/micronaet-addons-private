@@ -142,7 +142,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         float_time = wiz_browse.float_time
         
         res = {}
-        domain = []
+        domain = [
+            ('account_id.is_extra_report', '=', False),
+            ]
         # Period:
         if from_date:
             domain.append(
@@ -242,7 +244,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Ore grat.',
             'Ore fatt.',
             ])
-
         
         # Write data:
         for account in sorted(
@@ -292,5 +293,3 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-
-
