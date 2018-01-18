@@ -322,7 +322,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             elif account_mode == 'open':
                 # Counted
                 mode_format == f_green_text
-            elif account_mode == 'internal':
+            else:#if account_mode == 'internal':
                 # Not counted:
                 mode_format == f_text # not red
                 
