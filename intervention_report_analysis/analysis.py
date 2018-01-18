@@ -85,14 +85,22 @@ class account_analytic_account(orm.Model):
         ''' Fields function for calculate 
         '''
         res = dict.fromkeys(ids, 0)
+        
         ts_pool = self.pool.get('hr.analytic.timesheet')
         ts_ids = ts_pool.search(cr, uid, [
             ('account_id', 'in', ids),
             ], context=context)
+
+        # Calculate intervent marked hours:
         for ts in ts_pool.browse(cr, uid, ts_ids, context=context):
             invoiced_hour = ts_pool.get_total_h_2_invoice(ts, no_factor=True)
             account_id = ts.account_id.id
             res[account_id] += invoiced_hour 
+            
+        # Remove invoiced hours:    
+        for account in self.browse(cr, uid, ids, context=context):
+            for invoice in account.invoice_ids:
+                res[account.id] -= invoice.hour_removed
         return res
         
     _columns = {
