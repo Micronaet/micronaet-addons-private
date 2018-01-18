@@ -52,8 +52,8 @@
                                     <tree string="Invoice" editable="bottom">        
                                         <field name="date" />
                                         <field name="name" />
-                                        <field name="hour_removed" />
-                                        <field name="hour" />
+                                        <field name="hour_removed" sum="total_removed"/>
+                                        <field name="hour" sum="total_invoiced"/>
                                         <field name="hour_cost" />
                                         <field name="total_amount" />
                                         <!--<field name="date_invoice" />-->
