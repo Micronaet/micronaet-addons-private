@@ -228,7 +228,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         # Layout setup:        
         excel_pool.column_width(WS_name, [
-            25, 40, 20, 20, 10, 10, 10, 10, 10, 10])
+            25, 40, 20, 20, 10, 10, 10, 10, 10, 1, 10])
         
         # ---------------------------------------------------------------------
         # Generate format used:
@@ -240,6 +240,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         f_red_text = excel_pool.get_format('bg_red') 
         f_yellow_text = excel_pool.get_format('bg_yellow') 
         f_green_text = excel_pool.get_format('bg_green') 
+        f_blue_text = excel_pool.get_format('bg_blue') 
         
         # Number:
         f_text_right = excel_pool.get_format('text_right') 
@@ -281,6 +282,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Fabbisogno',
             'Ore segnate',             
             'Ore tolte',
+            'S', # Status counter
             'Ore fatt.',
             ], f_header)
         
@@ -304,11 +306,26 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             account_to = account.to_date
             account_h_todo = account.total_hours
             account_h_done = account.hour_done
+            account_mode = account.account_mode 
                         
             # TODO remove invoiced hours from total contract done
             # -----------------------------------------------------------------
             # Color test:
             # -----------------------------------------------------------------
+            # Mode:            
+            if account_mode == 'contract':
+                # Not counted (only invoiced)
+                mode_format == f_blue_text
+            elif account_mode in ('unfixed', 'fixed'):
+                # Not cuonted (depend on invoice monthly)
+                mode_format == f_yellow_text
+            elif account_mode == 'open':
+                # Counted
+                mode_format == f_green_text
+            elif account_mode == 'internal':
+                # Not counted:
+                mode_format == f_text # not red
+                
             # Date period:
             if account_to and account_to < now:
                 date_format = f_red_text
@@ -340,7 +357,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.write_xls_line(WS_name, row, [
                 (account.partner_id.name or _('GENERICO'), f_text),
                 (account.name, f_text), 
-                (account.account_mode, f_text),
+                (account_mode, mode_format),
                 ('[%s - %s]' % (
                     widget_date(account.from_date), 
                     widget_date(account.to_date),
@@ -353,6 +370,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (widget_float_time(h_todo, float_time), h_format),
                 (widget_float_time(h_pay, float_time), h_format), 
                 (widget_float_time(h_no_pay, float_time), h_format), 
+                ('', mode_format),
                 widget_float_time(h_invoice, float_time), 
                 ], f_text_right)
         return excel_pool.return_attachment(
