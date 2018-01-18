@@ -48,6 +48,7 @@ class account_analytic_account(osv.osv):
         'account_approved': fields.boolean(
             'Account approved', 
             help='Used for contract and fixed order'),
+        'account_approved_ref': fields.char('Approved ref.', size=80),    
                 
         #'request_by':fields.char('Request by', size=100, 
         #    help='List of people that request intervent'
