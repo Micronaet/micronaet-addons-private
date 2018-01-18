@@ -316,15 +316,19 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             if account_mode == 'contract':
                 # Not counted (only invoiced)
                 mode_format = f_blue_text
+                mode_format_value = 'N'
             elif account_mode in ('unfixed', 'fixed'):
                 # Not cuonted (depend on invoice monthly)
                 mode_format = f_yellow_text
+                mode_format_value = '?'
             elif account_mode == 'open':
                 # Counted
                 mode_format = f_green_text
+                mode_format_value = 'S'
             else:#if account_mode == 'internal':
                 # Not counted:
                 mode_format = f_text # not red
+                mode_format_value = 'N'
                 
             # Date period:
             if account_to and account_to < now:
@@ -370,7 +374,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (widget_float_time(h_todo, float_time), h_format),
                 (widget_float_time(h_pay, float_time), h_format), 
                 (widget_float_time(h_no_pay, float_time), h_format), 
-                ('', mode_format),
+                (mode_format_value, mode_format),
                 widget_float_time(h_invoice, float_time), 
                 ], f_text_right)
         return excel_pool.return_attachment(
