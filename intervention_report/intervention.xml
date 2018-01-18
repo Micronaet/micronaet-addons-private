@@ -68,7 +68,7 @@
         <field name='model'>account.analytic.account</field>
         <field name="inherit_id" ref="account.view_account_analytic_account_list"/>
         <field name='arch' type='xml'>
-            <field name="balance" position="after">
+            <field name="manager_id" position="before">
                 <field name="default_to_invoice" string="Default invoice intervent"/>
                 <field name="total_hours" />
                 <field name="account_mode" />
