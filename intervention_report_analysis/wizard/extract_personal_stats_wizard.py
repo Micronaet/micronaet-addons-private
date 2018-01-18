@@ -276,8 +276,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'H. tot.',
             
             'Fabbisogno',
-            'Ore pag.',             
-            'Ore grat.',
+            'Ore segnate',             
+            'Ore tolte',
             'Ore fatt.',
             ], f_header)
         
