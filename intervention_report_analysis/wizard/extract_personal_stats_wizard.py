@@ -176,8 +176,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 ('intervent_partner_id', '=', partner_id))
         if contract:         
             account_ids = account_pool.search(cr, uid, [
-                ('distribution_ids', '!=', False),
-                ('state', 'in', ('draft', 'open')),
+                ('account_mode', '=', 'contract'), # only contract
+                ('distribution_ids', '!=', False), # with distribution
+                ('state', 'in', ('draft', 'open')), # active
                 ], context=context)         
             for account in account_pool.browse(
                     cr, uid, account_ids, context=context):
