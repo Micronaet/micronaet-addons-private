@@ -63,6 +63,18 @@
             </field>
         </field>
     </record>
+    <record id='view_account_analytic_account_tree_add_list_fields' model='ir.ui.view'>
+        <field name='name'>Account extra</field>
+        <field name='model'>account.analytic.account</field>
+        <field name="inherit_id" ref="account.view_account_analytic_account_list"/>
+        <field name='arch' type='xml'>
+            <field name="balance" position="after">
+                <field name="default_to_invoice" string="Default invoice intervent"/>
+                <field name="total_hours" />
+                <field name="account_mode" />
+            </field>
+        </field>
+    </record>
 
     <record id='view_account_analytic_account_add_fields' model='ir.ui.view'>
         <field name='name'>Account extra</field>
