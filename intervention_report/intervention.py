@@ -54,7 +54,7 @@ class account_analytic_account(osv.osv):
         }
         
     _defaults = {
-        'account_mode': lambda *x: '',
+        'account_mode': lambda *x: 'fixed',
         }    
 
 class res_partner_extra_fields(osv.osv):
