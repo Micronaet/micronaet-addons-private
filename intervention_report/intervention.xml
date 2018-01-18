@@ -74,7 +74,7 @@
                 <label for="is_extra_report" />
             </field>
             <field name="manager_id" position="after">
-                <field name="account_mode" attrs="{'required': [('use_timesheets','=',True)]}" />
+                <field name="account_mode" attrs="{'required': [('use_timesheets','=',True),('is_extra_report','=',False)]}" />
                 <field name="default_to_invoice" />
                 <field name="total_hours" />
             </field>
