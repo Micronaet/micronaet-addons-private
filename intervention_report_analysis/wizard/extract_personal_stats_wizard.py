@@ -279,7 +279,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'H. fatte',
             'H. tot.',
             
-            'Fabbisogno',
+            'Fabbi. pers.',
             'Ore segnate',             
             'Ore tolte',
             'S', # Status counter
