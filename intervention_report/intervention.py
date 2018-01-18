@@ -43,7 +43,7 @@ class account_analytic_account(osv.osv):
             ('unfixed', 'Order (unfixed)'),
             ('fixed', 'Order (fixed)'),
             ('open', 'Order (open) / Consumpive'),
-            ('internal', 'Internal'),
+            ('internal', 'Internal or not counted'), # Demo or internal
             ], 'Account mode'),
                 
         #'request_by':fields.char('Request by', size=100, 
