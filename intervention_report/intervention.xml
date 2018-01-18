@@ -72,6 +72,7 @@
                 <field name="default_to_invoice" string="Default invoice intervent"/>
                 <field name="total_hours" />
                 <field name="account_mode" />
+                <field name="account_approved" />
             </field>
         </field>
     </record>
@@ -87,6 +88,7 @@
             </field>
             <field name="manager_id" position="after">
                 <field name="account_mode" attrs="{'required': [('use_timesheets','=',True),('is_extra_report','=',False)]}" />
+                <field name="account_approved" />
                 <field name="default_to_invoice" />
                 <field name="total_hours" />
             </field>

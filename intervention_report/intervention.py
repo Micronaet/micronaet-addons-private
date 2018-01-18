@@ -45,6 +45,9 @@ class account_analytic_account(osv.osv):
             ('open', 'Order (open) / Consumpive'),
             ('internal', 'Internal or not counted'), # Demo or internal
             ], 'Account mode'),
+        'account_approved': fields.boolean(
+            'Account approved', 
+            help='Used for contract and fixed order'),
                 
         #'request_by':fields.char('Request by', size=100, 
         #    help='List of people that request intervent'
