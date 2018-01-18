@@ -69,10 +69,12 @@
         <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
         <field name='arch' type='xml'>
             <field name="use_timesheets" position="before">    
+                <field name="account_mode" />
                 <field name="is_extra_report" />
                 <label for="is_extra_report" />
             </field>
             <field name="manager_id" position="after">
+                <field name="account_mode" />
                 <field name="default_to_invoice" />
                 <field name="total_hours" />
             </field>

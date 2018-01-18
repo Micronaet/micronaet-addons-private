@@ -28,10 +28,23 @@ class account_analytic_account(osv.osv):
     _inherit = 'account.analytic.account'
     
     _columns = {
-        'default_to_invoice': fields.many2one('hr_timesheet_invoice.factor', 'Default invoice', help = "Defaulf invoice type if there's one active for customer. All intervent are, for default, setted to this value"),        
-        'total_hours': fields.float('Total hour', digits = (16, 2), help = "Total hour for this contract for all period"),        
-        'is_extra_report': fields.boolean('Extra report', 
-            help='Hided in reports'),
+        'default_to_invoice': fields.many2one(
+            'hr_timesheet_invoice.factor', 'Default invoice', 
+            help = "Defaulf invoice type if there's one active for customer. All intervent are, for default, setted to this value",
+            ),
+        'total_hours': fields.float(
+            'Total hour', digits=(16, 2), 
+            help = "Total hour for this contract for all period",
+            ),
+        'is_extra_report': fields.boolean(
+            'Extra report', help='Hided in reports'),
+        'account_mode': fields.selection([
+            ('contract', 'Contract'),
+            ('unfixed', 'Order (unfixed)'),
+            ('fixed', 'Order (fixed)'),
+            ('open', 'Order (open) / Consumpive'),
+            ], 'Account mode')
+                
         #'request_by':fields.char('Request by', size=100, 
         #    help='List of people that request intervent'
         #    ),
@@ -39,6 +52,10 @@ class account_analytic_account(osv.osv):
         #    help='Reference for request (asana link, mail ecc.)',
         #    ),            
         }
+        
+    _defaults = {
+        'account_mode': lambda *x: '',
+        }    
 
 class res_partner_extra_fields(osv.osv):
     """ Add extra field to partner for intervent manage
