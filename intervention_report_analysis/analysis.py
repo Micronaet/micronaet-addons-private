@@ -238,9 +238,11 @@ class account_analytic_account_invoice(orm.Model):
     _columns = {
         'date': fields.date('Date', required=True),
         'name': fields.char('Invoice ref.', size=40, required=True),
-        'hour_removed': fields.float('Hour covered', digits=(16, 2),
+        'hour_removed': fields.float(
+            'Hour covered', digits=(16, 2), required=True,            
             help='Number of hours coveder (removed from contract)'), 
-        'hour': fields.float('Hour invoiced', digits=(16, 2),
+        'hour': fields.float(
+            'Hour invoiced', digits=(16, 2), required=True,
             help='Number of hours invoiced (sometimes is not all)'), 
         'hour_cost': fields.float('Hour cost', digits=(16, 2),
             help='Number of hours'), 
