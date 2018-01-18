@@ -118,7 +118,7 @@
             <field name="domain">[('distribution_ids', '!=', False),('state', 'in', ('draft', 'open'))]</field>
         </record>
         <record model="ir.actions.act_window" id="action_all_account_contract_form">
-            <field name="name">Contract with distribution</field>
+            <field name="name">All contract</field>
             <field name="res_model">account.analytic.account</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
