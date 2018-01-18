@@ -43,7 +43,8 @@ class account_analytic_account(osv.osv):
             ('unfixed', 'Order (unfixed)'),
             ('fixed', 'Order (fixed)'),
             ('open', 'Order (open) / Consumpive'),
-            ], 'Account mode')
+            ('internal', 'Internal'),
+            ], 'Account mode'),
                 
         #'request_by':fields.char('Request by', size=100, 
         #    help='List of people that request intervent'
