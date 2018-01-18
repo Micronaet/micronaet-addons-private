@@ -315,16 +315,16 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             # Mode:            
             if account_mode == 'contract':
                 # Not counted (only invoiced)
-                mode_format == f_blue_text
+                mode_format = f_blue_text
             elif account_mode in ('unfixed', 'fixed'):
                 # Not cuonted (depend on invoice monthly)
-                mode_format == f_yellow_text
+                mode_format = f_yellow_text
             elif account_mode == 'open':
                 # Counted
-                mode_format == f_green_text
+                mode_format = f_green_text
             else:#if account_mode == 'internal':
                 # Not counted:
-                mode_format == f_text # not red
+                mode_format = f_text # not red
                 
             # Date period:
             if account_to and account_to < now:
