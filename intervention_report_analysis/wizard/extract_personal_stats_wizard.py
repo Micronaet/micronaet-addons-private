@@ -73,7 +73,7 @@ class HrAnalyticTimesheet(orm.Model):
         f_white_number = excel_pool.get_format('bg_white_number') 
 
         # Title:
-        #row = 0
+        row = 0
         #excel_pool.write_xls_line(WS_name, row, [
         #    'Elenco rapportini contemplati nel periodo',
         #    ], f_title)
@@ -106,7 +106,7 @@ class HrAnalyticTimesheet(orm.Model):
             #'Non in report', # not in report
             ], f_header)
         
-        # Write data sort by date:
+        # Write data sort by date:        
         for intervent in sorted(self.browse(cr, uid, ids, context=context),
                 key=lambda x: x.date_start):
             row += 1
