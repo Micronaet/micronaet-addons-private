@@ -404,9 +404,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         row += 2
         excel_pool.write_xls_line(WS_name, row, [
             '',
-            'Tipologie di contratti',
-            'Totale ore marcate',
-            ], f_header)
+            ('Tipologie di contratti', f_header),
+            ('H. marcate', f_header),
+            ])
             
         for account_mode, total in medium_type.iteritems():
             row += 1
