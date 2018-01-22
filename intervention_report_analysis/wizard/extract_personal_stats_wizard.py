@@ -122,17 +122,17 @@ class HrAnalyticTimesheet(orm.Model):
                 
                 # Total:
                 (excel_pool.format_hour(
-                    intervent.intervent_duration), t_white_number),
+                    intervent.intervent_duration), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.intervent_total), t_white_number),
+                    intervent.intervent_total), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.trip_total), t_white_number),
+                    intervent.trip_total), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.break_total), t_white_number),
+                    intervent.break_total), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.unit_amount), t_white_number),
+                    intervent.unit_amount), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.extra_invoiced_total), t_white_number),
+                    intervent.extra_invoiced_total), f_white_number),
 
                 # Description
                 '%s [%s%%]' % (
