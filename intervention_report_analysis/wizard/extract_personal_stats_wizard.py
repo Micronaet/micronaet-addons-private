@@ -258,6 +258,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         # Number:
         f_text_right = excel_pool.get_format('text_right') 
+        f_blue_number = excel_pool.get_format('bg_blue_number') 
         f_red_number = excel_pool.get_format('bg_red_number') 
         f_yellow_number = excel_pool.get_format('bg_yellow_number') 
         f_green_number = excel_pool.get_format('bg_green_number') 
@@ -408,18 +409,23 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         for account_mode, total in medium_type.iteritems():
             row += 1
             if account_mode == 'contract':
-                mode_format = f_blue_text
+                text_format = f_blue_text
+                number_format = f_blue_number
             elif account_mode in ('unfixed', 'fixed'):
-                mode_format = f_yellow_text
+                text_format = f_yellow_text
+                number_format = f_yellow_number
             elif account_mode == 'open':
-                mode_format = f_green_text
+                text_format = f_green_text
+                number_format = f_green_number
             else:#if account_mode == 'internal':
-                mode_format = f_text # not red
+                text_format = f_text # not red
+                number_format = f_text_right
 
             excel_pool.write_xls_line(WS_name, row, [
-                account_mode,
-                excel_pool.format_hour(total, float_time), 
-                ], mode_format)
+                '',
+                (account_mode, text_format)
+                (excel_pool.format_hour(total, float_time), number_format)
+                ])
                 
             
         return excel_pool.return_attachment(
