@@ -107,7 +107,7 @@ class HrAnalyticTimesheet(orm.Model):
             ], f_header)
         
         # Write data sort by date:
-        for intervent in sorted(self.browse(cr, uid, ids, context=context)
+        for intervent in sorted(self.browse(cr, uid, ids, context=context),
                 key=lambda x: x.date_start):
             row += 1
             
