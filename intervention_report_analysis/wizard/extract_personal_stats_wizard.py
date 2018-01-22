@@ -326,6 +326,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
 
         # Write all intervent in second page:
         WS_intervent = _('Interventi')
+        excel_pool.create_worksheet(WS_intervent)
         ts_pool.write_account_list_excel_sheet(cr, uid, WS_intervent, ts_ids, 
             context=context)
 
