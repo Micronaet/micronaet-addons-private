@@ -114,7 +114,7 @@ class HrAnalyticTimesheet(orm.Model):
             excel_pool.write_xls_line(WS_name, row, [
                 # Intervent header:
                 intervent.ref or '',
-                intervent.partner_id.name or '',
+                intervent.intervent_partner_id.name or '',
                 intervent.account_id.name or '',
                 intervent.account_id.account_move or '',
                 intervent.mode or '',
