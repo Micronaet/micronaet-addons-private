@@ -462,6 +462,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ('Totale fatte', f_header),
             ('Riconosciute', f_header),
             ])
+        row += 1    
 
         excel_pool.write_xls_line(WS_name, row, [
             '',
