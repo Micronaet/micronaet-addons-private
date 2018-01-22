@@ -430,7 +430,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 number_format = f_green_number
             else:#if account_mode == 'internal':
                 text_format = f_text # not red
-                number_format = f_whide_number
+                number_format = f_white_number
 
             excel_pool.write_xls_line(WS_name, row, [
                 '',
