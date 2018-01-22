@@ -92,8 +92,8 @@ class HrAnalyticTimesheet(orm.Model):
             # Total:
             'Durata',
             'Manuale',
-            'Viaggio', # trip_total trip_require
-            'Pausa', # breal_total   break_require            
+            'Viaggio', # >> trip_require
+            'Pausa', # >> break_require            
             'Totale', # unit_amount
             'Riconosciuto extra', # extra_invoiced_total
 
@@ -126,9 +126,9 @@ class HrAnalyticTimesheet(orm.Model):
                 (excel_pool.format_hour(
                     intervent.intervent_total), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.trip_total), f_white_number),
+                    intervent.trip_hour), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.break_total), f_white_number),
+                    intervent.break_hour), f_white_number),
                 (excel_pool.format_hour(
                     intervent.unit_amount), f_white_number),
                 (excel_pool.format_hour(
