@@ -311,6 +311,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         # Write data:
         now = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
+        total_premiun = 0.0
         for account in sorted(
                 res, key=lambda x: (
                     0 if res[x][0] else 1, 
@@ -336,6 +337,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 premium = h_pay + h_invoice
             else:    
                 premium = h_invoice
+            total_premium += premium    
                 
             # -----------------------------------------------------------------
             # Color test:
@@ -449,18 +451,31 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     free_qty, float_time), number_format),
                 ])
 
-        row += 1                 
+        row += 2                 
         excel_pool.write_xls_line(WS_name, row, [
             '',
             '',
             '',
-            ('Totale', f_text),
+            '',
+            ('Tot. marcate', f_header),
+            ('Tot. tolte', f_header),
+            ('Totale fatte', f_header),
+            ('Riconosciute', f_header),
+            ])
+
+        excel_pool.write_xls_line(WS_name, row, [
+            '',
+            '',
+            '',
+            '',
             (excel_pool.format_hour(
                 total_marked), f_white_number),
             (excel_pool.format_hour(
                 total_free), f_white_number),
             (excel_pool.format_hour(
                 total_marked + total_free), f_white_number),
+            (excel_pool.format_hour(
+                total_premium), f_white_number),
             ])
             
         return excel_pool.return_attachment(
