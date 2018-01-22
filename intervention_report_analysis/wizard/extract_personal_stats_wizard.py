@@ -258,6 +258,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         # Number:
         f_text_right = excel_pool.get_format('text_right') 
+        f_white_number = excel_pool.get_format('bg_white_number') 
         f_blue_number = excel_pool.get_format('bg_blue_number') 
         f_red_number = excel_pool.get_format('bg_red_number') 
         f_yellow_number = excel_pool.get_format('bg_yellow_number') 
@@ -402,6 +403,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         row += 2
         excel_pool.write_xls_line(WS_name, row, [
+            '',
             'Tipologie di contratti',
             'Totale ore marcate',
             ], f_header)
@@ -419,7 +421,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 number_format = f_green_number
             else:#if account_mode == 'internal':
                 text_format = f_text # not red
-                number_format = f_text_right
+                number_format = f_whide_number
 
             excel_pool.write_xls_line(WS_name, row, [
                 '',
