@@ -112,8 +112,8 @@ class HrAnalyticTimesheet(orm.Model):
                     x.intervent_partner_id.name,
                     x.account_id.account_mode,
                     x.account_id.name,
-                    x.date_start
-                    ):
+                    x.date_start,
+                    )):
             row += 1
             
             excel_pool.write_xls_line(WS_name, row, [
