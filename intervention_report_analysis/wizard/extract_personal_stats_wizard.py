@@ -55,11 +55,11 @@ class HrAnalyticTimesheet(orm.Model):
         # Layout setup:        
         excel_pool.column_width(WS_name, [
             # Intervent header:
-            10, 30, 20, 10, 10, 10, 10,
+            10, 30, 30, 10, 10, 10, 10,
             # Total:
             10, 10, 10, 10, 10, 10,            
             # Description:
-            20, 30, 40, 40, 40,
+            20, 40, 40, 40, 40,
             ])
         
         # ---------------------------------------------------------------------
@@ -118,12 +118,12 @@ class HrAnalyticTimesheet(orm.Model):
             
             excel_pool.write_xls_line(WS_name, row, [
                 # Intervent header:
-                intervent.ref or '',
-                intervent.intervent_partner_id.name or '',
-                intervent.account_id.name or '',
-                intervent.account_id.account_mode or '',
-                intervent.mode or '',
-                intervent.state or '',
+                intervent.ref or 'Da confermare',
+                intervent.intervent_partner_id.name or ' ',
+                intervent.account_id.name or ' ',
+                intervent.account_id.account_mode or ' ',
+                intervent.mode or ' ',
+                intervent.state or ' ',
                 excel_pool.format_date(intervent.date_start),
                 
                 # Total:
@@ -146,10 +146,10 @@ class HrAnalyticTimesheet(orm.Model):
                     intervent.to_invoice.name,
                     intervent.to_invoice.factor,
                     ),
-                intervent.name or '',
-                intervent.intervention_request or '',
-                intervent.intervention or '',
-                intervent.internal_note or '',
+                intervent.name or ' ',
+                intervent.intervention_request or ' ',
+                intervent.intervention or ' ',
+                intervent.internal_note or ' ',
                 ], f_text)
 
 class AccountAnalyticAccount(orm.Model):
