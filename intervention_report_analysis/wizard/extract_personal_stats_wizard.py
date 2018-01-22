@@ -423,7 +423,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             
             marked_qty, free_qty = medium_type[account_mode]
             total_free += free_qty
-            total_marked =+= marked_qty
+            total_marked += marked_qty
             
             if account_mode == 'contract':
                 text_format = f_blue_text
