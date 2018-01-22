@@ -44,7 +44,7 @@ class HrAnalyticTimesheet(orm.Model):
     _inherit = 'hr.analytic.timesheet'
     
     def write_account_list_excel_sheet(self, cr, uid, WS_name, ids, 
-            context=None):
+            float_time, context=None):
         ''' Write a page of intervents in Excel sheet passed
         '''    
         excel_pool = self.pool.get('excel.writer')
@@ -122,17 +122,18 @@ class HrAnalyticTimesheet(orm.Model):
                 
                 # Total:
                 (excel_pool.format_hour(
-                    intervent.intervent_duration), f_white_number),
+                    intervent.intervent_duration, float_time), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.intervent_total), f_white_number),
+                    intervent.intervent_total, float_time), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.trip_hour), f_white_number),
+                    intervent.trip_hour, float_time), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.break_hour), f_white_number),
+                    intervent.break_hour, float_time), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.unit_amount), f_white_number),
+                    intervent.unit_amount, float_time), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.extra_invoiced_total), f_white_number),
+                    intervent.extra_invoiced_total, float_time), 
+                        f_white_number),
 
                 # Description
                 '%s [%s%%]' % (
@@ -328,7 +329,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         WS_intervent = _('Interventi')
         excel_pool.create_worksheet(WS_intervent)
         ts_pool.write_account_list_excel_sheet(cr, uid, WS_intervent, ts_ids, 
-            context=context)
+            float_time, context=context)
 
         # ---------------------------------------------------------------------
         #                               EXCEL:
