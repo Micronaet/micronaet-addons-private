@@ -73,13 +73,13 @@ class HrAnalyticTimesheet(orm.Model):
         f_white_number = excel_pool.get_format('bg_white_number') 
 
         # Title:
-        row = 0
-        excel_pool.write_xls_line(WS_name, row, [
-            'Elenco rapportini contemplati nel periodo',
-            ], f_title)
+        #row = 0
+        #excel_pool.write_xls_line(WS_name, row, [
+        #    'Elenco rapportini contemplati nel periodo',
+        #    ], f_title)
         
         # Header:
-        row += 2
+        #row += 2
         excel_pool.write_xls_line(WS_name, row, [
             # Intervent header information:
             'Numero',
@@ -116,7 +116,7 @@ class HrAnalyticTimesheet(orm.Model):
                 intervent.ref or '',
                 intervent.intervent_partner_id.name or '',
                 intervent.account_id.name or '',
-                '', #or intervent.account_id.account_move or '', # XXX
+                intervent.account_id.account_mode or '',
                 intervent.mode or '',
                 excel_pool.format_date(intervent.date_start),
                 
