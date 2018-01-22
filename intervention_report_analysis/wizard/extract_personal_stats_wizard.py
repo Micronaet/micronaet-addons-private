@@ -43,12 +43,107 @@ class HrAnalyticTimesheet(orm.Model):
     """    
     _inherit = 'hr.analytic.timesheet'
     
-    def write_account_list_excel_sheet(self, cr, uid, WS_page, ids, 
+    def write_account_list_excel_sheet(self, cr, uid, WS_name, ids, 
             context=None):
         ''' Write a page of intervents in Excel sheet passed
         '''    
         excel_pool = self.pool.get('excel.writer')
+
+        # ---------------------------------------------------------------------
+        #                               EXCEL:
+        # ---------------------------------------------------------------------
+        # Layout setup:        
+        excel_pool.column_width(WS_name, [
+            # Intervent header:
+            10, 30, 20, 10, 10, 10, 
+            # Total:
+            10, 10, 10, 10, 10, 10,
+            
+            # Description:
+            10, 30, 40, 40, 40,
+            ])
         
+        # ---------------------------------------------------------------------
+        # Generate format used:
+        # ---------------------------------------------------------------------
+        # Text:
+        f_title = excel_pool.get_format('title')
+        f_header = excel_pool.get_format('header')
+        f_text = excel_pool.get_format('text') 
+        f_white_number = excel_pool.get_format('bg_white_number') 
+
+        # Title:
+        row = 0
+        excel_pool.write_xls_line(WS_name, row, [
+            'Elenco rapportini contemplati nel periodo',
+            ], f_title)
+        
+        # Header:
+        row += 2
+        excel_pool.write_xls_line(WS_name, row, [
+            # Intervent header information:
+            'Numero',
+            'Cliente',
+            'Conto analitico',
+            'Tipo conto',
+            'Tipologia',
+            'Data',
+            
+            # Total:
+            'Durata',
+            'Manuale',
+            'Viaggio', # trip_total trip_require
+            'Pausa', # breal_total   break_require            
+            'Totale', # unit_amount
+            'Riconosciuto extra', # extra_invoiced_total
+
+            # Description:            
+            'Stato fattura',
+            'Oggetto',
+            'Richiesta',
+            'Intervento',
+            'Note',
+            #'Non in report', # not in report
+            ], f_header)
+        
+        # Write data sort by date:
+        for intervent in sorted(self.browse(cr, uid, ids, context=context)
+                key=lambda x: x.date_start):
+            row += 1
+            
+            excel_pool.write_xls_line(WS_name, row, [
+                # Intervent header:
+                intervent.ref or '',
+                intervent.partner_id.name or '',
+                intervent.account_id.name or '',
+                intervent.account_id.account_move or '',
+                intervent.mode or '',
+                excel_pool.format_date(intervent.date_start),
+                
+                # Total:
+                (excel_pool.format_hour(
+                    intervent.intervent_duration), t_white_number),
+                (excel_pool.format_hour(
+                    intervent.intervent_total), t_white_number),
+                (excel_pool.format_hour(
+                    intervent.trip_total), t_white_number),
+                (excel_pool.format_hour(
+                    intervent.break_total), t_white_number),
+                (excel_pool.format_hour(
+                    intervent.unit_amount), t_white_number),
+                (excel_pool.format_hour(
+                    intervent.extra_invoiced_total), t_white_number),
+
+                # Description
+                '%s [%s%%]' % (
+                    intervent.to_invoice.name,
+                    intervent.to_invoice.factor,
+                    ),
+                intervent.name or '',
+                intervent.intervention_request or '',
+                intervent.intervention or '',
+                intervent.internal_note or '',
+                ], f_text)
 
 class AccountAnalyticAccount(orm.Model):
     """ Model name: Account 
@@ -187,6 +282,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         invoiced_type = ('open', )
         my_total = 0.0
         ts_ids = ts_pool.search(cr, uid, domain, context=context)
+        
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
             account = intervent.account_id
             if account not in res:
@@ -227,6 +323,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             
         WS_name = _('Statistiche')
         excel_pool.create_worksheet(WS_name)
+
+        # Write all intervent in second page:
+        WS_intervent = _('Interventi')
+        ts_pool.write_account_list_excel_sheet(cr, uid, WS_intervent, ts_ids, 
+            context=context)
 
         # ---------------------------------------------------------------------
         #                               EXCEL:
