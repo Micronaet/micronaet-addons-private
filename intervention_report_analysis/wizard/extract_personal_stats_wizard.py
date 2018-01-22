@@ -398,7 +398,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Totale ore marcate',
             ], f_header)
             
-        for medium, total in medium_type.iteritems():
+        for account_mode, total in medium_type.iteritems():
             row += 1
             if account_mode == 'contract':
                 mode_format = f_blue_text
@@ -410,7 +410,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 mode_format = f_text # not red
 
             excel_pool.write_xls_line(WS_name, row, [
-                medium,
+                account_mode,
                 total,
                 ], mode_format)
                 
