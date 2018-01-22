@@ -311,7 +311,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         # Write data:
         now = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
-        total_premiun = 0.0
+        total_premium = 0.0
         for account in sorted(
                 res, key=lambda x: (
                     0 if res[x][0] else 1, 
