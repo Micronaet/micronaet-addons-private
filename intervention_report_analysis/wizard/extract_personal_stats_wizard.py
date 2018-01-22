@@ -38,6 +38,18 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
+class HrAnalyticTimesheet(orm.Model):
+    """ Model name: Timesheet
+    """    
+    _inherit = 'hr.analytic.timesheet'
+    
+    def write_account_list_excel_sheet(self, cr, uid, WS_page, ids, 
+            context=None):
+        ''' Write a page of intervents in Excel sheet passed
+        '''    
+        excel_pool = self.pool.get('excel.writer')
+        
+
 class AccountAnalyticAccount(orm.Model):
     """ Model name: Account 
     """    
@@ -99,33 +111,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
     def action_print(self, cr, uid, ids, context=None):
         ''' Event for button done
         '''
-        # ---------------------------------------------------------------------
-        # UTILITY:
-        # ---------------------------------------------------------------------
-        def format_date(value):
-            ''' Change float in DD-MM-YYYY
-            '''
-            if not value:
-                return ''
-            return '%s/%s/%s' % (
-                value[8:10],
-                value[5:7],
-                value[:4],
-                )
-                
-        def format_hour(value, use_format=True):
-            ''' Change float in HH:MM format
-            '''
-            if not use_format:
-                return value # as is
-            approx = 0.001
-            if not value:
-                return ''#'0:00'
-            
-            hour = int(value)
-            minute = int((value - hour + approx) * 60.0)    
-            return '%s:%02d' % (hour, minute)
-                
         if context is None: 
             context = {} 
        
