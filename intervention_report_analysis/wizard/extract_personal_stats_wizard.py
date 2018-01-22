@@ -57,8 +57,7 @@ class HrAnalyticTimesheet(orm.Model):
             # Intervent header:
             10, 30, 20, 10, 10, 10, 10,
             # Total:
-            10, 10, 10, 10, 10, 10,
-            
+            10, 10, 10, 10, 10, 10,            
             # Description:
             15, 30, 40, 40, 40,
             ])
