@@ -410,6 +410,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         row += 2
         excel_pool.write_xls_line(WS_name, row, [
             '',
+            '',
+            '',
             ('Tipologie di contratti', f_header),
             ('H. marcate', f_header),
             ('H. tolte', f_header),
@@ -433,6 +435,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 number_format = f_white_number
 
             excel_pool.write_xls_line(WS_name, row, [
+                '',
+                '',
                 '',
                 (account_mode, text_format),
                 (excel_pool.format_hour(
