@@ -416,11 +416,15 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ('H. marcate', f_header),
             ('H. tolte', f_header),
             ])
-            
+        
+        total_free = total_marked = 0    
         for account_mode in sorted(medium_type):
             row += 1
             
             marked_qty, free_qty = medium_type[account_mode]
+            total_free += free_qty
+            total_marked =+= marked_qty
+            
             if account_mode == 'contract':
                 text_format = f_blue_text
                 number_format = f_blue_number
@@ -444,7 +448,20 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (excel_pool.format_hour(
                     free_qty, float_time), number_format),
                 ])
-                
+
+        row += 1                 
+        excel_pool.write_xls_line(WS_name, row, [
+            '',
+            '',
+            '',
+            ('Totale', f_text),
+            excel_pool.format_hour(
+                total_marked),
+            excel_pool.format_hour(
+                total_free),
+            excel_pool.format_hour(
+                total_marked + total_free),
+            ], number_format)
             
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', 
