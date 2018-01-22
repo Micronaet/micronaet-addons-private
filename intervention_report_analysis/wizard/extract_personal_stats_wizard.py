@@ -298,6 +298,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Ore tolte',
             'S', # Status counter
             'Ore fatt.',
+            'Riconosciute',
             ], f_header)
         
         # Write data:
@@ -323,10 +324,15 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             account_mode = account.account_mode 
                         
             # TODO remove invoiced hours from total contract done
+            if account_mode in invoiced_type:
+                premium = h_pay + h_invoice
+            else:    
+                premium = h_invoice
+                
             # -----------------------------------------------------------------
             # Color test:
             # -----------------------------------------------------------------
-            # Mode:            
+            # Mode:
             if account_mode == 'contract':
                 # Not counted (only invoiced)
                 mode_format = f_blue_text
@@ -390,6 +396,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (excel_pool.format_hour(h_no_pay, float_time), h_format), 
                 (mode_format_value, mode_format),
                 excel_pool.format_hour(h_invoice, float_time), 
+                excel_pool.format_hour(premium, float_time), 
                 ], f_text_right)
         
         row += 2
