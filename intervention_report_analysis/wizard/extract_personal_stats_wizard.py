@@ -116,7 +116,7 @@ class HrAnalyticTimesheet(orm.Model):
                 intervent.ref or '',
                 intervent.intervent_partner_id.name or '',
                 intervent.account_id.name or '',
-                intervent.account_id.account_move or '',
+                '' or intervent.account_id.account_move or '', # XXX
                 intervent.mode or '',
                 excel_pool.format_date(intervent.date_start),
                 
