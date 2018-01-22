@@ -216,21 +216,27 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     ]
 
             # TODO extra hour in intervent pay!!        
+            account_mode = intervent.account_id.account_mode
             if intervent.to_invoice.factor == 100:
                 marked_qty = intervent.unit_amount # TODO Change using funct.
-                account_mode = intervent.account_id.account_mode
+                free_qty = 0.0
                 
                 res[account][1] += marked_qty # Total hour invoiced
                 if account_mode in invoiced_type:
                     my_total += marked_qty
                 
-                if account_mode in medium_type:
-                    medium_type[account_mode] += marked_qty
-                else:        
-                    medium_type[account_mode] = marked_qty
                         
             else: # No invoice
-                res[account][2] += intervent.unit_amount # Total hour gratis
+                marked_qty = 0.0
+                free_qty = intervent.unit_amount # Total hour gratis
+                res[account][2] += free_qty
+
+            if account_mode not in medium_type:
+                # marked, free
+                medium_type[account_mode] = [0.0, 0.0]            
+            medium_type[account_mode][0] += marked_qty
+            medium_type[account_mode][1] += free_qty
+
             res[account][3] += intervent.extra_invoiced_total # Extra invoiced
             my_total += intervent.extra_invoiced_total
             
@@ -292,11 +298,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Conto analitico', 
             'Tipo',
             'Periodo',
-            'H. fatte',
-            'H. tot.',
+            'H. parziali',
+            'H. contratto',
             
             'Fabbi. pers.',
-            'Ore segnate',             
+            'Ore marcate',             
             'Ore tolte',
             'S', # Status counter
             'Ore fatt.',
@@ -406,10 +412,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             '',
             ('Tipologie di contratti', f_header),
             ('H. marcate', f_header),
+            ('H. tolte', f_header),
             ])
             
-        for account_mode, total in medium_type.iteritems():
+        for account_mode, total in medium_type.iteritems():            
             row += 1
+            
+            marked_qty, free_qty = total
             if account_mode == 'contract':
                 text_format = f_blue_text
                 number_format = f_blue_number
@@ -426,7 +435,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.write_xls_line(WS_name, row, [
                 '',
                 (account_mode, text_format),
-                (excel_pool.format_hour(total, float_time), number_format),
+                (excel_pool.format_hour(
+                    marked_qty, float_time), number_format),
+                (excel_pool.format_hour(
+                    free_qty, float_time), number_format),
                 ])
                 
             
