@@ -455,13 +455,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             '',
             '',
             ('Totale', f_text),
-            excel_pool.format_hour(
-                total_marked),
-            excel_pool.format_hour(
-                total_free),
-            excel_pool.format_hour(
-                total_marked + total_free),
-            ], number_format)
+            (excel_pool.format_hour(
+                total_marked), f_white_number),
+            (excel_pool.format_hour(
+                total_free), f_white_number),
+            (excel_pool.format_hour(
+                total_marked + total_free), f_white_number),
+            ])
             
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', 
