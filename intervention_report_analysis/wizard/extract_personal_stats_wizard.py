@@ -102,7 +102,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         # UTILITY:
         # ---------------------------------------------------------------------
-        def widget_date(value):
+        def format_date(value):
             ''' Change float in DD-MM-YYYY
             '''
             if not value:
@@ -198,6 +198,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------        
         # Collect statistics:
         # ---------------------------------------------------------------------        
+        medium_type = {}
+        invoiced_mode = ('open', )
         my_total = 0.0
         ts_ids = ts_pool.search(cr, uid, domain, context=context)
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
@@ -212,10 +214,22 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     0.0, 
                     0.0, 
                     ]
+
+            # TODO extra hour in intervent pay!!        
             if intervent.to_invoice.factor == 100:
-                res[account][1] += intervent.unit_amount # Total hour invoiced
-                my_total += intervent.unit_amount
-            else:    
+                marked_qty = intervent.unit_amount # TODO Change using funct.
+                account_mode = intervent.account_id.account_mode
+                
+                res[account][1] += marked_qty # Total hour invoiced
+                if account_mode in invoice_mode:
+                    my_total += marked_qty
+                
+                if account_mode in medium_type:
+                    medium_type[account_mode] += marked_qty
+                else:        
+                    medium_type[account_mode] = marked_qty
+                        
+            else: # No invoice
                 res[account][2] += intervent.unit_amount # Total hour gratis
             res[account][3] += intervent.extra_invoiced_total # Extra invoiced
             my_total += intervent.extra_invoiced_total
@@ -252,8 +266,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         row = 0
         excel_pool.write_xls_line(WS_name, row, [
             'Report: Data [%s - %s]' % (
-                widget_date(from_date), 
-                widget_date(to_date),
+                excel_pool.format_date(from_date), 
+                excel_pool.format_date(to_date),
                 ),  
             ], f_title)
         row += 1    
@@ -363,8 +377,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (account.name, f_text), 
                 (account_mode, mode_format),
                 ('[%s - %s]' % (
-                    widget_date(account.from_date), 
-                    widget_date(account.to_date),
+                    excel_pool.format_date(account.from_date), 
+                    excel_pool.format_date(account.to_date),
                     ), date_format), 
                 (excel_pool.format_hour(account.hour_done, float_time), 
                     account_h_format),
@@ -377,6 +391,30 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (mode_format_value, mode_format),
                 excel_pool.format_hour(h_invoice, float_time), 
                 ], f_text_right)
+        
+        row += 2
+        excel_pool.write_xls_line(WS_name, row, [
+            'Tipologie di contratti',
+            'Totale ore marcate',
+            ], f_header)
+            
+        for medium, total in medium_type.iteritems():
+            row += 1
+            if account_mode == 'contract':
+                mode_format = f_blue_text
+            elif account_mode in ('unfixed', 'fixed'):
+                mode_format = f_yellow_text
+            elif account_mode == 'open':
+                mode_format = f_green_text
+            else:#if account_mode == 'internal':
+                mode_format = f_text # not red
+
+            excel_pool.write_xls_line(WS_name, row, [
+                medium,
+                total,
+                ], mode_format)
+                
+            
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', 
             context=context)
