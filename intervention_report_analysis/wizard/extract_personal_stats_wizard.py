@@ -113,7 +113,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 value[:4],
                 )
                 
-        def widget_float_time(value, use_format=True):
+        def format_hour(value, use_format=True):
             ''' Change float in HH:MM format
             '''
             if not use_format:
@@ -366,16 +366,16 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     widget_date(account.from_date), 
                     widget_date(account.to_date),
                     ), date_format), 
-                (widget_float_time(account.hour_done, float_time), 
+                (excel_pool.format_hour(account.hour_done, float_time), 
                     account_h_format),
-                (widget_float_time(account.total_hours, float_time), 
+                (excel_pool.format_hour(account.total_hours, float_time), 
                     account_h_format),
                 
-                (widget_float_time(h_todo, float_time), h_format),
-                (widget_float_time(h_pay, float_time), h_format), 
-                (widget_float_time(h_no_pay, float_time), h_format), 
+                (excel_pool.format_hour(h_todo, float_time), h_format),
+                (excel_pool.format_hour(h_pay, float_time), h_format), 
+                (excel_pool.format_hour(h_no_pay, float_time), h_format), 
                 (mode_format_value, mode_format),
-                widget_float_time(h_invoice, float_time), 
+                excel_pool.format_hour(h_invoice, float_time), 
                 ], f_text_right)
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', 
