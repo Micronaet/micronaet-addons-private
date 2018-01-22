@@ -423,8 +423,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
 
             excel_pool.write_xls_line(WS_name, row, [
                 '',
-                (account_mode, text_format)
-                (excel_pool.format_hour(total, float_time), number_format)
+                (account_mode, text_format),
+                (excel_pool.format_hour(total, float_time), number_format),
                 ])
                 
             
