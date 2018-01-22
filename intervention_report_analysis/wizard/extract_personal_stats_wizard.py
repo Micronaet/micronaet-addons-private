@@ -417,10 +417,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ('H. tolte', f_header),
             ])
             
-        for account_mode, total in medium_type.iteritems():            
+        for account_mode in sorted(medium_type):
             row += 1
             
-            marked_qty, free_qty = total
+            marked_qty, free_qty = medium_type[account_mode]
             if account_mode == 'contract':
                 text_format = f_blue_text
                 number_format = f_blue_number
