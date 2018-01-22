@@ -282,7 +282,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ], f_title)
         row += 1    
         excel_pool.write_xls_line(WS_name, row, [
-            'Totale a pagamento: %s' % my_total,
+            'Totale a pagamento: %s' % excel_pool.format_hour(my_total),
             ], f_title)
         
         # Header:
