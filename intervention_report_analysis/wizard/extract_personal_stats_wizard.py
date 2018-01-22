@@ -221,7 +221,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 account_mode = intervent.account_id.account_mode
                 
                 res[account][1] += marked_qty # Total hour invoiced
-                if account_mode in invoice_type:
+                if account_mode in invoiced_type:
                     my_total += marked_qty
                 
                 if account_mode in medium_type:
