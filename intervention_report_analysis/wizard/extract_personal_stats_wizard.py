@@ -55,12 +55,12 @@ class HrAnalyticTimesheet(orm.Model):
         # Layout setup:        
         excel_pool.column_width(WS_name, [
             # Intervent header:
-            10, 30, 20, 10, 10, 10, 
+            10, 30, 20, 10, 10, 10, 10
             # Total:
             10, 10, 10, 10, 10, 10,
             
             # Description:
-            10, 30, 40, 40, 40,
+            15, 30, 40, 40, 40,
             ])
         
         # ---------------------------------------------------------------------
@@ -88,6 +88,7 @@ class HrAnalyticTimesheet(orm.Model):
             'Tipo conto',
             'Tipologia',
             'Data',
+            'Stato',
             
             # Total:
             'Durata',
@@ -108,7 +109,12 @@ class HrAnalyticTimesheet(orm.Model):
         
         # Write data sort by date:        
         for intervent in sorted(self.browse(cr, uid, ids, context=context),
-                key=lambda x: x.date_start):
+                key=lambda x: (
+                    x.intervent_partner_id.name,
+                    x.account_id.account_mode,
+                    x.account_id.name,
+                    x.date_start
+                    ):
             row += 1
             
             excel_pool.write_xls_line(WS_name, row, [
@@ -118,6 +124,7 @@ class HrAnalyticTimesheet(orm.Model):
                 intervent.account_id.name or '',
                 intervent.account_id.account_mode or '',
                 intervent.mode or '',
+                intervent.state or '',
                 excel_pool.format_date(intervent.date_start),
                 
                 # Total:
