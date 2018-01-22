@@ -55,7 +55,7 @@ class HrAnalyticTimesheet(orm.Model):
         # Layout setup:        
         excel_pool.column_width(WS_name, [
             # Intervent header:
-            10, 30, 20, 10, 10, 10, 10
+            10, 30, 20, 10, 10, 10, 10,
             # Total:
             10, 10, 10, 10, 10, 10,
             
