@@ -199,7 +199,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Collect statistics:
         # ---------------------------------------------------------------------        
         medium_type = {}
-        invoiced_mode = ('open', )
+        invoiced_type = ('open', )
         my_total = 0.0
         ts_ids = ts_pool.search(cr, uid, domain, context=context)
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
@@ -221,7 +221,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 account_mode = intervent.account_id.account_mode
                 
                 res[account][1] += marked_qty # Total hour invoiced
-                if account_mode in invoice_mode:
+                if account_mode in invoice_type:
                     my_total += marked_qty
                 
                 if account_mode in medium_type:
