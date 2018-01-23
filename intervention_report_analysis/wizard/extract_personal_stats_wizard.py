@@ -635,14 +635,19 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Header:    
         excel_pool.write_xls_line(WS_name, table_start_row, [
             'Cliente', 
-            'contract', '',
-            'open', '',
-            'fixed', '',
-            'unfixed', '',
-            'internal', '',            
+            ('contract', f_blue_text), ('', f_blue_text),
+            ('open', f_green_text), ('', f_green_text),
+            ('fixed', f_orange_text), ('', f_orange_text),
+            ('unfixed', f_yellow_text), ('', f_yellow_text),
+            ('internal', f_white_text), ('', f_white_text),            
             ], f_header, 
             table_start_col, # shift
             )
+        for gap in (0, 2, 4, 6, 8):
+            excel_pool.merge_cell(WS_name, [
+                table_start_row, table_start_col + 1 + gap,
+                table_start_row, table_start_col + 2 + gap,
+                ])    
         
         for partner in sorted(res_partner, key=lambda x: x.name):
             table_start_row += 1
