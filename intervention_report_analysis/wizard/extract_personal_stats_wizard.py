@@ -574,14 +574,17 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.write_xls_line(WS_name, row, data_line, f_text_right)
         
         row += 2
-        excel_pool.write_xls_line(WS_name, row, [
+        mode_header = [
             '',
             '',
             '',
             ('Tipologie di contratti', f_header),
             ('H. marcate', f_header),
             ('H. tolte', f_header),
-            ])
+            ]
+        if not user_id: # filter
+            mode_header.append(('Utente', f_header))
+        excel_pool.write_xls_line(WS_name, row, mode_header)
         
         total_free = total_marked = 0    
         for key_mode in sorted(
@@ -613,7 +616,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 text_format = f_text # not red
                 number_format = f_white_number
 
-            excel_pool.write_xls_line(WS_name, row, [
+            mode_data = [
                 '',
                 '',
                 '',
@@ -622,7 +625,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     marked_qty, float_time), number_format),
                 (excel_pool.format_hour(
                     free_qty, float_time), number_format),
-                ])
+                ]
+            if not user_id: # filter    
+                mode_data.append(select_user.name)
+            excel_pool.write_xls_line(WS_name, row, mode_data)
 
         row += 2                 
         excel_pool.write_xls_line(WS_name, row, [
