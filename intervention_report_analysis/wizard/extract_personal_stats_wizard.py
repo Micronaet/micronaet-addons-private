@@ -382,6 +382,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         f_text = excel_pool.get_format('text') 
         f_red_text = excel_pool.get_format('bg_red') 
         f_yellow_text = excel_pool.get_format('bg_yellow') 
+        f_yellow_text = excel_pool.get_format('bg_orange')         
         f_green_text = excel_pool.get_format('bg_green') 
         f_blue_text = excel_pool.get_format('bg_blue') 
         
@@ -391,6 +392,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         f_blue_number = excel_pool.get_format('bg_blue_number') 
         f_red_number = excel_pool.get_format('bg_red_number') 
         f_yellow_number = excel_pool.get_format('bg_yellow_number') 
+        f_orange_number = excel_pool.get_format('bg_orange_number') 
         f_green_number = excel_pool.get_format('bg_green_number') 
 
         # Title:
@@ -470,10 +472,14 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 # Not counted (only invoiced)
                 mode_format = f_blue_text
                 mode_format_value = 'N'
-            elif account_mode in ('unfixed', 'fixed'):
-                # Not cuonted (depend on invoice monthly)
+            elif account_mode == 'unfixed':
+                # Not counted (depend on invoice monthly)
                 mode_format = f_yellow_text
                 mode_format_value = '?'
+            elif account_mode == 'fixed':
+                # Not counted (depend on invoice monthly)
+                mode_format = f_orange_text
+                mode_format_value = '!'
             elif account_mode == 'open':
                 # Counted
                 mode_format = f_green_text
@@ -555,9 +561,12 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             if account_mode == 'contract':
                 text_format = f_blue_text
                 number_format = f_blue_number
-            elif account_mode in ('unfixed', 'fixed'):
+            elif account_mode == 'unfixed':
                 text_format = f_yellow_text
                 number_format = f_yellow_number
+            elif account_mode == 'fixed':
+                text_format = f_orange_text
+                number_format = f_orange_number
             elif account_mode == 'open':
                 text_format = f_green_text
                 number_format = f_green_number
