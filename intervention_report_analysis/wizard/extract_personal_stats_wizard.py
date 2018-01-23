@@ -391,11 +391,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 res[key][2] += free_qty
                 
             # Table partner total:
-            res_partner[partner][account_mode][0] +=  maked_qty
+            res_partner[partner][account_mode][0] +=  marked_qty
             res_partner[partner][account_mode][1] +=  free_qty
             
             # Table user total:    
-            res_user[user][account_mode][0] +=  maked_qty
+            res_user[user][account_mode][0] +=  marked_qty
             res_user[user][account_mode][1] +=  free_qty
 
             key_mode = (account_mode, select_user)
