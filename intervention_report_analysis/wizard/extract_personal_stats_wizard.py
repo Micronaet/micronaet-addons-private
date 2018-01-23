@@ -334,6 +334,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
             account = intervent.account_id
+            key = (intervent.account_id, intervent.user_id.id)
             if key not in res:
                 account, select_user_id = res[key]
                 
