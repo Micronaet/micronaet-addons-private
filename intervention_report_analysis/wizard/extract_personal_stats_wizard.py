@@ -391,12 +391,12 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 res[key][2] += free_qty
                 
             # Table partner total:
-            res_partner[partner][account_mode][0] +=  marked_qty
-            res_partner[partner][account_mode][1] +=  free_qty
+            res_partner[partner][account_mode][0] += marked_qty
+            res_partner[partner][account_mode][1] += free_qty
             
             # Table user total:    
-            res_user[user][account_mode][0] +=  marked_qty
-            res_user[user][account_mode][1] +=  free_qty
+            res_user[user][account_mode][0] += marked_qty
+            res_user[user][account_mode][1] += free_qty
 
             key_mode = (account_mode, select_user)
             if key_mode not in res_medium_type:
@@ -643,9 +643,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ], f_header, 
             table_start_col, # shift
             )
-        table_start_row += 1
         
         for partner in sorted(res_partner, key=lambda x: x.name):
+            table_start_row += 1
             # Write partner
             excel_pool.write_xls_line(WS_name, table_start_row, [
                 partner.name, ], f_text, table_start_col)
@@ -658,6 +658,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     ], f_white_number, 
                     this_col, # shift
                     )
+
+        table_start_row += 2 # New table blank lines
         
         # ---------------------------------------------------------------------
         #                        PARTNER TABLE (RIGHT 2)
