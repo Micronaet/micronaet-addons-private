@@ -776,7 +776,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     ], f_white_number, 
                     this_col, # shift
                     )
-                total_user[account_mode][0] += maked_qty
+                total_user[account_mode][0] += marked_qty
                 total_user[account_mode][1] += free_qty
         
         # Write total:        
