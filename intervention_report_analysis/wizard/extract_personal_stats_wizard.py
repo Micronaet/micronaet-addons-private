@@ -425,7 +425,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         column_width = [25, 40, 10, 20, 10, 10]
         if not user_id: # Only for user
             column_width.append(18)  
-        column_width.extend([10, 10, 10, 1, 10, 10])
+        column_width.extend([10, 10, 10, 1, 10, 10, 1])
         excel_pool.column_width(WS_name, column_width)
         
         # ---------------------------------------------------------------------
