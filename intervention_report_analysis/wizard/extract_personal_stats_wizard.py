@@ -55,7 +55,7 @@ class HrAnalyticTimesheet(orm.Model):
         # Layout setup:        
         excel_pool.column_width(WS_name, [
             # Intervent header:
-            10, 28, 35, 10, 10, 10, 10,
+            10, 28, 10, 35, 10, 10, 10,
             # Total:
             10, 10, 10, 10, 10, 10,            
             # Description:
@@ -83,8 +83,8 @@ class HrAnalyticTimesheet(orm.Model):
             # Intervent header information:
             'Numero',
             'Cliente',
-            'Conto analitico',
             'Tipo conto',
+            'Conto analitico',
             'Tipologia',
             'Data',
             'Stato',
@@ -130,8 +130,8 @@ class HrAnalyticTimesheet(orm.Model):
                 # Intervent header:
                 intervent.ref or 'Da confermare',
                 intervent.intervent_partner_id.name or ' ',
-                intervent.account_id.name or ' ',
                 intervent.account_id.account_mode or ' ',
+                intervent.account_id.name or ' ',
                 intervent.mode or ' ',
                 intervent.state or ' ',
                 excel_pool.format_date(intervent.date_start),
