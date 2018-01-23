@@ -107,6 +107,15 @@ class HrAnalyticTimesheet(orm.Model):
             ], f_header)
         
         # Write data sort by date:        
+        if intervent.trip_require:
+            trip_hour = intervent.trip_hour 
+        else:    
+            trip_hour = 0
+        if intervent.break_require:
+            break_hour = intervent.break_hour 
+        else:    
+            break_hour = 0
+            
         for intervent in sorted(self.browse(cr, uid, ids, context=context),
                 key=lambda x: (
                     x.intervent_partner_id.name,
@@ -132,9 +141,9 @@ class HrAnalyticTimesheet(orm.Model):
                 (excel_pool.format_hour(
                     intervent.intervent_total, float_time), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.trip_hour, float_time), f_white_number),
+                    trip_hour, float_time), f_white_number),
                 (excel_pool.format_hour(
-                    intervent.break_hour, float_time), f_white_number),
+                    break_hour, float_time), f_white_number),
                 (excel_pool.format_hour(
                     intervent.unit_amount, float_time), f_white_number),
                 (excel_pool.format_hour(
