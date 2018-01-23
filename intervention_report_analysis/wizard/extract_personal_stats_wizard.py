@@ -686,6 +686,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             table_start_col, # shift
             )
         
+        total_partner = {
+            'contract': [0.0, 0.0],
+            'open': [0.0, 0.0],
+            'fixed': [0.0, 0.0],
+            'unfixed': [0.0, 0.0],
+            'internal': [0.0, 0.0],
+            }
         for partner in sorted(res_partner, key=lambda x: x.name):
             table_start_row += 1
             # Write partner
@@ -703,12 +710,40 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     ], f_white_number, 
                     this_col, # shift
                     )
+                total_partner[account_mode][0] += marked_qty
+                total_partner[account_mode][1] += free_qty
 
-        table_start_row += 2 # New table blank lines
+        # Write total:        
+        table_start_row += 1
+        excel_pool.write_xls_line(WS_name, table_start_row, [
+            ('Totale clienti: ', f_text),
+            excel_pool.format_hour(total_partner['contract'][0], float_time, 
+                zero_value=''),
+            excel_pool.format_hour(total_partner['contract'][1], float_time, 
+                zero_value=''),
+            excel_pool.format_hour(total_partner['open'][0], float_time, 
+                zero_value=''),
+            excel_pool.format_hour(total_partner['open'][1], float_time, 
+                zero_value=''),
+            excel_pool.format_hour(total_partner['fixed'][0], float_time, 
+                zero_value=''),
+            excel_pool.format_hour(total_partner['fixed'][1], float_time, 
+                zero_value=''),
+            excel_pool.format_hour(total_partner['unfixed'][0], float_time, 
+                zero_value=''),
+            excel_pool.format_hour(total_partner['unfixed'][1], float_time, 
+                zero_value=''),
+            excel_pool.format_hour(total_partner['internal'][0], float_time, 
+                zero_value=''),
+            excel_pool.format_hour(total_partner['internal'][1], float_time, 
+                zero_value=''),
+            ], f_white_number, table_start_col)
         
         # ---------------------------------------------------------------------
         #                        PARTNER TABLE (RIGHT 2)
         # ---------------------------------------------------------------------
+        table_start_row += 2 # New table blank lines
+
         # Loop for merge cell:    
         for gap, gap_format in (
                 (0, f_blue_text), 
@@ -782,7 +817,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Write total:        
         table_start_row += 1
         excel_pool.write_xls_line(WS_name, table_start_row, [
-            ('Totale: ', f_text),
+            ('Totale utenti: ', f_text),
             excel_pool.format_hour(total_user['contract'][0], float_time, 
                 zero_value=''),
             excel_pool.format_hour(total_user['contract'][1], float_time, 
@@ -804,7 +839,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.format_hour(total_user['internal'][1], float_time, 
                 zero_value=''),
             ], f_white_number, table_start_col)
-        
                 
 
         # ---------------------------------------------------------------------
