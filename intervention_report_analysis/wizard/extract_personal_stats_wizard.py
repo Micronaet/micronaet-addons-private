@@ -334,12 +334,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
             account = intervent.account_id
-            key = (intervent.account_id, intervent.user_id.id)
+            select_user_id = intervent.user_id.id
+            key = (account, select_user_id)
             if key not in res:
-                account, select_user_id = res[key]
-                
                 todo = account_pool.get_account_distribution(
-                    user_id, from_date, to_date, account)
+                    select_user_id, from_date, to_date, account)
                 # Total hour, todo
                 res[key] = [
                     todo,
