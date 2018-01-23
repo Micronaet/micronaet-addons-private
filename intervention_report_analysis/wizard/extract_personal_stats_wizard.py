@@ -298,18 +298,31 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 ], context=context)         
             for account in account_pool.browse(
                     cr, uid, account_ids, context=context):
-                # for user filter check if user is in distribution:
-                todo = account_pool.get_account_distribution(
-                    user_id, from_date, to_date, account)
-                if user_id and user_id not in [
-                        item.user_id.id for item in account.distribution_ids]:
-                    continue
-                res[account] = [
-                    todo,
-                    0.0, # done pay
-                    0.0, # done gratis
-                    0.0, # invoiced                    
-                    ]
+                if user_id: # filter (only contract with me in distribution
+                    # for user filter check if user is in distribution:
+                    todo = account_pool.get_account_distribution(
+                        user_id, from_date, to_date, account)
+                    if user_id not in [
+                            item.user_id.id for item in \
+                                account.distribution_ids]:
+                        continue
+                    res[(account, user_id)] = [
+                        todo,
+                        0.0, # done pay
+                        0.0, # done gratis
+                        0.0, # invoiced                    
+                        ]
+                else: # no filter, all contract with user in distribution:
+                    for perc in for item in account.distribution_ids:
+                        all_user_id = perc.user_id.id
+                        todo = account_pool.get_account_distribution(
+                            all_user_id, from_date, to_date, account)
+                        res[(account, all_user_id)] = [
+                            todo,
+                            0.0, # done pay
+                            0.0, # done gratis
+                            0.0, # invoiced                    
+                            ]
         
         # ---------------------------------------------------------------------        
         # Collect statistics:
@@ -321,11 +334,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
             account = intervent.account_id
-            if account not in res:
+            if key not in res:
+                account, select_user_id = res[key]
+                
                 todo = account_pool.get_account_distribution(
                     user_id, from_date, to_date, account)
                 # Total hour, todo
-                res[account] = [
+                res[key] = [
                     todo,
                     0.0, 
                     0.0, 
@@ -338,7 +353,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 marked_qty = intervent.unit_amount # TODO Change using funct.
                 free_qty = 0.0
                 
-                res[account][1] += marked_qty # Total hour invoiced
+                res[key][1] += marked_qty # Total hour invoiced
                 if account_mode in invoiced_type:
                     my_total += marked_qty
                 
@@ -346,7 +361,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             else: # No invoice
                 marked_qty = 0.0
                 free_qty = intervent.unit_amount # Total hour gratis
-                res[account][2] += free_qty
+                res[key][2] += free_qty
 
             if account_mode not in medium_type:
                 # marked, free
@@ -354,7 +369,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             medium_type[account_mode][0] += marked_qty
             medium_type[account_mode][1] += free_qty
 
-            res[account][3] += intervent.extra_invoiced_total # Extra invoiced
+            res[key][3] += intervent.extra_invoiced_total # Extra invoiced
             my_total += intervent.extra_invoiced_total
             
         WS_name = _('Statistiche')
@@ -437,14 +452,15 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Write data:
         now = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
         total_premium = 0.0
-        for account in sorted(
+        for key in sorted(
                 res, key=lambda x: (
-                    sort_order_account_mode(x.account_mode),
-                    x.partner_id.name,
-                    x.name,
+                    sort_order_account_mode(x[0].account_mode),
+                    x[0].partner_id.name,
+                    x[0].name,
                     )):
             row += 1
-            data = res[account]
+            account, select_user_id = key
+            data = res[key]
             
             # Intervent:
             h_todo, h_pay, h_no_pay, h_invoice = data
