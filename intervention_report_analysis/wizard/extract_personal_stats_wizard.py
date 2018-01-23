@@ -759,7 +759,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 select_user.name, ], f_text, table_start_col)
                 
             for account_mode in res_user[select_user]:                
-                marked_qty, free_qty = res_user[partner][account_mode]
+                marked_qty, free_qty = res_user[select_user][account_mode]
                 this_col = table_start_col + 1 + gap_mode[account_mode]                
                 excel_pool.write_xls_line(WS_name, table_start_row, [
                     excel_pool.format_hour(marked_qty, float_time, 
