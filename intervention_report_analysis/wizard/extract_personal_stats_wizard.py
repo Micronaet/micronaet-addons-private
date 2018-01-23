@@ -107,15 +107,6 @@ class HrAnalyticTimesheet(orm.Model):
             ], f_header)
         
         # Write data sort by date:        
-        if intervent.trip_require:
-            trip_hour = intervent.trip_hour 
-        else:    
-            trip_hour = 0
-        if intervent.break_require:
-            break_hour = intervent.break_hour 
-        else:    
-            break_hour = 0
-            
         for intervent in sorted(self.browse(cr, uid, ids, context=context),
                 key=lambda x: (
                     x.intervent_partner_id.name,
@@ -125,6 +116,14 @@ class HrAnalyticTimesheet(orm.Model):
                     )):
             row += 1
             
+            if intervent.trip_require:
+                trip_hour = intervent.trip_hour 
+            else:    
+                trip_hour = 0
+            if intervent.break_require:
+                break_hour = intervent.break_hour 
+            else:    
+                break_hour = 0
             excel_pool.write_xls_line(WS_name, row, [
                 # Intervent header:
                 intervent.ref or 'Da confermare',
