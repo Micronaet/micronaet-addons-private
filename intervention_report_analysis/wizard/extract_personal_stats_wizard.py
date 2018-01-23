@@ -98,8 +98,10 @@ class HrAnalyticTimesheet(orm.Model):
             'Riconosciuto extra', # extra_invoiced_total
 
             # Description:            
-            'Stato fattura',
+            'Stato fattura',            
             'Oggetto',
+            'Richiesto da',
+            'Rif. richiesta',
             'Richiesta',
             'Intervento',
             'Note',
@@ -155,6 +157,8 @@ class HrAnalyticTimesheet(orm.Model):
                     intervent.to_invoice.factor,
                     ),
                 intervent.name or ' ',
+                intervent.request_by or ' ',
+                intervent.request_reference or ' ',
                 intervent.intervention_request or ' ',
                 intervent.intervention or ' ',
                 intervent.internal_note or ' ',
