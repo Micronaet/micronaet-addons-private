@@ -385,8 +385,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         #                               EXCEL:
         # ---------------------------------------------------------------------
         # Layout setup:        
-        excel_pool.column_width(WS_name, [
-            25, 40, 10, 20, 10, 10, 10, 10, 10, 1, 10, 10])
+        column_width = [25, 40, 10, 20, 10, 10]
+        if not user_id: # Only for user
+            columns_witdh(15)  
+        column_width.extend([10, 10, 10, 1, 10, 10])
+        excel_pool.column_width(WS_name, column_width)
         
         # ---------------------------------------------------------------------
         # Generate format used:
@@ -433,21 +436,27 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         # Header:
         row += 2
-        excel_pool.write_xls_line(WS_name, row, [
+        header_line = [
             'Cliente',
             'Conto analitico', 
             'Tipo',
             'Periodo',
             'H. parziali',
             'H. contratto',
+            ]
+        if not user_id: # only if not filter
+            header_line.append('Utente')
             
+        header_line.extend([    
             'Fabbi. pers.',
             'Ore marcate',             
             'Ore tolte',
             'S', # Status counter
             'Ore fatt.',
             'Riconosciute',
-            ], f_header)
+            ])
+            
+        excel_pool.write_xls_line(WS_name, row, header_line, f_header)
         
         # Write data:
         now = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
@@ -533,7 +542,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             else:    
                 h_format = f_green_number            
             
-            excel_pool.write_xls_line(WS_name, row, [
+            data_line = [
                 (account.partner_id.name or _('GENERICO'), f_text),
                 (account.name, f_text), 
                 (account_mode, mode_format),
@@ -545,14 +554,20 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     account_h_format),
                 (excel_pool.format_hour(account.total_hours, float_time), 
                     account_h_format),
-                
+                ]
+            if not user_id:
+                data_line.append(
+                    (account.user_id.name or ' '), f_text),
+                    )                
+            data_line.extend([                
                 (excel_pool.format_hour(h_todo, float_time), h_format),
                 (excel_pool.format_hour(h_pay, float_time), h_format), 
                 (excel_pool.format_hour(h_no_pay, float_time), h_format), 
                 (mode_format_value, mode_format),
                 excel_pool.format_hour(h_invoice, float_time), 
                 excel_pool.format_hour(premium, float_time), 
-                ], f_text_right)
+                ])
+            excel_pool.write_xls_line(WS_name, row, data_line, f_text_right)
         
         row += 2
         excel_pool.write_xls_line(WS_name, row, [
