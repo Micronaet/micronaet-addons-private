@@ -276,7 +276,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Table collect data dict:
         res = {}
         res_partner = {}
-        res_users = {}
+        res_user = {}
         res_medium_type = {}
         
         domain = [
