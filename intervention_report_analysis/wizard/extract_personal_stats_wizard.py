@@ -403,8 +403,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             res_partner[partner][account_mode][1] += free_qty
             
             # Table user total:    
-            res_user[user][account_mode][0] += marked_qty
-            res_user[user][account_mode][1] += free_qty
+            res_user[select_user][account_mode][0] += marked_qty
+            res_user[select_user][account_mode][1] += free_qty
 
             key_mode = (account_mode, select_user)
             if key_mode not in res_medium_type:
