@@ -632,6 +632,19 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             table_start_col, # shift col
             )
         
+        # Loop for merge cell:    
+        for gap, gap_format in (
+                (0, f_blue_text), 
+                (2, f_green_text), 
+                (4, f_orange_text), 
+                (6, f_unfixed_text),
+                (8, f_text), 
+                ):
+            excel_pool.merge_cell(WS_name, [
+                table_start_row, table_start_col + 1 + gap,
+                table_start_row, table_start_col + 2 + gap,
+                ], gap_format)    
+
         # Header:    
         excel_pool.write_xls_line(WS_name, table_start_row, [
             'Cliente', 
@@ -643,11 +656,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ], f_header, 
             table_start_col, # shift
             )
-        for gap in (0, 2, 4, 6, 8):
-            excel_pool.merge_cell(WS_name, [
-                table_start_row, table_start_col + 1 + gap,
-                table_start_row, table_start_col + 2 + gap,
-                ])    
         
         for partner in sorted(res_partner, key=lambda x: x.name):
             table_start_row += 1
