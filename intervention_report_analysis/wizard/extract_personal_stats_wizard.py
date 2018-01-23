@@ -382,7 +382,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         f_text = excel_pool.get_format('text') 
         f_red_text = excel_pool.get_format('bg_red') 
         f_yellow_text = excel_pool.get_format('bg_yellow') 
-        f_yellow_text = excel_pool.get_format('bg_orange')         
+        f_orange_text = excel_pool.get_format('bg_orange')         
         f_green_text = excel_pool.get_format('bg_green') 
         f_blue_text = excel_pool.get_format('bg_blue') 
         
