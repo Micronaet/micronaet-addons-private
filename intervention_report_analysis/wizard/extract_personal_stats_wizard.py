@@ -213,6 +213,23 @@ class AccountDistributionStatsWizard(orm.TransientModel):
     def action_print(self, cr, uid, ids, context=None):
         ''' Event for button done
         '''
+        # ---------------------------------------------------------------------
+        #                            UTILITY:
+        # ---------------------------------------------------------------------
+        def sort_order_account_mode(account_mode):
+            ''' Order in stat report
+            '''
+            if account_mode == 'contract':
+                return 0
+            elif account_mode == 'open':
+                return 1
+            elif account_mode == 'fixed':
+                return 2
+            elif account_mode == 'unfixed':
+                return 3
+            else: # 'internal':
+                return 4
+            
         if context is None: 
             context = {} 
        
@@ -408,9 +425,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         total_premium = 0.0
         for account in sorted(
                 res, key=lambda x: (
-                    0 if x.account_mode == 'contract' else 1, # contract first
-                    #0 if res[x][0] else 1, # todo hour total
-                    x.account_mode, # sort for account mode 
+                    sort_order_account_mode(x.account_mode),
                     x.partner_id.name,
                     x.name,
                     )):
