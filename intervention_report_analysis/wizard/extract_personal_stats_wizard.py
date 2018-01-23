@@ -366,11 +366,12 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 free_qty = intervent.unit_amount # Total hour gratis
                 res[key][2] += free_qty
 
-            if account_mode not in medium_type:
+            key_mode = (account_mode, select_user)
+            if key_mode not in medium_type:
                 # marked, free
-                medium_type[account_mode] = [0.0, 0.0]            
-            medium_type[account_mode][0] += marked_qty
-            medium_type[account_mode][1] += free_qty
+                medium_type[key_mode] = [0.0, 0.0]            
+            medium_type[key_mode][0] += marked_qty
+            medium_type[key_mode][1] += free_qty
 
             res[key][3] += intervent.extra_invoiced_total # Extra invoiced
             my_total += intervent.extra_invoiced_total
@@ -390,7 +391,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Layout setup:        
         column_width = [25, 40, 10, 20, 10, 10]
         if not user_id: # Only for user
-            column_width.append(15)  
+            column_width.append(18)  
         column_width.extend([10, 10, 10, 1, 10, 10])
         excel_pool.column_width(WS_name, column_width)
         
@@ -583,11 +584,15 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ])
         
         total_free = total_marked = 0    
-        for account_mode in sorted(
+        for key_mode in sorted(
                 medium_type, 
-                key=lambda x: sort_order_account_mode(x)):
+                key=lambda x: (
+                    sort_order_account_mode(x[0]),
+                    x[1].name,
+                    )):
             row += 1
             
+            account_mode, select_user = key_mode
             marked_qty, free_qty = medium_type[account_mode]
             total_free += free_qty
             total_marked += marked_qty
