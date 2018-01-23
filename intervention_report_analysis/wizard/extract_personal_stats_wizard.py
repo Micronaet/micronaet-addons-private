@@ -623,11 +623,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         excel_pool.column_width(
             WS_name, 
             [30, # 
-            10, 10, # contract
-            10, 10, # open
-            10, 10, # fixed
-            10, 10, # unfixed
-            10, 10, # internal
+            4, 4, # contract
+            4, 4, # open
+            4, 4, # fixed
+            4, 4, # unfixed
+            4, 4, # internal
             ],
             table_start_col, # shift col
             )
