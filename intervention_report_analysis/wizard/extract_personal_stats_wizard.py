@@ -635,11 +635,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Header:    
         excel_pool.write_xls_line(WS_name, table_start_row, [
             'Cliente', 
-            'contract, '',
-            'open, '',
-            'fixed, '',
-            'unfixed, '',
-            'internal, '',            
+            'contract', '',
+            'open', '',
+            'fixed', '',
+            'unfixed', '',
+            'internal', '',            
             ], f_header, 
             table_start_col, # shift
             )
