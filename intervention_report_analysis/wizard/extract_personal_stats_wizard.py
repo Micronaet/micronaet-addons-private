@@ -557,7 +557,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 ]
             if not user_id:
                 data_line.append(
-                    (account.user_id.name or ' '), f_text),
+                    (account.user_id.name or ' ', f_text),
                     )                
             data_line.extend([                
                 (excel_pool.format_hour(h_todo, float_time), h_format),
