@@ -671,8 +671,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 marked_qty, free_qty = res_partner[partner][account_mode]
                 this_col = table_start_col + 1 + gap_mode[account_mode]                
                 excel_pool.write_xls_line(WS_name, table_start_row, [
-                    excel_pool.format_hour(marked_qty, float_time),
-                    excel_pool.format_hour(free_qty, float_time),
+                    excel_pool.format_hour(marked_qty, float_time, 
+                        zero_value=''), # remove 0:00
+                    excel_pool.format_hour(free_qty, float_time, 
+                        zero_value=''), # remove 0:00
                     ], f_white_number, 
                     this_col, # shift
                     )
