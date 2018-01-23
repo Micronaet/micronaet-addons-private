@@ -408,7 +408,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         total_premium = 0.0
         for account in sorted(
                 res, key=lambda x: (
-                    0 if res[x][0] else 1, 
+                    0 if x.account_mode == 'contract' else 1, # contract first
+                    #0 if res[x][0] else 1, # todo hour total
+                    x.account_mode, # sort for account mode 
                     x.partner_id.name,
                     x.name,
                     )):
