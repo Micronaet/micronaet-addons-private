@@ -637,7 +637,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (0, f_blue_text), 
                 (2, f_green_text), 
                 (4, f_orange_text), 
-                (6, f_unfixed_text),
+                (6, f_yellow_text),
                 (8, f_text), 
                 ):
             excel_pool.merge_cell(WS_name, [
