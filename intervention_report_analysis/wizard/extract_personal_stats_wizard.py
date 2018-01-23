@@ -782,7 +782,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Write total:        
         table_start_row += 1
         excel_pool.write_xls_line(WS_name, table_start_row, [
-            'Totale: ',
+            ('Totale: ', f_text),
             excel_pool.format_hour(total_user['contract'][0], float_time, 
                 zero_value=''),
             excel_pool.format_hour(total_user['contract'][1], float_time, 
@@ -803,7 +803,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 zero_value=''),
             excel_pool.format_hour(total_user['internal'][1], float_time, 
                 zero_value=''),
-            ], f_text, table_start_col)
+            ], f_white_number, table_start_col)
         
                 
 
