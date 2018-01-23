@@ -649,7 +649,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 table_start_row, table_start_col + 2 + gap,
                 ], gap_format)   
 
-        # Header:    
+        # Partner merge 2 row 
+        excel_pool.merge_cell(WS_name, [
+            table_start_row, table_start_col,
+            table_start_row + 1, table_start_col,
+            ], gap_format)   
+
+        # Header (A):
         excel_pool.write_xls_line(WS_name, table_start_row, [
             'Cliente', 
             ('contract', f_blue_text), ('', f_blue_text),
@@ -657,6 +663,18 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ('fixed', f_orange_text), ('', f_orange_text),
             ('unfixed', f_yellow_text), ('', f_yellow_text),
             ('internal', f_text), ('', f_text),            
+            ], f_header, 
+            table_start_col, # shift
+            )
+        table_start_row += 1
+        # Header (B):
+        excel_pool.write_xls_line(WS_name, table_start_row, [
+            '', 
+            ('SI', f_blue_text), ('NO', f_blue_text),
+            ('SI', f_green_text), ('NO', f_green_text),
+            ('SI', f_orange_text), ('NO', f_orange_text),
+            ('SI', f_yellow_text), ('NO', f_yellow_text),
+            ('SI', f_text), ('NO', f_text),            
             ], f_header, 
             table_start_col, # shift
             )
