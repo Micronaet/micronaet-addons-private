@@ -260,6 +260,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         user_id = wiz_browse.user_id.id or False  
         user_name = wiz_browse.user_id.name or _('Nessuno')
+        user = wiz_browse.user_id
         
         account_id = wiz_browse.account_id.id or False    
         account_name = wiz_browse.account_id.name or _('Nessuno')
@@ -306,7 +307,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                             item.user_id.id for item in \
                                 account.distribution_ids]:
                         continue
-                    res[(account, user_id)] = [
+                    # account and user browse obj    
+                    res[(account, user)] = [
                         todo,
                         0.0, # done pay
                         0.0, # done gratis
@@ -314,10 +316,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                         ]
                 else: # no filter, all contract with user in distribution:
                     for perc in account.distribution_ids:
-                        all_user_id = perc.user_id.id
+                        select_user = perc.user_id
                         todo = account_pool.get_account_distribution(
-                            all_user_id, from_date, to_date, account)
-                        res[(account, all_user_id)] = [
+                            select_user.id, from_date, to_date, account)
+                        res[(account, select_user)] = [
                             todo,
                             0.0, # done pay
                             0.0, # done gratis
@@ -334,11 +336,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
             account = intervent.account_id
-            select_user_id = intervent.user_id.id
-            key = (account, select_user_id)
+            select_user = intervent.user_id
+            key = (account, select_user)
             if key not in res:
                 todo = account_pool.get_account_distribution(
-                    select_user_id, from_date, to_date, account)
+                    select_user.id, from_date, to_date, account)
                 # Total hour, todo
                 res[key] = [
                     todo,
@@ -356,7 +358,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 res[key][1] += marked_qty # Total hour invoiced
                 if account_mode in invoiced_type:
                     my_total += marked_qty
-                
                         
             else: # No invoice
                 marked_qty = 0.0
@@ -468,7 +469,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     x[0].name,
                     )):
             row += 1
-            account, select_user_id = key
+            account, select_user = key
             data = res[key]
             
             # Intervent:
@@ -555,9 +556,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (excel_pool.format_hour(account.total_hours, float_time), 
                     account_h_format),
                 ]
-            if not user_id:
+            if not user_id: # no user filter
                 data_line.append(
-                    (account.user_id.name or ' ', f_text),
+                    (select_user.name or ' ', f_text),
                     )                
             data_line.extend([                
                 (excel_pool.format_hour(h_todo, float_time), h_format),
