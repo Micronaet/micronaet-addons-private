@@ -643,7 +643,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.merge_cell(WS_name, [
                 table_start_row, table_start_col + 1 + gap,
                 table_start_row, table_start_col + 2 + gap,
-                ], f_text)   
+                ])   
 
         # Header:    
         excel_pool.write_xls_line(WS_name, table_start_row, [
