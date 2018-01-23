@@ -352,9 +352,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             # Partner table
             # -----------------------------------------------------------------
             if partner not in res_partner:
-                res_partner[partner] = {}
-            if account_mode not in res_partner[partner]:
-                res_partner[partner][account_mode] = [0.0, 0.0] # maked, free
+                res_partner[partner] = {
+                    'contract': [0.0, 0.0],
+                    'open': [0.0, 0.0],
+                    'fixed': [0.0, 0.0],
+                    'unfixed': [0.0, 0.0],
+                    'internal': [0.0, 0.0],
+                    }
 
             # -----------------------------------------------------------------
             # User table
