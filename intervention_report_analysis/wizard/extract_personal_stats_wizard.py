@@ -627,7 +627,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     free_qty, float_time), number_format),
                 ]
             if not user_id: # filter    
-                mode_data.append(select_user.name)
+                mode_data.append((select_user.name, text_format))
             excel_pool.write_xls_line(WS_name, row, mode_data)
 
         row += 2                 
