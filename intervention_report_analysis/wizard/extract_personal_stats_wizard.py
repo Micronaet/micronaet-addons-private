@@ -639,7 +639,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ('open', f_green_text), ('', f_green_text),
             ('fixed', f_orange_text), ('', f_orange_text),
             ('unfixed', f_yellow_text), ('', f_yellow_text),
-            ('internal', f_white_text), ('', f_white_text),            
+            ('internal', f_white_text), ('', f_text),            
             ], f_header, 
             table_start_col, # shift
             )
