@@ -533,7 +533,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         total_free = total_marked = 0    
         for account_mode in sorted(
                 medium_type, 
-                key:lambda x: sort_order_account_mode(x)):
+                key=lambda x: sort_order_account_mode(x)):
             row += 1
             
             marked_qty, free_qty = medium_type[account_mode]
