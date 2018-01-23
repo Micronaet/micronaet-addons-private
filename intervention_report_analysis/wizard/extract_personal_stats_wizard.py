@@ -631,12 +631,12 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Layout format:    
         excel_pool.column_width(
             WS_name, 
-            [30, # 
-            4, 4, # contract
-            4, 4, # open
-            4, 4, # fixed
-            4, 4, # unfixed
-            4, 4, # internal
+            [35, # 
+            5, 5, # contract
+            5, 5, # open
+            5, 5, # fixed
+            5, 5, # unfixed
+            5, 5, # internal
             ],
             table_start_col, # shift col
             )
@@ -704,9 +704,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 this_col = table_start_col + 1 + gap_mode[account_mode]                
                 excel_pool.write_xls_line(WS_name, table_start_row, [
                     excel_pool.format_hour(marked_qty, float_time, 
-                        zero_value=''), # remove 0:00
+                        zero_value=' '), # remove 0:00
                     excel_pool.format_hour(free_qty, float_time, 
-                        zero_value=''), # remove 0:00
+                        zero_value=' '), # remove 0:00
                     ], f_white_number, 
                     this_col, # shift
                     )
@@ -805,9 +805,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 this_col = table_start_col + 1 + gap_mode[account_mode]                
                 excel_pool.write_xls_line(WS_name, table_start_row, [
                     excel_pool.format_hour(marked_qty, float_time, 
-                        zero_value=''), # remove 0:00
+                        zero_value=' '), # remove 0:00
                     excel_pool.format_hour(free_qty, float_time, 
-                        zero_value=''), # remove 0:00
+                        zero_value=' '), # remove 0:00
                     ], f_white_number, 
                     this_col, # shift
                     )
