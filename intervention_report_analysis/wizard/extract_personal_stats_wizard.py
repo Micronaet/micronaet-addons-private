@@ -593,7 +593,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             row += 1
             
             account_mode, select_user = key_mode
-            marked_qty, free_qty = medium_type[account_mode]
+            marked_qty, free_qty = medium_type[key_mode]
             total_free += free_qty
             total_marked += marked_qty
             
