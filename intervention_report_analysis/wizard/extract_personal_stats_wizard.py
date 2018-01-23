@@ -273,7 +273,12 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         contract = wiz_browse.contract
         float_time = wiz_browse.float_time
         
+        # Table collect data dict:
         res = {}
+        res_partner = {}
+        res_users = {}
+        res_medium_type = {}
+        
         domain = [
             ('account_id.is_extra_report', '=', False),
             ]
@@ -317,6 +322,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                         0.0, # done gratis
                         0.0, # invoiced                    
                         ]
+                        
                 else: # no filter, all contract with user in distribution:
                     for perc in account.distribution_ids:
                         select_user = perc.user_id
@@ -332,7 +338,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------        
         # Collect statistics:
         # ---------------------------------------------------------------------        
-        medium_type = {}
         invoiced_type = ('open', )
         my_total = 0.0
         ts_ids = ts_pool.search(cr, uid, domain, context=context)
@@ -341,6 +346,24 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             account = intervent.account_id
             select_user = intervent.user_id
             partner = intervent.intervent_partner_id
+            account_mode = intervent.account_id.account_mode
+            
+            # -----------------------------------------------------------------
+            # Partner table
+            # -----------------------------------------------------------------
+            if partner not in res_partner:
+                res_partner[partner] = {}
+            if account_mode not in res_partner[partner]:
+                res_partner[partner][account_mode] = [0.0, 0.0] # maked, free
+
+            # -----------------------------------------------------------------
+            # User table
+            # -----------------------------------------------------------------
+            if select_user not in res_user:
+                res_user[select_user] = {}
+            if account_mode not in res_user[user]:
+                res_user[user][account_mode] = [0.0, 0.0] # maked, free
+                
             key = (account, select_user, partner)
             if key not in res:
                 todo = account_pool.get_account_distribution(
@@ -354,7 +377,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     ]
 
             # TODO extra hour in intervent pay!!        
-            account_mode = intervent.account_id.account_mode
             if intervent.to_invoice.factor == 100:
                 marked_qty = intervent.unit_amount # TODO Change using funct.
                 free_qty = 0.0
@@ -362,18 +384,27 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 res[key][1] += marked_qty # Total hour invoiced
                 if account_mode in invoiced_type:
                     my_total += marked_qty
-                        
+
             else: # No invoice
                 marked_qty = 0.0
                 free_qty = intervent.unit_amount # Total hour gratis
                 res[key][2] += free_qty
+                
+            # Table partner total:
+            res_partner[partner][account_mode][0] +=  maked_qty
+            res_partner[partner][account_mode][1] +=  free_qty
+            
+            # Table user total:    
+            res_user[user][account_mode][0] +=  maked_qty
+            res_user[user][account_mode][1] +=  free_qty
 
             key_mode = (account_mode, select_user)
-            if key_mode not in medium_type:
+            if key_mode not in res_medium_type:
                 # marked, free
-                medium_type[key_mode] = [0.0, 0.0]            
-            medium_type[key_mode][0] += marked_qty
-            medium_type[key_mode][1] += free_qty
+                res_medium_type[key_mode] = [0.0, 0.0]
+                
+            res_medium_type[key_mode][0] += marked_qty
+            res_medium_type[key_mode][1] += free_qty
 
             res[key][3] += intervent.extra_invoiced_total # Extra invoiced
             my_total += intervent.extra_invoiced_total
@@ -451,8 +482,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'H. contratto',
             ]
         if not user_id: # only if not filter
-            header_line.append('Utente')
-            
+            header_line.append('Utente')            
         header_line.extend([    
             'Fabbi. pers.',
             'Ore marcate',             
@@ -461,8 +491,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'Ore fatt.',
             'Riconosciute',
             ])
-            
         excel_pool.write_xls_line(WS_name, row, header_line, f_header)
+            
+        table_start_row = row # for extra table on the right
+        table_start_col = len(header_line) + 1    
         
         # Write data:
         now = datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)
@@ -576,6 +608,64 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 ])
             excel_pool.write_xls_line(WS_name, row, data_line, f_text_right)
         
+        # ---------------------------------------------------------------------
+        #                        PARTNER TABLE (RIGHT 1)
+        # ---------------------------------------------------------------------
+        gap_mode = {
+            'contract': 0,
+            'open': 2,
+            'fixed': 4,
+            'unfixed': 6,
+            'internal': 8,
+            }
+            
+        # Layout format:    
+        excel_pool.column_width(
+            WS_name, 
+            [30, # 
+            10, 10, # contract
+            10, 10, # open
+            10, 10, # fixed
+            10, 10, # unfixed
+            10, 10, # internal
+            ],
+            table_start_col, # shift col
+            )
+        
+        # Header:    
+        excel_pool.write_xls_line(WS_name, table_start_row, [
+            'Cliente', 
+            'contract, '',
+            'open, '',
+            'fixed, '',
+            'unfixed, '',
+            'internal, '',            
+            ], f_header, 
+            table_start_col, # shift
+            )
+        table_start_row += 1
+        
+        for partner in sorted(res_partner, key=lambda x: x.name):
+            # Write partner
+            excel_pool.write_xls_line(WS_name, table_start_row, [
+                partner.name, ], f_text, table_start_col)
+                
+            for account_mode in res_partner[partner]:                
+                marked_qty, free_qty = res_partner[partner][account_mode]
+                this_col = table_start_col + 1 + gap_mode[account_mode]                
+                excel_pool.write_xls_line(WS_name, table_start_row, [
+                    marked_qty, free_qty,
+                    ], f_white_number, 
+                    this_col, # shift
+                    )
+        
+        # ---------------------------------------------------------------------
+        #                        PARTNER TABLE (RIGHT 2)
+        # ---------------------------------------------------------------------
+
+        # ---------------------------------------------------------------------
+        #                       MEDIUM TYPE TABLE (BOTTOM)
+        # ---------------------------------------------------------------------
         row += 2
         mode_header = [
             '',
@@ -591,7 +681,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         total_free = total_marked = 0    
         for key_mode in sorted(
-                medium_type, 
+                res_medium_type, 
                 key=lambda x: (
                     sort_order_account_mode(x[0]),
                     x[1].name,
@@ -599,7 +689,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             row += 1
             
             account_mode, select_user = key_mode
-            marked_qty, free_qty = medium_type[key_mode]
+            marked_qty, free_qty = res_medium_type[key_mode]
             total_free += free_qty
             total_marked += marked_qty
             
@@ -678,6 +768,11 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             'res.users', 'User'),
         'partner_id': fields.many2one(
             'res.partner', 'Partner'),
+
+        'partner_detail': fields.boolean('With partner detail', 
+            help='Add partner total detail table'),
+        'user_detail': fields.boolean('With user detail', 
+            help='Add user total detail table'),
         }
         
     _defaults = {
