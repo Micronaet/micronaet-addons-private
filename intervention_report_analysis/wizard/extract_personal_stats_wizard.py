@@ -313,7 +313,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                         0.0, # invoiced                    
                         ]
                 else: # no filter, all contract with user in distribution:
-                    for perc in for item in account.distribution_ids:
+                    for perc in account.distribution_ids:
                         all_user_id = perc.user_id.id
                         todo = account_pool.get_account_distribution(
                             all_user_id, from_date, to_date, account)
