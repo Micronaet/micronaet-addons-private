@@ -752,6 +752,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             table_start_col, # shift
             )
         
+        total_user = {
+            'contract': [0.0, 0.0],
+            'open': [0.0, 0.0],
+            'fixed': [0.0, 0.0],
+            'unfixed': [0.0, 0.0],
+            'internal': [0.0, 0.0],
+            }
         for select_user in sorted(res_user, key=lambda x: x.name):
             table_start_row += 1
             # Write partner
@@ -769,6 +776,26 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     ], f_white_number, 
                     this_col, # shift
                     )
+                total_user[account_mode][0] += maked_qty
+                total_user[account_mode][1] += free_qty
+        
+        # Write total:        
+        table_start_row += 1
+        excel_pool.write_xls_line(WS_name, table_start_row, [
+            'Totale: ',
+            total_user['contract'][0],
+            total_user['contract'][0],
+            total_user['open'][0],
+            total_user['open'][0],
+            total_user['fixed'][0],
+            total_user['fixed'][0],
+            total_user['unfixed'][0],
+            total_user['unfixed'][0],
+            total_user['internal'][0],
+            total_user['internal'][0],
+            ], f_text, table_start_col)
+        
+                
 
         # ---------------------------------------------------------------------
         #                       MEDIUM TYPE TABLE (BOTTOM)
