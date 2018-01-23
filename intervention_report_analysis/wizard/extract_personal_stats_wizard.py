@@ -769,10 +769,10 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         'partner_id': fields.many2one(
             'res.partner', 'Partner'),
 
-        'partner_detail': fields.boolean('With partner detail', 
-            help='Add partner total detail table'),
-        'user_detail': fields.boolean('With user detail', 
-            help='Add user total detail table'),
+        #'partner_detail': fields.boolean('With partner detail', 
+        #    help='Add partner total detail table'),
+        #'user_detail': fields.boolean('With user detail', 
+        #    help='Add user total detail table'),
         }
         
     _defaults = {
