@@ -364,9 +364,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             # User table
             # -----------------------------------------------------------------
             if select_user not in res_user:
-                res_user[select_user] = {}
-            if account_mode not in res_user[user]:
-                res_user[user][account_mode] = [0.0, 0.0] # maked, free
+                res_user[select_user] = {
+                    'contract': [0.0, 0.0],
+                    'open': [0.0, 0.0],
+                    'fixed': [0.0, 0.0],
+                    'unfixed': [0.0, 0.0],
+                    'internal': [0.0, 0.0],
+                    }
                 
             key = (account, select_user, partner)
             if key not in res:
@@ -615,6 +619,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         #                        PARTNER TABLE (RIGHT 1)
         # ---------------------------------------------------------------------
+        # Common setup:
         gap_mode = {
             'contract': 0,
             'open': 2,
@@ -636,7 +641,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             table_start_col, # shift col
             )
         
+        # ---------------------------------------------------------------------
         # Loop for merge cell:    
+        # ---------------------------------------------------------------------
         for gap, gap_format in (
                 (0, f_blue_text), 
                 (2, f_green_text), 
@@ -702,6 +709,66 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         #                        PARTNER TABLE (RIGHT 2)
         # ---------------------------------------------------------------------
+        # Loop for merge cell:    
+        for gap, gap_format in (
+                (0, f_blue_text), 
+                (2, f_green_text), 
+                (4, f_orange_text), 
+                (6, f_yellow_text),
+                (8, f_text), 
+                ):
+            excel_pool.merge_cell(WS_name, [
+                table_start_row, table_start_col + 1 + gap,
+                table_start_row, table_start_col + 2 + gap,
+                ], gap_format)   
+
+        # Partner merge 2 row 
+        excel_pool.merge_cell(WS_name, [
+            table_start_row, table_start_col,
+            table_start_row + 1, table_start_col,
+            ], gap_format)   
+
+        # Header (A):
+        excel_pool.write_xls_line(WS_name, table_start_row, [
+            'Utente', 
+            ('contract', f_blue_text), ('', f_blue_text),
+            ('open', f_green_text), ('', f_green_text),
+            ('fixed', f_orange_text), ('', f_orange_text),
+            ('unfixed', f_yellow_text), ('', f_yellow_text),
+            ('internal', f_text), ('', f_text),            
+            ], f_header, 
+            table_start_col, # shift
+            )
+        table_start_row += 1
+        # Header (B):
+        excel_pool.write_xls_line(WS_name, table_start_row, [
+            '', 
+            ('SI', f_blue_text), ('NO', f_blue_text),
+            ('SI', f_green_text), ('NO', f_green_text),
+            ('SI', f_orange_text), ('NO', f_orange_text),
+            ('SI', f_yellow_text), ('NO', f_yellow_text),
+            ('SI', f_text), ('NO', f_text),            
+            ], f_header, 
+            table_start_col, # shift
+            )
+        
+        for select_user in sorted(res_user, key=lambda x: x.name):
+            table_start_row += 1
+            # Write partner
+            excel_pool.write_xls_line(WS_name, table_start_row, [
+                select_user.name, ], f_text, table_start_col)
+                
+            for account_mode in res_user[partner]:                
+                marked_qty, free_qty = res_user[partner][account_mode]
+                this_col = table_start_col + 1 + gap_mode[account_mode]                
+                excel_pool.write_xls_line(WS_name, table_start_row, [
+                    excel_pool.format_hour(marked_qty, float_time, 
+                        zero_value=''), # remove 0:00
+                    excel_pool.format_hour(free_qty, float_time, 
+                        zero_value=''), # remove 0:00
+                    ], f_white_number, 
+                    this_col, # shift
+                    )
 
         # ---------------------------------------------------------------------
         #                       MEDIUM TYPE TABLE (BOTTOM)
