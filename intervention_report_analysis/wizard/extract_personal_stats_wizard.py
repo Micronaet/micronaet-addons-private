@@ -301,6 +301,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 ], context=context)         
             for account in account_pool.browse(
                     cr, uid, account_ids, context=context):
+                partner = account.partner_id    
                 if user_id: # filter (only contract with me in distribution
                     # for user filter check if user is in distribution:
                     todo = account_pool.get_account_distribution(
@@ -309,8 +310,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                             item.user_id.id for item in \
                                 account.distribution_ids]:
                         continue
-                    # account and user browse obj    
-                    res[(account, user)] = [
+                    # account, user, partner browse obj    
+                    res[(account, user, partner)] = [
                         todo,
                         0.0, # done pay
                         0.0, # done gratis
@@ -321,7 +322,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                         select_user = perc.user_id
                         todo = account_pool.get_account_distribution(
                             select_user.id, from_date, to_date, account)
-                        res[(account, select_user)] = [
+                        res[(account, select_user, partner)] = [
                             todo,
                             0.0, # done pay
                             0.0, # done gratis
@@ -339,7 +340,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         for intervent in ts_pool.browse(cr, uid, ts_ids, context=context):
             account = intervent.account_id
             select_user = intervent.user_id
-            key = (account, select_user)
+            partner = intervent.intervent_partner_id
+            key = (account, select_user, partner)
             if key not in res:
                 todo = account_pool.get_account_distribution(
                     select_user.id, from_date, to_date, account)
@@ -467,12 +469,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         total_premium = 0.0
         for key in sorted(
                 res, key=lambda x: (
-                    sort_order_account_mode(x[0].account_mode),
-                    x[0].partner_id.name,
-                    x[0].name,
+                    sort_order_account_mode(x[0].account_mode), # Account mode
+                    x[2].name, # Partner
+                    x[0].name, # Account
+                    x[1].name, # User name
                     )):
             row += 1
-            account, select_user = key
+            account, select_user, partner = key
             data = res[key]
             
             # Intervent:
@@ -547,7 +550,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 h_format = f_green_number            
             
             data_line = [
-                (account.partner_id.name or _('GENERICO'), f_text),
+                (partner.name or _('GENERICO'), f_text),
                 (account.name, f_text), 
                 (account_mode, mode_format),
                 ('[%s - %s]' % (
