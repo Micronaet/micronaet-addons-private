@@ -269,14 +269,18 @@ class hr_analytic_timesheet_extra(osv.osv):
                 for item in intervent_pool.browse(
                         cr, uid, intervent_ids, context=context):
                     maked_qty = item.intervent_total
+                    
                     # 1. Total:    
                     total += maked_qty
+                    
                     # 2. User total:
                     if item.user_id.id == uid:      
                         total_user += maked_qty
+                        
                     # 3. Month total:    
                     if item.date_start >= this_month:
                         total_month += maked_qty
+                        
                         # 4. Month user total:    
                         if item.user_id.id == uid:
                             total_user_month += maked_qty
