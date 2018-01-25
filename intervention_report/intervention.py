@@ -19,7 +19,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from osv import osv, fields
+import os
+import sys
+import logging
+import openerp
+import openerp.netsvc as netsvc
+import openerp.addons.decimal_precision as dp
+from openerp.osv import fields, osv, expression
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+from openerp import SUPERUSER_ID#, api
+from openerp import tools
+from openerp.tools.translate import _
+from openerp.tools.float_utils import float_round as round
+from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT, 
+    DEFAULT_SERVER_DATETIME_FORMAT, 
+    DATETIME_FORMATS_MAP, 
+    float_compare)
+
+
+_logger = logging.getLogger(__name__)
+
 
 
 class account_analytic_account(osv.osv):
@@ -222,15 +242,21 @@ class hr_analytic_timesheet_extra(osv.osv):
         ''' Test if change account, then write, if present, to_invoice field
         '''
         res = {'value': {'partner_id': partner_id}} # default
+        
+        # Pool used:
         account_pool = self.pool.get('account.analytic.account')
         intervent_pool = self.pool.get('hr.analytic.timesheet')
+
+        this_month = '%s-01 00:00:00' % \
+            datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
         if account_id:
             account_proxy = account_pool.browse(
                 cr, uid, account_id, context=context)
            
             # change only if present (else default pay intervent)    
             if account_proxy.default_to_invoice: 
-                res['value']['to_invoice'] = account_proxy.default_to_invoice.id
+                res['value']['to_invoice'] = \
+                    account_proxy.default_to_invoice.id
                
                 # -------------------------------------------------------------
                 # Status of contract:
@@ -240,21 +266,45 @@ class hr_analytic_timesheet_extra(osv.osv):
                     ('state', '!=', 'cancel'),
                     ], context=context)
                 total = 0.0    
-                total_user = 0.0
+                total_month = 0.0
+                total_user = 0.0 # this month
+                total_user_month = 0.0 
                 for item in intervent_pool.browse(
                         cr, uid, intervent_ids, context=context):
+                    # 1. Total:    
                     total += item.intervent_total
-                    if item.user_id.id == uid:
+                    # 2. User total:
+                    if item.user_id.id == uid:                 
                         total_user += item.intervent_total
+                    # 3. Month total:    
+                    if item.date_start >= this_month:
+                        total_month += item.intervent_total
+                    # 4. Month user total:    
+                    if item.date_start >= this_month and \
+                            item.user_id.id == uid:
+                        total_user_month += item.intervent_total
                     
                 try:    
-                    if account_proxy.total_hours:
-                        res['value']['account_hour_status'] = (
-                            '%6.2f / %6.2f Parz. (%6.2f personali)' % (
-                                total,
-                                account_proxy.total_hours,
-                                total_user,
-                                )) 
+                    if item.account_id.distribution_ids:
+                        if account_proxy.total_hours:
+                            res['value']['account_hour_status'] = (
+                                'Tot.: %6.2f (pers. %6.2f) / %6.2f - '
+                                'Mens.: %6.2f (pers. %6.2f)' % (# / %6.2f
+                                    total, # done total
+                                    account_proxy.total_hours, # contract total
+                                    total_user,
+                                    total_month,
+                                    total_user_month,
+                                    # TODO distribution for me
+                                    )) 
+                    else:
+                        if account_proxy.total_hours:
+                            res['value']['account_hour_status'] = (
+                                'Tot.: %6.2f (pers. %6.2f) / %6.2f' % (
+                                    total, # done total
+                                    total_user, # done personal
+                                    account_proxy.total_hours, # contract total
+                                    )) 
                     else:
                         res['value']['account_hour_status'] = False
                         
