@@ -232,22 +232,32 @@ class hr_analytic_timesheet_extra(osv.osv):
             if account_proxy.default_to_invoice: 
                 res['value']['to_invoice'] = account_proxy.default_to_invoice.id
                
-                # -------------------
+                # -------------------------------------------------------------
                 # Status of contract:
-                # -------------------
+                # -------------------------------------------------------------
                 intervent_ids = intervent_pool.search(cr, uid, [
                     ('account_id', '=', account_id),
                     ('state', '!=', 'cancel'),
                     ], context=context)
-                total = sum(
-                    [item.intervent_total for item in intervent_pool.browse(
-                        cr, uid, intervent_ids, context=context)])    
+                total = 0.0    
+                total_user = 0.0
+                for item in intervent_pool.browse(
+                        cr, uid, intervent_ids, context=context):
+                    total += item.intervent_total
+                    if item.user_id.id == uid:
+                        total_user += item.intervent_total
                     
                 try:    
-                    res['value']['account_hour_status'] = ("%6.2f / %6.2f" % (
-                        total,
-                        account_proxy.total_hours,
-                        )) if account_proxy.total_hours else False
+                    if account_proxy.total_hours:
+                        res['value']['account_hour_status'] = (
+                            '%6.2f / %6.2f Parz. (%6.2f personali)' % (
+                                total,
+                                account_proxy.total_hours,
+                                total_user,
+                                )) 
+                    else:
+                        res['value']['account_hour_status'] = False
+                        
                 except:        
                     res['value']['account_hour_status'] = 'Error' 
                
