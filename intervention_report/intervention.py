@@ -288,18 +288,19 @@ class hr_analytic_timesheet_extra(osv.osv):
                     if account_proxy.total_hours:
                         if item.account_id.distribution_ids:
                             res['value']['account_hour_status'] = (
-                                'Tot.: %6.2f (pers. %6.2f) / %6.2f - '
-                                'Mens.: %6.2f (pers. %6.2f)' % (# / %6.2f
+                                'Contratto: %6.2f (pers. %6.2f) / %6.2f - '
+                                'Mensile: %6.2f (pers. %6.2f)' % (# / %6.2f
                                     total, # done total
-                                    account_proxy.total_hours, # contract total
                                     total_user,
+                                    account_proxy.total_hours, # contract total
+
                                     total_month,
                                     total_user_month,
                                     # TODO distribution for me
                                     ))
                         else:
                             res['value']['account_hour_status'] = (
-                                'Tot.: %6.2f (pers. %6.2f) / %6.2f' % (
+                                'Contratto: %6.2f (pers. %6.2f) / %6.2f' % (
                                     total, # done total
                                     total_user, # done personal
                                     account_proxy.total_hours, # contract total
