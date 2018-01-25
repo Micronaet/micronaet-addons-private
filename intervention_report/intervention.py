@@ -265,24 +265,21 @@ class hr_analytic_timesheet_extra(osv.osv):
                     ('account_id', '=', account_id),
                     ('state', '!=', 'cancel'),
                     ], context=context)
-                total = 0.0    
-                total_month = 0.0
-                total_user = 0.0 # this month
-                total_user_month = 0.0 
+                total = total_user = total_month = total_user_month = 0.0 
                 for item in intervent_pool.browse(
                         cr, uid, intervent_ids, context=context):
+                    maked_qty = item.intervent_total
                     # 1. Total:    
-                    total += item.intervent_total
+                    total += maked_qty
                     # 2. User total:
-                    if item.user_id.id == uid:                 
-                        total_user += item.intervent_total
+                    if item.user_id.id == uid:      
+                        total_user += maked_qty
                     # 3. Month total:    
                     if item.date_start >= this_month:
-                        total_month += item.intervent_total
-                    # 4. Month user total:    
-                    if item.date_start >= this_month and \
-                            item.user_id.id == uid:
-                        total_user_month += item.intervent_total
+                        total_month += maked_qty
+                        # 4. Month user total:    
+                        if item.user_id.id == uid:
+                            total_user_month += maked_qty
                     
                 try:    
                     if account_proxy.total_hours:
@@ -294,8 +291,8 @@ class hr_analytic_timesheet_extra(osv.osv):
                                     total, # done total
                                     account_proxy.total_hours, # contract total
 
-                                    total_month,
                                     total_user_month,
+                                    total_month,
                                     # TODO distribution for me
                                     ))
                         else:
