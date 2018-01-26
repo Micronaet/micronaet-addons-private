@@ -387,7 +387,7 @@ class hr_analytic_timesheet_extra(osv.osv):
                                     ))
                         else:
                             res['value']['account_hour_status'] = (
-                                ''' <b>Stato commessa:</b>
+                                ''' <b>Stato commessa senza distribuzione:</b>
                                     <br/> 
                                     <b>Contratto:</b>
                                         <font color="%s">
