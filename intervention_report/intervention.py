@@ -317,6 +317,7 @@ class hr_analytic_timesheet_extra(osv.osv):
                     if account_proxy.total_hours:
                         if item.account_id.distribution_ids:
                             percentual = 0.0
+                            import pdb; pdb.set_trace()
                             for dist in item.account_id.distribution_ids:
                                 if uid == dist.user_id.id:
                                     percentual = dist.percentual / 100.0
