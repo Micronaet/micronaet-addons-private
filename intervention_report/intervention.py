@@ -339,19 +339,23 @@ class hr_analytic_timesheet_extra(osv.osv):
                             res['value']['account_hour_status'] = (
                                 '''<b>Stato commessa</b><br/> 
                                     <b>Contratto:</b> 
-                                        <em class="color:%s">
-                                            (pers. %6.2f)
-                                        </em> %6.2f / %6.2f <br/>
+                                        %6.2f / %6.2f 
+                                        <em><font color="%s">
+                                            (personali %6.2f)
+                                        </font></em> 
+                                        <br/>
                                     <b>Mensile:</b>
-                                        (pers. %6.2f) %6.2f / %6.2f''' % (
+                                         %6.2f / %6.2f
+                                         <em>(personali %6.2f)</em>
+                                        ''' % (
                                     user_font,
-                                    total_user,
                                     total, # done total
                                     account_proxy.total_hours, # contract total
+                                    total_user,
 
-                                    total_user_month,
                                     total_month,
                                     distribution_hours,
+                                    total_user_month,
                                     ))
                         else:
                             res['value']['account_hour_status'] = (
