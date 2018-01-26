@@ -342,7 +342,8 @@ class hr_analytic_timesheet_extra(osv.osv):
                                 distribution_hours = 0
                                 
                             res['value']['account_hour_status'] = (
-                                '''<b>Stato commessa:</b><br/> 
+                                ''' <b>Stato commessa con distribuzione:</b>
+                                    <br/> 
                                     <b>Contratto totale:</b> 
                                         <font color="%s">
                                             %6.2f / %6.2f 
@@ -386,12 +387,24 @@ class hr_analytic_timesheet_extra(osv.osv):
                                     ))
                         else:
                             res['value']['account_hour_status'] = (
-                                '''<b>Stato commessa</b><br/> 
+                                ''' <b>Stato commessa:</b>
+                                    <br/> 
                                     <b>Contratto:</b>
-                                        (pers. %6.2f) %6.2f / %6.2f''' % (
-                                    total_user, # done personal
+                                        <font color="%s">
+                                            %6.2f / %6.2f
+                                        </font>
+                                        <font color="%s">
+                                            (personale %6.2f) 
+                                        </font>
+                                ''' % (
+                                    font_red if \
+                                        total > account_proxy.total_hours \
+                                            else font_black,
                                     total, # done total
                                     account_proxy.total_hours, # contract total
+
+                                    user_font,
+                                    total_user, # done personal
                                     ))
                     else:
                         res['value']['account_hour_status'] = False
