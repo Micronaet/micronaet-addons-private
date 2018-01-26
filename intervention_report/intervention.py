@@ -333,9 +333,11 @@ class hr_analytic_timesheet_extra(osv.osv):
                             if percentual:
                                 period_total_days = \
                                     item.account_id.period_total_days
-                                distribution_hours = percentual * \
+                                distribution_hours_month = \
                                     account_proxy.total_hours *\
                                         day_month / period_total_days
+                                distribution_hours = percentual * \
+                                    distribution_hours_month
                             else:   
                                 distribution_hours = 0
                                 
@@ -349,14 +351,19 @@ class hr_analytic_timesheet_extra(osv.osv):
                                             (personali %6.2f)
                                         </font></em> 
                                         <br/>
-                                    <b>Contratto mese corrente:</b>
+
+                                    <b>Stato contratto mese corrente:</b> 
+                                        <em><font color="%s">
+                                            %6.2f / %6.2f 
+                                        </font></em> 
+                                        <br/>
+
+                                    <b>Personale mese corrente:</b>
                                         <em><font color="%s">
                                              %6.2f / %6.2f
                                         </font></em> 
-                                        <em><font color="%s">
-                                            (personali %6.2f)
-                                        </font></em> 
                                         ''' % (
+                                    # All total and personal
                                     font_red if \
                                         total > account_proxy.total_hours else\
                                             font_black,
@@ -365,13 +372,19 @@ class hr_analytic_timesheet_extra(osv.osv):
                                     user_font,
                                     total_user,
 
+                                    # All month
                                     font_red if \
-                                        total_month > distribution_hours else\
-                                            font_black,
+                                        total_month > distribution_hours_month\
+                                            else font_black,
                                     total_month,
-                                    distribution_hours,
-                                    user_font,
+                                    distribution_hours_month,
+                                    
+                                    # User month
+                                    font_red if \
+                                        total_user_month > distribution_hours \
+                                            else font_black,
                                     total_user_month,
+                                    distribution_hours,
                                     ))
                         else:
                             res['value']['account_hour_status'] = (
