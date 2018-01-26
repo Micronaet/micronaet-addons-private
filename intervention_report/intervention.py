@@ -269,7 +269,6 @@ class hr_analytic_timesheet_extra(osv.osv):
             datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
         
         # Days in this month:    
-        import pdb; pdb.set_trace()
         month_01 = \
             '%s01' % datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
         month_3x = \
@@ -319,7 +318,7 @@ class hr_analytic_timesheet_extra(osv.osv):
                         if item.account_id.distribution_ids:
                             percentual = 0.0
                             for dist in item.account_id.distribution_ids:
-                                if uid in dist.user_id:
+                                if uid in dist.user_id.id:
                                     factor = dist.percentual
                                     break
                             if percentual:
