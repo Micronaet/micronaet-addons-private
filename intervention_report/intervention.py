@@ -276,9 +276,6 @@ class hr_analytic_timesheet_extra(osv.osv):
                 DEFAULT_SERVER_DATE_FORMAT)[:8]
         day_month = (month_3x - month_01).days       
             
-        account.to_date.from_date.strptime(DEFAULT_SERVER_DATE_FORMAT)\
-                - account.from_date.strptime(DEFAULT_SERVER_DATE_FORMAT)
-                ).days
         if account_id:
             account_proxy = account_pool.browse(
                 cr, uid, account_id, context=context)
