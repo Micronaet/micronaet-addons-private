@@ -69,8 +69,8 @@ class account_analytic_account(osv.osv):
     _columns = {
         'default_to_invoice': fields.many2one(
             'hr_timesheet_invoice.factor', 'Default invoice', 
-            help = "Defaulf invoice type if there's one active for customer. '
-                'All intervent are, for default, setted to this value",
+            help = 'Defaulf invoice type if there\'s one active for customer. '
+                'All intervent are, for default, setted to this value',
             ),
         'total_hours': fields.float(
             'Total hour', digits=(16, 2), 
