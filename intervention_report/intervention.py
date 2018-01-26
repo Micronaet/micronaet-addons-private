@@ -348,9 +348,9 @@ class hr_analytic_timesheet_extra(osv.osv):
                                          %6.2f / %6.2f
                                          <em>(personali %6.2f)</em>
                                         ''' % (
-                                    user_font,
                                     total, # done total
                                     account_proxy.total_hours, # contract total
+                                    user_font,
                                     total_user,
 
                                     total_month,
