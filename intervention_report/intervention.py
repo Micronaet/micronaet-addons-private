@@ -335,15 +335,16 @@ class hr_analytic_timesheet_extra(osv.osv):
                                         day_month / period_total_days
                             else:   
                                 distribution_hours = 0
-                            user_font = 
+                            user_font = 'blue'
                             res['value']['account_hour_status'] = (
                                 '''<b>Stato commessa</b><br/> 
                                     <b>Contratto:</b> 
-                                        <div class="{color:blue}">
+                                        <div class="{color:%s}">
                                             (pers. %6.2f)
                                         </div> %6.2f / %6.2f <br/>
                                     <b>Mensile:</b>
                                         (pers. %6.2f) %6.2f / %6.2f''' % (
+                                    user_font,
                                     total_user,
                                     total, # done total
                                     account_proxy.total_hours, # contract total
