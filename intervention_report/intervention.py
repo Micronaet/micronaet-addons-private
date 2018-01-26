@@ -266,6 +266,9 @@ class hr_analytic_timesheet_extra(osv.osv):
         ''' Test if change account, then write, if present, to_invoice field
         '''
         res = {'value': {'partner_id': partner_id}} # default
+        user_font = 'blue'
+        font_black = 'black'
+        font_red = 'red'
         
         # Pool used:
         account_pool = self.pool.get('account.analytic.account')
@@ -335,26 +338,39 @@ class hr_analytic_timesheet_extra(osv.osv):
                                         day_month / period_total_days
                             else:   
                                 distribution_hours = 0
-                            user_font = 'blue'
+                                
                             res['value']['account_hour_status'] = (
-                                '''<b>Stato commessa</b><br/> 
-                                    <b>Contratto:</b> 
-                                        %6.2f / %6.2f 
+                                '''<b>Stato commessa:</b><br/> 
+                                    <b>Contratto totale:</b> 
+                                        <em><font color="%s">
+                                            %6.2f / %6.2f 
+                                        </font></em> 
                                         <em><font color="%s">
                                             (personali %6.2f)
                                         </font></em> 
                                         <br/>
-                                    <b>Mensile:</b>
-                                         %6.2f / %6.2f
-                                         <em>(personali %6.2f)</em>
+                                    <b>Contratto mese corrente:</b>
+                                        <em><font color="%s">
+                                             %6.2f / %6.2f
+                                        </font></em> 
+                                        <em><font color="%s">
+                                            (personali %6.2f)
+                                        </font></em> 
                                         ''' % (
+                                    font_red if \
+                                        total > account_proxy.total_hours else\
+                                            font_black,
                                     total, # done total
                                     account_proxy.total_hours, # contract total
                                     user_font,
                                     total_user,
 
+                                    font_red if \
+                                        total_month > distribution_hours else\
+                                            font_black,
                                     total_month,
                                     distribution_hours,
+                                    user_font,
                                     total_user_month,
                                     ))
                         else:
