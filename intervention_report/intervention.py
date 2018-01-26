@@ -54,9 +54,14 @@ class account_analytic_account(osv.osv):
         for account in self.browse(cr, uid, ids, context=context):
             if account.from_date and account.to_date:
                 res[account.id] = 1 + (
-                account.to_date.from_date.strptime(DEFAULT_SERVER_DATE_FORMAT)\
-                - account.from_date.strptime(DEFAULT_SERVER_DATE_FORMAT)
-                ).days
+                datetime.strptime(
+                    account.to_date, 
+                    DEFAULT_SERVER_DATE_FORMAT,
+                    ) - \
+                datetime.strptime(
+                    account.from_date, 
+                    DEFAULT_SERVER_DATE_FORMAT,
+                    )).days
             else:
                 res[account.id] = False
         return res
@@ -317,7 +322,6 @@ class hr_analytic_timesheet_extra(osv.osv):
                     if account_proxy.total_hours:
                         if item.account_id.distribution_ids:
                             percentual = 0.0
-                            import pdb; pdb.set_trace()
                             for dist in item.account_id.distribution_ids:
                                 if uid == dist.user_id.id:
                                     percentual = dist.percentual / 100.0
