@@ -315,12 +315,11 @@ class hr_analytic_timesheet_extra(osv.osv):
                     
                 try:
                     if account_proxy.total_hours:
-                        import pdb; pdb.set_trace()
                         if item.account_id.distribution_ids:
                             percentual = 0.0
                             for dist in item.account_id.distribution_ids:
-                                if uid in dist.user_id.id:
-                                    factor = dist.percentual
+                                if uid == dist.user_id.id:
+                                    percentual = dist.percentual
                                     break
                             if percentual:
                                 period_total_days = \
