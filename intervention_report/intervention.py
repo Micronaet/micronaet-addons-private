@@ -336,9 +336,12 @@ class hr_analytic_timesheet_extra(osv.osv):
                             else:   
                                 distribution_hours = 0
                             
-                            res['value']['account_hour_status'] = (
-                                'Contratto: (pers. %6.2f) %6.2f / %6.2f - '
-                                'Mensile:  (pers. %6.2f) %6.2f / %6.2f' % (
+                            res['value']['account_hour_status'] = ('''
+                                '<b>Contratto:</b> 
+                                    (pers. %6.2f) %6.2f / %6.2f <br/>
+                                '<b>Mensile:</b>
+                                    (pers. %6.2f) %6.2f / %6.2f
+                                ''' % (
                                     total_user,
                                     total, # done total
                                     account_proxy.total_hours, # contract total
@@ -348,8 +351,10 @@ class hr_analytic_timesheet_extra(osv.osv):
                                     distribution_hours,
                                     ))
                         else:
-                            res['value']['account_hour_status'] = (
-                                'Contratto: (pers. %6.2f) %6.2f / %6.2f' % (
+                            res['value']['account_hour_status'] = ('''
+                                <b>Contratto:</b>
+                                    (pers. %6.2f) %6.2f / %6.2f
+                                ''' % (
                                     total_user, # done personal
                                     total, # done total
                                     account_proxy.total_hours, # contract total
@@ -358,7 +363,7 @@ class hr_analytic_timesheet_extra(osv.osv):
                         res['value']['account_hour_status'] = False
                         
                 except:        
-                    res['value']['account_hour_status'] = 'Error' 
+                    res['value']['account_hour_status'] = '<b>Error</b>' 
                
         else: # return default value if empty
             res['value']['to_invoice'] = self.get_default_invoice_value(
@@ -446,7 +451,7 @@ class hr_analytic_timesheet_extra(osv.osv):
             ),            
         
         # Function fields (populated only in view not in DB:    
-        'account_hour_status': fields.char('Account status', size=40),
+        'account_hour_status': fields.text('Account status', size=40),
             
         # Google maps trip manage:
         'google_from':fields.selection([
