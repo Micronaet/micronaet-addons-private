@@ -269,6 +269,7 @@ class hr_analytic_timesheet_extra(osv.osv):
             datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
         
         # Days in this month:    
+        import pdb; pdb.set_trace()
         month_01 = \
             '%s01' % datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
         month_3x = \
