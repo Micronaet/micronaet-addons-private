@@ -47,6 +47,20 @@ class account_analytic_account(osv.osv):
     """
     _inherit = 'account.analytic.account'
     
+    def _get_total_day_period(self, cr, uid, ids, fields, args, context=None):
+        ''' Fields function for calculate 
+        '''
+        res = {}
+        for account in self.browse(cr, uid, ids, context=context):
+            if account.from_date and account.to_date:
+                res[account.id] = 1 + (
+                account.to_date.from_date.strptime(DEFAULT_SERVER_DATE_FORMAT)\
+                - account.from_date.strptime(DEFAULT_SERVER_DATE_FORMAT)
+                ).days
+            else:
+                res[account.id] = False
+        return res
+                
     _columns = {
         'default_to_invoice': fields.many2one(
             'hr_timesheet_invoice.factor', 'Default invoice', 
@@ -69,6 +83,10 @@ class account_analytic_account(osv.osv):
             'Account approved', 
             help='Used for contract and fixed order'),
         'account_approved_ref': fields.char('Approved ref.', size=80),    
+        'period_total_days': fields.function(
+            _get_total_day_period, method=True, 
+            type='integer', string='Total days', store=False), 
+                        
                 
         #'request_by':fields.char('Request by', size=100, 
         #    help='List of people that request intervent'
@@ -249,6 +267,18 @@ class hr_analytic_timesheet_extra(osv.osv):
 
         this_month = '%s-01 00:00:00' % \
             datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
+        
+        # Days in this month:    
+        month_01 = \
+            '%s01' % datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
+        month_3x = \
+            '%s01' % (datetime.now() + relativedelta(months=1)).strftime(
+                DEFAULT_SERVER_DATE_FORMAT)[:8]
+        day_month = (month_3x - month_01).days       
+            
+        account.to_date.from_date.strptime(DEFAULT_SERVER_DATE_FORMAT)\
+                - account.from_date.strptime(DEFAULT_SERVER_DATE_FORMAT)
+                ).days
         if account_id:
             account_proxy = account_pool.browse(
                 cr, uid, account_id, context=context)
@@ -265,7 +295,7 @@ class hr_analytic_timesheet_extra(osv.osv):
                     ('account_id', '=', account_id),
                     ('state', '!=', 'cancel'),
                     ], context=context)
-                total = total_user = total_month = total_user_month = 0.0 
+                total = total_user = total_month = total_user_month = 0.0
                 for item in intervent_pool.browse(
                         cr, uid, intervent_ids, context=context):
                     maked_qty = item.intervent_total
@@ -285,19 +315,33 @@ class hr_analytic_timesheet_extra(osv.osv):
                         if item.user_id.id == uid:
                             total_user_month += maked_qty
                     
-                try:    
+                try:
                     if account_proxy.total_hours:
                         if item.account_id.distribution_ids:
+                            percentual = 0.0
+                            for dist in item.account_id.distribution_ids:
+                                if uid in dist.user_id:
+                                    factor = dist.percentual
+                                    break
+                            if percentual:
+                                period_total_days = \
+                                    item.account_id.period_total_days
+                                distribution_hours = percentual * \
+                                    account_proxy.total_hours *\
+                                        day_month / period_total_days
+                            else:   
+                                distribution_hours = 0
+                            
                             res['value']['account_hour_status'] = (
                                 'Contratto: (pers. %6.2f) %6.2f / %6.2f - '
-                                'Mensile:  (pers. %6.2f) %6.2f' % (# / %6.2f
+                                'Mensile:  (pers. %6.2f) %6.2f / %6.2f' % (
                                     total_user,
                                     total, # done total
                                     account_proxy.total_hours, # contract total
 
                                     total_user_month,
                                     total_month,
-                                    # TODO distribution for me
+                                    distribution_hours,
                                     ))
                         else:
                             res['value']['account_hour_status'] = (
