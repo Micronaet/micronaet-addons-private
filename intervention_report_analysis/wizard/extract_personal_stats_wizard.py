@@ -445,6 +445,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         f_text = excel_pool.get_format('text') 
         f_red_text = excel_pool.get_format('bg_red') 
         f_yellow_text = excel_pool.get_format('bg_yellow') 
+        f_white_text = excel_pool.get_format('bg_white') 
         f_orange_text = excel_pool.get_format('bg_orange')         
         f_green_text = excel_pool.get_format('bg_green') 
         f_blue_text = excel_pool.get_format('bg_blue') 
@@ -567,7 +568,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             elif account_from and account_from >= now:
                 date_format = f_yellow_text                
             else:
-                date_format = f_text                
+                date_format = f_white_text
             
             # Account H.:
             if not account_h_todo:
@@ -649,7 +650,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (2, f_green_text), 
                 (4, f_orange_text), 
                 (6, f_yellow_text),
-                (8, f_text), 
+                (8, f_white_text), 
                 ):
             excel_pool.merge_cell(WS_name, [
                 table_start_row, table_start_col + 1 + gap,
@@ -669,7 +670,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ('open', f_green_text), ('', f_green_text),
             ('fixed', f_orange_text), ('', f_orange_text),
             ('unfixed', f_yellow_text), ('', f_yellow_text),
-            ('internal', f_text), ('', f_text),            
+            ('internal', f_white_text), ('', f_white_text),
             ], f_header, 
             table_start_col, # shift
             )
@@ -681,7 +682,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ('SI', f_green_text), ('NO', f_green_text),
             ('SI', f_orange_text), ('NO', f_orange_text),
             ('SI', f_yellow_text), ('NO', f_yellow_text),
-            ('SI', f_text), ('NO', f_text),            
+            ('SI', f_white_text), ('NO', f_white_text),
             ], f_header, 
             table_start_col, # shift
             )
@@ -750,7 +751,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 (2, f_green_text), 
                 (4, f_orange_text), 
                 (6, f_yellow_text),
-                (8, f_text), 
+                (8, f_white_text), 
                 ):
             excel_pool.merge_cell(WS_name, [
                 table_start_row, table_start_col + 1 + gap,
@@ -770,7 +771,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ('open', f_green_text), ('', f_green_text),
             ('fixed', f_orange_text), ('', f_orange_text),
             ('unfixed', f_yellow_text), ('', f_yellow_text),
-            ('internal', f_text), ('', f_text),            
+            ('internal', f_white_text), ('', f_white_text),
             ], f_header, 
             table_start_col, # shift
             )
@@ -782,7 +783,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ('SI', f_green_text), ('NO', f_green_text),
             ('SI', f_orange_text), ('NO', f_orange_text),
             ('SI', f_yellow_text), ('NO', f_yellow_text),
-            ('SI', f_text), ('NO', f_text),            
+            ('SI', f_white_text), ('NO', f_white_text),            
             ], f_header, 
             table_start_col, # shift
             )
@@ -884,7 +885,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 text_format = f_green_text
                 number_format = f_green_number
             else:#if account_mode == 'internal':
-                text_format = f_text # not red
+                text_format = f_white_text # not red
                 number_format = f_white_number
 
             mode_data = [
