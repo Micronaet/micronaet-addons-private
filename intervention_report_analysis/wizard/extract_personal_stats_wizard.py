@@ -931,21 +931,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             ])
 
         # Get base parameter for PHP call:
-        config_pool = self.pool.get('ir.config_parameter')
-        key = 'web.base.url.excel'
-        config_ids = config_pool.search(cr, uid, [
-            ('key', '=', key)], context=context)
-        if not config_ids:
-            raise osv.except_osv(
-                _('Errore'), 
-                _('Avvisare amministratore: configurare parametro: %s' % key),
-                )
-        config_proxy = config_pool.browse(
-            cr, uid, config_ids, context=context)[0]
-        base_address = config_proxy.value
-        
         return excel_pool.return_attachment(
-            cr, uid, 'Statistiche', version='7.0', php=base_address,
+            cr, uid, 'Statistiche', version='7.0', php=True,
             context=context)
 
     _columns = {
