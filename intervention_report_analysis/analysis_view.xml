@@ -12,23 +12,31 @@
                     <field name="from_date" />                    
                     <field name="to_date" />
                     
-                    <field name="h_contract_yes" sum="total" />
-                    <field name="h_contract_no" sum="total" />
-
                     <field name="h_open_yes" sum="total" />
-                    <field name="h_open_no" sum="total" />
-
+                    <field name="h_contract_yes" sum="total" />
                     <field name="h_fixed_yes" sum="total" />
-                    <field name="h_fixed_no" sum="total" />
-
                     <field name="h_unfixed_yes" sum="total" />
-                    <field name="h_unfixed_no" sum="total" />
-
                     <field name="h_internal_yes" sum="total" />
+                    
+                    <field name="h_open_no" sum="total" />
+                    <field name="h_contract_no" sum="total" />
+                    <field name="h_fixed_no" sum="total" />
+                    <field name="h_unfixed_no" sum="total" />
                     <field name="h_internal_no" sum="total" />
                 </tree>
             </field>
-        </record>        
+        </record>   
+        <record model="ir.ui.view" id="view_user_stats_graph">
+            <field name="name">hr.analytic.timesheet.user.stats.graph</field>
+            <field name="model">hr.analytic.timesheet.user.stats</field>
+            <field name="type">graph</field>
+            <field name="arch" type="xml">
+                <graph string="User stats" type="bar/pie">
+                    <field name="user_id"/>
+                    <field name="h_open_yes" operator="+"/>
+                </graph>
+            </field>
+        </record>     
         <record model="ir.actions.act_window" id="action_user_stats">
             <field name="name">User stats</field>
             <field name="res_model">hr.analytic.timesheet.user.stats</field>
