@@ -959,12 +959,12 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             excel_pool.write_xls_line(WS_name, row, mode_data)
             
             if update_dashboard:
-                if user_id not in update_data:
-                    update_data[user_id] = {}
-                if account_mode not in update_data[user_id]:
-                    update_data[user_id][account_mode] = [0.0, 0.0]
-                update_data[user_id][account_mode][0] += marked_qty
-                update_data[user_id][account_mode][1] += free_qty
+                if select_user.id not in update_data:
+                    update_data[select_user.id] = {}
+                if account_mode not in update_data[select_user.id]:
+                    update_data[select_user.id][account_mode] = [0.0, 0.0]
+                update_data[select_user.id][account_mode][0] += marked_qty
+                update_data[select_user.id][account_mode][1] += free_qty
 
         row += 2                 
         excel_pool.write_xls_line(WS_name, row, [
