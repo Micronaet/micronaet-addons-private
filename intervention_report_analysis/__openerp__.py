@@ -41,7 +41,7 @@
     'init_xml': [],
     'demo_xml': [],
     'update_xml': [
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'analysis_view.xml',  
         'report/status_webkit.xml',
         'report/status_intervent.xml',
