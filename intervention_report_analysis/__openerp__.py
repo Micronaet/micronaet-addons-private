@@ -31,6 +31,7 @@
     'license': 'AGPL-3',
     'depends': [
         'base',
+        'hr',
         'intervention_report',
         'intervention_report_invoice',
         'report_webkit',
@@ -47,6 +48,8 @@
         'wizard/intervention_status_wizard.xml',                    
         'wizard/import_excel_file_view.xml',
         'wizard/extract_personal_stats_view.xml',
+        
+        'dashboard_scheduler.xml',
         ],
     'active': False,
     'installable': True,

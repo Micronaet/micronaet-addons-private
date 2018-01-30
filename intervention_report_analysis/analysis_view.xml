@@ -1,6 +1,43 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <record model="ir.ui.view" id="view_user_stats_tree">
+            <field name="name">hr.analytic.timesheet.user.stats.tree</field>
+            <field name="model">hr.analytic.timesheet.user.stats</field>
+            <field name="arch" type="xml">
+                <tree string="Stats per user" editable="bottom">
+                    <field name="user_id" />
+                    
+                    <field name="from_date" />                    
+                    <field name="to_date" />
+                    
+                    <field name="h_contract_yes" sum="total" />
+                    <field name="h_contract_no" sum="total" />
+
+                    <field name="h_open_yes" sum="total" />
+                    <field name="h_open_no" sum="total" />
+
+                    <field name="h_fixed_yes" sum="total" />
+                    <field name="h_fixed_no" sum="total" />
+
+                    <field name="h_unfixed_yes" sum="total" />
+                    <field name="h_unfixed_no" sum="total" />
+
+                    <field name="h_internal_yes" sum="total" />
+                    <field name="h_internal_no" sum="total" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_user_stats">
+            <field name="name">User stats</field>
+            <field name="res_model">hr.analytic.timesheet.user.stats.tree</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_user_stats_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
         <record id='view_account_analytic_account_add_fields_onchange' model='ir.ui.view'>
             <field name='name'>Account extra onchange</field>
             <field name='model'>account.analytic.account</field>
@@ -146,6 +183,14 @@
             <field name="context">{}</field>
             <field name="domain">[('account_id.state', 'in', ('draft', 'open'))]</field>
         </record>-->
+
+        <menuitem 
+            parent="hr.menu_hr_main" 
+            id="menu_user_stats" 
+            action="action_user_stats"
+            sequence="1"
+            />
+        
         <menuitem 
             parent="hr.menu_hr_root" 
             id="menu_statistic_root" 

@@ -47,6 +47,26 @@ class HrAnalyticTimesheetUserStats(orm.Model):
     _rec_name = 'user_id'
     _order = 'from_date desc'
     
+    # Scheduled action:
+    def update_statistic_per_user(self, cr, uid, context=None):
+        ''' Run report from wizard and update statistics table
+        '''
+        wiz_pool = self.pool.get('account.distribution.stats.wizard')
+        wiz_ids = [wiz_pool.create(cr, uid, {
+            # Defaults:
+            #'from_date': 
+            #'to_date': 
+            'update_dashboard': True,
+            'contract': False,
+            'float_time': False,
+            'account_id': False,
+            'user_id': False,
+            'partner_id': False,            
+            }, context=context)]
+        # Launch report for generate dashboard:
+        wiz_pool.action_print(cr, uid, wiz_ids, context=context)
+        return True
+        
     _columns = {
         'user_id': fields.many2one('res.users', 'User', required=True),
 
@@ -1001,6 +1021,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             context=context)
 
     _columns = {
+        'update_dashboard': fields.boolean('Update dashboard'),
         'contract': fields.boolean('With contract', 
             help='Always add also contract with distribution'),
         'float_time': fields.boolean('Formatted hour', 
@@ -1027,7 +1048,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         'from_date': lambda *x: datetime.now().strftime('%Y-%m-01'),
         'to_date': lambda *x: (
             datetime.now() + relativedelta(months=1)).strftime('%Y-%m-01'),
-        'update_dashboard': fields.boolean('Update dashboard'),
         }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
