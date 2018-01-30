@@ -997,7 +997,6 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         # Update stastistics:
         # ---------------------------------------------------------------------
-        import pdb; pdb.set_trace()
         if update_dashboard:
             stats_pool = self.pool.get('hr.analytic.timesheet.user.stats')
             stats_ids = stats_pool.search(cr, uid, [], context=context)
@@ -1011,7 +1010,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     
                 for state, qty in update.iteritems():
                     data['h_%s_yes' % state] = qty[0]
-                    data['h_%s_no' % state] = qty[0]
+                    data['h_%s_no' % state] = qty[1]
                 stats_pool.create(cr, uid, data, context=context)
         
         # ---------------------------------------------------------------------
