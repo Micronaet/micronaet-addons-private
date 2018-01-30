@@ -997,6 +997,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # ---------------------------------------------------------------------
         # Update stastistics:
         # ---------------------------------------------------------------------
+        import pdb; pdb.set_trace()
         if update_dashboard:
             stats_pool = self.pool.get('hr.analytic.timesheet.user.stats')
             stats_ids = stats_pool.search(cr, uid, [], context=context)
