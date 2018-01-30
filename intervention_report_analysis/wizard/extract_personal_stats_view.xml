@@ -24,6 +24,8 @@
                         
                         <field name="contract" />
                         <field name="float_time" />
+                        
+                        <field name="update_dashboard" invisible="1"/>
                    </group>
                 </form>
             </field>

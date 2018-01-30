@@ -38,6 +38,37 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
+class HrAnalyticTimesheetUserStats(orm.Model):
+    """ Model name: hr.analytic.timesheet
+    """
+    
+    _name = 'hr.analytic.timesheet.user.stats'
+    _description = 'User stats'
+    _rec_name = 'user_id'
+    _order = 'from_date desc'
+    
+    _columns = {
+        'user_id': fields.many2one('res.users', 'User', required=True),
+
+        'from_date': fields.date('From'),
+        'to_date': fields.date('To'),
+        
+        'h_contract_yes': fields.float('H. Contract YES', digits=(16, 3)),
+        'h_contract_no': fields.float('H. Contract NO', digits=(16, 3)),
+
+        'h_open_yes': fields.float('H. Open YES', digits=(16, 3)),
+        'h_open_no': fields.float('H. Open NO', digits=(16, 3)),
+
+        'h_fixed_yes': fields.float('H. Fixed YES', digits=(16, 3)),
+        'h_fixed_no': fields.float('H. Fixed NO', digits=(16, 3)),
+
+        'h_unfixed_yes': fields.float('H. Unfixed YES', digits=(16, 3)),
+        'h_unfixed_no': fields.float('H. Unfixed NO', digits=(16, 3)),
+
+        'h_internal_yes': fields.float('H. Internal YES', digits=(16, 3)),
+        'h_internal_no': fields.float('H. Internal NO', digits=(16, 3)),
+        }
+
 class HrAnalyticTimesheet(orm.Model):
     """ Model name: Timesheet
     """    
@@ -272,6 +303,8 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         
         contract = wiz_browse.contract
         float_time = wiz_browse.float_time
+        
+        update_dashboard = wiz_browse.update_dashboard
         
         # Table collect data dict:
         res = {}
@@ -846,6 +879,9 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         #                       MEDIUM TYPE TABLE (BOTTOM)
         # ---------------------------------------------------------------------
         row += 2
+        if update_dashboard:
+            update_data = {}
+            
         mode_header = [
             '',
             '',
@@ -901,6 +937,14 @@ class AccountDistributionStatsWizard(orm.TransientModel):
             if not user_id: # filter    
                 mode_data.append((select_user.name, text_format))
             excel_pool.write_xls_line(WS_name, row, mode_data)
+            
+            if update_dashboard:
+                if user_id not in update_data:
+                    update_data[user_id] = {}
+                if account_mode not in update_data[user_id]:
+                    update_data[user_id][account_mode] = [0.0, 0.0]
+                update_data[user_id][account_mode][0] += marked_qty
+                update_data[user_id][account_mode][1] += free_qty
 
         row += 2                 
         excel_pool.write_xls_line(WS_name, row, [
@@ -930,7 +974,28 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 total_premium), f_white_number),
             ])
 
+        # ---------------------------------------------------------------------
+        # Update stastistics:
+        # ---------------------------------------------------------------------
+        if update_dashboard:
+            stats_pool = self.pool.get('hr.analytic.timesheet.user.stats')
+            stats_ids = stats_pool.search(cr, uid, [], context=context)
+            stats_pool.unlink(cr, uid, stats_ids, context=context)
+            for user_id, update in update_data.iteritems():
+                data = {
+                    'user_id': user_id,
+                    'from_date': from_date,
+                    'to_date': to_date,
+                    }
+                    
+                for state, qty in update:
+                    data['h_%s_yes' % state] = qty[0]
+                    data['h_%s_no' % state] = qty[0]
+                stats_pool.create(cr, uid, data, context=context)
+        
+        # ---------------------------------------------------------------------
         # Get base parameter for PHP call:
+        # ---------------------------------------------------------------------
         return excel_pool.return_attachment(
             cr, uid, 'Statistiche', version='7.0', php=True,
             context=context)
@@ -962,6 +1027,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         'from_date': lambda *x: datetime.now().strftime('%Y-%m-01'),
         'to_date': lambda *x: (
             datetime.now() + relativedelta(months=1)).strftime('%Y-%m-01'),
+        'update_dashboard': fields.boolean('Update dashboard'),
         }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
