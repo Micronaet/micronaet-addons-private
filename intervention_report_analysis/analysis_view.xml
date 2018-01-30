@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <!--hr.analytic.timesheet.user.stats-->
         <record model="ir.ui.view" id="view_user_stats_tree">
             <field name="name">hr.analytic.timesheet.user.stats.tree</field>
             <field name="model">hr.analytic.timesheet.user.stats</field>
@@ -27,10 +28,10 @@
                     <field name="h_internal_no" sum="total" />
                 </tree>
             </field>
-        </record>
+        </record>        
         <record model="ir.actions.act_window" id="action_user_stats">
             <field name="name">User stats</field>
-            <field name="res_model">hr.analytic.timesheet.user.stats.tree</field>
+            <field name="res_model">hr.analytic.timesheet.user.stats</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_user_stats_tree"/>
