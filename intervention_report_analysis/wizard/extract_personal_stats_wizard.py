@@ -1008,7 +1008,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     'to_date': to_date,
                     }
                     
-                for state, qty in update:
+                for state, qty in update.iteritems():
                     data['h_%s_yes' % state] = qty[0]
                     data['h_%s_no' % state] = qty[0]
                 stats_pool.create(cr, uid, data, context=context)
