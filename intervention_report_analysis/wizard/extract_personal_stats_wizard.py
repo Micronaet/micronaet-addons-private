@@ -184,8 +184,8 @@ class HrAnalyticTimesheet(orm.Model):
 
             discount_qty = intervent.intervent_duration - \
                 intervent.intervent_total + \
-                intervent.trip_hour if intervent.trip_require else 0.0 - \
-                intervent.break_hour if intervent.break_require else 0.0
+                (intervent.trip_hour if intervent.trip_require else 0.0) - \
+                (intervent.break_hour if intervent.break_require else 0.0)
                 
             excel_pool.write_xls_line(WS_name, row, [
                 # Intervent header:
@@ -459,6 +459,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     (intervent.break_hour if intervent.break_require else 0.0)
                 
                 res[key][1] += marked_qty # Total hour invoiced
+                res[key][2] += free_qty # Total removed
                 if account_mode in invoiced_type:
                     my_total += marked_qty
 
