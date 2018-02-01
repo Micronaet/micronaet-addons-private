@@ -449,6 +449,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                     ]
 
             # TODO extra hour in intervent pay!!  
+            print intervent.ref
             import pdb; pdb.set_trace()      
             if intervent.to_invoice.factor == 100:
                 marked_qty = intervent.intervent_total # invoiced
