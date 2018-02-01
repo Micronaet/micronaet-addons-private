@@ -252,7 +252,7 @@ msgstr "Wizard"
 #: model:ir.actions.act_window,name:intervention_report_analysis.action_account_distribution_stats_wizard
 #: model:ir.ui.menu,name:intervention_report_analysis.menu_account_distribution_report
 msgid "Stats report"
-msgstr "Report satistico"
+msgstr "Report statistico"
 
 #. module: intervention_report_analysis
 #: view:account.analytic.account:0
