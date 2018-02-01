@@ -1,0 +1,435 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# 	* intervention_report_analysis
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-01 12:53+0000\n"
+"PO-Revision-Date: 2018-02-01 14:00+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#. module: intervention_report_analysis
+#: model:ir.actions.report.xml,name:intervention_report_analysis.aeroo_intervent_status_report_id
+msgid "Status intervent report"
+msgstr "Report stato interventi"
+
+#. module: intervention_report_analysis
+#: model:ir.ui.menu,name:intervention_report_analysis.menu_statistic_root
+msgid "Statistics"
+msgstr "Statistiche"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account,from_date:0
+#: field:hr.analytic.timesheet.user.stats,from_date:0
+msgid "From"
+msgstr "Da"
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_contract_no:0
+msgid "H. Contract NO"
+msgstr "H. Contratto NO"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account,hour_cost:0
+#: field:account.analytic.account.invoice,hour_cost:0
+msgid "Hour cost"
+msgstr "Costo orario"
+
+#. module: intervention_report_analysis
+#: help:account.analytic.account.invoice,hour_cost:0
+msgid "Number of hours"
+msgstr "Numero di ore"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account,hour_cost_customer:0
+msgid "Customer hour cost"
+msgstr "Costo orario cliente"
+
+#. module: intervention_report_analysis
+#: field:account.invoice,analytic_invoice_ids:0
+msgid "Analytic Invoice"
+msgstr "Fattura analitica"
+
+#. module: intervention_report_analysis
+#: model:ir.actions.act_window,name:intervention_report_analysis.action_hr_intervent_wizard_menu_form
+#: model:ir.ui.menu,name:intervention_report_analysis.menu_hr_intervent_wizard_menu_form
+msgid "Intervent analysys"
+msgstr "Analisi interventi"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account,to_date:0
+#: field:hr.analytic.timesheet.user.stats,to_date:0
+msgid "To"
+msgstr "A"
+
+#. module: intervention_report_analysis
+#: model:ir.model,name:intervention_report_analysis.model_hr_intervent_wizard
+msgid "Intervention analysis wizard"
+msgstr "Wizard analisi interventi"
+
+#. module: intervention_report_analysis
+#: view:hr.intervent.wizard:0
+msgid "Analysis wizard"
+msgstr "Wizard Analisi"
+
+#. module: intervention_report_analysis
+#: model:ir.actions.report.xml,name:intervention_report_analysis.webkit_itervention_analytic_analysis_report
+msgid "Intervention analysis status"
+msgstr "Analisi stato interventi"
+
+#. module: intervention_report_analysis
+#: view:account.distribution.stats.wizard:0 view:hr.intervent.wizard:0
+msgid "Print"
+msgstr "Stampa"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account:0
+msgid "total_invoiced"
+msgstr "totale fatturato"
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_internal_yes:0
+msgid "H. Internal YES"
+msgstr "H. Interne SI"
+
+#. module: intervention_report_analysis
+#: field:account.distribution.stats.wizard,from_date:0
+msgid "From date >= "
+msgstr "Dalla data >= "
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_unfixed_no:0
+msgid "H. Unfixed NO"
+msgstr "H. Non fissato NO"
+
+#. module: intervention_report_analysis
+#: help:account.analytic.account.distribution,percentual:0
+msgid "Percentual on total hour"
+msgstr "Percentuale sul totale ore"
+
+#. module: intervention_report_analysis
+#: help:account.analytic.account,total_amount:0
+msgid "Total amount of contract"
+msgstr "Importo totale contratto"
+
+#. module: intervention_report_analysis
+#: help:account.analytic.account,hour_cost_customer:0
+msgid "Remember starndar customer hour cost"
+msgstr "Ricorda il costo orario standard cliente"
+
+#. module: intervention_report_analysis
+#: view:hr.analytic.timesheet.user.stats:0
+#: model:ir.actions.act_window,name:intervention_report_analysis.action_user_stats
+#: model:ir.model,name:intervention_report_analysis.model_hr_analytic_timesheet_user_stats
+#: model:ir.ui.menu,name:intervention_report_analysis.menu_user_stats
+msgid "User stats"
+msgstr "Statistiche utente"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account:0
+msgid ""
+"onchange_cost_parameter(hour_cost, total_amount, total_hours, 'total_hours')"
+msgstr ""
+"onchange_cost_parameter(hour_cost, total_amount, total_hours, 'total_hours')"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account.distribution,user_id:0
+msgid "Users"
+msgstr "Utenti"
+
+#. module: intervention_report_analysis
+#: model:ir.model,name:intervention_report_analysis.model_account_analytic_account_distribution
+msgid "User distribution for contract"
+msgstr "Distribuzione interventi per utente sul contratto"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account.invoice,hour:0
+msgid "Hour invoiced"
+msgstr "Ore fatturate"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account.distribution,hour:0
+msgid "Tot. H."
+msgstr "Tot. H."
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account:0
+msgid "total_removed"
+msgstr "totale rimosse"
+
+#. module: intervention_report_analysis
+#: view:account.invoice:0
+msgid "Analytic invoice"
+msgstr "Fatture analitiche"
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_fixed_no:0
+msgid "H. Fixed NO"
+msgstr "H. Fissasto NO"
+
+#. module: intervention_report_analysis
+#: field:account.distribution.stats.wizard,to_date:0
+#: field:hr.intervent.wizard,to_date:0
+msgid "To date <"
+msgstr "Alla data <"
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_contract_yes:0
+msgid "H. Contract YES"
+msgstr "H. Contratto SI"
+
+#. module: intervention_report_analysis
+#: field:account.distribution.stats.wizard,user_id:0
+#: field:hr.analytic.timesheet.user.stats,user_id:0
+#: field:hr.intervent.wizard,user_id:0
+msgid "User"
+msgstr "Utenti"
+
+#. module: intervention_report_analysis
+#: help:account.analytic.account.invoice,hour_removed:0
+msgid "Number of hours coveder (removed from contract)"
+msgstr "Numero di ore coperte (rimosse dal contratto)"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account.invoice,date:0
+msgid "Date"
+msgstr "Data"
+
+#. module: intervention_report_analysis
+#: view:account.distribution.stats.wizard:0
+msgid "Relation"
+msgstr "Relazione"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account:0
+#: model:ir.actions.act_window,name:intervention_report_analysis.action_account_analytic_account_invoice_xlsx_import_wizard
+msgid "Import XLSX file"
+msgstr "Importa XLSX file"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account.invoice,name:0
+msgid "Invoice ref."
+msgstr "Rif. fattura"
+
+#. module: intervention_report_analysis
+#: model:ir.model,name:intervention_report_analysis.model_account_distribution_stats_wizard
+msgid "account.distribution.stats.wizard"
+msgstr "Wizard distribuzione statistica"
+
+#. module: intervention_report_analysis
+#: help:account.distribution.stats.wizard,contract:0
+msgid "Always add also contract with distribution"
+msgstr "Sempre aggiunto contratto con distribuzione"
+
+#. module: intervention_report_analysis
+#: field:account.distribution.stats.wizard,float_time:0
+msgid "Formatted hour"
+msgstr "Ore formattate (HH:MM)"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account.distribution,account_id:0
+#: field:account.analytic.account.invoice,account_id:0
+#: field:account.distribution.stats.wizard,account_id:0
+msgid "Account"
+msgstr "Conto"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account.invoice.xlsx.import:0
+msgid "Wizard"
+msgstr "Wizard"
+
+#. module: intervention_report_analysis
+#: view:account.distribution.stats.wizard:0
+#: model:ir.actions.act_window,name:intervention_report_analysis.action_account_distribution_stats_wizard
+#: model:ir.ui.menu,name:intervention_report_analysis.menu_account_distribution_report
+msgid "Stats report"
+msgstr "Report satistico"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account:0
+msgid "Extract Excel status"
+msgstr "Esporta stato excel"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account:0 view:account.invoice:0
+#: view:hr.analytic.timesheet.user.stats:0
+msgid "total"
+msgstr "totale"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account,total_amount:0
+#: field:account.analytic.account.invoice,total_amount:0
+msgid "Total amount"
+msgstr "Importo totale"
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_internal_no:0
+msgid "H. Internal NO"
+msgstr "H. Interne NO"
+
+#. module: intervention_report_analysis
+#: help:account.distribution.stats.wizard,float_time:0
+msgid "If checked print hour in HH:MM format"
+msgstr "Se spuntato stampa l'ora in formato HH:MM"
+
+#. module: intervention_report_analysis
+#: help:account.analytic.account,hour_cost:0
+msgid "Hour cost (total / number of hours)"
+msgstr "Costo orario (totale / numero di ore)"
+
+#. module: intervention_report_analysis
+#: field:account.distribution.stats.wizard,contract:0
+msgid "With contract"
+msgstr "Con contratti"
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_open_yes:0
+msgid "H. Open YES"
+msgstr "H. Aperti SI"
+
+#. module: intervention_report_analysis
+#: field:account.distribution.stats.wizard,partner_id:0
+#: field:hr.intervent.wizard,partner_id:0
+msgid "Partner"
+msgstr "Cliente"
+
+#. module: intervention_report_analysis
+#: help:account.analytic.account.invoice,hour:0
+msgid "Number of hours invoiced (sometimes is not all)"
+msgstr "Numero di ore fatturate (a volte non sono tutte)"
+
+#. module: intervention_report_analysis
+#: model:ir.model,name:intervention_report_analysis.model_account_analytic_account_invoice
+msgid "Invoice extra for contract"
+msgstr "Fatturato extra sul contratto"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account:0
+#: field:account.analytic.account,distribution_ids:0
+msgid "Distribution"
+msgstr "Distribuzione"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account,hour_done:0
+msgid "Done hour"
+msgstr "Ore fatte"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account.invoice.xlsx.import,xls_file:0
+msgid "XLSX file"
+msgstr "File XLSX"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account.distribution,percentual:0
+msgid "% of hours"
+msgstr "% di ore"
+
+#. module: intervention_report_analysis
+#: field:hr.intervent.wizard,detailed:0
+msgid "Detailed"
+msgstr "Dettaglio"
+
+#. module: intervention_report_analysis
+#: model:ir.actions.act_window,name:intervention_report_analysis.action_all_account_contract_form
+#: model:ir.ui.menu,name:intervention_report_analysis.menu_all_account_contract_distribution_form
+msgid "All contract"
+msgstr "Tutti i contratti"
+
+#. module: intervention_report_analysis
+#: field:account.analytic.account.invoice,hour_removed:0
+msgid "Hour covered"
+msgstr "Ore coperte"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account.invoice.xlsx.import:0
+msgid "Import XLSX"
+msgstr "Importa XLSX"
+
+#. module: intervention_report_analysis
+#: view:hr.analytic.timesheet.user.stats:0
+msgid "Stats per user"
+msgstr "Statistiche per utente"
+
+#. module: intervention_report_analysis
+#: view:account.distribution.stats.wizard:0
+msgid "Period"
+msgstr "Periodo"
+
+#. module: intervention_report_analysis
+#: model:ir.model,name:intervention_report_analysis.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Conto analitico"
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_open_no:0
+msgid "H. Open NO"
+msgstr "H. Aperti NO"
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_unfixed_yes:0
+msgid "H. Unfixed YES"
+msgstr "H. Non fissato SI"
+
+#. module: intervention_report_analysis
+#: field:hr.analytic.timesheet.user.stats,h_fixed_yes:0
+msgid "H. Fixed YES"
+msgstr "H. Fissato SI"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account:0
+#: field:account.analytic.account,invoice_ids:0
+#: field:account.analytic.account.invoice,invoice_id:0 view:account.invoice:0
+#: model:ir.model,name:intervention_report_analysis.model_account_invoice
+msgid "Invoice"
+msgstr "Fattura"
+
+#. module: intervention_report_analysis
+#: field:hr.intervent.wizard,from_date:0
+msgid "From date >="
+msgstr "Dalla data >="
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account.invoice.xlsx.import:0
+#: view:account.distribution.stats.wizard:0 view:hr.intervent.wizard:0
+msgid "Cancel"
+msgstr "Annulla"
+
+#. module: intervention_report_analysis
+#: view:account.analytic.account:0
+msgid "Extra info"
+msgstr "Info extra"
+
+#. module: intervention_report_analysis
+#: model:ir.model,name:intervention_report_analysis.model_account_analytic_account_invoice_xlsx_import
+msgid "account.analytic.account.invoice.xlsx.import"
+msgstr "importa excel"
+
+#. module: intervention_report_analysis
+#: field:account.distribution.stats.wizard,update_dashboard:0
+msgid "Update dashboard"
+msgstr "Aggiorna dashboard"
+
+#. module: intervention_report_analysis
+#: model:ir.model,name:intervention_report_analysis.model_hr_analytic_timesheet
+msgid "Timesheet Line"
+msgstr "Riga foglio presenze"
+
+#. module: intervention_report_analysis
+#: model:ir.actions.act_window,name:intervention_report_analysis.act_hr_intervent_wizard
+msgid "Intervent analysis"
+msgstr "Analisi interventi"
+
+#. module: intervention_report_analysis
+#: model:ir.actions.act_window,name:intervention_report_analysis.action_account_contract_form
+#: model:ir.ui.menu,name:intervention_report_analysis.menu_account_contract_distribution_form
+msgid "Contract with distribution"
+msgstr "Contratto con distribuzione"
