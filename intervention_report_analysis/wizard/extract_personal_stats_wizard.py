@@ -146,7 +146,7 @@ class HrAnalyticTimesheet(orm.Model):
             'Manuale',
             'Viaggio', # >> trip_require
             'Pausa', # >> break_require            
-            'Totale', # unit_amount
+            'Totale', # intervent total (for customer)
             'Riconosciuto extra', # extra_invoiced_total
 
             # Description:            
@@ -439,8 +439,13 @@ class AccountDistributionStatsWizard(orm.TransientModel):
 
             # TODO extra hour in intervent pay!!        
             if intervent.to_invoice.factor == 100:
-                marked_qty = intervent.unit_amount # TODO Change using funct.
-                free_qty = 0.0
+                marked_qty = intervent.intervent_total # invoiced
+
+                # TODO Create a fields of function for better manage:                
+                free_qty = intervent.intervent_duration -
+                    intervent.intervent_total +
+                    intervent.trip_hour if intervent.trip_require else 0.0 -
+                    intervent.break_hour if intervent.break_require else 0.0 
                 
                 res[key][1] += marked_qty # Total hour invoiced
                 if account_mode in invoiced_type:
@@ -448,7 +453,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
 
             else: # No invoice
                 marked_qty = 0.0
-                free_qty = intervent.unit_amount # Total hour gratis
+                free_qty = intervent.intervent_total # Free or analytic no pay
                 res[key][2] += free_qty
                 
             # Table partner total:
