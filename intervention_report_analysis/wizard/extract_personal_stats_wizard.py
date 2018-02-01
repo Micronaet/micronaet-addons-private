@@ -143,10 +143,13 @@ class HrAnalyticTimesheet(orm.Model):
             
             # Total:            
             'Durata',
-            'Manuale',
+            'Manuale', # Net
+            'Rimosse', # From user*
+
             'Viaggio', # >> trip_require
             'Pausa', # >> break_require            
-            'Totale', # intervent total (for customer)
+            'Totale', # effective
+            
             'Riconosciuto extra', # extra_invoiced_total
 
             # Description:            
@@ -178,6 +181,12 @@ class HrAnalyticTimesheet(orm.Model):
                 break_hour = intervent.break_hour 
             else:    
                 break_hour = 0
+
+            discount_qty = intervent.intervent_duration - \
+                intervent.intervent_total + \
+                intervent.trip_hour if intervent.trip_require else 0.0 - \
+                intervent.break_hour if intervent.break_require else 0.0
+                
             excel_pool.write_xls_line(WS_name, row, [
                 # Intervent header:
                 intervent.ref or 'Da confermare',
@@ -195,7 +204,9 @@ class HrAnalyticTimesheet(orm.Model):
                 (excel_pool.format_hour(
                     intervent.intervent_total, float_time), f_white_number),
                 (excel_pool.format_hour(
-                    trip_hour, float_time), f_white_number),
+                    discount_qty, float_time), f_white_number),
+                (excel_pool.format_hour(                
+                    trip_hour, float_time), f_white_number),                    
                 (excel_pool.format_hour(
                     break_hour, float_time), f_white_number),
                 (excel_pool.format_hour(
