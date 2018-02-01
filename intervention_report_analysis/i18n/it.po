@@ -174,7 +174,7 @@ msgstr "Fatture analitiche"
 #. module: intervention_report_analysis
 #: field:hr.analytic.timesheet.user.stats,h_fixed_no:0
 msgid "H. Fixed NO"
-msgstr "H. Fissasto NO"
+msgstr "H. Fissato NO"
 
 #. module: intervention_report_analysis
 #: field:account.distribution.stats.wizard,to_date:0
