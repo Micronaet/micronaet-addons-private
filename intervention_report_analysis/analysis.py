@@ -136,8 +136,9 @@ class account_analytic_account(orm.Model):
                 _('Parameter error'), 
                 _('Not found: intervention_export_root_folder parameter!'),
                 )
-        month_folder = os.path.expanduser(os.path.join(root_folder, '%s_%s' % (
-            year, month))
+        month_folder = os.path.expanduser(
+            os.path.join(root_folder, '%s_%s' % (
+                year, month)))
         os.system('mkdir -p %s' % month_folder)
         for account, excel_pool in WS_ids.iteritems():
             excel_pool.save_file_as(os.path.join(
