@@ -80,7 +80,7 @@
     <record id='view_account_analytic_account_add_fields_bis' model='ir.ui.view'>
         <field name='name'>Account extra</field>
         <field name='model'>account.analytic.account</field>
-        <field name="inherit_id" ref="hr_tiesheet.account_analytic_account_timesheet_form"/>
+        <field name="inherit_id" ref="hr_timesheet.account_analytic_account_timesheet_form"/>
         <field name='arch' type='xml'>
             <field name="use_timesheets" position="before">    
                 <field name="is_extra_report" />
