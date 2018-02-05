@@ -104,6 +104,7 @@ class account_analytic_account(orm.Model):
                 ts_pool.browse(cr, uid, ts_ids, context=context),
                 key=lambda x: (
                     x.account_id.name,
+                    x.intervent_partner_id.name,
                     x.date_start,                      
                     x.user_id.name,
                     )
