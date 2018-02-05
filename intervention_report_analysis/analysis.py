@@ -144,7 +144,8 @@ class account_analytic_account(orm.Model):
             if account:        
                 return excel_pool.return_attachment(
                     cr, uid, 'Interventi da valutare', 
-                    'intervent.xlsx', version='7.0', context=context)
+                    'intervent.xlsx', version='7.0', php=True,
+                    context=context)
             else:
                 # Close and save previous:
                 excel_pool.save_file_as(os.path.join(
