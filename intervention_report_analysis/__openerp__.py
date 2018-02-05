@@ -42,12 +42,15 @@
     'demo_xml': [],
     'update_xml': [
         'security/ir.model.access.csv',
+        'data/config.xml', # Parameter for export folder
         'analysis_view.xml',  
         'report/status_webkit.xml',
         'report/status_intervent.xml',
+        
         'wizard/intervention_status_wizard.xml',                    
         'wizard/import_excel_file_view.xml',
         'wizard/extract_personal_stats_view.xml',
+        'wizard/extra_export_invoice_view.xml',
         
         'dashboard_scheduler.xml',
         ],

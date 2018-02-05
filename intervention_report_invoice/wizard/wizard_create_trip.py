@@ -295,9 +295,9 @@ class account_invoice_intervent_wizard(osv.osv_memory):
     # -------------------------------------------------------------------------
     def create_month_statistic(self, cr, uid, ids, context=None):
         ''' Statistic for month and invoice status
-        '''
+        '''        
         # Pool used:
-        account_pool = self.pool.get('account.analytic.account')
+        account_pool = self.pool.get('account.analytic.account')        
         intervent_pool = self.pool.get('hr.analytic.timesheet')
                 
         # Read paremeters:

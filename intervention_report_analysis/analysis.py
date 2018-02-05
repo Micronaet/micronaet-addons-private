@@ -43,6 +43,109 @@ class account_analytic_account(orm.Model):
     '''
     _inherit = 'account.analytic.account'
 
+    # Utility: extract Excel account intervent block:    
+    def extract_excel_status(self, cr, uid, month, year, account,
+            context=None):
+        ''' Extract XLS status for intervent for this month and for
+            this account analitic
+        '''
+        # Pool used:
+        ts_pool = self.pool.get('hr.analytic.timesheet')        
+        
+        # ---------------------------------------------------------------------
+        # Excel setup:
+        # ---------------------------------------------------------------------
+        WS_ids = {} # For extract all account                
+        WS_row = {} # Position row
+        WS_name = _('Fatturazione extra')
+        WS_header = [
+            'ID', 'Cliente', 'Data', 
+            'Numero', 'Utente', 'Oggetto', 'Descrizione',
+            'Fatturazione', 'H tot.', 'H fatt.', # da inserire
+            ]
+        WS_header_width = [
+            1, 30, 20,
+            10, 20, 30, 50,
+            20, 10, 10,
+            ]
+
+        # ---------------------------------------------------------------------
+        # Date filter for intervent selection:            
+        # ---------------------------------------------------------------------
+        date = current_proxy.date
+        # Start or end month:
+        from_date = '%s-%s-01' % (year, month)
+        date_dt = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
+        date_dt += relativedelta(months=1)
+        to_date = '%s01' % date_dt.strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
+        
+        domain = [
+            ('date_start', '>=', from_date),
+            ('date_start', '<', to_date),
+            ]
+        if account:
+            domain.append(
+                ('account_id', '=', current_proxy.account_id.id)
+                )
+                
+        ts_ids = ts_pool.search(cr, uid, domain, context=context)
+        for intervent in sorted(
+                ts_pool.browse(cr, uid, ts_ids, context=context),
+                key=lambda x: (x.date_start, x.user_id.name)
+                ):
+            this_account = intervent.account_id
+            if this_account in WS_ids:
+                excel_pool = WS_ids[this_account]                
+            else:
+                # Create pool for every Excel file:
+                WS_ids[this_account] = self.pool.get('excel.writer')
+                excel_pool = WS_ids[this_account]                
+                excel_pool.create_worksheet(WS_name)
+                excel_pool.write_xls_line(WS_name, 0, WS_header)
+                excel_pool.column_width(WS_name, WS_header_width)
+                WS_row[this_account] = 0
+            WS_row[this_account] += 1
+            
+            excel_pool.write_xls_line(WS_name, WS_row[this_account], [
+                intervent.id, 
+                intervent.intervent_partner_id.name,
+                intervent.date_start, 
+                intervent.ref, 
+                intervent.user_id.name,
+                intervent.name,
+                intervent.to_invoice.name,
+                intervent.intervention,
+                intervent.unit_amount,
+                '', # da inserire
+                ])
+        if account:        
+            return WS_ids[account].return_attachment(
+                cr, uid, 'Interventi da valutare', 
+                'intervent.xlsx', version='7.0', context=context)
+                
+        # else: all will be saved in folder:
+        config_pool = self.pool.get('ir.config_parameter')
+        config_ids = config_pool.search(cr, uid, [
+            ('key', '=', 'intervention_export_root_folder')], context=context)
+        if config_ids:
+            config_browse = config_pool.browse(cr, uid, config_ids, 
+                context=context)[0]    
+            root_folder = config_browse.value
+        else: 
+            raise osv.except_osv(
+                _('Parameter error'), 
+                _('Not found: intervention_export_root_folder parameter!'),
+                )
+        month_folder = os.path.expanduser(os.path.join(root_folder, '%s_%s' % (
+            year, month))
+        os.system('mkdir -p %s' % month_folder)
+        for account, excel_pool in WS_ids.iteritems():
+            excel_pool.save_file_as(os.path.join(
+                month_folder, 
+                account.name,
+                )
+        return True 
+
     def onchange_cost_parameter(self, cr, uid, ids, hour_cost, total_amount, 
             total_hours, field='hour_cost', context=None):
         ''' Calculate 2 value depend on change element         
@@ -167,73 +270,16 @@ class account_analytic_account_invoice(orm.Model):
             this account analitic
         '''
         assert len(ids) == 1, 'Works only with one record a time'
+        
+        # Read data from invoice:
         current_proxy = self.browse(cr, uid, ids, context=context)[0]    
-        
-        # Pool used:
-        excel_pool = self.pool.get('excel.writer')
-        ts_pool = self.pool.get('hr.analytic.timesheet')        
-        
-        WS_name = _('Fatturazione extra')
-        excel_pool.create_worksheet(WS_name)
-        excel_pool.write_xls_line(WS_name, 0, [
-            'ID', 
-            'Cliente',
-            'Data', 
-            'Numero', 
-            'Utente',
-            'Oggetto',
-            'Descrizione',
-            'Fatturazione',
-            'H tot.',
-            'H fatt.', # da inserire
-            ])
-
-        excel_pool.column_width(WS_name, [
-            1,
-            30,
-            20,
-            10,
-            20,
-            30,
-            50,
-            20,
-            10,
-            10,
-            ])
-        
         date = current_proxy.date
-        # Start or end month:
-        from_date = '%s01' % date[:8]
-        date_dt = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
-        date_dt += relativedelta(months=1)
-        to_date = '%s01' % date_dt.strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
-        
-        ts_ids = ts_pool.search(cr, uid, [
-            ('date_start', '>=', from_date),
-            ('date_start', '<', to_date),
-            ('account_id', '=', current_proxy.account_id.id),
-            ], context=context)
-        row = 0
-        for intervent in sorted(
-                ts_pool.browse(cr, uid, ts_ids, context=context),
-                key=lambda x: (x.date_start, x.user_id.name)
-                ):
-            row += 1
-            excel_pool.write_xls_line(WS_name, row, [
-                intervent.id, 
-                intervent.intervent_partner_id.name,
-                intervent.date_start, 
-                intervent.ref, 
-                intervent.user_id.name,
-                intervent.name,
-                intervent.to_invoice.name,
-                intervent.intervention,
-                intervent.unit_amount,
-                '', # da inserire
-                ])
-        return excel_pool.return_attachment(
-            cr, uid, 'Interventi da valutare', 
-            'intervent.xlsx', version='7.0', context=context)
+                
+        account_pool = self.pool.get('account.analytic.account')
+        return account_pool.extract_excel_status(cr, uid, 
+            date[5:7], date[:4],  
+            current_proxy.account_id, # browse
+            context=context)
         
     _columns = {
         'date': fields.date('Date', required=True),

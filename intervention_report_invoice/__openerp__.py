@@ -49,6 +49,8 @@
     'demo_xml': [],
     'update_xml': [
         #'security/ir.model.access.csv',
+        #'date/config.xml',
+        
         'intervention_invoice.xml',  
         'wizard/wizard_create_trip_view.xml',                    
         'report/report_intervent_state.xml',
