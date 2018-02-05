@@ -50,7 +50,6 @@ class account_analytic_account(orm.Model):
             this account analitic
         '''
         # Pool used:
-        import pdb; pdb.set_trace()
         ts_pool = self.pool.get('hr.analytic.timesheet')        
         
         # ---------------------------------------------------------------------
@@ -141,21 +140,16 @@ class account_analytic_account(orm.Model):
                 ])
                 
         if last_account != False:
-            # Close and save previous:
-            excel_pool.save_file_as(os.path.join(
-                month_folder, 
-                this_account.name,
-                ))
-                
-        #if account:        
-        #    return WS_ids[account].return_attachment(
-        #        cr, uid, 'Interventi da valutare', 
-        #        'intervent.xlsx', version='7.0', context=context)
-        #else:
-        #    raise osv.except_osv(
-        #        _('Parameter error'), 
-        #        _('Not found: intervention_export_root_folder parameter!'),
-        #        )
+            if account:        
+                return excel_pool.return_attachment(
+                    cr, uid, 'Interventi da valutare', 
+                    'intervent.xlsx', version='7.0', context=context)
+            else:        
+                # Close and save previous:
+                excel_pool.save_file_as(os.path.join(
+                    month_folder, 
+                    this_account.name,
+                    ))                
         return True
 
     def onchange_cost_parameter(self, cr, uid, ids, hour_cost, total_amount, 
