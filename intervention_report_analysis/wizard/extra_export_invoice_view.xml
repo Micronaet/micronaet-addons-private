@@ -4,12 +4,11 @@
         <record id="hr_analytic_timesheet_invoice_button_extract_wizard" model="ir.ui.view">
             <field name="name">Wizard extract reinvoice files</field>
             <field name="model">account.invoice.intervent.wizard</field>
+            <field name="inherit_id" ref="intervention_report_invoice.hr_analytic_timesheet_invoice_wizard"/>
             <field name="arch" type="xml">
-                <form string="Intervent account wizard" version="7.0">
-                     <button icon="gtk-ok" name="create_month_statistic" position="after">
-                         <button icon="gtk-ok" name="extract_all_account_month_for_reinvoice" string="Reinvoice files" type="object" />
-                     </button>
-                </form>
+                 <button icon="gtk-ok" name="create_month_statistic" position="after">
+                     <button icon="gtk-ok" name="extract_all_account_month_for_reinvoice" string="Reinvoice files" type="object" />
+                 </button>
             </field>
         </record>
 
