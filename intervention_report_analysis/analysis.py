@@ -114,7 +114,7 @@ class account_analytic_account(orm.Model):
                     # Close and save previous:
                     excel_pool.save_file_as(os.path.join(
                         month_folder, 
-                        this_account.name,
+                        excel_pool.clean_filename(this_account.name),
                         ))
                 last_account = this_account
                 
