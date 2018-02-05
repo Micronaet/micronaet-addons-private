@@ -84,7 +84,7 @@ class account_analytic_account(orm.Model):
             ]
         if account:
             domain.append(
-                ('account_id', '=', current_proxy.account_id.id)
+                ('account_id', '=', account.id)
                 )
                 
         ts_ids = ts_pool.search(cr, uid, domain, context=context)
