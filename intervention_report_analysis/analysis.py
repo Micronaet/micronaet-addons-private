@@ -140,7 +140,8 @@ class account_analytic_account(orm.Model):
                 '', # insert from file (for reimport)
                 ])
                 
-        if last_account != False:
+        import pdb; pdb.set_trace()        
+        if last_account != False:        
             if account:        
                 return excel_pool.return_attachment(
                     cr, uid, 'Interventi da valutare', 
@@ -282,9 +283,9 @@ class account_analytic_account_invoice(orm.Model):
         current_proxy = self.browse(cr, uid, ids, context=context)[0]    
         date = current_proxy.date
                 
-        account_pool = self.pool.get('account.analytic.account')
-        return account_pool.extract_excel_status(cr, uid, 
-            date[5:7], date[:4],  
+        return self.pool.get('account.analytic.account').extract_excel_status(
+            cr, uid, 
+            date[5:7], date[:4],
             current_proxy.account_id, # browse
             context=context)
         
