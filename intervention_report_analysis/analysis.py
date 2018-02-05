@@ -110,13 +110,14 @@ class account_analytic_account(orm.Model):
                     )
                 ):
             this_account = intervent.account_id
-            if last_account == False or last_account != this_account:
-                if last_account != False: # previous exist:
+            if last_account == False or last_account != this_account:                
+                if last_account != False: # previous exist:                
                     # Close and save previous:
                     excel_pool.save_file_as(os.path.join(
                         month_folder, 
                         account.name,
                         ))
+                last_account = this_account
                 
                 # Create pool for every Excel file:
                 excel_pool = self.pool.get('excel.writer')
