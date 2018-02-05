@@ -77,15 +77,22 @@
         </field>
     </record>
 
-    <record id='view_account_analytic_account_add_fields' model='ir.ui.view'>
+    <record id='view_account_analytic_account_add_fields_bis' model='ir.ui.view'>
         <field name='name'>Account extra</field>
         <field name='model'>account.analytic.account</field>
-        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+        <field name="inherit_id" ref="hr_tiesheet.account_analytic_account_timesheet_form"/>
         <field name='arch' type='xml'>
             <field name="use_timesheets" position="before">    
                 <field name="is_extra_report" />
                 <label for="is_extra_report" />
             </field>
+        </field>
+    </record>
+    <record id='view_account_analytic_account_add_fields' model='ir.ui.view'>
+        <field name='name'>Account extra</field>
+        <field name='model'>account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+        <field name='arch' type='xml'>
             <field name="manager_id" position="after">
                 <field name="account_mode" attrs="{'required': [('use_timesheets','=',True),('is_extra_report','=',False)]}" />
                 <field name="account_approved" />
