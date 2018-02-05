@@ -135,7 +135,7 @@ class account_analytic_account(orm.Model):
                 intervent.name,
                 intervent.intervention,
                 intervent.to_invoice.name,
-                intervent.unit_amount,
+                intervent.intervent_total,
                 '', # insert from file (for reimport)
                 ])
                 
