@@ -50,6 +50,7 @@ class account_analytic_account(orm.Model):
             this account analitic
         '''
         # Pool used:
+        import pdb; pdb.set_trace()
         ts_pool = self.pool.get('hr.analytic.timesheet')        
         
         # ---------------------------------------------------------------------
@@ -98,6 +99,8 @@ class account_analytic_account(orm.Model):
             else:
                 # Create pool for every Excel file:
                 WS_ids[this_account] = self.pool.get('excel.writer')
+                
+                # Add header once:
                 excel_pool = WS_ids[this_account]                
                 excel_pool.create_worksheet(WS_name)
                 excel_pool.write_xls_line(WS_name, 0, WS_header)
