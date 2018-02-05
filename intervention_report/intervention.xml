@@ -77,7 +77,7 @@
         </field>
     </record>
 
-    <record id='view_account_analytic_account_add_fields_bis' model='ir.ui.view'>
+    <!--TODO CORREGGERE!!! <record id='view_account_analytic_account_add_fields_bis' model='ir.ui.view'>
         <field name='name'>Account extra</field>
         <field name='model'>account.analytic.account</field>
         <field name="inherit_id" ref="hr_timesheet.account_analytic_account_timesheet_form"/>
@@ -87,7 +87,7 @@
                 <label for="is_extra_report" />
             </field>
         </field>
-    </record>
+    </record>-->
     <record id='view_account_analytic_account_add_fields' model='ir.ui.view'>
         <field name='name'>Account extra</field>
         <field name='model'>account.analytic.account</field>
