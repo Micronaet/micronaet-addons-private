@@ -144,11 +144,11 @@ class account_analytic_account(orm.Model):
                 return excel_pool.return_attachment(
                     cr, uid, 'Interventi da valutare', 
                     'intervent.xlsx', version='7.0', context=context)
-            else:        
+            else:
                 # Close and save previous:
                 excel_pool.save_file_as(os.path.join(
-                    month_folder, 
-                    this_account.name,
+                    month_folder,
+                    excel_pool.clean_filename(this_account.name),
                     ))                
         return True
 
