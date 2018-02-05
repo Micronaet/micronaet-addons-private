@@ -125,7 +125,7 @@ class account_analytic_account(orm.Model):
                 excel_pool.write_xls_line(WS_name, 0, WS_header)
                 excel_pool.column_width(WS_name, WS_header_width)
                 row = 0
-            
+            row += 1
             excel_pool.write_xls_line(WS_name, row, [
                 intervent.id, 
                 intervent.intervent_partner_id.name,
