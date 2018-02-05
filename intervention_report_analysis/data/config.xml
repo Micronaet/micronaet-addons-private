@@ -3,7 +3,7 @@
     <data> 
         <record model="ir.config_parameter" id="parameter_export_document_root_folder">
             <field name="key">intervention_export_root_folder</field>
-            <field name="value">~/datastore/intervention</field>
+            <field name="value">~/filestore/samba/reinvoice</field>
         </record>
     </data>
 </openerp>

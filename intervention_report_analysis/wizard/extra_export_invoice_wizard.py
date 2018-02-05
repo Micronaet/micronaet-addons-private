@@ -49,12 +49,12 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             context=None):
         ''' Extract account intervet for recalculate 
         '''    
-        current_proxy = self.browse(cr, uid, ids, context=context)[0]    
-                
-        account_pool = self.pool.get('account.analytic.account')
-        return account_pool.extract_excel_status(cr, uid, 
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]                
+        return self.pool.get('account.analytic.account').extract_excel_status(
+            cr, uid, 
             current_proxy.month, current_proxy.year,  
-            False, context=context)
+            False, # No account browse obj
+            context=context)
         
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
