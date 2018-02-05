@@ -72,10 +72,9 @@ class account_analytic_account(orm.Model):
         # ---------------------------------------------------------------------
         # Date filter for intervent selection:            
         # ---------------------------------------------------------------------
-        date = current_proxy.date
         # Start or end month:
         from_date = '%s-%s-01' % (year, month)
-        date_dt = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
+        date_dt = datetime.strptime(from_date, DEFAULT_SERVER_DATE_FORMAT)
         date_dt += relativedelta(months=1)
         to_date = '%s01' % date_dt.strftime(DEFAULT_SERVER_DATE_FORMAT)[:8]
         
