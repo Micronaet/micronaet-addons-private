@@ -94,7 +94,7 @@
         <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
         <field name='arch' type='xml'>
             <field name="manager_id" position="after">
-                <field name="account_mode" attrs="{'required': [('use_timesheets','=',True),('is_extra_report','=',False)]}" />
+                <field name="account_mode" attrs="{'required': [('use_timesheets','=',True)]}" /><!--TODO ,('is_extra_report','=',False)-->
                 <field name="account_approved" />
                 <field name="account_approved_ref" attrs="{'invisible': [('account_approved','=',False)]}"/>
                 <field name="default_to_invoice" />
