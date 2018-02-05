@@ -140,7 +140,6 @@ class account_analytic_account(orm.Model):
                 '', # insert from file (for reimport)
                 ])
                 
-        import pdb; pdb.set_trace()        
         if last_account != False:        
             if account:        
                 return excel_pool.return_attachment(
@@ -151,8 +150,13 @@ class account_analytic_account(orm.Model):
                 excel_pool.save_file_as(os.path.join(
                     month_folder,
                     excel_pool.clean_filename(last_account.name),
-                    ))                
-        return True
+                    ))
+                return True
+        else:            
+            raise osv.except_osv(
+                _('No data'), 
+                _('No data to extract'),
+                )
 
     def onchange_cost_parameter(self, cr, uid, ids, hour_cost, total_amount, 
             total_hours, field='hour_cost', context=None):
