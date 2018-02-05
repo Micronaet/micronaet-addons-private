@@ -56,8 +56,6 @@ class account_analytic_account(orm.Model):
         # ---------------------------------------------------------------------
         # Excel setup:
         # ---------------------------------------------------------------------
-        WS_ids = {} # For extract all account                
-        WS_row = {} # Position row
         WS_name = _('Fatturazione extra')
         WS_header = [
             'ID', 'Cliente', 'Data', 
@@ -87,28 +85,48 @@ class account_analytic_account(orm.Model):
             domain.append(
                 ('account_id', '=', account.id)
                 )
-                
+
+        # Read extract folder:                
+        config_pool = self.pool.get('ir.config_parameter')
+        config_ids = config_pool.search(cr, uid, [
+            ('key', '=', 'intervention_export_root_folder')], context=context)
+        if config_ids:
+            config_browse = config_pool.browse(cr, uid, config_ids, 
+                context=context)[0]    
+            root_folder = config_browse.value
+        month_folder = os.path.expanduser(
+            os.path.join(root_folder, '%s_%s' % (
+                year, month)))
+        os.system('mkdir -p %s' % month_folder)
+
         ts_ids = ts_pool.search(cr, uid, domain, context=context)
+        last_account = False
         for intervent in sorted(
                 ts_pool.browse(cr, uid, ts_ids, context=context),
-                key=lambda x: (x.date_start, x.user_id.name)
+                key=lambda x: (
+                    x.account_id.name,
+                    x.date_start,                      
+                    x.user_id.name,
+                    )
                 ):
             this_account = intervent.account_id
-            if this_account in WS_ids:
-                excel_pool = WS_ids[this_account]                
-            else:
-                # Create pool for every Excel file:
-                WS_ids[this_account] = self.pool.get('excel.writer')
+            if last_account == False or last_account != this_account:
+                if last_account != False: # previous exist:
+                    # Close and save previous:
+                    excel_pool.save_file_as(os.path.join(
+                        month_folder, 
+                        account.name,
+                        ))
                 
+                # Create pool for every Excel file:
+                excel_pool = self.pool.get('excel.writer')
                 # Add header once:
-                excel_pool = WS_ids[this_account]                
                 excel_pool.create_worksheet(WS_name)
                 excel_pool.write_xls_line(WS_name, 0, WS_header)
                 excel_pool.column_width(WS_name, WS_header_width)
-                WS_row[this_account] = 0
-            WS_row[this_account] += 1
+                row = 0
             
-            excel_pool.write_xls_line(WS_name, WS_row[this_account], [
+            excel_pool.write_xls_line(WS_name, row, [
                 intervent.id, 
                 intervent.intervent_partner_id.name,
                 intervent.date_start, 
@@ -118,35 +136,25 @@ class account_analytic_account(orm.Model):
                 intervent.to_invoice.name,
                 intervent.intervention,
                 intervent.unit_amount,
-                '', # da inserire
+                '', # insert from file (for reimport)
                 ])
-        if account:        
-            return WS_ids[account].return_attachment(
-                cr, uid, 'Interventi da valutare', 
-                'intervent.xlsx', version='7.0', context=context)
                 
-        # else: all will be saved in folder:
-        config_pool = self.pool.get('ir.config_parameter')
-        config_ids = config_pool.search(cr, uid, [
-            ('key', '=', 'intervention_export_root_folder')], context=context)
-        if config_ids:
-            config_browse = config_pool.browse(cr, uid, config_ids, 
-                context=context)[0]    
-            root_folder = config_browse.value
-        else: 
-            raise osv.except_osv(
-                _('Parameter error'), 
-                _('Not found: intervention_export_root_folder parameter!'),
-                )
-        month_folder = os.path.expanduser(
-            os.path.join(root_folder, '%s_%s' % (
-                year, month)))
-        os.system('mkdir -p %s' % month_folder)
-        for account, excel_pool in WS_ids.iteritems():
+        if last_account != False:
+            # Close and save previous:
             excel_pool.save_file_as(os.path.join(
                 month_folder, 
                 account.name,
                 ))
+                
+        #if account:        
+        #    return WS_ids[account].return_attachment(
+        #        cr, uid, 'Interventi da valutare', 
+        #        'intervent.xlsx', version='7.0', context=context)
+        #else:
+        #    raise osv.except_osv(
+        #        _('Parameter error'), 
+        #        _('Not found: intervention_export_root_folder parameter!'),
+        #        )
         return True
 
     def onchange_cost_parameter(self, cr, uid, ids, hour_cost, total_amount, 
