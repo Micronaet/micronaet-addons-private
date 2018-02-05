@@ -38,4 +38,23 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
+class account_invoice_intervent_wizard(osv.osv_memory):
+    ''' Wizard: 
+        Create invoice and link intervent list for print report
+        Create XLSX report for sent intervent list
+    '''
+    _inherit = 'account.invoice.intervent.wizard'   
+    
+    def extract_all_account_month_for_reinvoice(self, cr, uid, ids, 
+            context=None):
+        ''' Extract account intervet for recalculate 
+        '''    
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]    
+                
+        account_pool = self.pool.get('account.analytic.account')
+        return account_pool.extract_excel_status(cr, uid, 
+            current_proxy.month, current_proxy.year,  
+            False, context=context)
+        
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
