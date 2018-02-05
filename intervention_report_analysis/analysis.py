@@ -144,8 +144,8 @@ class account_analytic_account(orm.Model):
             excel_pool.save_file_as(os.path.join(
                 month_folder, 
                 account.name,
-                )
-        return True 
+                ))
+        return True
 
     def onchange_cost_parameter(self, cr, uid, ids, hour_cost, total_amount, 
             total_hours, field='hour_cost', context=None):
