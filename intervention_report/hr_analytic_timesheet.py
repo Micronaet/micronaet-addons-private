@@ -23,14 +23,16 @@ from openerp.osv import fields, osv
 
 
 class hr_analytic_timesheet_mail(osv.Model):
-    """ Update hr.analytic.timesheet to add a field about notification preferences """
-    _name = "hr.analytic.timesheet"
+    """ Update hr.analytic.timesheet to add a field about notification 
+        preferences 
+    """
+    _name = 'hr.analytic.timesheet'
     _inherit = ['hr.analytic.timesheet', 'mail.thread']
     _mail_flat_thread = False
 
     def message_post(self, cr, uid, thread_id, **kwargs):
-        """ Override related to hr.analytic.timesheet. In case of email message, set it as
-            private:
+        """ Override related to hr.analytic.timesheet. In case of email message
+            set it as private:
             - add the target partner in the message partner_ids
             - set thread_id as None, because this will trigger the 'private'
                 aspect of the message (model=False, res_id=False)
@@ -43,6 +45,6 @@ class hr_analytic_timesheet_mail(osv.Model):
                 partner_ids.append((4, thread_id))
             kwargs['partner_ids'] = partner_ids
             thread_id = False
-        return super(hr_analytic_timesheet_mail, self).message_post(cr, uid, thread_id, **kwargs)
-
+        return super(hr_analytic_timesheet_mail, self).message_post(
+            cr, uid, thread_id, **kwargs)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

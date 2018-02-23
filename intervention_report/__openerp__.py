@@ -28,38 +28,37 @@
 ##############################################################################
 
 {
-    'name' : 'Intervention Report',
-    'version' : '0.2',
-    'category' : 'Report',
-    'description' : """ Module for manage calendar appointment, for fix 
+    'name': 'Intervention Report',
+    'version': '0.2',
+    'category': 'Report',
+    'description': ''' Module for manage calendar appointment, for fix 
           date of intervention, a little workflow that can set up state of
           intervention, from planning, customer comunication, and report
-          for complete intervention""",
-    'author' : 'Micronaet s.r.l.',
-    'website' : 'http://www.micronaet.it',
-    'license' : 'AGPL-3',
-    'depends' : ['base',
-                 'product',
-                 'report_aeroo',
-                 'report_aeroo_ooo',
-                 'hr',
-                 'hr_timesheet_invoice',
-                ],
-    'init_xml' : [],
-    'demo_xml' : [],
-    'update_xml' : ['data/factor.xml',
-                    'intervent_sequence.xml',
-                    'intervention.xml',  
-                    'intervention_workflow.xml',
-                    'report/report_intervent.xml',
-                    #'report/report_intervent_state.xml',
-                    #'report/report_intervent_state.xml',
-                    #'wizard/wizard_report_view.xml', 
-                    #'intervention_dashboard.xml',
-                    'data/intervent_mail_template.xml',
-                    ],
+          for complete intervention
+          ''',
+    'author': 'Micronaet s.r.l.',
+    'website': 'http://www.micronaet.it',
+    'license': 'AGPL-3',
+    'depends': [
+        'base',
+        'product',
+        'report_aeroo',
+        #'report_aeroo_ooo',
+        'hr',
+        'hr_timesheet_invoice',
+        ],
+    'init_xml': [],
+    'demo_xml': [],
+    'data': [
+        #'data/factor.xml',
+        'intervent_sequence.xml',
+        'intervention.xml',  
+        'intervention_workflow.xml',
+        #'report/report_intervent.xml',
+        #'data/intervent_mail_template.xml',
+        ],
     'active': False,
     'installable': True,
-}
+    }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -41,7 +41,6 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 _logger = logging.getLogger(__name__)
 
 
-
 class account_analytic_account(osv.osv):
     """ Add extra fields to account.analytic.account
     """
@@ -136,13 +135,14 @@ class hr_analytic_timesheet_extra(osv.osv):
             
         msg_ids = self.pool.get('mail.message').search(cr, uid, [
             ('model','=','hr.analytic.timesheet'),
-            ('res_id','in',ids)], context=context)
+            ('res_id', 'in', ids),
+            ], context=context)
         self.pool.get('mail.message').unlink(cr, uid, msg_ids, context=context)
         return super(hr_analytic_timesheet_extra, self).unlink(
             cr, uid, ids, context)
         
     # Workflow function:
-    def force_confirmation(self, cr, uid, ids, context = None):
+    def force_confirmation(self, cr, uid, ids, context=None):
         ''' Test if is not present ref, calculate and change status
         '''
         data={'state': 'reported',}
@@ -153,15 +153,15 @@ class hr_analytic_timesheet_extra(osv.osv):
         return True
 
 
-    def intervention_draft(self, cr, uid, ids, context = None):
+    def intervention_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'draft',}) 
         return True
 
-    def intervention_waiting(self, cr, uid, ids, context = None):
+    def intervention_waiting(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'waiting',}) 
         return True
 
-    def intervention_confirmed(self, cr, uid, ids, context = None):
+    def intervention_confirmed(self, cr, uid, ids, context=None):
         ''' Test if is not present ref, calculate and change status
         '''
         data={'state': 'confirmed',}
@@ -171,22 +171,22 @@ class hr_analytic_timesheet_extra(osv.osv):
         self.write(cr, uid, ids, data) 
         return True
 
-    def intervention_cancel(self, cr, uid, ids, context = None):
+    def intervention_cancel(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'cancel',})
         return True
 
-    def intervention_close(self, cr, uid, ids, context = None):
+    def intervention_close(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'close',})
         return True
 
-    def intervention_report_close(self, cr, uid, ids, context = None):
+    def intervention_report_close(self, cr, uid, ids, context=None):
         ''' Test if is not present ref, calculate and change status
         '''
         self.write(cr, uid, ids, {'state': 'reported',})
         return True
     
     # Utiliy function for workflow:
-    def get_sequence_if_not_present(self, cr, uid, ids, context = None):
+    def get_sequence_if_not_present(self, cr, uid, ids, context=None):
         ''' test if ids element don't have ref setted, if not get next value
         '''
         item_proxy=self.browse(cr, uid, ids[0], context=context)
@@ -194,17 +194,22 @@ class hr_analytic_timesheet_extra(osv.osv):
            return self.get_intervent_number(cr, uid, context = context)
         return False
 
-    def intervention_report_send_and_close(self, cr, uid, ids, context = None):
-        ''' This function opens a window to compose an email, with the intervent template message loaded by default
+    def intervention_report_send_and_close(self, cr, uid, ids, context=None):
+        ''' This function opens a window to compose an email, with the 
+            intervent template message loaded by default
         '''
         assert len(ids) == 1, 'This option should only be used for a single id at a time.'
         ir_model_data = self.pool.get('ir.model.data')
         try:
-            template_id = ir_model_data.get_object_reference(cr, uid, 'intervention_report', 'email_template_timesheet_intervent')[1]
+            template_id = ir_model_data.get_object_reference(
+                cr, uid, 'intervention_report', 
+                'email_template_timesheet_intervent')[1]
         except ValueError:
             template_id = False
         try:
-            compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+            compose_form_id = ir_model_data.get_object_reference(
+               cr, uid, 'mail', 
+               'email_compose_message_wizard_form')[1]
         except ValueError:
             compose_form_id = False
         ctx = dict(context)
@@ -228,7 +233,7 @@ class hr_analytic_timesheet_extra(osv.osv):
         }
     
     # On change event:
-    def on_change_name(self, cr, uid, ids, name, intervention_request, context = None):
+    def on_change_name(self, cr, uid, ids, name, intervention_request, context=None):
         ''' Test if change name, then write it in intervention_request if empty
             No changes if name is empty
         '''
@@ -236,7 +241,7 @@ class hr_analytic_timesheet_extra(osv.osv):
            return {'value': {'intervention_request':name}}
         return {}
 
-    def on_change_mode(self, cr, uid, ids, mode, context = None):
+    def on_change_mode(self, cr, uid, ids, mode, context=None):
         ''' If change mode:
             test if is customer so trip is required
         '''
@@ -244,7 +249,7 @@ class hr_analytic_timesheet_extra(osv.osv):
         res['value']={'trip_require': mode == 'customer'} # True if customer
         return res
 
-    def on_change_partner(self, cr, uid, ids, partner_id, account_id, context = None):
+    def on_change_partner(self, cr, uid, ids, partner_id, account_id, context=None):
         ''' If change partner:
             set up account_id if there's default 
             change trip hour if mode setted up to 'customer'        
@@ -256,8 +261,10 @@ class hr_analytic_timesheet_extra(osv.osv):
             res['value']['trip_hour'] = 0.0
             return res
 
-        partner_proxy=self.pool.get("res.partner").browse(cr, uid, partner_id, context=context)
-        res['value']['account_id'] = partner_proxy.default_contract_id.id if partner_proxy.default_contract_id else False
+        partner_proxy=self.pool.get("res.partner").browse(
+            cr, uid, partner_id, context=context)
+        res['value']['account_id'] = partner_proxy.default_contract_id.id if \
+            partner_proxy.default_contract_id else False
         res['value']['trip_hour'] = partner_proxy.trip_duration # hide if non required
         return res
 
@@ -440,18 +447,20 @@ class hr_analytic_timesheet_extra(osv.osv):
         return res        
         
     # default function:
-    def get_default_invoice_value (self, cr, uid, context = None):
+    def get_default_invoice_value (self, cr, uid, context=None):
         ''' Get default invoice depend on xml data imported with module
         '''
         ids = self.pool.get('ir.model.data').search(cr, uid, [
            ('model', '=', 'hr_timesheet_invoice.factor'),
-           ('name', '=', 'working_intervent_100')], context=context)
+           ('name', '=', 'working_intervent_100'),
+           ], context=context)
         if ids:
-            res_id=self.pool.get('ir.model.data').read(cr, uid, ids, ('id','res_id'), context=context)            
+            res_id = self.pool.get('ir.model.data').read(
+                cr, uid, ids, ('id','res_id'), context=context)            
             return res_id[0]['res_id']
         return # nothing (no default)    
     
-    def get_intervent_number(self, cr, uid, context = None):
+    def get_intervent_number(self, cr, uid, context=None):
         ''' Get intervent sequence number
         '''
         res = self.pool.get('ir.sequence').get(cr, uid, 'hr.intervent.report')
@@ -525,36 +534,41 @@ class hr_analytic_timesheet_extra(osv.osv):
             ('company','Company address'),
             ], 'Mode', select=True, required=True),
         'state':fields.selection([
-            ('cancel', 'Cancelled'),               # Appointment cancel
-            ('draft', 'Draft'),                    # Intervent / appointment marked on agenda
-            ('waiting', 'Await confirm'),  # Appointment await confirm from customer
-            ('confirmed', 'Confirmed'),            # Appointment confirmet
-            ('close', 'Close'),                 # Appointment close without sending intervent report
-            ('reported', 'Close reported'),     # Appointment close with sending intervent report
+            ('cancel', 'Cancelled'), # Appointment cancel
+            ('draft', 'Draft'), # Intervent / appointment marked on agenda
+            ('waiting', 'Await confirm'), # Appointment await confirm from customer
+            ('confirmed', 'Confirmed'), # Appointment confirmet
+            ('close', 'Close'), # Appointment close without sending intervent report
+            ('reported', 'Close reported'), # Appointment close with sending intervent report
         ],'State', select=True, readonly=True),    
         'extra_planned':fields.boolean('Extra Planned'),
-    }
+        }
     
-    _defaults={
-         # set working data from xml file as default
-         'name': lambda *a: False,
-         'to_invoice': lambda s, c, uid, ctx: s.get_default_invoice_value(c, uid, context=ctx),
-         #'ref': lambda s, c, uid, ctx: s.get_intervent_number(c, uid, context=ctx),
-         'state': lambda *a: 'draft',
-         'mode': lambda *a: 'connection',
-         'manual_total': lambda *x: False,
-         #'user_id': lambda obj, cr, uid, context: uid,
-    }
+    _defaults = {
+        # set working data from xml file as default
+        'name': lambda *a: False,
+        'to_invoice': lambda s, c, uid, ctx: s.get_default_invoice_value(c, uid, context=ctx),
+        #'ref': lambda s, c, uid, ctx: s.get_intervent_number(c, uid, context=ctx),
+        'state': lambda *a: 'draft',
+        'mode': lambda *a: 'connection',
+        'manual_total': lambda *x: False,
+        #'user_id': lambda obj, cr, uid, context: uid,
+        }
 
 class mail_compose_intervent_message(osv.Model):
     _inherit = 'mail.compose.message'
 
-    def send_mail(self, cr, uid, ids, context = None):
+    def send_mail(self, cr, uid, ids, context=None):
         import netsvc
         context = context or {}
-        if context.get('default_model') == 'hr.analytic.timesheet' and context.get('default_res_id') and context.get('mark_intervent_as_sent'):
+        if context.get('default_model') == 'hr.analytic.timesheet' and \
+                context.get('default_res_id') and \
+                context.get('mark_intervent_as_sent'):
             context = dict(context, mail_post_autofollow=True)
             wf_service = netsvc.LocalService("workflow")
-            wf_service.trg_validate(uid, 'hr.analytic.timesheet', context['default_res_id'], 'intervention_report_close', cr)
-        return super(mail_compose_intervent_message, self).send_mail(cr, uid, ids, context=context)
+            wf_service.trg_validate(
+                uid, 'hr.analytic.timesheet', 
+                context['default_res_id'], 'intervention_report_close', cr)
+        return super(mail_compose_intervent_message, self).send_mail(
+            cr, uid, ids, context=context)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
