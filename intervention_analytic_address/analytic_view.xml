@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_account_analytic_account_address_form">
+            <field name="name">account.analytic.account.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                     <field name="address_id" domain="[('parent_id', '=', partner_id)]" context="{'default_is_address':1, 'default_parent_id': partner_id, 'default_name': name}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
+
