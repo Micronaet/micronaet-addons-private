@@ -4,10 +4,13 @@
         <menuitem name="FC" id="menu_partner_fc_root" sequence="10" />
             <menuitem name="Interventi" id="menu_partner_fc_intervent" parent="menu_partner_fc_root" sequence="10" />
                 <menuitem name="My intervent" parent="menu_partner_fc_intervent" id="menu_partner_fc_intervent_my" action="intervention_report.action_view_hr_analytic_timesheet_my" sequence="10" />        
+                <menuitem name="My intervent (lite)" parent="menu_partner_fc_intervent" id="menu_partner_fc_intervent_my_lite" action="intervention_report.action_view_hr_analytic_timesheet_my_lite" sequence="10" />        
                 
             <menuitem name="Amministrazione" id="menu_partner_fc_management" parent="menu_partner_fc_root" sequence="20" />
-                <menuitem parent="menu_partner_fc_management" id="menu_partner_fc_employee" action="hr.open_view_employee_list_my" sequence="10"/>
-                
+                <menuitem id="menu_partner_fc_management_address_customer" parent="menu_partner_fc_management" name="Customer" sequence="10" action="base.action_partner_customer_form"/>
+                <menuitem id="menu_partner_fc_management_address_supplier" parent="menu_partner_fc_management" name="Supplier" sequence="20" action="base.action_partner_supplier_form"/>
+                <menuitem parent="menu_partner_fc_management" id="menu_partner_fc_employee" action="hr.open_view_employee_list_my" sequence="30"/>                
+                         
             <menuitem name="Analisi" id="menu_partner_fc_analysis" parent="menu_partner_fc_root" sequence="50" />
                 <menuitem name="Intervent" parent="menu_partner_fc_analysis" id="menu_partner_fc_analysis_intervent" action="intervention_report.action_view_hr_analytic_timesheet" sequence="20" />        
                     <menuitem name="User" parent="menu_partner_fc_analysis_intervent" id="menu_hr_analytic_timesheet_insert" action="intervention_report.action_view_hr_analytic_timesheet_insert" sequence="10" />        

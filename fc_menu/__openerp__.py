@@ -18,7 +18,7 @@
 ###############################################################################
 
 {
-    'name': 'FR master root menu',
+    'name': 'FC master root menu',
     'version': '0.1',
     'category': 'HW',
     'description': '''        
@@ -30,6 +30,7 @@
     'depends': [
         'base',
         'hr',
+        'intervention_report',
         ],
     'init_xml': [],
     'demo': [],
