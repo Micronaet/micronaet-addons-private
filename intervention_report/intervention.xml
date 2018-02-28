@@ -466,7 +466,7 @@
 
        <!-- Menu -->       
     <menuitem name="Intervent report" parent="hr.menu_hr_root" id="menu_base_intervention_report" sequence="0" />
-        <menuitem name="My intervent (+/-3 gg.)" parent="menu_base_intervention_report" id="menu_base_intervention_report_only_my" action="action_view_hr_analytic_timesheet_my" sequence="10" />        
+        <menuitem name="My intervent" parent="menu_base_intervention_report" id="menu_base_intervention_report_only_my" action="action_view_hr_analytic_timesheet_my" sequence="10" />        
     
         <menuitem name="All intervent" parent="menu_base_intervention_report" id="menu_base_intervention_report_all" action="action_view_hr_analytic_timesheet" sequence="20" />        
             <menuitem name="User" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_insert" action="action_view_hr_analytic_timesheet_insert" sequence="20" />        
