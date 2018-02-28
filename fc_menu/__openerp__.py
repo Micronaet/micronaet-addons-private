@@ -30,6 +30,8 @@
     'depends': [
         'base',
         'hr',
+        'account',
+        'analytic',
         'intervention_report',
         ],
     'init_xml': [],

@@ -10,7 +10,8 @@
                 <menuitem id="menu_partner_fc_management_address_customer" parent="menu_partner_fc_management" name="Customer" sequence="10" action="base.action_partner_customer_form"/>
                 <menuitem id="menu_partner_fc_management_address_supplier" parent="menu_partner_fc_management" name="Supplier" sequence="20" action="base.action_partner_supplier_form"/>
                 <menuitem parent="menu_partner_fc_management" id="menu_partner_fc_employee" action="hr.open_view_employee_list_my" sequence="30"/>                
-                         
+                <menuitem action="account.action_account_analytic_account_form" id="menu_partner_fc_management_account_analytic" parent="menu_partner_fc_management" sequence="30"/>
+                    
             <menuitem name="Analisi" id="menu_partner_fc_analysis" parent="menu_partner_fc_root" sequence="50" />
                 <menuitem name="Intervent" parent="menu_partner_fc_analysis" id="menu_partner_fc_analysis_intervent" action="intervention_report.action_view_hr_analytic_timesheet" sequence="20" />        
                     <menuitem name="User" parent="menu_partner_fc_analysis_intervent" id="menu_hr_analytic_timesheet_insert" action="intervention_report.action_view_hr_analytic_timesheet_insert" sequence="10" />        
@@ -19,6 +20,7 @@
                     <menuitem name="Invoice type" parent="menu_partner_fc_analysis_intervent" id="menu_hr_analytic_timesheet_pay" action="intervention_report.action_view_hr_analytic_timesheet_pay" sequence="40" />
             
             <menuitem name="Configurazione" id="menu_partner_fc_configuration" parent="menu_partner_fc_root" sequence="99" />
+
     </data>
 </openerp>
 
