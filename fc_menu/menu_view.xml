@@ -20,7 +20,6 @@
                     <menuitem name="Invoice type" parent="menu_partner_fc_analysis_intervent" id="menu_hr_analytic_timesheet_pay" action="intervention_report.action_view_hr_analytic_timesheet_pay" sequence="40" />
             
             <menuitem name="Configurazione" id="menu_partner_fc_configuration" parent="menu_partner_fc_root" sequence="99" />
-
     </data>
 </openerp>
 

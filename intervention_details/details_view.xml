@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id='view_hr_analytic_timesheet_form' model='ir.ui.view'>
+            <field name='name'>HR analytic timesheet details</field>
+            <field name='model'>hr.analytic.timesheet</field>
+            <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_form"/>
+            <field name='arch' type='xml'>
+                <page string="Accounting" position="before">
+                    <page string="Details">
+                       <group colspan="4" col="4">
+                           <field name="create_uid" />
+                           <field name="create_date" />
+                           <field name="write_uid" />
+                           <field name="write_date" />
+                       </group>
+                    </page>
+                       
+                </page>
+            </field>
+        </record>
+    </data>
+</openerp>
+
