@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-28 15:44+0000\n"
-"PO-Revision-Date: 2018-02-28 16:46+0100\n"
+"POT-Creation-Date: 2018-03-07 15:20+0000\n"
+"PO-Revision-Date: 2018-03-07 16:20+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -28,6 +28,11 @@ msgid "Analisi"
 msgstr "Analisi"
 
 #. module: fc_menu
+#: model:ir.ui.menu,name:fc_menu.menu_partner_fc_management_account_analytic
+msgid "Analytic Accounts"
+msgstr "Conti analitici"
+
+#. module: fc_menu
 #: model:ir.ui.menu,name:fc_menu.menu_partner_fc_configuration
 msgid "Configurazione"
 msgstr "Configurazione"
@@ -41,11 +46,6 @@ msgstr "Clienti"
 #: model:ir.ui.menu,name:fc_menu.menu_partner_fc_employee
 msgid "Employees"
 msgstr "Dipendenti"
-
-#. module: fc_menu
-#: model:ir.ui.menu,name:fc_menu.menu_hr_analytic_timesheet_extra
-msgid "Extra Planned"
-msgstr "Extra pianificazione"
 
 #. module: fc_menu
 #: model:ir.ui.menu,name:fc_menu.menu_partner_fc_root
@@ -83,6 +83,11 @@ msgid "My intervent (lite)"
 msgstr "Miei interventi (veloce)"
 
 #. module: fc_menu
+#: model:ir.ui.menu,name:fc_menu.menu_partner_fc_analysis_intervent_operation_calendar
+msgid "Operation"
+msgstr "Operation"
+
+#. module: fc_menu
 #: model:ir.ui.menu,name:fc_menu.menu_hr_analytic_timesheet_state
 msgid "State"
 msgstr "Stato"
@@ -91,6 +96,11 @@ msgstr "Stato"
 #: model:ir.ui.menu,name:fc_menu.menu_partner_fc_management_address_supplier
 msgid "Supplier"
 msgstr "Fornitori"
+
+#. module: fc_menu
+#: model:ir.ui.menu,name:fc_menu.menu_menu_partner_fc_configuration_operation_list
+msgid "Timesheet operation"
+msgstr "Operazioni interventi"
 
 #. module: fc_menu
 #: model:ir.ui.menu,name:fc_menu.menu_hr_analytic_timesheet_insert

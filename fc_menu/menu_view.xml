@@ -18,8 +18,11 @@
                     <menuitem name="State" parent="menu_partner_fc_analysis_intervent" id="menu_hr_analytic_timesheet_state" action="intervention_report.action_view_hr_analytic_timesheet_state" sequence="20" />        
                     <menuitem name="Mode" parent="menu_partner_fc_analysis_intervent" id="menu_hr_analytic_timesheet_location" action="intervention_report.action_view_hr_analytic_timesheet_location" sequence="30" />        
                     <menuitem name="Invoice type" parent="menu_partner_fc_analysis_intervent" id="menu_hr_analytic_timesheet_pay" action="intervention_report.action_view_hr_analytic_timesheet_pay" sequence="40" />
+                    <menuitem name="Operation" parent="menu_partner_fc_analysis_intervent" id="menu_partner_fc_analysis_intervent_operation_calendar" action="intervention_report.action_view_hr_analytic_timesheet_operation" sequence="50" />
             
-            <menuitem name="Configurazione" id="menu_partner_fc_configuration" parent="menu_partner_fc_root" sequence="99" />
+            <menuitem name="Configurazione" id="menu_partner_fc_configuration" parent="menu_partner_fc_root" sequence="99" />               
+                 <menuitem name="Timesheet operation" parent="menu_partner_fc_configuration" id="menu_menu_partner_fc_configuration_operation_list" action="intervention_report.action_hr_analytic_timesheet_operation" sequence="10" />
+
     </data>
 </openerp>
 

@@ -1,13 +1,13 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* intervention_report
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 7.0\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-19 16:28+0000\n"
-"PO-Revision-Date: 2017-10-19 18:31+0100\n"
+"POT-Creation-Date: 2018-03-07 15:21+0000\n"
+"PO-Revision-Date: 2018-03-07 16:24+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,191 +18,13 @@ msgstr ""
 "X-Generator: Poedit 1.6.10\n"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet,intervent_duration:0
-#: field:hr.analytic.timesheet,intervent_total:0
-msgid "Duration intervent"
-msgstr "Durata intervento"
-
-#. module: intervention_report
-#: model:ir.model,name:intervention_report.model_hr_analytic_timesheet_trip
-msgid "HR timesheet trip"
-msgstr "HR viaggio foglio presenza"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Sent report by mail"
-msgstr "Invia rapportino per email"
-
-#. module: intervention_report
-#: view:account.analytic.account:0
-msgid "Default invoice intervent"
-msgstr "Modalità di default"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Today"
-msgstr "Oggi"
-
-#. module: intervention_report
-#: model:ir.ui.menu,name:intervention_report.menu_base_intervention_report_only_my
-msgid "My intervent (+/-3 gg.)"
-msgstr "Interventi personali (+/-3 gg.)"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "March"
-msgstr "Marzo"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,message_unread:0
-msgid "Unread Messages"
-msgstr "Messaggi non letti"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,intervention_request:0
-msgid "Keep track of the origina request"
-msgstr "Tiene traccia delle richieste originali"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet,google_from:0
-#: selection:hr.analytic.timesheet,google_to:0
-msgid "Company"
-msgstr "Azienda"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Timesheet"
-msgstr "Timesheet"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,intervent_partner_id:0
-msgid "Partner ref."
-msgstr "Rif. partner"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,break_hour:0
-msgid "Break hour"
-msgstr "Ore pausa"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "With Trip"
-msgstr "Con viaggio"
-
-#. module: intervention_report
-#: field:account.analytic.account,default_to_invoice:0
-msgid "Default invoice"
-msgstr "Fatturazione di default"
-
-#. module: intervention_report
-#: model:ir.model,name:intervention_report.model_hr_analytic_timesheet_trip_wizard
-msgid "hr.analytic.timesheet.trip.wizard"
-msgstr "hr.analytic.timesheet.trip.wizard"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,request_by:0
-msgid "List of people that request intervent"
-msgstr "Lista del personale che ha effettuato la richiesta"
-
-#. module: intervention_report
-#: model:hr_timesheet_invoice.factor,name:intervention_report.pay_analysis_intervent_100
-msgid "Pay analysis"
-msgstr "Analisi a pagamento"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet,mode:0
-msgid "Tele assistence"
-msgstr "Teleassistenza"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,message_ids:0
-msgid "Messages"
-msgstr "Messaggi"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "With Break"
-msgstr "Con pausa"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet,state:0
-msgid "Cancelled"
-msgstr "Annullato"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet.trip,intervent_ids:0
-msgid "Intervent"
-msgstr "Intervento"
-
-#. module: intervention_report
-#: model:ir.model,name:intervention_report.model_mail_compose_message
-msgid "Email composition wizard"
-msgstr "Wizard composizione email"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,message_unread:0
-msgid "If checked new messages require your attention."
-msgstr "Se spuntato i nuovi messaggi vengono messi in evidenza"
-
-#. module: intervention_report
-#: model:hr_timesheet_invoice.factor,name:intervention_report.warranty_intervent_0
-msgid "Warranty"
-msgstr "Garanzia"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,account_hour_status:0
-msgid "Account status"
-msgstr "Stato commessa"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Group By..."
-msgstr "Raggruppa per..."
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,intervent_total:0
-msgid ""
-"Duration intervent considering trip and break used for invoice (q. for "
-"customer)"
-msgstr ""
-"Durata intervento consideranto il viaggio e la pausa, usato per fatturazione "
-"(q. visibile al cliente)"
-
-#. module: intervention_report
-#: model:ir.model,name:intervention_report.model_account_analytic_account
-msgid "Analytic Account"
-msgstr "Conto Analitico"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,message_summary:0
-msgid ""
-"Holds the Chatter summary (number of messages, ...). This summary is "
-"directly in html format in order to be inserted in kanban views."
-msgstr ""
-"Mantiene il sommarrio chat (numero di messaggi, ...). Questo riepiloco è "
-"direttamente fatto in formato html per essere inserito nelle viste kanban."
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "From date"
-msgstr "Dalla data"
-
-#. module: intervention_report
-#: model:email.template,report_name:intervention_report.email_template_timesheet_intervent
-msgid "${(object.ref or '').replace('/','_')}"
-msgstr "${(object.ref or '').replace('/','_')}"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet,google_from:0
-msgid "Previous"
-msgstr "Precedente"
-
-#. module: intervention_report
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_extra
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_insert
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_location
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_my
+#: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_my_lite
+#: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_operation
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_pay
 #: model:ir.actions.act_window,help:intervention_report.action_view_hr_analytic_timesheet_state
 msgid ""
@@ -221,52 +43,29 @@ msgstr ""
 "            "
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0 selection:hr.analytic.timesheet,state:0
-#: selection:hr.analytic.timesheet.trip,state:0
-msgid "Confirmed"
-msgstr "Confermato"
+#: field:account.analytic.account,account_approved:0
+msgid "Account approved"
+msgstr "Conto approvato"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet,google_from:0
-msgid "From"
-msgstr "Da"
+#: field:account.analytic.account,account_mode:0
+msgid "Account mode"
+msgstr "Modalità conto"
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Closed"
-msgstr "Chiuso"
+#: field:hr.analytic.timesheet,account_hour_status:0
+msgid "Account status"
+msgstr "Stato commessa"
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Internal purpose, not visible for customers"
-msgstr "Usato per scopi interi, non visibile al cliente"
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+msgid "Accounting"
+msgstr "Contabilità"
 
 #. module: intervention_report
-#: selection:hr.analytic.timesheet,state:0
-msgid "Close reported"
-msgstr "Chiuso con rapportino"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet,google_to:0
-msgid "Next"
-msgstr "Prossimo"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Analytic account"
-msgstr "Conto analitico"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0 field:hr.analytic.timesheet,state:0
-#: field:hr.analytic.timesheet.trip,state:0
-#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_state
-msgid "State"
-msgstr "Stato"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,message_follower_ids:0
-msgid "Followers"
-msgstr "Followers"
+#: help:hr.analytic.timesheet,intervention:0
+msgid "All description of the intervent, used for print report"
+msgstr "Descrizione completa dell'intervento, usato per la stampa report"
 
 #. module: intervention_report
 #: model:ir.ui.menu,name:intervention_report.menu_base_intervention_report_all
@@ -274,103 +73,98 @@ msgid "All intervent"
 msgstr "Tutti gli interventi"
 
 #. module: intervention_report
-#: field:account.analytic.account,total_hours:0
-msgid "Total hour"
-msgstr "Ore totali"
+#: model:ir.model,name:intervention_report.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Conto Analitico"
 
 #. module: intervention_report
-#: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet_insert
-msgid "Insert intervent"
-msgstr "Inserisci intervento"
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Analytic account"
+msgstr "Conto analitico"
 
 #. module: intervention_report
-#: help:hr.analytic.timesheet,not_in_report:0
-msgid "It's not printed in monthly report"
-msgstr "Non stampato nel report mensile"
+#: field:account.analytic.account,account_approved_ref:0
+msgid "Approved ref."
+msgstr "Rif. approvazione"
 
 #. module: intervention_report
-#: help:hr.analytic.timesheet,internal_note:0
-msgid "Note for save some impression, no comunication to customer"
-msgstr "Nota per salvare alcune impressioni, non comunicate al cliente"
+#: selection:hr.analytic.timesheet,state:0
+msgid "Await confirm"
+msgstr "Attesa conferma"
 
 #. module: intervention_report
-#: model:hr_timesheet_invoice.factor,name:intervention_report.gratis_intervent_0
-msgid "Gratis"
-msgstr "Gratuito"
+#: field:hr.analytic.timesheet,break_require:0
+msgid "Break"
+msgstr "Pausa"
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "To close"
-msgstr "Da chiudere"
+#: field:hr.analytic.timesheet,break_hour:0
+msgid "Break hour"
+msgstr "Ore pausa"
 
 #. module: intervention_report
-#: help:account.analytic.account,total_hours:0
-msgid "Total hour for this contract for all period"
-msgstr "Totale ore per questo contratto per tutto il periodo"
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_tree
+msgid "Cancel"
+msgstr "Annulla"
 
 #. module: intervention_report
-#: help:hr.analytic.timesheet,ref:0
-msgid "ID for intervent, actually manually configured, after became a sequence"
-msgstr "ID intervento"
+#: selection:hr.analytic.timesheet,state:0
+msgid "Cancelled"
+msgstr "Annullato"
 
 #. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "July"
-msgstr "Luglio"
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Check month"
+msgstr "Controllo mese"
 
 #. module: intervention_report
-#: help:hr.analytic.timesheet.trip,manual_total_trip:0
-msgid "Duration in Km of total trip, setted manual, used instead of Total trip"
-msgstr ""
-"Durata totale viaggio in Km, impostato manuale viene usato al posto del "
-"viaggio totale"
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_tree
+#: selection:hr.analytic.timesheet,state:0
+msgid "Close"
+msgstr "Chiuso"
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Share a message..."
-msgstr "Condividi messaggi..."
+#: selection:hr.analytic.timesheet,state:0
+msgid "Close reported"
+msgstr "Chiuso con rapportino"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet.trip,manual_total_trip:0
-msgid "Manual total trip"
-msgstr "Totale viaggio manuale"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,manual_total:0
-#: field:hr.analytic.timesheet.trip,manual_total:0
-msgid "Manual"
-msgstr "Manuale"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,request_by:0
-msgid "Request by"
-msgstr "Richiesto da"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,not_in_report:0
-msgid "Not in report"
-msgstr "Non nel report"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "This year"
-msgstr "Anno attuale"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-#: model:ir.model,name:intervention_report.model_res_partner
-msgid "Partner"
-msgstr "Partner"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_tree
 msgid "Close with report"
 msgstr "Chiuso con rapportino"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet,internal_note:0
-msgid "Internal note"
-msgstr "Note interne"
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Closed"
+msgstr "Chiuso"
+
+#. module: intervention_report
+#: selection:hr.analytic.timesheet,google_from:0
+#: selection:hr.analytic.timesheet,google_to:0
+msgid "Company"
+msgstr "Azienda"
+
+#. module: intervention_report
+#: selection:hr.analytic.timesheet,mode:0
+msgid "Company address"
+msgstr "Azienda"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_tree
+#: selection:hr.analytic.timesheet,state:0
+msgid "Confirmed"
+msgstr "Confermato"
+
+#. module: intervention_report
+#: selection:account.analytic.account,account_mode:0
+msgid "Contract"
+msgstr "Contratto"
 
 #. module: intervention_report
 #: help:res.partner,has_contract:0
@@ -378,34 +172,44 @@ msgid "Contract for assistence, if yes compile also the analytic account"
 msgstr "Contratto per assistenza, se spuntato compila anche il conto analitico"
 
 #. module: intervention_report
-#: help:account.analytic.account,default_to_invoice:0
-msgid ""
-"Defaulf invoice type if there's one active for customer. All intervent are, "
-"for default, setted to this value"
-msgstr ""
-"Fatturazione di default se ne esiste qualcuna abbinata al cliente. Tutti gli "
-"interventi sono, per default, impostati a questo valore"
+#: field:hr.analytic.timesheet.operation,create_uid:0
+msgid "Created by"
+msgstr "Creato da"
 
 #. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "December"
-msgstr "Dicembre"
+#: field:hr.analytic.timesheet.operation,create_date:0
+msgid "Created on"
+msgstr "Creato il"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet.trip.wizard,month:0
-msgid "Month"
-msgstr "Mese"
+#: selection:hr.analytic.timesheet,mode:0
+msgid "Customer (passenger)"
+msgstr "Cliente (passeggero)"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet,intervention_request:0
-msgid "Intervention request"
-msgstr "Richiesta intervento"
+#: selection:hr.analytic.timesheet,mode:0
+msgid "Customer address"
+msgstr "Dal cliente"
 
 #. module: intervention_report
-#: selection:hr.analytic.timesheet,google_from:0
-#: selection:hr.analytic.timesheet,google_to:0
-msgid "Home"
-msgstr "Casa"
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Date"
+msgstr "Data"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,date_end:0
+msgid "Date end"
+msgstr "Data termine"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,message_last_post:0
+msgid "Date of the last message posted on the record."
+msgstr "Data ultimo messaggio postato"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,date_start:0
+msgid "Date start"
+msgstr "Data partenza"
 
 #. module: intervention_report
 #: help:res.partner,default_contract_id:0
@@ -417,55 +221,62 @@ msgstr ""
 "interventi verranno di conseguenza impostati a questo valore"
 
 #. module: intervention_report
-#: view:res.partner:0
-msgid "Intervent parameter:"
-msgstr "Parametri interventi:"
+#: help:account.analytic.account,default_to_invoice:0
+msgid ""
+"Defaulf invoice type if there's one active for customer. All intervent are, "
+"for default, setted to this value"
+msgstr ""
+"Fatturazione di default se ne esiste qualcuna abbinata al cliente. Tutti gli "
+"interventi sono, per default, impostati a questo valore"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet,trip_hour:0
-msgid "Trip hour"
-msgstr "Ore viaggio"
+#: field:res.partner,default_contract_id:0
+msgid "Default Contract"
+msgstr "Contratto di default"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet,manual_total_internal:0
-msgid "Manual (internal)"
-msgstr "Manuale (interno)"
+#: field:account.analytic.account,default_to_invoice:0
+msgid "Default invoice"
+msgstr "Fatturazione di default"
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Map route"
-msgstr "Tragitto mappa"
+#: view:account.analytic.account:intervention_report.view_account_analytic_account_tree_add_fields
+#: view:account.analytic.account:intervention_report.view_account_analytic_account_tree_add_list_fields
+msgid "Default invoice intervent"
+msgstr "Modalità di default"
 
 #. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "June"
-msgstr "Giugno"
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+msgid "Description"
+msgstr "Descrizione"
 
 #. module: intervention_report
-#: help:hr.analytic.timesheet,google_to:0
-msgid "Used for auto trace route 'to' with google maps"
-msgstr "Usato per tracciare automaticamente la destinazione in google maps"
-
-#. module: intervention_report
-#: model:hr_timesheet_invoice.factor,name:intervention_report.internal_intervent_0
-msgid "Internal"
-msgstr "Interno"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0 selection:hr.analytic.timesheet,state:0
-#: selection:hr.analytic.timesheet.trip,state:0
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_tree
+#: selection:hr.analytic.timesheet,state:0
 msgid "Draft"
 msgstr "Bozza"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet.trip.wizard,from_date:0
-msgid "From date (>=)"
-msgstr "Dalla data (>=)"
+#: field:hr.analytic.timesheet,intervent_duration:0
+#: field:hr.analytic.timesheet,intervent_total:0
+msgid "Duration intervent"
+msgstr "Durata intervento"
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Internal total (eff.)"
-msgstr "Totale interno (eff.)"
+#: help:hr.analytic.timesheet,intervent_total:0
+msgid ""
+"Duration intervent considering trip and break used for invoice (q. for "
+"customer)"
+msgstr ""
+"Durata intervento consideranto il viaggio e la pausa, usato per fatturazione "
+"(q. visibile al cliente)"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,intervent_duration:0
+msgid "Duration intervent without trip"
+msgstr "Durata intervento senza viaggio"
 
 #. module: intervention_report
 #: help:hr.analytic.timesheet,break_hour:0
@@ -473,9 +284,103 @@ msgid "Duration of break"
 msgstr "Durata pause"
 
 #. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "August"
-msgstr "Agosto"
+#: field:hr.analytic.timesheet,extra_invoiced_total:0
+msgid "Duration of extra invoiced"
+msgstr "Durata extra fatturato"
+
+#. module: intervention_report
+#: model:ir.model,name:intervention_report.model_mail_compose_message
+msgid "Email composition wizard"
+msgstr "Wizard composizione email"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,extra_planned:0
+msgid "Extra Planned"
+msgstr "Extra pianificazione"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,extra_invoiced_total:0
+msgid "Extra invoiced of this contract intervent"
+msgstr "Extra fatturato per questo contratto"
+
+#. module: intervention_report
+#: field:account.analytic.account,is_extra_report:0
+msgid "Extra report"
+msgstr "Extra stampa"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,message_follower_ids:0
+msgid "Followers"
+msgstr "Followers"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+msgid "Force reported"
+msgstr "Forza chiusura"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,google_from:0
+msgid "From"
+msgstr "Da"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "From date"
+msgstr "Dalla data"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Group By..."
+msgstr "Raggruppa per..."
+
+#. module: intervention_report
+#: field:res.partner,has_contract:0
+msgid "Has contract"
+msgstr "Ha contratto"
+
+#. module: intervention_report
+#: help:account.analytic.account,is_extra_report:0
+msgid "Hided in reports"
+msgstr "Nascosto nel report"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,message_summary:0
+msgid ""
+"Holds the Chatter summary (number of messages, ...). This summary is "
+"directly in html format in order to be inserted in kanban views."
+msgstr ""
+"Mantiene il sommarrio chat (numero di messaggi, ...). Questo riepiloco è "
+"direttamente fatto in formato html per essere inserito nelle viste kanban."
+
+#. module: intervention_report
+#: selection:hr.analytic.timesheet,google_from:0
+#: selection:hr.analytic.timesheet,google_to:0
+msgid "Home"
+msgstr "Casa"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet.operation,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,message_unread:0
+msgid "If checked new messages require your attention."
+msgstr "Se spuntato i nuovi messaggi vengono messi in evidenza"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,break_require:0
+msgid "If intervention is split in 2 part for break"
+msgstr "Se l'intervento è diviso in 2 parti per la pausa"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,manual_total:0
+msgid ""
+"If true don't auto calculate total hour, if false, total hours=intervent + "
+"trip - pause hours"
+msgstr ""
+"Se spuntato non calcola automaticamente il totale ore, se non spuntato: "
+"totale ore= intervento + viaggio - pausa"
 
 #. module: intervention_report
 #: help:hr.analytic.timesheet,manual_total_internal:0
@@ -487,466 +392,41 @@ msgstr ""
 "spuntanto: totale ore=intervento + viaggio - pause"
 
 #. module: intervention_report
-#: selection:hr.analytic.timesheet,state:0
-msgid "Await confirm"
-msgstr "Attesa conferma"
+#: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet_insert
+msgid "Insert intervent"
+msgstr "Inserisci intervento"
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Force reported"
-msgstr "Forza chiusura"
+#: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet_operation
+msgid "Insert intervent operation"
+msgstr "Inserisci operazione intervento"
 
 #. module: intervention_report
-#: model:ir.ui.menu,name:intervention_report.menu_base_intervention_trip_root
-msgid "Invoice and trip"
-msgstr "Fatture e viaggi"
+#: field:hr.analytic.timesheet,internal_note:0
+msgid "Internal note"
+msgstr "Note interne"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet,break_require:0
-msgid "Break"
-msgstr "Pausa"
+#: selection:account.analytic.account,account_mode:0
+msgid "Internal or not counted"
+msgstr "Interno o non conteggiato"
 
 #. module: intervention_report
-#: selection:hr.analytic.timesheet,mode:0
-msgid "Phone"
-msgstr "Telefono"
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+msgid "Internal purpose, not visible for customers"
+msgstr "Usato per scopi interi, non visibile al cliente"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet,message_is_follower:0
-msgid "Is a Follower"
-msgstr "E' un follower"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,user_name:0
-#: field:hr.analytic.timesheet.trip.wizard,user_id:0
-#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_insert
-msgid "User"
-msgstr "Utente"
-
-#. module: intervention_report
-#: model:hr_timesheet_invoice.factor,name:intervention_report.extra_work_intervent_0
-msgid "Extra work"
-msgstr "Extra lavorativo"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0 field:hr.analytic.timesheet.trip,date:0
-msgid "Date"
-msgstr "Data"
-
-#. module: intervention_report
-#: model:hr_timesheet_invoice.factor,name:intervention_report.job_intervent_0
-msgid "Job work"
-msgstr "Commessa"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "November"
-msgstr "Novembre"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "To invoice"
-msgstr "Da fatturare"
-
-#. module: intervention_report
-#: field:res.partner,has_contract:0
-msgid "Has contract"
-msgstr "Ha contratto"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,date_end:0
-msgid "Date end"
-msgstr "Data termine"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,google_from:0
-msgid "Used for auto trace route 'from' with google maps"
-msgstr "Utilizzato per auto tracciare il percorso di partenza in google maps"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "January"
-msgstr "Gennaio"
-
-#. module: intervention_report
-#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_pay
-msgid "Invoice type"
-msgstr "Tipo fatturazione"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet,mode:0
-msgid "Company address"
-msgstr "Azienda"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,trip_id:0
-msgid "Day trip"
-msgstr "Giorno con viaggio"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet.trip,total_trip:0
-msgid "Tot. distance"
-msgstr "Tot. distanza"
-
-#. module: intervention_report
-#: model:email.template,body_html:intervention_report.email_template_timesheet_intervent
-msgid ""
-"\n"
-"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-"
-"serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, "
-"255, 255); \">\n"
-"    <p>Spett.le ${object.intervent_partner_id.name},</p>\n"
-"    <p>In allegato il rapportino di intervento </p>\n"
-"    <p style=\"border-left: 1px solid #8e0000; margin-left: 30px;\">\n"
-"       &nbsp;&nbsp;<strong>RIFERIMENTO</strong><br />\n"
-"       &nbsp;&nbsp;Numero rapportino: <strong>${object.ref}</strong><br />\n"
-"       &nbsp;&nbsp;Data: ${object.date_start}<br />\n"
-"       % if object.user_id:\n"
-"       &nbsp;&nbsp;Riferimento tecnico: <a href=\"mailto:${object.user_id."
-"email or ''}?subject=Rif%20${object.rf}\">${object.user_id.name}</a>\n"
-"       % endif\n"
-"    </p>\n"
-"\n"
-"    <br/>\n"
-"    <p>Per ogni necessita' a riguardo non esitate a contattarci, grazie.</"
-"p>\n"
-"    <br/>\n"
-"    <br/>\n"
-"    <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: "
-"#8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; "
-"background-repeat: repeat no-repeat;\">\n"
-"        <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: "
-"#DDD;\">\n"
-"            <strong style=\"text-transform:uppercase;\">${object.company_id."
-"name}</strong></h3>\n"
-"    </div>\n"
-"    <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: "
-"16px; background-color: #F2F2F2;\">\n"
-"        <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
-"        % if object.company_id.street:\n"
-"            ${object.company_id.street}<br/>\n"
-"        % endif\n"
-"        % if object.company_id.street2:\n"
-"            ${object.company_id.street2}<br/>\n"
-"        % endif\n"
-"        % if object.company_id.city or object.company_id.zip:\n"
-"            ${object.company_id.zip} ${object.company_id.city}<br/>\n"
-"        % endif\n"
-"        % if object.company_id.country_id:\n"
-"            ${object.company_id.state_id and ('%s, ' % object.company_id."
-"state_id.name) or ''} ${object.company_id.country_id.name or ''}<br/>\n"
-"        % endif\n"
-"        </span>\n"
-"        % if object.company_id.phone:\n"
-"            <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: "
-"0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: "
-"0px; padding-left: 0px; \">\n"
-"                Phone:&nbsp; ${object.company_id.phone}\n"
-"            </div>\n"
-"        % endif\n"
-"        % if object.company_id.website:\n"
-"            <div>\n"
-"                Web :&nbsp;<a href=\"${object.company_id.website}\">${object."
-"company_id.website}</a>\n"
-"            </div>\n"
-"        % endif\n"
-"        <p></p>\n"
-"    </div>\n"
-"</div>\n"
-"            "
-msgstr ""
-"\n"
-"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-"
-"serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, "
-"255, 255); \">\n"
-"    <p>Spett.le ${object.intervent_partner_id.name},</p>\n"
-"    <p>In allegato il rapportino di intervento </p>\n"
-"    <p style=\"border-left: 1px solid #8e0000; margin-left: 30px;\">\n"
-"       &nbsp;&nbsp;<strong>RIFERIMENTO</strong><br />\n"
-"       &nbsp;&nbsp;Numero rapportino: <strong>${object.ref}</strong><br />\n"
-"       &nbsp;&nbsp;Data: ${object.date_start}<br />\n"
-"       % if object.user_id:\n"
-"       &nbsp;&nbsp;Riferimento tecnico: <a href=\"mailto:${object.user_id."
-"email or ''}?subject=Rif%20${object.rf}\">${object.user_id.name}</a>\n"
-"       % endif\n"
-"    </p>\n"
-"\n"
-"    <br/>\n"
-"    <p>Per ogni necessita' a riguardo non esitate a contattarci, grazie.</"
-"p>\n"
-"    <br/>\n"
-"    <br/>\n"
-"    <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: "
-"#8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; "
-"background-repeat: repeat no-repeat;\">\n"
-"        <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: "
-"#DDD;\">\n"
-"            <strong style=\"text-transform:uppercase;\">${object.company_id."
-"name}</strong></h3>\n"
-"    </div>\n"
-"    <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: "
-"16px; background-color: #F2F2F2;\">\n"
-"        <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
-"        % if object.company_id.street:\n"
-"            ${object.company_id.street}<br/>\n"
-"        % endif\n"
-"        % if object.company_id.street2:\n"
-"            ${object.company_id.street2}<br/>\n"
-"        % endif\n"
-"        % if object.company_id.city or object.company_id.zip:\n"
-"            ${object.company_id.zip} ${object.company_id.city}<br/>\n"
-"        % endif\n"
-"        % if object.company_id.country_id:\n"
-"            ${object.company_id.state_id and ('%s, ' % object.company_id."
-"state_id.name) or ''} ${object.company_id.country_id.name or ''}<br/>\n"
-"        % endif\n"
-"        </span>\n"
-"        % if object.company_id.phone:\n"
-"            <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: "
-"0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: "
-"0px; padding-left: 0px; \">\n"
-"                Phone:&nbsp; ${object.company_id.phone}\n"
-"            </div>\n"
-"        % endif\n"
-"        % if object.company_id.website:\n"
-"            <div>\n"
-"                Web :&nbsp;<a href=\"${object.company_id.website}\">${object."
-"company_id.website}</a>\n"
-"            </div>\n"
-"        % endif\n"
-"        <p></p>\n"
-"    </div>\n"
-"</div>\n"
-"            "
-
-#. module: intervention_report
-#: model:email.template,subject:intervention_report.email_template_timesheet_intervent
-msgid "${object.name} Rif: ${object.ref or 'n/a'})"
-msgstr "${object.name} Rif: ${object.ref or 'n/a'}"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet.trip.wizard,all_user:0
-msgid "All user"
-msgstr "Tutti gli utenti"
-
-#. module: intervention_report
-#: help:res.partner,trip_duration:0
-msgid "Trip hour duration dealed with the partner"
-msgstr "Ore viaggio condordate con il partner"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Waiting"
-msgstr "In attesa"
-
-#. module: intervention_report
-#: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet_my
-msgid "My intervent"
-msgstr "Propri interventi"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "September"
-msgstr "Settembre"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Reschedule"
-msgstr "Rischedula"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Cancel"
-msgstr "Annulla"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0 selection:hr.analytic.timesheet,state:0
-msgid "Close"
-msgstr "Chiuso"
-
-#. module: intervention_report
-#: model:ir.model,name:intervention_report.model_hr_analytic_timesheet
-msgid "Timesheet Line"
-msgstr "Riga Timesheet"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet.trip,state:0
-msgid "Re-Draft"
-msgstr "Riattiva"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Intervention"
-msgstr "Intervento"
-
-#. module: intervention_report
-#: model:hr_timesheet_invoice.factor,name:intervention_report.personal_intervent_0
-msgid "Personal"
-msgstr "Personale"
-
-#. module: intervention_report
-#: model:hr_timesheet_invoice.factor,name:intervention_report.working_intervent_100
-msgid "Pay"
-msgstr "Pagamento"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,request_reference:0
-msgid "Reference for request (asana link, mail ecc.)"
-msgstr "Reference for request (asana link, mail ecc.)"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Partner hours"
-msgstr "Ore partner"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,break_require:0
-msgid "If intervention is split in 2 part for break"
-msgstr "Se l'intervento è diviso in 2 parti per la pausa"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,google_to:0
-msgid "To"
-msgstr "A"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "October"
-msgstr "Ottobre"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,intervention:0
-msgid "All description of the intervent, used for print report"
-msgstr "Descrizione completa dell'intervento, usato per la stampa report"
-
-#. module: intervention_report
-#: field:res.partner,trip_duration:0
-msgid "Trip duration"
-msgstr "Durata viaggio"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Product"
-msgstr "Prodotto"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Description"
-msgstr "Descrizione"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "May"
-msgstr "Maggio"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0 field:hr.analytic.timesheet,extra_planned:0
-#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_extra
-msgid "Extra Planned"
-msgstr "Extra pianificazione"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet.trip.wizard,to_date:0
-msgid "To date (<)"
-msgstr "Alla data (<)"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,manual_total:0
-#: help:hr.analytic.timesheet.trip,manual_total:0
-msgid ""
-"If true don't auto calculate total hour, if false, total hours=intervent + "
-"trip - pause hours"
-msgstr ""
-"Se spuntato non calcola automaticamente il totale ore, se non spuntato: "
-"totale ore= intervento + viaggio - pausa"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,intervent_duration:0
-msgid "Duration intervent without trip"
-msgstr "Durata intervento senza viaggio"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "To date"
-msgstr "Alla data"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,ref:0
-msgid "Ref."
-msgstr "Rif."
-
-#. module: intervention_report
-#: field:res.partner,default_contract_id:0
-msgid "Default Contract"
-msgstr "Contratto di default"
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+msgid "Internal total (eff.)"
+msgstr "Totale interno (eff.)"
 
 #. module: intervention_report
 #: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet_extra
 msgid "Intervent extra planned"
 msgstr "Intervento pianificato extra"
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "February"
-msgstr "Febbraio"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet.trip,name:0
-msgid "Name"
-msgstr "Nome"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Check month"
-msgstr "Controllo mese"
-
-#. module: intervention_report
-#: constraint:hr.analytic.timesheet:0
-msgid "You cannot modify an entry in a Confirmed/Done timesheet !"
-msgstr "Non potete modificare un foglio presenze confermato."
-
-#. module: intervention_report
-#: selection:hr.analytic.timesheet.trip.wizard,month:0
-msgid "April"
-msgstr "Aprile"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,mode:0
-#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_location
-msgid "Mode"
-msgstr "Modalità"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-#: model:ir.actions.report.xml,name:intervention_report.aeroo_intervent_report_id
-#: model:ir.ui.menu,name:intervention_report.menu_base_intervention_report
-msgid "Intervent report"
-msgstr "Report intervento"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,date_start:0
-msgid "Date start"
-msgstr "Data partenza"
-
-#. module: intervention_report
-#: field:hr.analytic.timesheet,message_summary:0
-msgid "Summary"
-msgstr "Riepilogo"
-
-#. module: intervention_report
-#: help:hr.analytic.timesheet,message_ids:0
-msgid "Messages and communication history"
-msgstr "Comunicazioni e storico messaggi"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0 field:hr.analytic.timesheet.trip,user_id:0
-msgid "Users"
-msgstr "Utenti"
-
-#. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Near today (+/-3 gg)"
-msgstr "In questi giorni (+/-3 gg)"
 
 #. module: intervention_report
 #: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet
@@ -957,14 +437,27 @@ msgid "Intervent list all"
 msgstr "Lista interventi completa"
 
 #. module: intervention_report
-#: model:hr_timesheet_invoice.factor,name:intervention_report.free_analysis_intervent_0
-msgid "Free analysis"
-msgstr "Analisi gratuita"
+#: view:res.partner:intervention_report.view_partner_add_fields
+msgid "Intervent parameter:"
+msgstr "Parametri interventi:"
 
 #. module: intervention_report
-#: selection:hr.analytic.timesheet,mode:0
-msgid "Customer address"
-msgstr "Dal cliente"
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_tree
+#: model:ir.ui.menu,name:intervention_report.menu_base_intervention_report
+msgid "Intervent report"
+msgstr "Report intervento"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_calendar
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_calendar_insert
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_calendar_location
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_calendar_operation
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_calendar_pay
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_calendar_state
+msgid "Intervention"
+msgstr "Intervento"
 
 #. module: intervention_report
 #: field:hr.analytic.timesheet,intervention:0
@@ -972,19 +465,190 @@ msgid "Intervention description"
 msgstr "Descrizione intervento"
 
 #. module: intervention_report
-#: report:ir.actions.report.xml:intervention_report.aeroo_intervent_report_id
-msgid "Street"
-msgstr "Via"
+#: field:hr.analytic.timesheet,intervention_request:0
+msgid "Intervention request"
+msgstr "Richiesta intervento"
 
 #. module: intervention_report
-#: field:hr.analytic.timesheet.trip,total_intervent:0
-msgid "Tot. intervent"
-msgstr "Tot. intervento"
+#: model:ir.ui.menu,name:intervention_report.menu_base_intervention_trip_root
+msgid "Invoice and trip"
+msgstr "Fatture e viaggi"
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Visible for customers"
-msgstr "Visibile per i clienti"
+#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_pay
+msgid "Invoice type"
+msgstr "Tipo fatturazione"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,message_is_follower:0
+msgid "Is a Follower"
+msgstr "E' un follower"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,not_in_report:0
+msgid "It's not printed in monthly report"
+msgstr "Non stampato nel report mensile"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,intervention_request:0
+msgid "Keep track of the origina request"
+msgstr "Tiene traccia delle richieste originali"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,message_last_post:0
+msgid "Last Message Date"
+msgstr "Uldima data messaggio"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet.operation,write_uid:0
+msgid "Last Updated by"
+msgstr "Aggiornato da"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet.operation,write_date:0
+msgid "Last Updated on"
+msgstr "Aggiornato il"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,request_by:0
+msgid "List of people that request intervent"
+msgstr "Lista del personale che ha effettuato la richiesta"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,manual_total:0
+msgid "Manual"
+msgstr "Manuale"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,manual_total_internal:0
+msgid "Manual (internal)"
+msgstr "Manuale (interno)"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+msgid "Map route"
+msgstr "Tragitto mappa"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,message_ids:0
+msgid "Messages"
+msgstr "Messaggi"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,message_ids:0
+msgid "Messages and communication history"
+msgstr "Comunicazioni e storico messaggi"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,mode:0
+#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_location
+msgid "Mode"
+msgstr "Modalità"
+
+#. module: intervention_report
+#: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet_my
+#: model:ir.ui.menu,name:intervention_report.menu_base_intervention_report_only_my
+msgid "My intervent"
+msgstr "Propri interventi"
+
+#. module: intervention_report
+#: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet_my_lite
+msgid "My intervent (lite)"
+msgstr "Miei interventi (veloce)"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Near today (+/-3 gg)"
+msgstr "Interventi"
+
+#. module: intervention_report
+#: selection:hr.analytic.timesheet,google_to:0
+msgid "Next"
+msgstr "Prossimo"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,not_in_report:0
+msgid "Not in report"
+msgstr "Non nel report"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet.operation:intervention_report.view_hr_analytic_timesheet_operation_form
+#: field:hr.analytic.timesheet.operation,note:0
+msgid "Note"
+msgstr "Note"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,internal_note:0
+msgid "Note for save some impression, no comunication to customer"
+msgstr "Nota per salvare alcune impressioni, non comunicate al cliente"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+#: field:hr.analytic.timesheet,operation_id:0
+#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_operation_calendar
+msgid "Operation"
+msgstr "Operazione"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet.operation,name:0
+msgid "Operation name"
+msgstr "Nome operazione"
+
+#. module: intervention_report
+#: selection:account.analytic.account,account_mode:0
+msgid "Order (fixed)"
+msgstr "Ordine (fisso)"
+
+#. module: intervention_report
+#: selection:account.analytic.account,account_mode:0
+msgid "Order (open) / Consumpive"
+msgstr "Ordine (aperto) / Consuntivo"
+
+#. module: intervention_report
+#: selection:account.analytic.account,account_mode:0
+msgid "Order (unfixed)"
+msgstr "Ordine (non fisso)"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+#: model:ir.model,name:intervention_report.model_res_partner
+msgid "Partner"
+msgstr "Partner"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_graph
+msgid "Partner hours"
+msgstr "Ore partner"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,intervent_partner_id:0
+msgid "Partner ref."
+msgstr "Rif. partner"
+
+#. module: intervention_report
+#: selection:hr.analytic.timesheet,mode:0
+msgid "Phone"
+msgstr "Telefono"
+
+#. module: intervention_report
+#: selection:hr.analytic.timesheet,google_from:0
+msgid "Previous"
+msgstr "Precedente"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,request_reference:0
+msgid "Reference for request (asana link, mail ecc.)"
+msgstr "Riferimento richiesta (asana, mail ecc.)"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,request_by:0
+msgid "Request by"
+msgstr "Richiesto da"
 
 #. module: intervention_report
 #: field:hr.analytic.timesheet,request_reference:0
@@ -992,11 +656,173 @@ msgid "Request reference"
 msgstr "Riferimento richiesta"
 
 #. module: intervention_report
-#: view:hr.analytic.timesheet:0
-msgid "Accounting"
-msgstr "Contabilità"
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_tree
+msgid "Reschedule"
+msgstr "Rischedula"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+msgid "Sent report by mail"
+msgstr "Invia rapportino per email"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+msgid "Share a message..."
+msgstr "Condividi messaggi..."
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+#: field:hr.analytic.timesheet,state:0
+#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_state
+msgid "State"
+msgstr "Stato"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,message_summary:0
+msgid "Summary"
+msgstr "Riepilogo"
+
+#. module: intervention_report
+#: selection:hr.analytic.timesheet,mode:0
+msgid "Tele assistence"
+msgstr "Teleassistenza"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "This year"
+msgstr "Anno attuale"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Timesheet"
+msgstr "Foglio presenze"
+
+#. module: intervention_report
+#: model:ir.model,name:intervention_report.model_hr_analytic_timesheet
+msgid "Timesheet Line"
+msgstr "Riga Foglio Orario"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet.operation:intervention_report.view_hr_analytic_timesheet_operation_form
+#: view:hr.analytic.timesheet.operation:intervention_report.view_hr_analytic_timesheet_operation_tree
+#: model:ir.actions.act_window,name:intervention_report.action_hr_analytic_timesheet_operation
+#: model:ir.model,name:intervention_report.model_hr_analytic_timesheet_operation
+#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_operation
+msgid "Timesheet operation"
+msgstr "Operazione intervento"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,google_to:0
+msgid "To"
+msgstr "A"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "To close"
+msgstr "Da chiudere"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "To date"
+msgstr "Alla data"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "To invoice"
+msgstr "Da fatturare"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Today"
+msgstr "Oggi"
+
+#. module: intervention_report
+#: field:account.analytic.account,period_total_days:0
+msgid "Total days"
+msgstr "Totale giorni"
+
+#. module: intervention_report
+#: field:account.analytic.account,total_hours:0
+msgid "Total hour"
+msgstr "Ore totali"
+
+#. module: intervention_report
+#: help:account.analytic.account,total_hours:0
+msgid "Total hour for this contract for all period"
+msgstr "Totale ore per questo contratto per tutto il periodo"
 
 #. module: intervention_report
 #: field:hr.analytic.timesheet,trip_require:0
 msgid "Trip"
 msgstr "Viaggio"
+
+#. module: intervention_report
+#: field:res.partner,trip_duration:0
+msgid "Trip duration"
+msgstr "Durata viaggio"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,trip_hour:0
+msgid "Trip hour"
+msgstr "Ore viaggio"
+
+#. module: intervention_report
+#: help:res.partner,trip_duration:0
+msgid "Trip hour duration dealed with the partner"
+msgstr "Ore viaggio condordate con il partner"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,message_unread:0
+msgid "Unread Messages"
+msgstr "Messaggi non letti"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,google_from:0
+msgid "Used for auto trace route 'from' with google maps"
+msgstr "Utilizzato per auto tracciare il percorso di partenza in google maps"
+
+#. module: intervention_report
+#: help:hr.analytic.timesheet,google_to:0
+msgid "Used for auto trace route 'to' with google maps"
+msgstr "Usato per tracciare automaticamente la destinazione in google maps"
+
+#. module: intervention_report
+#: help:account.analytic.account,account_approved:0
+msgid "Used for contract and fixed order"
+msgstr "Used for contract and fixed order"
+
+#. module: intervention_report
+#: field:hr.analytic.timesheet,user_name:0
+#: model:ir.ui.menu,name:intervention_report.menu_hr_analytic_timesheet_insert
+msgid "User"
+msgstr "Utente"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "Users"
+msgstr "Utenti"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+msgid "Visible for customers"
+msgstr "Visibile per i clienti"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_form
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_lite_tree
+#: view:hr.analytic.timesheet:intervention_report.view_hr_analytic_timesheet_tree
+msgid "Waiting"
+msgstr "In attesa"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "With Break"
+msgstr "Con pausa"
+
+#. module: intervention_report
+#: view:hr.analytic.timesheet:intervention_report.hr_timesheet_line_search
+msgid "With Trip"
+msgstr "Con viaggio"
