@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-    <!-- inherit view-->
+    <!-- inherit view-->       
       <!-- account.analytic.account-->
      <record id="hr_timesheet_line_search" model="ir.ui.view">
             <field name="name">hr.analytic.timesheet.intervent.search</field>
@@ -15,6 +15,7 @@
 
                     <field name="user_id"/>
                     <field name="account_id"/>
+                    <field name="operation_id" />
                     <field name="ref"/>
                     <field name="name"/>
                     <field name="intervention"/>
@@ -42,6 +43,7 @@
                         <filter string="Users" icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
                         <filter string="Partner" icon="terp-personal" domain="[]" context="{'group_by':'intervent_partner_id'}"/>
                         <filter string="Analytic account" icon="terp-folder-green" domain="[]" context="{'group_by':'account_id'}"/>
+                        <filter string="Operation" icon="terp-personal" domain="[]" context="{'group_by': 'operation_id'}"/>
                         <filter string="State" icon="terp-personal" domain="[]" context="{'group_by':'state'}"/>
                         <filter string="Product" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id'}"/>
                         <filter string="Date" icon="terp-go-month" domain="[]" context="{'group_by':'date_start'}"/>
@@ -173,7 +175,7 @@
 	                  <field name="account_hour_status" readonly="1" attrs="{'invisible': [('account_hour_status','=',False)]}"  colspan="4" widget="html" nolabel="1"/>
 
                       <field name="request_by" />
-                      <field name="request_reference" />
+                      <field name="operation_id" widget="selection" /><!--<field name="request_reference" />-->
 
 	                  <field name="date_start" required="1" />
                       <field name="intervent_duration" widget="float_time" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)" required="1" /> 
@@ -552,6 +554,42 @@
             </field>
         </record>
 
+    <!--hr.analytic.timesheet.operation-->
+    <record model="ir.ui.view" id="view_hr_analytic_timesheet_operation_form">
+        <field name="name">hr.analytic.timesheet.operation.form</field>
+        <field name="model">hr.analytic.timesheet.operation</field>
+        <field name="arch" type="xml">
+            <form string="Timesheet operation" version="7.0">        
+                <sheet>
+                    <group col="2" colspan="4">
+                        <field name="name" />
+                        <separator string="Note" colspan="2"/>
+                        <field name="note" colspan="2" nolabel="1" />
+                    </group>
+                </sheet>        
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_hr_analytic_timesheet_operation_tree">
+        <field name="name">hr.analytic.timesheet.operation.tree</field>
+        <field name="model">hr.analytic.timesheet.operation</field>
+        <field name="arch" type="xml">
+            <tree string="Timesheet operation" version="7.0">        
+                <field name="name" />
+                <field name="note" />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_hr_analytic_timesheet_operation">
+        <field name="name">Timesheet operation</field>
+        <field name="res_model">hr.analytic.timesheet.operation</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_hr_analytic_timesheet_operation_tree"/>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+    </record>
+
        <!-- Menu -->       
     <menuitem name="Intervent report" parent="hr.menu_hr_root" id="menu_base_intervention_report" sequence="0" />
         <menuitem name="My intervent" parent="menu_base_intervention_report" id="menu_base_intervention_report_only_my" action="action_view_hr_analytic_timesheet_my" sequence="10" />        
@@ -563,10 +601,12 @@
             <menuitem name="Invoice type" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_pay" action="action_view_hr_analytic_timesheet_pay" sequence="50" />
             <menuitem name="Extra Planned" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_extra" action="action_view_hr_analytic_timesheet_extra" sequence="60"/>
 
-       <menuitem name="Invoice and trip" 
-                 parent="hr.menu_hr_root" 
-                 id="menu_base_intervention_trip_root" 
-                 sequence="2" /> <!--for inherited modules-->       
+        <menuitem name="Invoice and trip" 
+             parent="hr.menu_hr_root" 
+             id="menu_base_intervention_trip_root" 
+             sequence="2" /> <!--for inherited modules-->       
+
+       <menuitem name="Timesheet operation" parent="menu_base_intervention_report" id="menu_hr_analytic_timesheet_operation" action="action_hr_analytic_timesheet_operation" sequence="90" />        
 
     </data>
 </openerp>

@@ -120,6 +120,21 @@ class res_partner_extra_fields(osv.osv):
             help="Defaulf contract if there's one active for customer. All intervent are, for default, setted to this value"),
         }
 
+class hr_analytic_timesheet_operation(osv.osv):
+    """ Model name: hr.analytic.timesheet.operation
+    """    
+    _name = 'hr.analytic.timesheet.operation'
+    _description = 'Timesheet operation'
+    _rec_name = 'name'
+    _order = 'name'
+    
+    _columns = {
+        'name': fields.char(
+            'Operation name', size=64, required=True, 
+            ),
+        'note': fields.text('Note')    
+        }
+
 class hr_analytic_timesheet_extra(osv.osv):
     ''' Add extra fields to intervent 
     '''
@@ -466,10 +481,12 @@ class hr_analytic_timesheet_extra(osv.osv):
         res = self.pool.get('ir.sequence').get(cr, uid, 'hr.intervent.report')
         return res
        
-    _columns={
+    _columns = {
         'ref':fields.char('Ref.', size=12, required=False, readonly=False, 
             help="ID for intervent, actually manually configured, after became a sequence"),
-        'intervent_partner_id': fields.many2one('res.partner', 'Partner ref.'),
+        'operation_id': fields.many2one(
+            'hr.analytic.timesheet.operation', 'Operation'),
+        'intervent_partner_id': fields.many2one('res.partner', 'Partner ref.'),        
         'intervention_request': fields.text('Intervention request', 
             help="Keep track of the origina request"),
         'intervention': fields.text('Intervention description', 
@@ -479,7 +496,7 @@ class hr_analytic_timesheet_extra(osv.osv):
         'date_start': fields.datetime('Date start'), # TODO check definition for data (override this?)
         'date_end': fields.datetime('Date end'),         # TODO evauluate if necessari
         'intervent_duration': fields.float('Duration intervent', 
-            digits=(16, 6), help="Duration intervent without trip"),
+            digits=(16, 6), help="Duration intervent without trip"),            
         'intervent_total': fields.float('Duration intervent', digits=(16, 6), 
             help = "Duration intervent considering trip and break used for invoice (q. for customer)"),
         'manual_total':fields.boolean('Manual', required=False, 
@@ -540,7 +557,7 @@ class hr_analytic_timesheet_extra(osv.osv):
             ('confirmed', 'Confirmed'), # Appointment confirmet
             ('close', 'Close'), # Appointment close without sending intervent report
             ('reported', 'Close reported'), # Appointment close with sending intervent report
-        ],'State', select=True, readonly=True),    
+        ], 'State', select=True, readonly=True),    
         'extra_planned':fields.boolean('Extra Planned'),
         }
     

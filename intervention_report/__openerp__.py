@@ -50,6 +50,8 @@
     'init_xml': [],
     'demo_xml': [],
     'data': [
+        'security/ir.model.access.csv',
+        
         #'data/factor.xml',
         'intervent_sequence.xml',
         'intervention.xml',  
