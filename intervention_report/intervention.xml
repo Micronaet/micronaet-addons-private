@@ -632,7 +632,7 @@
             <menuitem name="State" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_state" action="action_view_hr_analytic_timesheet_state" sequence="30" />        
             <menuitem name="Mode" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_location" action="action_view_hr_analytic_timesheet_location" sequence="40" />        
             <menuitem name="Invoice type" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_pay" action="action_view_hr_analytic_timesheet_pay" sequence="50" />
-            <menuitem name="Operation" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_operation" action="action_view_hr_analytic_timesheet_operation" sequence="60" />
+            <menuitem name="Operation" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_operation_calendar" action="action_view_hr_analytic_timesheet_operation" sequence="60" />
 
         <menuitem name="Invoice and trip" 
              parent="hr.menu_hr_root" 
