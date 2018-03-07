@@ -37,7 +37,7 @@
                     <filter name="with_trip" string="With Trip" domain="[('trip_require','=',True),]" icon="terp-dolar"/>
                     <filter name="with_break" string="With Break" domain="[('break_require','=',True),]" icon="terp-dolar"/>
                     <separator/>
-                    <filter name="extra" string="Extra Planned" domain="[('extra_planned','=',True),]" icon="terp-dolar"/>
+                    <!--<filter name="extra" string="Extra Planned" domain="[('extra_planned','=',True),]" icon="terp-dolar"/>-->
                     
                     <group expand="0" string="Group By...">
                         <filter string="Users" icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
@@ -242,6 +242,7 @@
                 <field name="intervent_duration" widget="float_time"/>
                 <field name="user_id" /> 
                 <field name="intervent_partner_id" /> 
+                <field name="operation_id" />
                 <field name="name" />
                 <field name="account_id" invisible="1" />
                 <field name="to_invoice" />
@@ -376,6 +377,20 @@
             </calendar>
         </field>
     </record>    
+    <record model="ir.ui.view" id="view_hr_analytic_timesheet_calendar_operation">
+        <field name="name">intervention.report.operation.calendar</field>
+        <field name="model">hr.analytic.timesheet</field>
+        <field name="type">calendar</field>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <calendar color="operation_id" date_start="date_start" date_delay="intervent_duration" string="Intervention" mode="week">
+                <field name="intervent_partner_id"/>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="mode"/>                
+            </calendar>
+        </field>
+    </record>    
     <record model="ir.ui.view" id="view_hr_analytic_timesheet_calendar_state">
         <field name="name">intervention.report.insert.calendar</field>
         <field name="model">hr.analytic.timesheet</field>
@@ -474,6 +489,24 @@
             <field name="view_type">form</field>
             <field name="view_mode">calendar,tree,form,graph</field>
             <field name="view_id" ref="view_hr_analytic_timesheet_calendar_insert"/>
+            <field name="search_view_id" ref="hr_timesheet_line_search"/>            
+            <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,}</field>
+            <field name="domain">[('extra_planned','=', False)]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to see intervent view.
+              </p><p>
+                List of intervent of all dependent
+              </p>
+            </field>
+        </record>
+        
+    <record id="action_view_hr_analytic_timesheet_operation" model="ir.actions.act_window">
+            <field name="name">Insert intervent operation</field>
+            <field name="res_model">hr.analytic.timesheet</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar,tree,form,graph</field>
+            <field name="view_id" ref="view_hr_analytic_timesheet_calendar_operation"/>
             <field name="search_view_id" ref="hr_timesheet_line_search"/>            
             <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,}</field>
             <field name="domain">[('extra_planned','=', False)]</field>
@@ -599,7 +632,7 @@
             <menuitem name="State" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_state" action="action_view_hr_analytic_timesheet_state" sequence="30" />        
             <menuitem name="Mode" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_location" action="action_view_hr_analytic_timesheet_location" sequence="40" />        
             <menuitem name="Invoice type" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_pay" action="action_view_hr_analytic_timesheet_pay" sequence="50" />
-            <menuitem name="Extra Planned" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_extra" action="action_view_hr_analytic_timesheet_extra" sequence="60"/>
+            <menuitem name="Operation" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_operation" action="action_view_hr_analytic_timesheet_operation" sequence="60" />
 
         <menuitem name="Invoice and trip" 
              parent="hr.menu_hr_root" 
