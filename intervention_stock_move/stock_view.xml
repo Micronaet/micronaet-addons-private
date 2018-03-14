@@ -6,7 +6,7 @@
             <field name="name">stock.picking.manual.tree</field>
             <field name="model">stock.picking.manual</field>
             <field name="arch" type="xml">
-                <tree string="String" colors="green:pick_state=='ready';blue:pick_state=='todo'">
+                <tree string="String" colors="green:state=='ready';blue:state=='todo'">
                     <field name="partner_id" />
                     <field name="address_id" />
                     <field name="name"/>
@@ -14,9 +14,9 @@
                     <field name="planned_date" />
                     <field name="intervention_id" />
                     <field name="state" />
-                    <button name="wf_ready" string="Ready" type="object" attrs="{'invisible': [('pick_state','!=','todo')]}" class="oe_highlight"/>
-                    <button name="wf_delivered" string="Delivered" type="object" attrs="{'invisible': [('pick_state','!=','ready')]}" class="oe_highlight"/>
-                    <button name="wf_restart" string="Restart" type="object" attrs="{'invisible': [('pick_state','!=','delivered')]}" class="oe_highlight"/>
+                    <button name="wf_ready" string="Ready" type="object" attrs="{'invisible': [('state','!=','todo')]}" class="oe_highlight"/>
+                    <button name="wf_delivered" string="Delivered" type="object" attrs="{'invisible': [('state','!=','ready')]}" class="oe_highlight"/>
+                    <button name="wf_restart" string="Restart" type="object" attrs="{'invisible': [('state','!=','delivered')]}" class="oe_highlight"/>
                     <button name="add_to_intervention" string="Add" type="object" class="oe_highlight" invisible="not context.get('show_move')" attrs="{'invisible': [('intervention_id','!=',False)]}"/>
                     <button name="remove_to_intervention" string="Unlink" type="object" attrs="{'invisible': [('intervention_id','=',False)]}" />
                 </tree>
@@ -28,9 +28,9 @@
             <field name="arch" type="xml">
                 <form string="Transfer">
                     <header>
-                        <button name="wf_ready" string="Ready" type="object" attrs="{'invisible': [('pick_state','!=','todo')]}" class="oe_highlight"/>
-                        <button name="wf_delivered" string="Delivered" type="object" attrs="{'invisible': [('pick_state','!=','ready')]}" class="oe_highlight"/>
-                        <button name="wf_restart" string="Restart" type="object" attrs="{'invisible': [('pick_state','!=','delivered')]}" class="oe_highlight"/>
+                        <button name="wf_ready" string="Ready" type="object" attrs="{'invisible': [('state','!=','todo')]}" class="oe_highlight"/>
+                        <button name="wf_delivered" string="Delivered" type="object" attrs="{'invisible': [('state','!=','ready')]}" class="oe_highlight"/>
+                        <button name="wf_restart" string="Restart" type="object" attrs="{'invisible': [('state','!=','delivered')]}" class="oe_highlight"/>
                         <field name="state" widget="statusbar" />
                     </header>
                     <sheet>
