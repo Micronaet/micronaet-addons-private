@@ -7,8 +7,11 @@
             <field name="model">stock.move.manual</field>
             <field name="arch" type="xml">
                 <tree string="Move" editable="bottom">
-                    <field name="picking_id"/>      
-                    <field name="intervention_id" />
+                    <field name="picking_id" invisible="context.get('embedded', False)"/>      
+                    <field name="intervention_id" invisible="context.get('embedded', False)" />
+                    <field name="partner_id" invisible="context.get('embedded', False)"/>
+                    <field name="date" invisible="context.get('embedded', False)" />
+
                     <field name="product_id"/>
                     <field name="product_uom_qty" />
                     <field name="uom_id" />
@@ -114,11 +117,10 @@
                            <group colspan="4" col="4">
                                <separator string="Delivered material:" colspan="3"/>
                                <button name="create_picking" string="Create picking" type="object" colspan="1"/>
+                               <field name="delivered_ids" nolabel="1" colspan="4" context="{'embedded': True}"/>
 
-                               <field name="delivered_ids" nolabel="1" colspan="3"/>
+                               <separator string="Picking:" colspan="3"/>
                                <button name="dummy_button" string="Refresh" type="object" colspan="1"/>
-
-                               <separator string="Picking:" colspan="4"/>
                                <field name="picking_ids" nolabel="1" readonly="1" colspan="4" />
 
                                <separator string="Available:" colspan="4"/>

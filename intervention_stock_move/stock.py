@@ -78,11 +78,6 @@ class StockPickingManual(orm.Model):
     # -------------------------------------------------------------------------
     # Button event:
     # -------------------------------------------------------------------------
-    def dummy_button(self, cr, uid, ids, context=None):
-        ''' Refresh
-        '''
-        return True
-        
     def remove_to_intervention(self, cr, uid, ids, context=None):
         ''' Link to intervention
         '''
@@ -148,18 +143,20 @@ class StockMoveManual(orm.Model):
         'intervention_id': fields.many2one(
             'hr.analytic.timesheet', 'Intervention'),
         'product_uom_qty': fields.float('Q.ty', digits=(16, 3), required=True),
+        'picking_id': fields.many2one(
+            'stock.picking.manual', 'Picking'),
+        
         'uom_id': fields.related(
             'product_id', 'uom_id', 
             type='many2one', relation='product.uom', 
             string='UOM'),
-        'picking_id': fields.many2one(
-            'stock.picking.manual', 'Picking'),
+        'date': fields.related(
+            'picking_id', 'date', 
+            type='date', string='Date'),    
+        'partner_id': fields.related(
+            'picking_id', 'partner_id', 
+            type='many2one', relation='res.partner', string='Partner'),
 
-        #'state': fields.selection([
-        #    ('todo', 'To do'),
-        #    ('ready', 'Ready'),
-        #    ('delivered', 'Delivered'),
-        #    ], 'Picking state')
         'state': fields.related(
             'picking_id', 'state', 
             type='selection', selection=[
@@ -167,10 +164,6 @@ class StockMoveManual(orm.Model):
                 ('ready', 'Ready'),
                 ('delivered', 'Delivered'),
                 ] , string='State', readonly=True),
-        }
-
-    _defaults = {
-        #'state': lambda *x: 'todo',
         }
 
 class StockPickingManual(orm.Model):
@@ -228,6 +221,14 @@ class HrAnalyticTimesheet(orm.Model):
         return super(HrAnalyticTimesheet, self).intervention_close(
             cr, uid, ids, context=context)
 
+        
+    # -------------------------------------------------------------------------
+    # Button event:
+    # -------------------------------------------------------------------------
+    def dummy_button(self, cr, uid, ids, context=None):
+        ''' Refresh
+        '''
+        return True
         
     def _get_partner_delivery_picking(
             self, cr, uid, ids, fields, args, context=None):
