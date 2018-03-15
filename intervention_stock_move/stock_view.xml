@@ -1,18 +1,50 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <!-- stock.move.manual-->
+        <record model="ir.ui.view" id="view_stock_move_fast_tree">
+            <field name="name">stock.move.manual.tree</field>
+            <field name="model">stock.move.manual</field>
+            <field name="arch" type="xml">
+                <tree string="Move" editable="bottom">
+                    <field name="picking_id"/>      
+                    <field name="intervention_id" />
+                    <field name="product_id"/>
+                    <field name="product_uom_qty" />
+                    <field name="uom_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>                
+        <record model="ir.ui.view" id="view_stock_move_fast_form">
+            <field name="name">stock.move.manual.tree</field>
+            <field name="model">stock.move.manual</field>
+            <field name="arch" type="xml">
+                <form string="Move">
+                    <sheet>
+                        <field name="picking_id" invisible="1"/>      
+                        <field name="intervention_id" />
+                        <field name="product_id"/>
+                        <field name="product_uom_qty" />
+                        <field name="uom_id" />
+                        <field name="state" />
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
         <!-- stock.picking.manual-->
         <record model="ir.ui.view" id="view_stock_picking_fast_tree">
             <field name="name">stock.picking.manual.tree</field>
             <field name="model">stock.picking.manual</field>
             <field name="arch" type="xml">
-                <tree string="String" colors="green:state=='ready';blue:state=='todo'">
-                    <field name="partner_id" />
-                    <field name="address_id" />
+                <tree string="Picking" colors="green:state=='ready';blue:state=='todo'">
+                    <field name="partner_id" domain="[('is_company', '=', True),('is_address', '=', False)]"/>
+                    <field name="address_id" domain="[('is_address', '=', True),('parent_id', '=', partner_id)]" />
                     <field name="name"/>
                     <field name="date"/>      
                     <field name="planned_date" />
-                    <field name="intervention_id" />
+                    <field name="intervention_id" domain="[('intervent_partner_id', '=', partner_id)]" />
                     <field name="state" />
                     <button name="wf_ready" string="Ready" type="object" attrs="{'invisible': [('state','!=','todo')]}" class="oe_highlight"/>
                     <button name="wf_delivered" string="Delivered" type="object" attrs="{'invisible': [('state','!=','ready')]}" class="oe_highlight"/>
@@ -26,7 +58,7 @@
             <field name="name">stock.picking.manual.form</field>
             <field name="model">stock.picking.manual</field>
             <field name="arch" type="xml">
-                <form string="Transfer">
+                <form string="Picking">
                     <header>
                         <button name="wf_ready" string="Ready" type="object" attrs="{'invisible': [('state','!=','todo')]}" class="oe_highlight"/>
                         <button name="wf_delivered" string="Delivered" type="object" attrs="{'invisible': [('state','!=','ready')]}" class="oe_highlight"/>
@@ -35,13 +67,13 @@
                     </header>
                     <sheet>
                         <h1>
-                            <field name="name" class="oe_inline" attrs="{'invisible': [('name','=','/')]}" readonly="1"/>
+                            <field name="name" class="oe_inline" />
                         </h1>
                         <group>
                             <group>
-                                <field name="partner_id"/>                            
-                                <field name="address_id"/>                                
-                                <field name="intervention_id" />
+                                <field name="partner_id" domain="[('is_company', '=', True),('is_address', '=', False)]"/>
+                                <field name="address_id" domain="[('is_address', '=', True),('parent_id', '=', partner_id)]" widget="selection"/>
+                                <field name="intervention_id" domain="[('intervent_partner_id', '=', partner_id)]" />
                             </group>
                             <group>
                                 <field name="date"/>
@@ -72,7 +104,7 @@
         </record>        
         
         <!--hr.analytic.timesheet-->
-        <!--<record model="ir.ui.view" id="view_hr_analytic_timesheet_delivery_form">
+        <record model="ir.ui.view" id="view_hr_analytic_timesheet_delivery_form">
             <field name="name">hr.analytic.timesheet.delivery.page</field>
             <field name="model">hr.analytic.timesheet</field>
             <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_form"/>
@@ -80,16 +112,22 @@
                 <page string="Accounting" position="before">
                        <page string="Delivery">                           
                            <group colspan="4" col="4">
-                               <separator string="Current picking:" colspan="4"/>
-                               <field name="picking_ids" nolabel="1" context="{'show_move': True, 'intervention_id': active_id, 'tree_view_ref': 'intervention_stock_move.view_stock_picking_fast_tree', 'form_view_ref': 'intervention_stock_move.view_stock_picking_fast_form'}"/>
-                               
-                               <separator string="Delivered picking:" colspan="4"/>
-                               <field name="delivered_ids" nolabel="1" context="{'default_partner_id': intervent_partner_id, 'tree_view_ref': 'intervention_stock_move.view_stock_picking_fast_tree', 'form_view_ref': 'intervention_stock_move.view_stock_picking_fast_form'}"/>
+                               <separator string="Delivered material:" colspan="3"/>
+                               <button name="create_picking" string="Create picking" type="object" colspan="1"/>
+
+                               <field name="delivered_ids" nolabel="1" colspan="3"/>
+                               <button name="dummy_button" string="Refresh" type="object" colspan="1"/>
+
+                               <separator string="Picking:" colspan="4"/>
+                               <field name="picking_ids" nolabel="1" readonly="1" colspan="4" />
+
+                               <separator string="Available:" colspan="4"/>
+                               <field name="todo_ids" nolabel="1" readonly="1" colspan="4" context="{'show_move': True, 'intervention_id': active_id}"/>
                            </group> 
                        </page>                    
                 </page>
             </field>
-        </record>-->
+        </record>
         
         <record model="ir.actions.act_window" id="action_stock_picking_manual">
             <field name="name">Picking</field>
@@ -105,7 +143,7 @@
             <field name="res_model">stock.move.manual</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="domain">[('picking_id', '!=', False)]</field>
+            <!--<field name="domain">[('picking_id', '!=', False)]</field>-->
         </record>
         
         <menuitem 

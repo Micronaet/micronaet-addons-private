@@ -78,6 +78,11 @@ class StockPickingManual(orm.Model):
     # -------------------------------------------------------------------------
     # Button event:
     # -------------------------------------------------------------------------
+    def dummy_button(self, cr, uid, ids, context=None):
+        ''' Refresh
+        '''
+        return True
+        
     def remove_to_intervention(self, cr, uid, ids, context=None):
         ''' Link to intervention
         '''
@@ -107,7 +112,7 @@ class StockPickingManual(orm.Model):
         return {'tag': 'reload'}
 
     _columns = {
-        'name': fields.char('Number', size=25, required=True),
+        'name': fields.char('Number', size=25),#TODO , required=True),
         'date': fields.date('Date', required=True),
         'planned_date': fields.date('Planned date'),
         'partner_id': fields.many2one(
@@ -117,7 +122,6 @@ class StockPickingManual(orm.Model):
         'note': fields.char('Note'),	        
         'intervention_id': fields.many2one(
             'hr.analytic.timesheet', 'Intervention'),
-
         'state': fields.selection([
             ('todo', 'To do'),
             ('ready', 'Ready'),
@@ -141,6 +145,8 @@ class StockMoveManual(orm.Model):
     _columns = {
         'product_id': fields.many2one(
             'product.product', 'Product', required=True),            
+        'intervention_id': fields.many2one(
+            'hr.analytic.timesheet', 'Intervention'),
         'product_uom_qty': fields.float('Q.ty', digits=(16, 3), required=True),
         'uom_id': fields.related(
             'product_id', 'uom_id', 
@@ -149,15 +155,22 @@ class StockMoveManual(orm.Model):
         'picking_id': fields.many2one(
             'stock.picking.manual', 'Picking'),
 
-        'state': fields.selection([
-            ('todo', 'To do'),
-            ('ready', 'Ready'),
-            ('delivered', 'Delivered'),
-            ], 'Picking state')
+        #'state': fields.selection([
+        #    ('todo', 'To do'),
+        #    ('ready', 'Ready'),
+        #    ('delivered', 'Delivered'),
+        #    ], 'Picking state')
+        'state': fields.related(
+            'picking_id', 'state', 
+            type='selection', selection=[
+                ('todo', 'To do'),
+                ('ready', 'Ready'),
+                ('delivered', 'Delivered'),
+                ] , string='State', readonly=True),
         }
 
     _defaults = {
-        'state': lambda *x: 'todo',
+        #'state': lambda *x: 'todo',
         }
 
 class StockPickingManual(orm.Model):
@@ -170,6 +183,111 @@ class StockPickingManual(orm.Model):
         'line_ids': fields.one2many(
             'stock.move.manual', 'picking_id', 
             'Line'),
+        }
+
+class HrAnalyticTimesheet(orm.Model):
+    ''' Add extra data for delivery
+    '''
+    _inherit = 'hr.analytic.timesheet'
+
+    # -------------------------------------------------------------------------
+    # Utility:
+    # -------------------------------------------------------------------------
+    def make_and_confirm_picking(self, cr, uid, ids, context=None):
+        ''' Confirm picking when confirmed or create one
+        '''
+        pick_pool = self.pool.get('stock.picking.manual')
+        
+        # Create picking if material is present:
+        self.create_picking(cr, uid, ids, context=context)
+
+        # Confirm Picking delivery:
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]
+        pick_ids = [pick.id for pick in current_proxy.picking_ids]
+        pick_pool.write(cr, uid, pick_ids, {
+            'state': 'delivered',
+            }, context=context)
+        return True    
+        
+    # -------------------------------------------------------------------------
+    # Override WF:
+    # -------------------------------------------------------------------------
+    def intervention_confirmed(self, cr, uid, ids, context=None):
+        ''' Confirm picking when confirmed or create one
+        '''
+        self.make_and_confirm_picking(cr, uid, ids, context=context)
+        
+        return super(HrAnalyticTimesheet, self).intervention_confirmed(
+            cr, uid, ids, context=context)
+
+    def intervention_close(self, cr, uid, ids, context=None):
+        ''' Confirm picking when close or create one
+        '''
+        self.make_and_confirm_picking(cr, uid, ids, context=context)
+        
+        return super(HrAnalyticTimesheet, self).intervention_close(
+            cr, uid, ids, context=context)
+
+        
+    def _get_partner_delivery_picking(
+            self, cr, uid, ids, fields, args, context=None):
+        ''' Fields function for calculate 
+        '''
+        res = {}
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]        
+        partner_id = current_proxy.intervent_partner_id.id
+        pick_pool = self.pool.get('stock.picking.manual')
+        res[ids[0]] = pick_pool.search(cr, uid, [
+            ('partner_id', '=', partner_id),
+            ('state', 'in', ('todo', 'ready')),
+            ('intervention_id', '=', False),            
+            ], context=context)
+        return res
+
+    def create_picking(self, cr, uid, ids, context=None): 
+        ''' Create picking and link to intervent
+        '''
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]
+
+        # Pool used:        
+        move_pool = self.pool.get('stock.move.manual')        
+        pick_pool = self.pool.get('stock.picking.manual')        
+
+        move_ids = [move.id for move in current_proxy.delivered_ids]    
+        if not move_ids: # Nothing to do
+            return True
+            
+        pick_id = pick_pool.create(cr, uid, {
+            'partner_id': current_proxy.intervent_partner_id.id,
+            'date': current_proxy.date_start,
+            'planned_date': current_proxy.date_start,
+            'name': '',
+            'address_id': False,
+            'origin': 'Intervent',
+            'note': False,
+            'intervention_id': current_proxy.id,
+            'state': 'ready',            
+            }, context=context)
+            
+        # Unlock movement from intervent:    
+        move_pool.write(cr, uid, move_ids, {
+            'intervention_id': False,
+            'picking_id': pick_id,
+            }, context=context)
+        return True
+        
+    _columns = {
+        'delivered_ids': fields.one2many(
+            'stock.move.manual', 'intervention_id', 
+            'Delivered'),
+        'picking_ids': fields.one2many(
+            'stock.picking.manual', 'intervention_id', 
+            'Picking'),
+
+        'todo_ids': fields.function(
+            _get_partner_delivery_picking, method=True, 
+            type='many2many', relation='stock.picking.manual', 
+            string='Delivery available', store=False),                   
         }
 
 """
