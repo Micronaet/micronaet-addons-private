@@ -96,7 +96,10 @@ class AccountAnalyticAccount(orm.Model):
         res = []
         for record in self.browse(cr, uid, ids, context=context):
             if context.get('with_code', False):
-                res.append((record.id, '[%s] %s' % (record.code, record.name)))
+                res.append((record.id, '[%s] %s%s' % (
+                    record.code, 
+                    record.name,
+                    '' if record.partner_id else '*')))
             else:
                 res.append((record.id, record.name))
         return res
