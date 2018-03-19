@@ -46,6 +46,7 @@
         #'report_aeroo_ooo',
         'hr',
         'hr_timesheet_invoice',
+        'invervention_code_search', # Extra search for code
         ],
     'init_xml': [],
     'demo_xml': [],
@@ -53,7 +54,7 @@
         'security/ir.model.access.csv',
         
         #'data/factor.xml',
-        'intervent_sequence.xml',
+        'intervent_sequence.xml',        
         'intervention.xml',  
         'intervention_workflow.xml',
         #'report/report_intervent.xml',
