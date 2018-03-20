@@ -20,7 +20,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import os
+import sys
+import logging
+import openerp
+import openerp.netsvc as netsvc
+import openerp.addons.decimal_precision as dp
 from osv import fields, osv
+from openerp.osv.fields import datetime as datetime_field    
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+from openerp import SUPERUSER_ID
+from openerp import tools
+from openerp.tools.translate import _
+from openerp.tools.float_utils import float_round as round
+from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT, 
+    DEFAULT_SERVER_DATETIME_FORMAT, 
+    DATETIME_FORMATS_MAP, 
+    float_compare)
+
+
+_logger = logging.getLogger(__name__)
 
 class intervent_report_create_wizard(osv.osv_memory):
     ''' Wizard for create new intervent from invoice and linked to the document
@@ -60,81 +80,97 @@ class intervent_report_create_wizard(osv.osv_memory):
             context = {}
         
         wiz_proxy = self.browse(cr, uid, ids)[0]    
-        data={
+        data = {
             'intervention_request':'Richiesta telefonica intervento',
             #'code':'Codice intervento',
             #'date_end',
-             'google_from': 'company',
-             'manual_total': False,
-             'user_id': context.get('trip_user_id', False), 
-             'google_to': 'company',
-             'trip_require': wiz_proxy.mode == "customer",
-             'intervent_partner_id': wiz_proxy.partner_id.id,
-             'partner_id': wiz_proxy.partner_id.id,
-             'break_require': False,
-             'not_in_report': True,
-             'name': 'Richiesta intervento generico',
-             'mode': wiz_proxy.mode,
-             'invoice_id': False,
-             'intervent_duration': wiz_proxy.intervent_duration,
-             'manual_total_internal': False,
-             'extra_planned': True,
-             'trip_id': context.get('active_id', False),
-             #'message_ids': '',
-             'trip_hour': wiz_proxy.partner_id.trip_duration,
-             'date_start': wiz_proxy.datetime,
-             'date': wiz_proxy.datetime[:10],
-             'state': 'close',
-             'intervention': 'Intervento generico',
-             'ref': '', #TODO vedere se inserirlo
-             'break_hour': 0.0,
-             #'move_id': '',
-             'internal_note': '',
-             #'amount': '', #TODO
-             #'unit_amount':, #TODO
-             'intervent_total': wiz_proxy.intervent_duration + wiz_proxy.partner_id.trip_duration if wiz_proxy.mode == "customer" else 0.0,
-             #'line_id': '',
-             #'to_invoice': , #TODO
-             'account_id': self.get_account_id(cr, uid, context=context) , #wiz_proxy.account_id.id,
+            'google_from': 'company',
+            'manual_total': False,
+            'user_id': context.get('trip_user_id', False), 
+            'google_to': 'company',
+            'trip_require': wiz_proxy.mode == "customer",
+            'intervent_partner_id': wiz_proxy.partner_id.id,
+            'partner_id': wiz_proxy.partner_id.id,
+            'break_require': False,
+            'not_in_report': True,
+            'name': 'Richiesta intervento generico',
+            'mode': wiz_proxy.mode,
+            'invoice_id': False,
+            'intervent_duration': wiz_proxy.intervent_duration,
+            'manual_total_internal': False,
+            'extra_planned': True,
+            'trip_id': context.get('active_id', False),
+            #'message_ids': '',
+            'trip_hour': wiz_proxy.partner_id.trip_duration,
+            'date_start': wiz_proxy.datetime,
+            'date': wiz_proxy.datetime[:10],
+            'state': 'close',
+            'intervention': 'Intervento generico',
+            'ref': '', #TODO vedere se inserirlo
+            'break_hour': 0.0,
+            #'move_id': '',
+            'internal_note': '',
+            #'amount': '', #TODO
+            #'unit_amount':, #TODO
+            'intervent_total': 
+                wiz_proxy.intervent_duration + \
+                wiz_proxy.partner_id.trip_duration \
+                    if wiz_proxy.mode == "customer" else 0.0,
+            #'line_id': '',
+            #'to_invoice': , #TODO
+            'account_id': self.get_account_id(cr, uid, context=context) , #wiz_proxy.account_id.id,
             }
         
-        res=self.pool.get ("hr.analytic.timesheet").on_change_user_id(cr, uid, [], data['user_id'],)
+        res = self.pool.get ("hr.analytic.timesheet").on_change_user_id(
+            cr, uid, [], data['user_id'],)
         data.update(res.get('value', {}))
-        self.pool.get ("hr.analytic.timesheet").create(cr, uid, data, context=context)    
-        self.pool.get("hr.analytic.timesheet.trip").calculate_step_list(cr, uid, [data['trip_id']], context=context)
+        self.pool.get ("hr.analytic.timesheet").create(
+            cr, uid, data, context=context)    
+        self.pool.get("hr.analytic.timesheet.trip").calculate_step_list(
+            cr, uid, [data['trip_id']], context=context)
         return False
         
-    def onchange_datetime(self, cr, uid, ids, datetime, context=None,):
+    def onchange_datetime(self, cr, uid, ids, dt, context=None):
         ''' Read the appointment list of user for date selected 
         '''
         if context is None:
             context = {}
                       
-        res = {"value":{}, 'warning':{}}
+        res = {"value": {}, 'warning': {}}
         user_id = context.get('trip_user_id', False) # context passed from button in hr.analytic.timesheet.trip and then from on_change function
         trip_date = context.get('trip_date', False)  # context passed from button in hr.analytic.timesheet.trip and then from on_change function
         
-        if datetime[:10] != trip_date:
-            
-            res['warning']['title']='Attenzione:'
-            res['warning']['message']='Utilizzare come data la data del viaggio: %s' %(trip_date)    
-            #datetime="%s %s" %(trip_date, datetime[11:])    
+        if dt[:10] != trip_date:            
+            res['warning']['title'] = 'Attenzione:'
+            res['warning']['message'] = \
+                'Utilizzare come data la data del viaggio: %s' % trip_date
+            #dt="%s %s" %(trip_date, dt[11:])    
             return res 
             
-        if user_id and datetime:            
+        if user_id and dt:            
             intervent_pool = self.pool.get("hr.analytic.timesheet")
-            domain = [('user_id','=', user_id),
-                      ('date_start', '>=', "%s 00:00:00"%(datetime[:10])),
-                      ('date_start', '<=', "%s 23:59:59"%(datetime[:10])),
-                      ]
+            domain = [
+                ('user_id','=', user_id),
+                ('date_start', '>=', "%s 00:00:00" % dt[:10]),
+                ('date_start', '<=', "%s 23:59:59" % dt[:10]),
+                ]
             intervent_ids = intervent_pool.search(cr, uid, domain)
             situation = ""       
-            for rapportino in intervent_pool.browse(cr, uid, intervent_ids, context=None):
-                
-                situation += "%s [%.2f] %s %s\n" %(rapportino.date_start[-8:], 
-                                               rapportino.intervent_duration,
-                                               rapportino.intervent_partner_id.name, 
-                                               "DAL CLIENTE" if rapportino.mode == "customer" else "IN AZIENDA")
+            for rapportino in intervent_pool.browse(
+                    cr, uid, intervent_ids, context=None):                
+                date_start = datetime_field.context_timestamp(cr, uid,
+                    timestamp=datetime.strptime(
+                        rapportino.date_start, DEFAULT_SERVER_DATETIME_FORMAT),
+                    context=context)
+                date_start = date_start.strftime(
+                    DEFAULT_SERVER_DATETIME_FORMAT)
+
+                situation += "%s [%.2f] %s %s\n" % (
+                    date_start[-8:], 
+                    rapportino.intervent_duration,
+                    rapportino.intervent_partner_id.name, 
+                    "DAL CLIENTE" if \
+                        rapportino.mode == "customer" else "IN AZIENDA")
             res["value"]["situation"]=situation
             #res["value"]["datetime"]=datetime
 
@@ -156,12 +192,14 @@ class intervent_report_create_wizard(osv.osv_memory):
             ('phone','Phone'),
             ('customer','Customer address'),
             ('connection','Tele assistence'),
-            ('company','Company address'),],'Mode', select=True, required=True,readonly=False),        
+            ('company','Company address'),
+            ],'Mode', select=True, required=True),        
         'situation': fields.text('User situation',),
-        'intervent_duration': fields.float('Intervent duration', digits=(8, 2), required=True),
-               }
+        'intervent_duration': fields.float(
+            'Intervent duration', digits=(8, 2), required=True),
+        }
 
-    _defaults={
+    _defaults = {
         'intervent_duration': lambda *a: 1.0,
         'name': lambda *a: 'Intervento generico',
         'mode': lambda *a: 'customer',
