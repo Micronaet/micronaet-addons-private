@@ -32,5 +32,24 @@ from report.report_sxw import rml_parse
 
 class Parser(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(Parser, self).__init__(cr, uid, name, context) 
+        super(Parser, self).__init__(cr, uid, name, context)
+        
+        self.localcontext.update({
+            'get_total_data': self.get_total_data,
+            })        
+    
+    def get_total_data(self, objects, mode='km'):       
+        ''' Get total Km or trip (pass total km or trip)
+            for passed objects
+        '''
+        total = {
+            'km': 0.0,
+            'trip': 0,
+            }
+        for o in objects:
+            total['km'] += o.total_trip_company
+            total['trip'] += 1 if o.refund_day else 0
+        return total[mode]
+    
+        
 
