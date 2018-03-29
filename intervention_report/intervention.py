@@ -260,8 +260,10 @@ class hr_analytic_timesheet_extra(osv.osv):
         ''' If change mode:
             test if is customer so trip is required
         '''
-        res={}
-        res['value']={'trip_require': mode == 'customer'} # True if customer
+        res = {}
+        res['value'] = {
+            'trip_require': mode == 'customer',
+            } # True if customer
         return res
 
     def on_change_partner(self, cr, uid, ids, partner_id, account_id, context=None):
