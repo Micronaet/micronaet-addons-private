@@ -1,6 +1,22 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <!--res.company-->
+        <record model="ir.ui.view" id="view_res_company_stock_page_parameter_form">
+            <field name="name">res.company.stock.parameter.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[1]" position="after">
+                    <page string="Stock">
+                        <group colspan="4" col="4">
+                            <field name="manual_picking_type_id" />
+                        </group>    
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
         <!-- stock.move.manual-->
         <record model="ir.ui.view" id="view_stock_move_fast_tree">
             <field name="name">stock.move.manual.tree</field>

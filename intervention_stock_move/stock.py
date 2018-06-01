@@ -131,11 +131,90 @@ class StockPickingManual(orm.Model):
 class StockMoveManual(orm.Model):
     """ Model name: StockMoveManual
     """
-    
     _name = 'stock.move.manual'
     _description = 'Stock move manual'
     _rec_name = 'product_id'
     _order = 'product_id'
+
+    def create_write_move(self, cr, uid, ids, res_id, context=None):
+        ''' Create or write move linked
+        '''
+        current_proxy = self.browse(cr, uid, res_id, context=context)    
+
+        # Create stock movement linked:
+        picking_type = \
+            current_proxy.partner_id.company_id.manual_picking_type_id
+
+        if current_proxy.state == 'delivered':
+            state = 'done'
+        else: #'todo', 'ready'
+            state = 'assigned'
+
+        move_pool = self.pool.get('stock.move')
+        data = {
+            'name': current_proxy.product_id.name,
+            'product_id': current_proxy.product_id.id,
+            'product_uom_qty': current_proxy.product_uom_qty,
+            'product_uom': current_proxy.product_id.uom_id.id,
+            'partner_id': current_proxy.partner_id.id,            
+            'date': current_proxy.date,
+            'date_expected': current_proxy.date,
+            'origin': _('Manual picking'),
+            'picking_id': False, # TODO
+            'picking_type_id': picking_type.id,
+            'location_id': picking_type.default_location_src_id.id,
+            'location_dest_id': picking_type.default_location_dest_id.id,            
+            'state': state,
+            #'product_qty': current_proxy.product_uom_qty,
+            #'product_uos_qty': current_proxy.product_uom_qty,
+            #'product_uos': current_proxy.product_id.uom_id.id,
+            #'product_packaging',
+            #'producton_id'
+            #'price_unit',
+            #'priority':,
+            #'invoice_state':
+            #'procure_method':
+            }
+        if current_proxy.move_id:
+            move_id = current_proxy.move_id.id
+            move_pool.write(cr, uid, move_id, data, context=context)
+        else:
+            move_id = move_pool.create(cr, uid, data, context=context)        
+        return move_id
+        
+    def write(self, cr, uid, ids, vals, context=None):
+        """ Update redord(s) comes in {ids}, with new value comes as {vals}
+            return True on success, False otherwise
+            @param cr: cursor to database
+            @param uid: id of current user
+            @param ids: list of record ids to be update
+            @param vals: dict of new values to be set
+            @param context: context arguments, like lang, time zone
+            
+            @return: True on success, False otherwise
+        """
+        #TODO: process before updating resource
+        res = super(StockMoveManual, self).write(
+            cr, uid, ids, vals, context=context)
+        return res
+        
+    def create(self, cr, uid, vals, context=None):
+        """ Create a new record for a model ClassName
+            @param cr: cursor to database
+            @param uid: id of current user
+            @param vals: provides a data for new record
+            @param context: context arguments, like lang, time zone
+            
+            @return: returns a id of new record
+        """
+        res_id = super(StockMoveManual, self).create(
+            cr, uid, vals, context=context)
+        self.create_write_move(cr, uid, ids, res_id, context=context)
+        
+        self.write(cr, uid, res_id, {
+            'move_id': move_id,
+            }, context=context)            
+        return res_id
     
     _columns = {
         'product_id': fields.many2one(
@@ -156,6 +235,7 @@ class StockMoveManual(orm.Model):
         'partner_id': fields.related(
             'picking_id', 'partner_id', 
             type='many2one', relation='res.partner', string='Partner'),
+        'move_id': fields.many2one('stock.move', 'Stock move linked'),
 
         'state': fields.related(
             'picking_id', 'state', 
@@ -166,6 +246,16 @@ class StockMoveManual(orm.Model):
                 ] , string='State', readonly=True),
         }
 
+class StockPickingManual(orm.Model):
+    """ Model name: Stock Picking Manual
+    """
+    
+    _inherit = 'res.company'
+    
+    _columns = {
+         'manual_picking_type_id': fields.many2one(
+             'stock.picking.type', 'Picking type customer'),         
+         }
 class StockPickingManual(orm.Model):
     """ Model name: Stock Picking Manual
     """
