@@ -78,6 +78,39 @@ class StockPickingManual(orm.Model):
     # -------------------------------------------------------------------------
     # Button event:
     # -------------------------------------------------------------------------
+    def unlink(self, cr, uid, ids, context=None):
+        """ Delete all record(s) from table heaving record id in ids
+            return True on success, False otherwise 
+            @param cr: cursor to database
+            @param uid: id of current user
+            @param ids: list of record ids to be removed from table
+            @param context: context arguments, like lang, time zone
+            
+            @return: True on success, False otherwise
+        """
+        # ---------------------------------------------------------------------
+        # Delete detail before
+        # ---------------------------------------------------------------------
+        line_ids = []
+        for pick in self.browse(cr, uid, ids, context=context):
+            for line in pick.line_ids:
+                line_ids.append(line.id)
+        if line_ids:        
+            self.pool.get('stock.move.manual').unlink(
+                cr, uid, line_ids, context=context)
+        
+        # Delete line after:
+        #super(StockPickingManual, self).unlink(
+        #    cr, uid, ids, context=context)
+        cr.execute(
+            'DELETE FROM stock_picking_manual WHERE ID in (%s)' % \
+                ','.join([str(item) for item in ids])
+            )
+        return True
+
+    # -------------------------------------------------------------------------
+    # Button event:
+    # -------------------------------------------------------------------------
     def remove_to_intervention(self, cr, uid, ids, context=None):
         ''' Link to intervention
         '''
@@ -142,9 +175,9 @@ class StockMoveManual(orm.Model):
         _logger.warning('Update create/write stock move')
         current_proxy = self.browse(cr, uid, res_id, context=context)    
 
-        # Create stock movement linked:
+        # Create stock movement linked (use create_uid for acces company:
         picking_type = \
-            current_proxy.partner_id.company_id.manual_picking_type_id
+            current_proxy.create_uid.company_id.manual_picking_type_id
 
         if current_proxy.state == 'delivered':
             state = 'done'
@@ -152,14 +185,16 @@ class StockMoveManual(orm.Model):
             state = 'assigned'
 
         move_pool = self.pool.get('stock.move')
+        date = current_proxy.date or datetime.now().strftime(
+            DEFAULT_SERVER_DATETIME_FORMAT)
         data = {
             'name': current_proxy.product_id.name,
             'product_id': current_proxy.product_id.id,
             'product_uom_qty': current_proxy.product_uom_qty,
             'product_uom': current_proxy.product_id.uom_id.id,
             'partner_id': current_proxy.partner_id.id,            
-            'date': current_proxy.date,
-            'date_expected': current_proxy.date,
+            'date': date,
+            'date_expected': date,
             'origin': _('Manual picking'),
             'picking_id': False, # TODO
             'picking_type_id': picking_type.id,
@@ -218,6 +253,34 @@ class StockMoveManual(orm.Model):
             }, context=context)            
         return res_id
     
+    def unlink(self, cr, uid, ids, context=None):
+        """ Delete all record(s) from table heaving record id in ids
+            return True on success, False otherwise 
+            @param cr: cursor to database
+            @param uid: id of current user
+            @param ids: list of record ids to be removed from table
+            @param context: context arguments, like lang, time zone
+            
+            @return: True on success, False otherwise
+        """
+        # ---------------------------------------------------------------------
+        # Before delete linked movement:
+        # ---------------------------------------------------------------------
+        move_ids = []
+        for move in self.browse(cr, uid, ids, context=context):
+            if move.move_id:
+                move_ids.append(move.move_id.id)
+        
+        if move_ids:        
+            move_pool = self.pool.get('stock.move')
+            move_pool.write(cr, uid, move_ids, {
+                'state': 'draft',
+                }, context=context)
+            move_pool.unlink(cr, uid, move_ids, context=context)
+        
+        return super(StockMoveManual, self).unlink(
+            cr, uid, ids, context=context)
+    
     _columns = {
         'product_id': fields.many2one(
             'product.product', 'Product', required=True),            
@@ -225,7 +288,7 @@ class StockMoveManual(orm.Model):
             'hr.analytic.timesheet', 'Intervention'),
         'product_uom_qty': fields.float('Q.ty', digits=(16, 3), required=True),
         'picking_id': fields.many2one(
-            'stock.picking.manual', 'Picking'),
+            'stock.picking.manual', 'Picking', ondelete='cascade'),
         
         'uom_id': fields.related(
             'product_id', 'uom_id', 
@@ -276,7 +339,7 @@ class ResPartner(orm.Model):
     """
     
     _inherit = 'res.partner'
-    
+
     def _get_pending_stock_material(self, cr, uid, ids, fields, args, 
             context=None):
         ''' Fields function for calculate 
@@ -290,8 +353,9 @@ class ResPartner(orm.Model):
             partner_db[item] = [0, 0] # todo, ready status counter
         
         picking_ids = picking_pool.search(cr, uid, [
-            ('state', 'in', ('todo', 'ready')),
-            ('partner_id', 'in', ids),
+            ('state', 'in', ('todo', 'ready')), # in status to delivery
+            ('partner_id', 'in', ids), # with selected partner
+            ('intervention_id', '=', False), # not linked
             ], context=context)
         for picking in picking_pool.browse(cr, uid, picking_ids, 
                 context=context):    
@@ -368,6 +432,27 @@ class HrAnalyticTimesheet(orm.Model):
     # -------------------------------------------------------------------------
     # Button event:
     # -------------------------------------------------------------------------
+    def link_all_delivery_pending(self, cr, uid, ids, context=None):
+        ''' Link all pending delivery:
+        '''
+        # Pool used:
+        picking_pool = self.pool.get('stock.picking.manual')
+
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]
+        partner_id = current_proxy.intervent_partner_id.id
+        
+        picking_ids = picking_pool.search(cr, uid, [
+            ('state', 'in', ('todo', 'ready')), # in status to delivery
+            ('partner_id', '=', partner_id), # with selected partner
+            ('intervention_id', '=', False), # not linked
+            ], context=context)
+        if not picking_ids:
+            return True
+
+        return picking_pool.write(cr, uid, picking_ids, {
+            'intervention_id': ids[0],
+            }, context=context)    
+        
     def dummy_button(self, cr, uid, ids, context=None):
         ''' Refresh
         '''
