@@ -280,7 +280,20 @@ class StockMoveManual(orm.Model):
         
         return super(StockMoveManual, self).unlink(
             cr, uid, ids, context=context)
-    
+   
+    # Store function:
+    def _store_move_change(self, cr, uid, ids, context=None):
+        return ids
+        
+    def _store_picking_change(self, cr, uid, ids, context=None):
+        ''' Refresh line of picking
+        ''' 
+        move_pool = self.pool.get('stock.move.manual')
+        move_ids = move_pool.search(cr, uid, [
+            ('picking_id', 'in', ids),
+            ], context=context)
+        return move_ids
+        
     _columns = {
         'product_id': fields.many2one(
             'product.product', 'Product', required=True),            
@@ -309,7 +322,12 @@ class StockMoveManual(orm.Model):
                 ('todo', 'To do'),
                 ('ready', 'Ready'),
                 ('delivered', 'Delivered'),
-                ] , string='State', readonly=True),
+                ] , string='State', readonly=True, store={
+                    'stock.picking.manual': (
+                        _store_picking_change, ['state',], 10),
+                    'stock.move.manual': (
+                        _store_move_change, ['id', 'picking_id'], 10),
+                    }),
         }
 
 class StockPickingManual(orm.Model):

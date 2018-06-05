@@ -167,6 +167,25 @@
             <field name="context">{}</field>
             <field name="domain">[]</field>
         </record>
+        <record model="ir.actions.act_window" id="action_stock_picking_manual_todo">
+            <field name="name">Picking todo</field>
+            <field name="res_model">stock.picking.manual</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_stock_picking_fast_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[('state', '=', 'todo')]</field>
+        </record>
+        <record model="ir.actions.act_window" id="action_stock_picking_manual_ready">
+            <field name="name">Picking ready</field>
+            <field name="res_model">stock.picking.manual</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_stock_picking_fast_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[('state', '=', 'ready')]</field>
+        </record>
+
         <record model="ir.actions.act_window" id="action_stock_movement_manual">
             <field name="name">Stock move</field>
             <field name="res_model">stock.move.manual</field>
@@ -182,16 +201,29 @@
             sequence="0"
             />
             <menuitem 
+                parent="menu_stock_picking_picking" 
+                id="menu_stock_picking_picking_todo" 
+                action="action_stock_picking_manual_todo"
+                sequence="20"
+                />
+            <menuitem 
+                parent="menu_stock_picking_picking" 
+                id="menu_stock_picking_picking_ready" 
+                action="action_stock_picking_manual_ready"
+                sequence="30"
+                />
+            <menuitem 
                 parent="menu_stock_picking_root" 
                 id="menu_stock_picking_picking" 
                 action="action_stock_picking_manual"
-                sequence="10"
+                sequence="40"
                 />
+                
             <menuitem 
                 parent="menu_stock_picking_root" 
                 id="menu_stock_picking_move" 
                 action="action_stock_movement_manual"
-                sequence="20"
+                sequence="50"
                 />
             
         
