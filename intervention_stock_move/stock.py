@@ -136,9 +136,10 @@ class StockMoveManual(orm.Model):
     _rec_name = 'product_id'
     _order = 'product_id'
 
-    def create_write_move(self, cr, uid, ids, res_id, context=None):
+    def create_write_move(self, cr, uid, res_id, context=None):
         ''' Create or write move linked
         '''
+        _logger.warning('Update create/write stock move')
         current_proxy = self.browse(cr, uid, res_id, context=context)    
 
         # Create stock movement linked:
@@ -193,9 +194,10 @@ class StockMoveManual(orm.Model):
             
             @return: True on success, False otherwise
         """
-        #TODO: process before updating resource
+        # Update stock move:
         res = super(StockMoveManual, self).write(
             cr, uid, ids, vals, context=context)
+        self.create_write_move(cr, uid, ids[0], context=context)
         return res
         
     def create(self, cr, uid, vals, context=None):
@@ -209,9 +211,9 @@ class StockMoveManual(orm.Model):
         """
         res_id = super(StockMoveManual, self).create(
             cr, uid, vals, context=context)
-        self.create_write_move(cr, uid, ids, res_id, context=context)
+        move_id = self.create_write_move(cr, uid, res_id, context=context)
         
-        self.write(cr, uid, res_id, {
+        self.write(cr, uid, [res_id], {
             'move_id': move_id,
             }, context=context)            
         return res_id
@@ -235,7 +237,8 @@ class StockMoveManual(orm.Model):
         'partner_id': fields.related(
             'picking_id', 'partner_id', 
             type='many2one', relation='res.partner', string='Partner'),
-        'move_id': fields.many2one('stock.move', 'Stock move linked'),
+        'move_id': fields.many2one(
+            'stock.move', 'Stock move linked', ondelete='cascade'),
 
         'state': fields.related(
             'picking_id', 'state', 
@@ -266,6 +269,56 @@ class StockPickingManual(orm.Model):
         'line_ids': fields.one2many(
             'stock.move.manual', 'picking_id', 
             'Line'),
+        }
+
+class ResPartner(orm.Model):
+    """ Model name: Res Partner
+    """
+    
+    _inherit = 'res.partner'
+    
+    def _get_pending_stock_material(self, cr, uid, ids, fields, args, 
+            context=None):
+        ''' Fields function for calculate 
+        '''
+        # Pool used:
+        picking_pool = self.pool.get('stock.picking.manual')
+
+        # Prepare empty database for partner
+        partner_db = {}
+        for item in ids:
+            partner_db[item] = [0, 0] # todo, ready status counter
+        
+        picking_ids = picking_pool.search(cr, uid, [
+            ('state', 'in', ('todo', 'ready')),
+            ('partner_id', 'in', ids),
+            ], context=context)
+        for picking in picking_pool.browse(cr, uid, picking_ids, 
+                context=context):    
+            if picking.state == 'todo':
+                partner_db[picking.partner_id.id][0] += 1
+            elif picking.state == 'ready':   
+                partner_db[picking.partner_id.id][1] += 1
+            else:
+                pass # nothing
+        res = {}
+        for partner_id in partner_db:
+            res[partner_id] = {
+                'pending_material_present': any(partner_db[partner_id]),
+                'pending_material_detail': _(
+                    'TODO: %s - Ready: %s') % tuple(partner_db[partner_id]),
+                }
+        return res
+        
+    _columns = {
+        'pending_material_present': fields.function(
+            _get_pending_stock_material, method=True, 
+            type='boolean', string='Pending material', store=False, 
+            multi=True),                         
+        'pending_material_detail': fields.function(
+            _get_pending_stock_material, method=True, 
+            type='char', size=80, string='Pending material detail', 
+            store=False, multi=True),
         }
 
 class HrAnalyticTimesheet(orm.Model):
@@ -379,7 +432,17 @@ class HrAnalyticTimesheet(orm.Model):
             _get_partner_delivery_picking, method=True, 
             type='many2many', relation='stock.picking.manual', 
             string='Delivery available', store=False),                   
+        'delivery_present': fields.char('Delivery present', size=64),
+        'pending_material_present': fields.related(
+            'intervent_partner_id', 'pending_material_present', 
+            type='boolean', string='Pending material present'),
+        'pending_material_detail': fields.related(
+            'intervent_partner_id', 'pending_material_detail', 
+            type='char', size=80, string='Pending material detail'),
         }
+    _defaults = {
+        'delivery_present': lambda *x: _('PENDING DELIVERY')
+        }    
 
 """
 class StockPicking(orm.Model):

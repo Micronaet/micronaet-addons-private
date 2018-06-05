@@ -131,6 +131,9 @@
                 <page string="Accounting" position="before">
                        <page string="Delivery">                           
                            <group colspan="4" col="4">
+                               <field name="pending_material_present" />
+                               <field name="pending_material_detail" />
+                               
                                <separator string="Delivered material:" colspan="3"/>
                                <button name="create_picking" string="Create picking" type="object" colspan="1"/>
                                <field name="delivered_ids" nolabel="1" colspan="4" context="{'embedded': True}"/>
@@ -139,11 +142,18 @@
                                <button name="dummy_button" string="Refresh" type="object" colspan="1"/>
                                <field name="picking_ids" nolabel="1" readonly="1" colspan="4" />
 
-                               <separator string="Available:" colspan="4"/>
-                               <field name="todo_ids" nolabel="1" readonly="1" colspan="4" context="{'show_move': True, 'intervention_id': active_id}"/>
+                               <!--<separator string="Available:" colspan="4"/>
+                               <field name="todo_ids" nolabel="1" readonly="1" colspan="4" context="{'show_move': True, 'intervention_id': active_id}"/>-->
                            </group> 
                        </page>                    
                 </page>
+                <xpath expr="//notebook" position="before">
+                <!--<field name="name" position="before">
+                </field>     -->
+                     <div style="background-color: blue;text-align: center;font-weight:bold;color:white;">
+                         <field name="delivery_present" readonly="1" nolabel="1" attrs="{'invisible': [('pending_material_present', '=', False)]}" class="oe_color_blue" colspan="4"/>
+                     </div>
+                </xpath>
             </field>
         </record>
         
