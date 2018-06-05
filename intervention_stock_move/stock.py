@@ -458,20 +458,20 @@ class HrAnalyticTimesheet(orm.Model):
         '''
         return True
         
-    def _get_partner_delivery_picking(
-            self, cr, uid, ids, fields, args, context=None):
-        ''' Fields function for calculate 
-        '''
-        res = {}
-        current_proxy = self.browse(cr, uid, ids, context=context)[0]        
-        partner_id = current_proxy.intervent_partner_id.id
-        pick_pool = self.pool.get('stock.picking.manual')
-        res[ids[0]] = pick_pool.search(cr, uid, [
-            ('partner_id', '=', partner_id),
-            ('state', 'in', ('todo', 'ready')),
-            ('intervention_id', '=', False),            
-            ], context=context)
-        return res
+    #def _get_partner_delivery_picking(
+    #        self, cr, uid, ids, fields, args, context=None):
+    #    ''' Fields function for calculate 
+    #    '''
+    #    res = {}
+    #    current_proxy = self.browse(cr, uid, ids, context=context)[0]        
+    #    partner_id = current_proxy.intervent_partner_id.id
+    #    pick_pool = self.pool.get('stock.picking.manual')
+    #    res[ids[0]] = pick_pool.search(cr, uid, [
+    #        ('partner_id', '=', partner_id),
+    #        ('state', 'in', ('todo', 'ready')),
+    #        ('intervention_id', '=', False),            
+    #        ], context=context)
+    #    return res
 
     def create_picking(self, cr, uid, ids, context=None): 
         ''' Create picking and link to intervent
@@ -513,10 +513,10 @@ class HrAnalyticTimesheet(orm.Model):
             'stock.picking.manual', 'intervention_id', 
             'Picking'),
 
-        'todo_ids': fields.function(
-            _get_partner_delivery_picking, method=True, 
-            type='many2many', relation='stock.picking.manual', 
-            string='Delivery available', store=False),                   
+        #'todo_ids': fields.function(
+        #    _get_partner_delivery_picking, method=True, 
+        #    type='many2many', relation='stock.picking.manual', 
+        #    string='Delivery available', store=False),                   
         'delivery_present': fields.char('Delivery present', size=64),
         'pending_material_present': fields.related(
             'intervent_partner_id', 'pending_material_present', 
