@@ -48,13 +48,27 @@ class StockPickingManual(orm.Model):
     _rec_name = 'name'
     _order = 'name'
     
+
+    def update_also_detail(self, cr, uid, ids, state, context=None):
+        ''' Update detail for new state (and move)
+        '''
+        assert len(ids) == 1, 'Works only with one record a time'
+        
+        move_pool = self.pool.get('stock.move.manual')
+        move_ids = move_pool.search(cr, uid, [
+            ('picking_id', '=', ids[0]),
+            ], context=context)
+        return move_pool.write(cr, uid, move_ids, {
+            'state': state,
+            }, context=context)
+        
     # -------------------------------------------------------------------------
     # WF Button:
     # -------------------------------------------------------------------------
     def wf_ready(self, cr, uid, ids, context=None):
         ''' Restart procedure
         '''
-        # TODO movement and picking!
+        self.update_also_detail(cr, uid, ids, 'ready', context=context)
         self.write(cr, uid, ids, {
             'state': 'ready',
             }, context=context)
@@ -62,7 +76,7 @@ class StockPickingManual(orm.Model):
     def wf_delivered(self, cr, uid, ids, context=None):
         ''' Restart procedure
         '''
-        # TODO movement and picking!
+        self.update_also_detail(cr, uid, ids, 'delivered', context=context)
         self.write(cr, uid, ids, {
             'state': 'delivered',
             }, context=context)
@@ -70,7 +84,7 @@ class StockPickingManual(orm.Model):
     def wf_restart(self, cr, uid, ids, context=None):
         ''' Restart procedure
         '''
-        # TODO movement and picking!
+        self.update_also_detail(cr, uid, ids, 'todo', context=context)
         self.write(cr, uid, ids, {
             'state': 'todo',
             }, context=context)
@@ -213,6 +227,10 @@ class StockMoveManual(orm.Model):
             }
         if current_proxy.move_id:
             move_id = current_proxy.move_id.id
+            move_pool.write(cr, uid, move_id, {
+                'state': 'draft',
+                }, context=context)
+            
             move_pool.write(cr, uid, move_id, data, context=context)
         else:
             move_id = move_pool.create(cr, uid, data, context=context)        
@@ -281,19 +299,6 @@ class StockMoveManual(orm.Model):
         return super(StockMoveManual, self).unlink(
             cr, uid, ids, context=context)
    
-    # Store function:
-    def _store_move_change(self, cr, uid, ids, context=None):
-        return ids
-        
-    def _store_picking_change(self, cr, uid, ids, context=None):
-        ''' Refresh line of picking
-        ''' 
-        move_pool = self.pool.get('stock.move.manual')
-        move_ids = move_pool.search(cr, uid, [
-            ('picking_id', 'in', ids),
-            ], context=context)
-        return move_ids
-        
     _columns = {
         'product_id': fields.many2one(
             'product.product', 'Product', required=True),            
@@ -315,19 +320,15 @@ class StockMoveManual(orm.Model):
             type='many2one', relation='res.partner', string='Partner'),
         'move_id': fields.many2one(
             'stock.move', 'Stock move linked', ondelete='cascade'),
+        'state': fields.selection([
+            ('todo', 'To do'),
+            ('ready', 'Ready'),
+            ('delivered', 'Delivered'),
+            ], 'Picking state')
+        }
 
-        'state': fields.related(
-            'picking_id', 'state', 
-            type='selection', selection=[
-                ('todo', 'To do'),
-                ('ready', 'Ready'),
-                ('delivered', 'Delivered'),
-                ] , string='State', readonly=True, store={
-                    'stock.picking.manual': (
-                        _store_picking_change, ['state',], 10),
-                    'stock.move.manual': (
-                        _store_move_change, ['id', 'picking_id'], 10),
-                    }),
+    _defaults = {
+        'state': lambda *x: 'todo',
         }
 
 class StockPickingManual(orm.Model):
@@ -375,6 +376,7 @@ class ResPartner(orm.Model):
             ('partner_id', 'in', ids), # with selected partner
             ('intervention_id', '=', False), # not linked
             ], context=context)
+
         for picking in picking_pool.browse(cr, uid, picking_ids, 
                 context=context):    
             if picking.state == 'todo':
@@ -383,6 +385,7 @@ class ResPartner(orm.Model):
                 partner_db[picking.partner_id.id][1] += 1
             else:
                 pass # nothing
+
         res = {}
         for partner_id in partner_db:
             res[partner_id] = {
@@ -409,6 +412,22 @@ class HrAnalyticTimesheet(orm.Model):
     _inherit = 'hr.analytic.timesheet'
 
     # -------------------------------------------------------------------------
+    # On Change:
+    # -------------------------------------------------------------------------
+    def onchange_intervent_partner_id(self, cr, uid, ids, partner_id, 
+            context=None):
+        ''' Update alert
+        '''    
+        partner_pool = self.pool.get('res.partner')
+
+        res = {'value': {}}
+        pending_material_present = partner_pool._get_pending_stock_material(
+            cr, uid, [partner_id], None, 
+            None, context=context)[partner_id]['pending_material_present']
+        res['value']['pending_material_present'] = pending_material_present
+        return res
+
+    # -------------------------------------------------------------------------
     # Utility:
     # -------------------------------------------------------------------------
     def make_and_confirm_picking(self, cr, uid, ids, context=None):
@@ -422,10 +441,9 @@ class HrAnalyticTimesheet(orm.Model):
         # Confirm Picking delivery:
         current_proxy = self.browse(cr, uid, ids, context=context)[0]
         pick_ids = [pick.id for pick in current_proxy.picking_ids]
-        pick_pool.write(cr, uid, pick_ids, {
-            'state': 'delivered',
-            }, context=context)
-        return True    
+        
+        # Update with WF action:
+        return pick_pool.wf_delivered(cr, uid, pick_ids, context=context)
         
     # -------------------------------------------------------------------------
     # Override WF:
