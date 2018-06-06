@@ -183,6 +183,39 @@ class StockMoveManual(orm.Model):
     _rec_name = 'product_id'
     _order = 'product_id'
 
+    """def create_update_quants(self, cr, uid, manual_id, context=None):
+        ''' Create quants when done
+        '''
+        # Pool used:
+        quant_pool = self.pool.get('stock.quant')
+
+        manual_proxy = self.browse(cr, uid, manual_id, context=context)
+
+        if manual_proxy.state == 'done':
+            move = manual_proxy.move_id
+            # Create quants:
+            quant_id = manual_proxy.create(cr, uid, {
+                 'qty': move.product_qty
+                 #'propagated_from_id'
+                 #'package_id'
+                 'cost': 0.0, #TODO
+                 #'lot_id'
+                 #'reservation_id'
+                 'location_id': move.location_id.id,
+                 'company_id': move.company_id.id,
+                 #'owner_id'
+                 'product_id': move.product_id.id,
+                 #'packaging_type_id'
+                 #'negative_move_id'
+                 'in_date': move.date,
+                }, context=context)
+            
+        else:
+            # Delete quants if present:
+            if manual_proxy.quant_id:
+                quant_pool.unlink(cr, uid, manual_proxy.quant_id.id, 
+                    context=context)"""
+        
     def create_write_move(self, cr, uid, res_id, context=None):
         ''' Create or write move linked
         '''
@@ -195,7 +228,7 @@ class StockMoveManual(orm.Model):
 
         if current_proxy.state == 'delivered':
             state = 'assigned' #done
-        else: #'todo', 'ready'
+        else: # 'todo', 'ready'
             state = 'waiting' # 'assigned'
 
         move_pool = self.pool.get('stock.move')
@@ -321,6 +354,8 @@ class StockMoveManual(orm.Model):
             type='many2one', relation='res.partner', string='Partner'),
         'move_id': fields.many2one(
             'stock.move', 'Stock move linked', ondelete='cascade'),
+        #'quant_id': fields.many2one(
+        #    'stock.quant', 'Stock quant linked', ondelete='cascade'),
         'state': fields.selection([
             ('todo', 'To do'),
             ('ready', 'Ready'),
