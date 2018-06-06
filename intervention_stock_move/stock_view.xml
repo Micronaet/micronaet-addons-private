@@ -183,6 +183,15 @@
             <field name="context">{}</field>
             <field name="domain">[('state', '=', 'ready')]</field>
         </record>
+        <record model="ir.actions.act_window" id="action_stock_picking_manual_delivered">
+            <field name="name">Picking delivered</field>
+            <field name="res_model">stock.picking.manual</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_stock_picking_fast_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[('state', '=', 'delivered')]</field>
+        </record>
 
         <record model="ir.actions.act_window" id="action_stock_movement_manual">
             <field name="name">Stock move</field>
@@ -214,6 +223,12 @@
                     parent="menu_stock_picking_picking" 
                     id="menu_stock_picking_picking_ready" 
                     action="action_stock_picking_manual_ready"
+                    sequence="30"
+                    />
+                <menuitem 
+                    parent="menu_stock_picking_picking" 
+                    id="menu_stock_picking_picking_delivered" 
+                    action="action_stock_picking_manual_delivered"
                     sequence="30"
                     />
                 
