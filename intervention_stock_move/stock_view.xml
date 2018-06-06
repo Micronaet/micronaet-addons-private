@@ -199,23 +199,23 @@
             sequence="0"
             />
             <menuitem 
-                parent="menu_stock_picking_picking" 
-                id="menu_stock_picking_picking_todo" 
-                action="action_stock_picking_manual_todo"
-                sequence="20"
-                />
-            <menuitem 
-                parent="menu_stock_picking_picking" 
-                id="menu_stock_picking_picking_ready" 
-                action="action_stock_picking_manual_ready"
-                sequence="30"
-                />
-            <menuitem 
                 parent="menu_stock_picking_root" 
                 id="menu_stock_picking_picking" 
                 action="action_stock_picking_manual"
                 sequence="40"
                 />
+                <menuitem 
+                    parent="menu_stock_picking_picking" 
+                    id="menu_stock_picking_picking_todo" 
+                    action="action_stock_picking_manual_todo"
+                    sequence="20"
+                    />
+                <menuitem 
+                    parent="menu_stock_picking_picking" 
+                    id="menu_stock_picking_picking_ready" 
+                    action="action_stock_picking_manual_ready"
+                    sequence="30"
+                    />
                 
             <menuitem 
                 parent="menu_stock_picking_root" 
