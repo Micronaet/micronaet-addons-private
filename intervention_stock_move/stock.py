@@ -47,16 +47,14 @@ class StockPickingManual(orm.Model):
     _description = 'Stock picking manual'
     _rec_name = 'name'
     _order = 'name'
-    
 
     def update_also_detail(self, cr, uid, ids, state, context=None):
         ''' Update detail for new state (and move)
+            Work multi IDS
         '''
-        assert len(ids) == 1, 'Works only with one record a time'
-        
         move_pool = self.pool.get('stock.move.manual')
         move_ids = move_pool.search(cr, uid, [
-            ('picking_id', '=', ids[0]),
+            ('picking_id', 'in', ids),
             ], context=context)
         return move_pool.write(cr, uid, move_ids, {
             'state': state,
@@ -69,7 +67,7 @@ class StockPickingManual(orm.Model):
         ''' Restart procedure
         '''
         self.update_also_detail(cr, uid, ids, 'ready', context=context)
-        self.write(cr, uid, ids, {
+        return self.write(cr, uid, ids, {
             'state': 'ready',
             }, context=context)
 
@@ -77,7 +75,7 @@ class StockPickingManual(orm.Model):
         ''' Restart procedure
         '''
         self.update_also_detail(cr, uid, ids, 'delivered', context=context)
-        self.write(cr, uid, ids, {
+        return self.write(cr, uid, ids, {
             'state': 'delivered',
             }, context=context)
 
@@ -85,7 +83,7 @@ class StockPickingManual(orm.Model):
         ''' Restart procedure
         '''
         self.update_also_detail(cr, uid, ids, 'todo', context=context)
-        self.write(cr, uid, ids, {
+        return self.write(cr, uid, ids, {
             'state': 'todo',
             }, context=context)
 
