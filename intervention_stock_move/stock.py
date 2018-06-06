@@ -194,9 +194,9 @@ class StockMoveManual(orm.Model):
             current_proxy.create_uid.company_id.manual_picking_type_id
 
         if current_proxy.state == 'delivered':
-            state = 'done'
+            state = 'assigned' #done
         else: #'todo', 'ready'
-            state = 'assigned'
+            state = 'waiting' # 'assigned'
 
         move_pool = self.pool.get('stock.move')
         date = current_proxy.date or datetime.now().strftime(
@@ -234,6 +234,7 @@ class StockMoveManual(orm.Model):
             move_pool.write(cr, uid, move_id, data, context=context)
         else:
             move_id = move_pool.create(cr, uid, data, context=context)        
+        # TODO create quants if done movement!!    
         return move_id
         
     def write(self, cr, uid, ids, vals, context=None):

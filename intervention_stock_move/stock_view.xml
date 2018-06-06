@@ -138,8 +138,8 @@
                                <button name="create_picking" string="Create picking" type="object" colspan="1"/>
                                <field name="delivered_ids" nolabel="1" colspan="4" context="{'embedded': True}"/>
 
-                               <field name="pending_material_present" />
-                               <field name="pending_material_detail" />
+                               <field name="pending_material_present" readonly="1" />
+                               <field name="pending_material_detail" readonly="1" />
 
                                <separator string="Picking:" colspan="2"/>
                                <button name="link_all_delivery_pending" string="Link all" type="object" colspan="1"/>
