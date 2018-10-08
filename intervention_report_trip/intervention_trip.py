@@ -19,8 +19,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
+import os
+import sys
+import logging
+import openerp
+import urllib    
 from osv import osv, fields
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+from openerp import SUPERUSER_ID
+from openerp import tools
+from openerp.tools.translate import _
+from openerp.tools.float_utils import float_round as round
+from openerp.tools import (
+    DEFAULT_SERVER_DATE_FORMAT, 
+    DEFAULT_SERVER_DATETIME_FORMAT, 
+    DATETIME_FORMATS_MAP, 
+    float_compare,
+    )
+
+
+_logger = logging.getLogger(__name__)
 
 class hr_analytic_timesheet_trip(osv.osv):
     ''' Trip for intervent daily for user
@@ -59,13 +78,15 @@ class hr_analytic_timesheet_trip(osv.osv):
                 return True
             return False    
             
-        # Start procedure: #####################################################  
+        # ---------------------------------------------------------------------
+        # Start procedure
+        # ---------------------------------------------------------------------
         company_name = "Company"
         home_name = "Home"
         for trip in self.browse(cr, uid, ids, context=context): 
-            ####################################################################
-            # COMMON PART ######################################################
-            ####################################################################
+            # -----------------------------------------------------------------
+            # COMMON PART
+            # -----------------------------------------------------------------
             # Get parameters from home and company
             home_partner_id = trip.user_id.partner_id.id
             company_partner_id = trip.user_id.company_id.partner_id.id
@@ -78,9 +99,9 @@ class hr_analytic_timesheet_trip(osv.osv):
             if step_ids:
                 self.pool.get('hr.analytic.timesheet.trip.step').unlink(cr, uid, step_ids, context=context)
 
-            ####################################################################
-            # FROM HOME TO HOME ################################################
-            ####################################################################
+            # -----------------------------------------------------------------
+            # FROM HOME TO HOME
+            # -----------------------------------------------------------------
             # Generate all the steps
             previous_id = home_partner_id # Always home first start
             previous_name = home_name
@@ -205,12 +226,13 @@ class hr_analytic_timesheet_trip(osv.osv):
                 element in string ask for return json object
             '''
             try:
-                header = "http://maps.googleapis.com/maps/api/distancematrix/json?"
-                return header + "origins=" + prepare_element(self, cr, uid, origin, context=context) + "&destinations=" + prepare_element(self, cr, uid, destination, context=context) + "&sensor=false"
+                header = u'http://maps.googleapis.com/maps/api/distancematrix/json?'
+                google_page = header + "origins=" + prepare_element(self, cr, uid, origin, context=context) + "&destinations=" + prepare_element(self, cr, uid, destination, context=context) + "&sensor=false"
+                return google_page
             except IOError:
+                _logger.error('Errol generate google page: %s' % google_page)
                 return None
 
-        import urllib    
         query = distance_query(origin, destination)
         try:
             response = eval(urllib.urlopen(query).read())
