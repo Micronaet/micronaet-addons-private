@@ -228,9 +228,10 @@ class hr_analytic_timesheet_trip(osv.osv):
             try:
                 header = u'http://maps.googleapis.com/maps/api/distancematrix/json?'
                 google_page = header + "origins=" + prepare_element(self, cr, uid, origin, context=context) + "&destinations=" + prepare_element(self, cr, uid, destination, context=context) + "&sensor=false"
+                _logger.warning('Call google page: %s' % google_page)
                 return google_page
             except IOError:
-                _logger.error('Errol generate google page: %s' % google_page)
+                _logger.error('Error generate google page: %s' % google_page)
                 return None
 
         query = distance_query(origin, destination)
