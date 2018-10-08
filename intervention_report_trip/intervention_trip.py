@@ -234,6 +234,9 @@ class hr_analytic_timesheet_trip(osv.osv):
                 _logger.error('Error generate google page: %s' % google_page)
                 return None
 
+        # ---------------------------------------------------------------------        
+        # Call Google page:
+        # ---------------------------------------------------------------------        
         query = distance_query(origin, destination)
         try:
             response = eval(urllib.urlopen(query).read())
@@ -242,6 +245,17 @@ class hr_analytic_timesheet_trip(osv.osv):
                 _('Google error'), 
                 _('Error asking: %s' % query),
                 )
+                
+        # ---------------------------------------------------------------------        
+        # Check if not correct call:
+        # ---------------------------------------------------------------------        
+        if 'error_message' in response:
+            raise osv.except_osv(
+                _('Google error'),
+                _('Call error: %s' % response.get(
+                    'error_message', 'Generic error')),
+                )
+                    
         try:
             distance_km = response['rows'][0]['elements'][0]['distance']['value'] / 1000.0  # km
             return distance_km
