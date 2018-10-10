@@ -152,7 +152,7 @@ class StockPickingManual(orm.Model):
         return {'tag': 'reload'}
 
     _columns = {
-        'name': fields.char('Number', size=25),#TODO , required=True),
+        'name': fields.char('Number', size=25), #TODO required=True),
         'date': fields.date('Date', required=True),
         'planned_date': fields.date('Planned date'),
         'partner_id': fields.many2one(
@@ -322,15 +322,15 @@ class StockMoveManual(orm.Model):
                 move_ids.append(move.move_id.id)
         
         if move_ids:        
-            move_pool = self.pool.get('stock.move')
-            move_pool.write(cr, uid, move_ids, {
+            move_pool = self.pool.get('stock.move')            
+            move_pool.write(cr, uid, move_ids, { # Draft (need to delete)
                 'state': 'draft',
                 }, context=context)
             move_pool.unlink(cr, uid, move_ids, context=context)
         
         return super(StockMoveManual, self).unlink(
             cr, uid, ids, context=context)
-   
+
     _columns = {
         'product_id': fields.many2one(
             'product.product', 'Product', required=True),            
@@ -375,6 +375,7 @@ class StockPickingManual(orm.Model):
          'manual_picking_type_id': fields.many2one(
              'stock.picking.type', 'Picking type customer'),         
          }
+
 class StockPickingManual(orm.Model):
     """ Model name: Stock Picking Manual
     """
@@ -597,7 +598,16 @@ class HrAnalyticTimesheet(orm.Model):
         }
     _defaults = {
         'delivery_present': lambda *x: _('PENDING DELIVERY')
-        }    
+        }
+
+
+
+
+
+
+
+
+
 
 """
 class StockPicking(orm.Model):
@@ -702,5 +712,6 @@ class HrAnalyticTimesheet(orm.Model):
             type='many2many', relation='stock.picking', 
             string='Delivery available', store=False),                         
             
-        }"""
+        }
+"""
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
