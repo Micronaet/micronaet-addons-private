@@ -113,6 +113,36 @@ _logger = logging.getLogger(__name__)
         return move_id
         
 """
+class StockMove(orm.Model):
+    """ Model name: Stock move
+    """    
+    _inherit = 'stock.move'
+
+    def onchange_product_id(self, cr, uid, ids, product_id=False, loc_id=False, 
+            loc_dest_id=False, partner_id=False):
+        ''' Update price during creation of movement
+        '''        
+        res = super(StockMove, self).onchange_product_id(
+            cr, uid, ids, prod_id=product_id, loc_id=loc_id,
+            loc_dest_id=loc_dest_id, partner_id=partner_id)
+
+        if product_id and 'value' in res:
+            product_proxy = self.pool.get('product.product').browse(
+                cr, uid, product_id)
+            res['value']['price_unit'] = product_proxy.standard_price
+        return res    
+
+class StockQuants(orm.Model):
+    """ Model name: Stock Quants
+    """    
+    _inherit = 'stock.quant'
+    
+        
+    _columns = {
+         'stock_move_id': fields.many2one('stock.move', 'Generator move', 
+             ondelete='cascade',
+             ),
+         }
 
 class StockPickingManual(orm.Model):
     """ Model name: Stock Picking Manual
@@ -345,6 +375,9 @@ class StockPicking(orm.Model):
     _inherit = 'stock.picking'
     
     
+    # -------------------------------------------------------------------------
+    # UTILITY:
+    # -------------------------------------------------------------------------
     def remove_to_intervention(self, cr, uid, ids, context=None):
         ''' Link to intervention
         '''
@@ -373,31 +406,108 @@ class StockPicking(orm.Model):
             }, context=context)
         return {'tag': 'reload'}
 
+    # -------------------------------------------------------------------------
     # Second WF Button:
-    def pickwk_ready(self, cr, uid, ids, context=None):
-        ''' Restart procedure
+    # -------------------------------------------------------------------------
+    # Utility for update movement:
+    def _set_stock_move_picked(self, cr, uid, ids, state, context=None):
+        ''' Return list of moved in picking
         '''
-        # TODO movement and picking!
-        self.write(cr, uid, ids, {
+        move_pool = self.pool.get('stock.move')
+        move_ids = move_pool.search(cr, uid, [
+            ('picking_id', 'in', ids),
+            ], context=context)
+        return move_pool.write(cr, uid, move_ids, {
+            'state': state,
+            }, context=context)
+    
+    # Utility for update quants:
+    def _create_quants(self, cr, uid, picking_ids, context=None):
+        ''' Create quants when done a movement
+        '''
+        # Pool used:
+        quant_pool = self.pool.get('stock.quant')
+
+        for picking in self.browse(cr, uid, picking_ids, context=context):
+            for move in picking.move_lines:                        
+                # Create quants:
+                quant_pool.create(cr, uid, {
+                     'stock_move_id': move.id,
+                     'qty': -move.product_qty,
+                     # XXX Move price or current product price for cost:
+                     'cost': move.price_unit or move.product_id.standard_price,
+                     'location_id': move.location_id.id,
+                     'company_id': move.company_id.id,
+                     'product_id': move.product_id.id,
+                     'in_date': move.date,
+                     #'propagated_from_id'
+                     #'package_id'
+                     #'lot_id'
+                     #'reservation_id'
+                     #'owner_id'
+                     #'packaging_type_id'
+                     #'negative_move_id'
+                    }, context=context)
+        return True
+                    
+    def _delete_quants(self, cr, uid, picking_ids, context=None):
+        ''' Create quants when done a movement
+        '''
+        # Pool used:
+        quant_pool = self.pool.get('stock.quant')
+        quant_ids = quant_pool.search(cr, uid, [
+            ('stock_move_id.picking_id', 'in', picking_ids),
+            ], context=context)
+        return quant_pool.unlink(cr, uid, quant_ids)    
+        
+        
+    def pickwf_ready(self, cr, uid, ids, context=None):
+        ''' Restart procedure
+            draft, cancel, waiting, confirmed, partially_available, 
+            assigned, done
+        '''
+        # Update stock movement:
+        self._set_stock_move_picked(
+            cr, uid, ids, state='assigned', context=context)
+                    
+        # Update picking:
+        return self.write(cr, uid, ids, {
             'pick_state': 'ready',
             }, context=context)
 
-    def pickwk_delivered(self, cr, uid, ids, context=None):
+    def pickwf_delivered(self, cr, uid, ids, context=None):
         ''' Restart procedure
         '''
-        # TODO movement and picking!
-        self.write(cr, uid, ids, {
+        # Create quants for stock evaluation:
+        self._create_quants(cr, uid, ids, context=context)
+        
+        # Update stock movement:
+        self._set_stock_move_picked(#assigned
+            cr, uid, ids, state='done', context=context)
+        
+        # Update picking:
+        return self.write(cr, uid, ids, {
             'pick_state': 'delivered',
             }, context=context)
 
-    def pickwk_restart(self, cr, uid, ids, context=None):
+    def pickwf_restart(self, cr, uid, ids, context=None):
         ''' Restart procedure
         '''
-        # TODO movement and picking!
-        self.write(cr, uid, ids, {
+        # Create quants for stock evaluation:
+        self._delete_quants(cr, uid, ids, context=context)
+        
+        # Update stock movement:
+        self._set_stock_move_picked(
+            cr, uid, ids, state='draft', context=context)
+        
+        # Update picking:
+        return self.write(cr, uid, ids, {
             'pick_state': 'todo',
             }, context=context)
         
+    # -------------------------------------------------------------------------
+    # Default function:
+    # -------------------------------------------------------------------------
     def get_default_picking_type_id(self, cr, uid, context=None):
         ''' Update default depend on context data        
         '''

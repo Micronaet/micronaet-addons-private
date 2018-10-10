@@ -70,25 +70,49 @@
                 </tree>
             </field>
         </record>
-        <record model="ir.ui.view" id="view_stock_picking_header_form">
+        <record model="ir.ui.view" id="view_stock_picking_header_wf_form">
             <field name="name">stock.picking.form</field>
             <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
-            <field name="inherit_id" ref="stock.view_move_form"/>
-                <header position="replace">
-                	<header>
-	                    <!--<button name="action_confirm" states="draft" string="Elabora successivamente" type="object" class="oe_highlight" modifiers="{'invisible': [['state', 'not in', ['draft']]]}"/>
-	                    <button name="action_done" states="draft,assigned,confirmed" string="Elabora interamente" type="object" class="oe_highlight" modifiers="{'invisible': [['state', 'not in', ['draft', 'assigned', 'confirmed']]]}"/>
-	                    <button name="force_assign" states="confirmed" string="Imposta disponibilità" type="object" class="oe_highlight" modifiers="{'invisible': [['state', 'not in', ['confirmed']]]}"/>
-	                    <button name="action_cancel" states="draft,assigned,confirmed" string="Annulla Movimento" type="object" modifiers="{'invisible': [['state', 'not in', ['draft', 'assigned', 'confirmed']]]}"/>
-	                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,assigned,done" statusbar_colors="{'waiting':'blue','confirmed':'blue'}" modifiers="{'readonly': true}"/>-->
-	                    
-                        <button name="wf_ready" string="Ready" type="object" attrs="{'invisible': [('state','!=','todo')]}" class="oe_highlight"/>
-                        <button name="wf_delivered" string="Delivered" type="object" attrs="{'invisible': [('state','!=','ready')]}" class="oe_highlight"/>
-                        <button name="wf_restart" string="Restart" type="object" attrs="{'invisible': [('state','!=','delivered')]}" class="oe_highlight"/>
-                        <field name="state" widget="statusbar" />
-                    </header>
-                </header>
+	                <xpath expr="//button[@name='action_confirm']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='action_assign']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='rereserve_pick']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='force_assign']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='do_enter_transfer_details']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='do_print_picking']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='action_cancel']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <!--<xpath expr="button[@name='do_unreserve']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>-->
+	                <field name="state" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </field>
+	                
+	                <!--<button name="438" />
+	                <button name="393" />-->
+
+	                <field name="state" position="after">
+                        <button name="pickwf_ready" string="Ready" type="object" attrs="{'invisible': [('pick_state','!=','todo')]}" class="oe_highlight" />
+                        <button name="pickwf_delivered" string="Delivered" type="object" attrs="{'invisible': [('pick_state','!=','ready')]}" class="oe_highlight" />
+                        <button name="pickwf_restart" string="Restart" type="object" attrs="{'invisible': [('pick_state','!=','delivered')]}" class="oe_highlight" />
+                        <field name="state" />
+                        <field name="pick_state" widget="statusbar" />
+                    </field>    
             </field>
         </record>
         <record model="ir.ui.view" id="view_stock_picking_inline_moves_form_fast">
@@ -106,6 +130,7 @@
                             <field name="product_uom" />
                             <field name="product_uos" invisible="1"/>
                             <field name="name" invisible="1" />
+                            <field name="price_unit" invisible="1" />
                             <field name="location_id" invisible="1"/>
                             <field name="location_dest_id" invisible="1" />
                             <field name="date_expected" invisible="1" />
