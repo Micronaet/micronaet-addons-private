@@ -33,6 +33,7 @@
         'hr',
         'stock',
         'product',
+        'stock_account',
         ],
     'init_xml': [],
     'demo': [],

@@ -39,91 +39,7 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 _logger = logging.getLogger(__name__)
 
 
-class StockPickingManual(orm.Model):
-    """ Model name: Stock Picking Manual
-    """
-    
-    _name = 'stock.picking.manual'
-    _description = 'Stock picking manual'
-    _rec_name = 'name'
-    _order = 'name'
-
-    def update_also_detail(self, cr, uid, ids, state, context=None):
-        ''' Update detail for new state (and move)
-            Work multi IDS
-        '''
-        move_pool = self.pool.get('stock.move.manual')
-        move_ids = move_pool.search(cr, uid, [
-            ('picking_id', 'in', ids),
-            ], context=context)
-        return move_pool.write(cr, uid, move_ids, {
-            'state': state,
-            }, context=context)
-        
-    # -------------------------------------------------------------------------
-    # WF Button:
-    # -------------------------------------------------------------------------
-    def wf_ready(self, cr, uid, ids, context=None):
-        ''' Restart procedure
-        '''
-        self.update_also_detail(cr, uid, ids, 'ready', context=context)
-        return self.write(cr, uid, ids, {
-            'state': 'ready',
-            }, context=context)
-
-    def wf_delivered(self, cr, uid, ids, context=None):
-        ''' Restart procedure
-        '''
-        self.update_also_detail(cr, uid, ids, 'delivered', context=context)
-        return self.write(cr, uid, ids, {
-            'state': 'delivered',
-            }, context=context)
-
-    def wf_restart(self, cr, uid, ids, context=None):
-        ''' Restart procedure
-        '''
-        self.update_also_detail(cr, uid, ids, 'todo', context=context)
-        return self.write(cr, uid, ids, {
-            'state': 'todo',
-            }, context=context)
-
-    # -------------------------------------------------------------------------
-    # Button event:
-    # -------------------------------------------------------------------------
-    def unlink(self, cr, uid, ids, context=None):
-        """ Delete all record(s) from table heaving record id in ids
-            return True on success, False otherwise 
-            @param cr: cursor to database
-            @param uid: id of current user
-            @param ids: list of record ids to be removed from table
-            @param context: context arguments, like lang, time zone
-            
-            @return: True on success, False otherwise
-        """
-        # ---------------------------------------------------------------------
-        # Delete detail before
-        # ---------------------------------------------------------------------
-        line_ids = []
-        for pick in self.browse(cr, uid, ids, context=context):
-            for line in pick.line_ids:
-                line_ids.append(line.id)
-        if line_ids:        
-            self.pool.get('stock.move.manual').unlink(
-                cr, uid, line_ids, context=context)
-        
-        # Delete line after:
-        #super(StockPickingManual, self).unlink(
-        #    cr, uid, ids, context=context)
-        cr.execute(
-            'DELETE FROM stock_picking_manual WHERE ID in (%s)' % \
-                ','.join([str(item) for item in ids])
-            )
-        return True
-
-    # -------------------------------------------------------------------------
-    # Button event:
-    # -------------------------------------------------------------------------
-    def remove_to_intervention(self, cr, uid, ids, context=None):
+"""    def remove_to_intervention(self, cr, uid, ids, context=None):
         ''' Link to intervention
         '''
         if context is None:
@@ -151,78 +67,6 @@ class StockPickingManual(orm.Model):
             }, context=context)
         return {'tag': 'reload'}
 
-    _columns = {
-        'name': fields.char('Number', size=25), #TODO required=True),
-        'date': fields.date('Date', required=True),
-        'planned_date': fields.date('Planned date'),
-        'partner_id': fields.many2one(
-            'res.partner', 'Partner', required=True),
-        'address_id': fields.many2one('res.partner', 'Address'),
-        'origin': fields.char('Origin', size=40),
-        'note': fields.char('Note'),	        
-        'intervention_id': fields.many2one(
-            'hr.analytic.timesheet', 'Intervention'),
-        'state': fields.selection([
-            ('todo', 'To do'),
-            ('ready', 'Ready'),
-            ('delivered', 'Delivered'),
-            ], 'Picking state')
-        }
-
-    _defaults = {
-        'state': lambda *x: 'todo',
-        }
-
-class StockMoveManual(orm.Model):
-    """ Model name: StockMoveManual
-    """
-    _name = 'stock.move.manual'
-    _description = 'Stock move manual'
-    _rec_name = 'product_id'
-    _order = 'product_id'
-
-    """def create_update_quants(self, cr, uid, manual_id, context=None):
-        ''' Create quants when done
-        '''
-        # Pool used:
-        quant_pool = self.pool.get('stock.quant')
-
-        manual_proxy = self.browse(cr, uid, manual_id, context=context)
-
-        if manual_proxy.state == 'done':
-            move = manual_proxy.move_id
-            # Create quants:
-            quant_id = manual_proxy.create(cr, uid, {
-                 'qty': move.product_qty
-                 #'propagated_from_id'
-                 #'package_id'
-                 'cost': 0.0, #TODO
-                 #'lot_id'
-                 #'reservation_id'
-                 'location_id': move.location_id.id,
-                 'company_id': move.company_id.id,
-                 #'owner_id'
-                 'product_id': move.product_id.id,
-                 #'packaging_type_id'
-                 #'negative_move_id'
-                 'in_date': move.date,
-                }, context=context)
-            
-        else:
-            # Delete quants if present:
-            if manual_proxy.quant_id:
-                quant_pool.unlink(cr, uid, manual_proxy.quant_id.id, 
-                    context=context)"""
-        
-    def create_write_move(self, cr, uid, res_id, context=None):
-        ''' Create or write move linked
-        '''
-        _logger.warning('Update create/write stock move')
-        current_proxy = self.browse(cr, uid, res_id, context=context)    
-
-        # Create stock movement linked (use create_uid for acces company:
-        picking_type = \
-            current_proxy.create_uid.company_id.manual_picking_type_id
 
         if current_proxy.state == 'delivered':
             state = 'assigned' #done
@@ -268,102 +112,7 @@ class StockMoveManual(orm.Model):
         # TODO create quants if done movement!!    
         return move_id
         
-    def write(self, cr, uid, ids, vals, context=None):
-        """ Update redord(s) comes in {ids}, with new value comes as {vals}
-            return True on success, False otherwise
-            @param cr: cursor to database
-            @param uid: id of current user
-            @param ids: list of record ids to be update
-            @param vals: dict of new values to be set
-            @param context: context arguments, like lang, time zone
-            
-            @return: True on success, False otherwise
-        """
-        # Update stock move:
-        res = super(StockMoveManual, self).write(
-            cr, uid, ids, vals, context=context)
-        self.create_write_move(cr, uid, ids[0], context=context)
-        return res
-        
-    def create(self, cr, uid, vals, context=None):
-        """ Create a new record for a model ClassName
-            @param cr: cursor to database
-            @param uid: id of current user
-            @param vals: provides a data for new record
-            @param context: context arguments, like lang, time zone
-            
-            @return: returns a id of new record
-        """
-        res_id = super(StockMoveManual, self).create(
-            cr, uid, vals, context=context)
-        move_id = self.create_write_move(cr, uid, res_id, context=context)
-        
-        self.write(cr, uid, [res_id], {
-            'move_id': move_id,
-            }, context=context)            
-        return res_id
-    
-    def unlink(self, cr, uid, ids, context=None):
-        """ Delete all record(s) from table heaving record id in ids
-            return True on success, False otherwise 
-            @param cr: cursor to database
-            @param uid: id of current user
-            @param ids: list of record ids to be removed from table
-            @param context: context arguments, like lang, time zone
-            
-            @return: True on success, False otherwise
-        """
-        # ---------------------------------------------------------------------
-        # Before delete linked movement:
-        # ---------------------------------------------------------------------
-        move_ids = []
-        for move in self.browse(cr, uid, ids, context=context):
-            if move.move_id:
-                move_ids.append(move.move_id.id)
-        
-        if move_ids:        
-            move_pool = self.pool.get('stock.move')            
-            move_pool.write(cr, uid, move_ids, { # Draft (need to delete)
-                'state': 'draft',
-                }, context=context)
-            move_pool.unlink(cr, uid, move_ids, context=context)
-        
-        return super(StockMoveManual, self).unlink(
-            cr, uid, ids, context=context)
-
-    _columns = {
-        'product_id': fields.many2one(
-            'product.product', 'Product', required=True),            
-        'intervention_id': fields.many2one(
-            'hr.analytic.timesheet', 'Intervention'),
-        'product_uom_qty': fields.float('Q.ty', digits=(16, 3), required=True),
-        'picking_id': fields.many2one(
-            'stock.picking.manual', 'Picking', ondelete='cascade'),
-        
-        'uom_id': fields.related(
-            'product_id', 'uom_id', 
-            type='many2one', relation='product.uom', 
-            string='UOM'),
-        'date': fields.related(
-            'picking_id', 'date', 
-            type='date', string='Date'),    
-        'partner_id': fields.related(
-            'picking_id', 'partner_id', 
-            type='many2one', relation='res.partner', string='Partner'),
-        'move_id': fields.many2one(
-            'stock.move', 'Stock move linked', ondelete='cascade'),
-        #'quant_id': fields.many2one(
-        #    'stock.quant', 'Stock quant linked', ondelete='cascade'),
-        'state': fields.selection([
-            ('todo', 'To do'),
-            ('ready', 'Ready'),
-            ('delivered', 'Delivered'),
-            ], 'Picking state')
-        }
-
-    _defaults = {
-        'state': lambda *x: 'todo',
-        }
+"""
 
 class StockPickingManual(orm.Model):
     """ Model name: Stock Picking Manual
@@ -375,18 +124,6 @@ class StockPickingManual(orm.Model):
          'manual_picking_type_id': fields.many2one(
              'stock.picking.type', 'Picking type customer'),         
          }
-
-class StockPickingManual(orm.Model):
-    """ Model name: Stock Picking Manual
-    """
-    
-    _inherit = 'stock.picking.manual'
-    
-    _columns = {
-        'line_ids': fields.one2many(
-            'stock.move.manual', 'picking_id', 
-            'Line'),
-        }
 
 class ResPartner(orm.Model):
     """ Model name: Res Partner
@@ -596,20 +333,12 @@ class HrAnalyticTimesheet(orm.Model):
             'intervent_partner_id', 'pending_material_detail', 
             type='char', size=80, string='Pending material detail'),
         }
+
     _defaults = {
         'delivery_present': lambda *x: _('PENDING DELIVERY')
         }
 
 
-
-
-
-
-
-
-
-
-"""
 class StockPicking(orm.Model):
     ''' Model name: StockPicking
     '''    
@@ -669,6 +398,20 @@ class StockPicking(orm.Model):
             'pick_state': 'todo',
             }, context=context)
         
+    def get_default_picking_type_id(self, cr, uid, context=None):
+        ''' Update default depend on context data        
+        '''
+        if context is None:
+            return False
+
+        if context.get('fast_picking'): 
+            company_pool = self.pool.get('res.company')
+            company_ids = company_pool.search(cr, uid, [], context=context)
+            return company_pool.browse(
+                cr, uid, company_ids, 
+                context=context)[0].manual_picking_type_id.id
+        return False
+    
     _columns = {
         'intervention_id': fields.many2one(
             'hr.analytic.timesheet', 'Intervention'),
@@ -681,6 +424,8 @@ class StockPicking(orm.Model):
 
     _defaults = {
         'pick_state': lambda *x: 'todo',
+        'picking_type_id': lambda s, cr, uid, ctx: 
+            s.get_default_picking_type_id(cr, uid, ctx),
         }
 
 class HrAnalyticTimesheet(orm.Model):
@@ -711,7 +456,5 @@ class HrAnalyticTimesheet(orm.Model):
             _get_partner_delivery_picking, method=True, 
             type='many2many', relation='stock.picking', 
             string='Delivery available', store=False),                         
-            
         }
-"""
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
