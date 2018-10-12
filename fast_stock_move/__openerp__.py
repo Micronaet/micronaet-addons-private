@@ -33,6 +33,7 @@
         'product',
         'analytic',
         'stock_account',
+        'electrical_l10n_it_ddt',
         ],
     'init_xml': [],
     'demo': [],

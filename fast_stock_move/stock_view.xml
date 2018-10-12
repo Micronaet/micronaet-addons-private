@@ -93,8 +93,8 @@
 	                <field name="partner_id" />
 	                <field name="location_dest_id" />
                     <field name="account_id" />
-	                <!--<field name="ddt_id" />
-	                <field name="invoice_id" />-->
+	                <field name="ddt_id" />
+	                <!--<field name="invoice_id" />-->
 	                <field name="origin" />
 	                <field name="group_id" invisible="1" />
 	                <field name="backorder_id" invisible="1"/>
@@ -158,7 +158,7 @@
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_stock_picking_inline_moves_tree_fast"/>
             <field name="context">{'fast_picking': True}</field>
-            <field name="domain">[('pick_state', '=', 'todo')]</field>
+            <field name="domain">[('ddt_id', '=', False),('pick_state', '=', 'todo')]</field>
         </record>
         <record model="ir.actions.act_window" id="action_stock_picking_manual_ready_fast">
             <field name="name">Picking ready</field>
@@ -167,7 +167,7 @@
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_stock_picking_inline_moves_tree_fast"/>
             <field name="context">{'fast_picking': True}</field>
-            <field name="domain">[('pick_state', '=', 'ready')]</field>
+            <field name="domain">[('ddt_id', '=', False),('pick_state', '=', 'ready')]</field>
         </record>
         <record model="ir.actions.act_window" id="action_stock_picking_manual_delivered_fast">
             <field name="name">Picking delivered</field>
@@ -176,7 +176,7 @@
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_stock_picking_inline_moves_tree_fast"/>
             <field name="context">{'fast_picking': True}</field>
-            <field name="domain">[('pick_state', '=', 'delivered')]</field>
+            <field name="domain">[('ddt_id', '=', False),('pick_state', '=', 'delivered')]</field>
         </record>
 
         <record model="ir.actions.act_window" id="action_stock_movement_manual">
@@ -197,7 +197,7 @@
                 parent="menu_stock_picking_root" 
                 id="menu_stock_picking_picking" 
                 action="action_stock_picking_manual_fast"
-                sequence="40"
+                sequence="10"
                 />
                 <menuitem 
                     parent="menu_stock_picking_picking" 
