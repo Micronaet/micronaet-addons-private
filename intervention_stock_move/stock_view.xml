@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_form"/>
             <field name="arch" type="xml">
                 <!--<field name="intervent_partner_id" position="attributes">
-                   <attribute name="on_change">onchange_intervent_partner_id(intervent_partner_id)</attribute>
+                   <attribute name="on_change">onchange_intervent_partner_id(intervent_partner_id,account_id)</attribute>
                 </field>-->
                 <page string="Accounting" position="before">
                        <page string="Delivery">                           
