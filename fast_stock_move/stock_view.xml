@@ -217,7 +217,6 @@
                     action="action_stock_picking_manual_delivered_fast"
                     sequence="30"
                     />
-
             <menuitem 
                 parent="menu_stock_picking_root" 
                 id="menu_stock_picking_ddt" 
@@ -229,16 +228,13 @@
                     id="menu_stock_picking_ddt_wizard" 
                     action="electrical_l10n_it_ddt.action_ddt_from_pickings_wizard"
                     sequence="10"
-                    />
-                
+                    />                
             <menuitem 
                 parent="menu_stock_picking_root" 
                 id="menu_stock_picking_move" 
                 action="action_stock_movement_manual"
                 sequence="50"
                 />
-            
-                
     </data>
 </openerp>
 
