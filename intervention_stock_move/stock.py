@@ -138,20 +138,17 @@ class HrAnalyticTimesheet(orm.Model):
     # -------------------------------------------------------------------------
     # Utility:
     # -------------------------------------------------------------------------
-    def make_and_confirm_picking(self, cr, uid, ids, context=None):
+    def confirm_also_picking(self, cr, uid, ids, context=None):
         ''' Confirm picking when confirmed or create one
         '''
-        pick_pool = self.pool.get('stock.picking.manual')
+        pick_pool = self.pool.get('stock.picking')
         
-        # Create picking if material is present:
-        self.create_picking(cr, uid, ids, context=context)
-
         # Confirm Picking delivery:
         current_proxy = self.browse(cr, uid, ids, context=context)[0]
         pick_ids = [pick.id for pick in current_proxy.picking_ids]
         
         # Update with WF action:
-        return pick_pool.wf_delivered(cr, uid, pick_ids, context=context)
+        return pick_pool.pickwf_delivered(cr, uid, pick_ids, context=context)
         
     # -------------------------------------------------------------------------
     # Override WF:
@@ -159,7 +156,7 @@ class HrAnalyticTimesheet(orm.Model):
     def intervention_confirmed(self, cr, uid, ids, context=None):
         ''' Confirm picking when confirmed or create one
         '''
-        self.make_and_confirm_picking(cr, uid, ids, context=context)
+        self.confirm_also_picking(cr, uid, ids, context=context)
         
         return super(HrAnalyticTimesheet, self).intervention_confirmed(
             cr, uid, ids, context=context)
@@ -167,7 +164,7 @@ class HrAnalyticTimesheet(orm.Model):
     def intervention_close(self, cr, uid, ids, context=None):
         ''' Confirm picking when close or create one
         '''
-        self.make_and_confirm_picking(cr, uid, ids, context=context)
+        self.confirm_also_picking(cr, uid, ids, context=context)
         
         return super(HrAnalyticTimesheet, self).intervention_close(
             cr, uid, ids, context=context)
@@ -176,11 +173,11 @@ class HrAnalyticTimesheet(orm.Model):
     # -------------------------------------------------------------------------
     # Button event:
     # -------------------------------------------------------------------------
-    def link_all_delivery_pending(self, cr, uid, ids, context=None):
+    """def link_all_delivery_pending(self, cr, uid, ids, context=None):
         ''' Link all pending delivery:
         '''
         # Pool used:
-        picking_pool = self.pool.get('stock.picking.manual')
+        picking_pool = self.pool.get('stock.picking')
 
         current_proxy = self.browse(cr, uid, ids, context=context)[0]
         partner_id = current_proxy.intervent_partner_id.id
@@ -196,7 +193,7 @@ class HrAnalyticTimesheet(orm.Model):
         return picking_pool.write(cr, uid, picking_ids, {
             'intervention_id': ids[0],
             }, context=context)    
-        
+    """    
     def dummy_button(self, cr, uid, ids, context=None):
         ''' Refresh
         '''

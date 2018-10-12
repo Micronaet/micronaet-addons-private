@@ -15,7 +15,7 @@
                            <group colspan="4" col="4">                               
                                <separator string="Delivered material:" colspan="3"/>
                                <button name="create_picking" string="Create picking" type="object" colspan="1"/>
-                               <field name="delivered_ids" nolabel="1" colspan="4" context="{'embedded': True}"/>
+                               <field name="delivered_ids" nolabel="1" colspan="4" context="{'embedded': True}" readonly="1" /> <!--options="{'create': false}"-->
                                <field name="pending_material_detail" invisible="1" />
                                <field name="pending_material_present" invisible="1" />
 

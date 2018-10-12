@@ -35,6 +35,7 @@
         'product',
         'stock_account',
         'fast_stock_move',
+        #'web_m2x_options',
         ],
     'init_xml': [],
     'demo': [],
