@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--res.company-->
+        <record model="ir.ui.view" id="view_res_company_stock_page_parameter_form">
+            <field name="name">res.company.stock.parameter.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[1]" position="after">
+                    <page string="Stock">
+                        <group colspan="4" col="4">
+                            <field name="manual_picking_type_id" />
+                        </group>    
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_stock_move_fast_tree">
+            <field name="name">stock.move.fast.tree</field>
+            <field name="model">stock.move</field>
+            <field name="priority" eval="50" />
+            <field name="arch" type="xml">
+                <tree string="Move" editable="bottom">
+                    <field name="product_id" />
+                    <field name="product_uom_qty" />
+                    <field name="product_uom" />
+                    <field name="location_id" invisible="1"/>
+                    <field name="location_dest_id" invisible="1" />
+                    <field name="state" invisible="1" />
+                    <field name="date_expected" invisible="1"/>
+                    <field name="picking_id" invisible="1" />
+                    <field name="picking_type_id" invisible="1"/>
+                    <field name="invoice_state" />                    
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_stock_picking_header_wf_form">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+	                <xpath expr="//button[@name='action_confirm']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='action_assign']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='rereserve_pick']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='force_assign']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='do_enter_transfer_details']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='do_print_picking']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <xpath expr="//button[@name='action_cancel']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                <!--<xpath expr="button[@name='do_unreserve']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>-->
+	                <field name="state" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </field>
+	                
+	                <!--<button name="438" />
+	                <button name="393" />-->
+
+	                <field name="state" position="after">
+                        <button name="pickwf_ready" string="Ready" type="object" attrs="{'invisible': [('pick_state','!=','todo')]}" class="oe_highlight" />
+                        <button name="pickwf_delivered" string="Delivered" type="object" attrs="{'invisible': [('pick_state','!=','ready')]}" class="oe_highlight" />
+                        <button name="pickwf_restart" string="Restart" type="object" attrs="{'invisible': [('pick_state','!=','delivered')]}" class="oe_highlight" />
+                        <field name="state" />
+                        <field name="pick_state" widget="statusbar" />
+                    </field>    
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_stock_picking_inline_moves_form_fast">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock_account.view_picking_inherit_form2"/>
+            <field name="arch" type="xml">
+                <field name="move_lines" position="replace">
+                    <field name="move_lines"
+                        attrs="{'readonly': [['state', 'in', ['cancel', 'done']]]}" 
+                        context="{'default_invoice_state': invoice_state, 'address_in_id': partner_id, 'default_picking_type_id': picking_type_id, 'default_picking_id': active_id}">
+                        <tree string="Move" editable="bottom">
+                            <field name="product_id" on_change="onchange_product_id(product_id,location_id,location_dest_id, False)"/>
+                            <field name="product_uom_qty" on_change="onchange_quantity(product_id,product_uom_qty,product_uom,product_uos)"/>
+                            <field name="product_uom" />
+                            <field name="product_uos" invisible="1"/>
+                            <field name="name" invisible="1" />
+                            <field name="price_unit" invisible="1" />
+                            <field name="location_id" invisible="1"/>
+                            <field name="location_dest_id" invisible="1" />
+                            <field name="date_expected" invisible="1" />
+                            <field name="origin" invisible="1" />
+                            <field name="state" invisible="1" />
+                            <field name="date_expected" invisible="1"/>
+                            <field name="picking_id" invisible="1" />
+                            <field name="picking_type_id" invisible="1"/>
+                            <field name="invoice_state" invisible="1"/>                    
+                        </tree>
+                    </field>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="action_stock_picking_manual_fast">
+            <field name="name">Picking list</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="view_id" ref="stock.view_picking_tree"/>-->
+            <field name="context">{'fast_picking': True}</field>
+            <field name="domain">[]</field>
+        </record>
+        <record model="ir.actions.act_window" id="action_stock_picking_manual_todo_fast">
+            <field name="name">Picking todo</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="view_id" ref="stock.view_picking_tree"/>-->
+            <field name="context">{'fast_picking': True}</field>
+            <field name="domain">[('pick_state', '=', 'todo')]</field>
+        </record>
+        <record model="ir.actions.act_window" id="action_stock_picking_manual_ready_fast">
+            <field name="name">Picking ready</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="view_id" ref="stock.view_picking_tree"/>-->
+            <field name="context">{'fast_picking': True}</field>
+            <field name="domain">[('pick_state', '=', 'ready')]</field>
+        </record>
+        <record model="ir.actions.act_window" id="action_stock_picking_manual_delivered_fast">
+            <field name="name">Picking delivered</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="view_id" ref="stock.view_picking_tree"/>-->
+            <field name="context">{'fast_picking': True}</field>
+            <field name="domain">[('pick_state', '=', 'delivered')]</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_stock_movement_manual">
+            <field name="name">Stock move</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <!--<field name="domain">[('picking_id', '!=', False)]</field>-->
+        </record>
+        
+        <menuitem 
+            parent="stock.menu_stock_root" 
+            name="Delivery management"
+            id="menu_stock_picking_root" 
+            sequence="0"
+            />
+            <menuitem 
+                parent="menu_stock_picking_root" 
+                id="menu_stock_picking_picking" 
+                action="action_stock_picking_manual_fast"
+                sequence="40"
+                />
+                <menuitem 
+                    parent="menu_stock_picking_picking" 
+                    id="menu_stock_picking_picking_todo_fast" 
+                    action="action_stock_picking_manual_todo_fast"
+                    sequence="20"
+                    />
+                <menuitem 
+                    parent="menu_stock_picking_picking" 
+                    id="menu_stock_picking_picking_ready_fast" 
+                    action="action_stock_picking_manual_ready_fast"
+                    sequence="30"
+                    />
+                <menuitem 
+                    parent="menu_stock_picking_picking" 
+                    id="menu_stock_picking_picking_delivered_fast" 
+                    action="action_stock_picking_manual_delivered_fast"
+                    sequence="30"
+                    />
+                
+            <menuitem 
+                parent="menu_stock_picking_root" 
+                id="menu_stock_picking_move" 
+                action="action_stock_movement_manual"
+                sequence="50"
+                />
+    </data>
+</openerp>
+

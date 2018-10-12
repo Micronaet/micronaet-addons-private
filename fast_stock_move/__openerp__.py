@@ -18,27 +18,25 @@
 ###############################################################################
 
 {
-    'name': 'Intervention stock move',
+    'name': 'Fast stock move',
     'version': '0.1',
     'category': 'Stock',
     'description': '''
-        Product with intervention and preparation of delivery (picking)        
+        Fast creation of pick out document
         ''',
     'author': 'Micronaet S.r.l. - Nicola Riolini',
     'website': 'http://www.micronaet.it',
     'license': 'AGPL-3',
     'depends': [
         'base',
-        'intervention_report',
-        'hr',
         'stock',
         'product',
         'stock_account',
-        'fast_stock_move',
         ],
     'init_xml': [],
     'demo': [],
     'data': [
+        'security/ir.model.access.csv',    
         'stock_view.xml',
         ],
     'active': False,

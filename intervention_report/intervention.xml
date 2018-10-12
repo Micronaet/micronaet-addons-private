@@ -209,7 +209,7 @@
 	                           <label for="internal_note" />
 	                           <field name="internal_note" />
 	                       </page>
-	                       <page string="Accounting">
+	                       <page string="Accounting" groups="intervention_report.group_intervent_account_manager">
 	                           <group colspan="4" col="4">
 	                               <field name="product_uom_id" on_change="on_change_unit_amount(product_id,unit_amount,False,product_uom_id,journal_id)" /> 
 	                               <field name="journal_id" invisible="1" required="1"/> 

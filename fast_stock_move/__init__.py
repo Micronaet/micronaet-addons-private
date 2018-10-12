@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ###############################################################################
 #
 #    Copyright (C) 2001-2014 Micronaet SRL (<http://www.micronaet.it>).
@@ -16,32 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
+from . import stock
 
-{
-    'name': 'Intervention stock move',
-    'version': '0.1',
-    'category': 'Stock',
-    'description': '''
-        Product with intervention and preparation of delivery (picking)        
-        ''',
-    'author': 'Micronaet S.r.l. - Nicola Riolini',
-    'website': 'http://www.micronaet.it',
-    'license': 'AGPL-3',
-    'depends': [
-        'base',
-        'intervention_report',
-        'hr',
-        'stock',
-        'product',
-        'stock_account',
-        'fast_stock_move',
-        ],
-    'init_xml': [],
-    'demo': [],
-    'data': [
-        'stock_view.xml',
-        ],
-    'active': False,
-    'installable': True,
-    'auto_install': False,
-    }
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
