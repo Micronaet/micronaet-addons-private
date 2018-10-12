@@ -76,7 +76,7 @@
                         <button name="pickwf_ready" string="Ready" type="object" attrs="{'invisible': [('pick_state','!=','todo')]}" class="oe_highlight" />
                         <button name="pickwf_delivered" string="Delivered" type="object" attrs="{'invisible': [('pick_state','!=','ready')]}" class="oe_highlight" />
                         <button name="pickwf_restart" string="Restart" type="object" attrs="{'invisible': [('pick_state','!=','delivered')]}" class="oe_highlight" />
-                        <field name="state" />
+                        <!--<field name="state" />-->
                         <field name="pick_state" widget="statusbar" />
                     </field>    
             </field>

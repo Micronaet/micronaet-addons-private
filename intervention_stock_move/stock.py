@@ -221,10 +221,39 @@ class HrAnalyticTimesheet(orm.Model):
         ''' Create picking and link to intervent
         '''
         current_proxy = self.browse(cr, uid, ids, context=context)[0]
+        
+        model_pool = self.pool.get('ir.model.data')
+        form_id = model_pool.get_object_reference(
+            cr, uid,
+            'stock', 'view_picking_form')[1]
+        ctx = context.copy()
+        ctx.update({
+            'default_partner_id': current_proxy.intervent_partner_id.id,
+            'default_intervention_id': current_proxy.id,
+            'fast_picking': True,
+            })
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('New picking'),
+            'view_type': 'form',
+            'view_mode': 'form,tree',
+            #'res_id': 1,
+            'res_model': 'stock.picking',
+            'view_id': form_id, # False
+            'views': [(form_id, 'form'), (False, 'tree')],
+            'domain': [],
+            'context': ctx,
+            'target': 'new',
+            'nodestroy': False,
+            }
 
         # Pool used:        
-        move_pool = self.pool.get('stock.move.manual')        
-        pick_pool = self.pool.get('stock.picking.manual')        
+        """
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]
+
+        move_pool = self.pool.get('stock.move')     
+        pick_pool = self.pool.get('stock.picking')
 
         move_ids = [move.id for move in current_proxy.delivered_ids]    
         if not move_ids: # Nothing to do
@@ -247,7 +276,7 @@ class HrAnalyticTimesheet(orm.Model):
             'intervention_id': False,
             'picking_id': pick_id,
             }, context=context)
-        return True
+        return True"""
         
     _columns = {
         'delivered_ids': fields.one2many(

@@ -2,38 +2,40 @@
 <openerp>
     <data>
         <!--hr.analytic.timesheet-->
-        <!--<record model="ir.ui.view" id="view_hr_analytic_timesheet_delivery_form">
+        <record model="ir.ui.view" id="view_hr_analytic_timesheet_delivery_form">
             <field name="name">hr.analytic.timesheet.delivery.page</field>
             <field name="model">hr.analytic.timesheet</field>
             <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_form"/>
             <field name="arch" type="xml">
-                <field name="intervent_partner_id" position="attributes">
+                <!--<field name="intervent_partner_id" position="attributes">
                    <attribute name="on_change">onchange_intervent_partner_id(intervent_partner_id)</attribute>
-                </field>
+                </field>-->
                 <page string="Accounting" position="before">
                        <page string="Delivery">                           
                            <group colspan="4" col="4">                               
                                <separator string="Delivered material:" colspan="3"/>
                                <button name="create_picking" string="Create picking" type="object" colspan="1"/>
                                <field name="delivered_ids" nolabel="1" colspan="4" context="{'embedded': True}"/>
+                               <field name="pending_material_detail" invisible="1" />
+                               <field name="pending_material_present" invisible="1" />
 
-                               <field name="pending_material_present" readonly="1" />
-                               <field name="pending_material_detail" readonly="1" />
+                               <!--<field name="pending_material_present" readonly="1" />
+                               <field name="pending_material_detail" readonly="1" />-->
 
-                               <separator string="Picking:" colspan="2"/>
+                               <!--<separator string="Picking:" colspan="2"/>
                                <button name="link_all_delivery_pending" string="Link all" type="object" colspan="1"/>
                                <button name="dummy_button" string="Refresh" type="object" colspan="1"/>
-                               <field name="picking_ids" nolabel="1" readonly="1" colspan="4" />
+                               <field name="picking_ids" nolabel="1" readonly="1" colspan="4" />-->
                            </group> 
                        </page>                    
                 </page>
                 <xpath expr="//notebook" position="before">
-                     <div style="background-color: blue;text-align: center;font-weight:bold;color:white;">
+                     <div style="background-color: blue;text-align: center;font-weight:bold;color:white;">                         
                          <field name="delivery_present" readonly="1" nolabel="1" attrs="{'invisible': [('pending_material_present', '=', False)]}" class="oe_color_blue" colspan="4"/>
                      </div>
                 </xpath>
             </field>
-        </record>-->
+        </record>
     </data>
 </openerp>
 
