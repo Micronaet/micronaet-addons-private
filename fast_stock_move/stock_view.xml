@@ -81,11 +81,41 @@
                     </field>    
             </field>
         </record>
+        <record model="ir.ui.view" id="view_stock_picking_inline_moves_tree_fast">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="priority" eval="30"/>
+            <field name="arch" type="xml">
+                <tree colors="blue:pick_state=='todo';green:pick_state=='ready';black:pick_state=='done';" string="Lista Picking">
+	                <field name="name" />
+	                <field name="date" />
+	                <field name="min_date" invisible="1" />
+	                <field name="partner_id" />
+	                <field name="location_dest_id" />
+                    <field name="account_id" />
+	                <!--<field name="ddt_id" />
+	                <field name="invoice_id" />-->
+	                <field name="origin" />
+	                <field name="group_id" invisible="1" />
+	                <field name="backorder_id" invisible="1"/>
+	                <field name="invoice_state" invisible="1"/>
+	                <field name="priority" invisible="1" />
+	                <field name="picking_type_id" invisible="1" />
+	                <field name="pick_state" />
+	                <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>        
         <record model="ir.ui.view" id="view_stock_picking_inline_moves_form_fast">
             <field name="name">stock.picking.form</field>
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock_account.view_picking_inherit_form2"/>
             <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="account_id" 
+                        context="{'with_code': True,'default_use_timesheets': 1}" 
+                        domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
+                </field>
                 <field name="move_lines" position="replace">
                     <field name="move_lines"
                         attrs="{'readonly': [['state', 'in', ['cancel', 'done']]]}" 
@@ -117,7 +147,7 @@
             <field name="res_model">stock.picking</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <!--<field name="view_id" ref="stock.view_picking_tree"/>-->
+            <field name="view_id" ref="view_stock_picking_inline_moves_tree_fast"/>
             <field name="context">{'fast_picking': True}</field>
             <field name="domain">[]</field>
         </record>
@@ -126,7 +156,7 @@
             <field name="res_model">stock.picking</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <!--<field name="view_id" ref="stock.view_picking_tree"/>-->
+            <field name="view_id" ref="view_stock_picking_inline_moves_tree_fast"/>
             <field name="context">{'fast_picking': True}</field>
             <field name="domain">[('pick_state', '=', 'todo')]</field>
         </record>
@@ -135,7 +165,7 @@
             <field name="res_model">stock.picking</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <!--<field name="view_id" ref="stock.view_picking_tree"/>-->
+            <field name="view_id" ref="view_stock_picking_inline_moves_tree_fast"/>
             <field name="context">{'fast_picking': True}</field>
             <field name="domain">[('pick_state', '=', 'ready')]</field>
         </record>
@@ -144,7 +174,7 @@
             <field name="res_model">stock.picking</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <!--<field name="view_id" ref="stock.view_picking_tree"/>-->
+            <field name="view_id" ref="view_stock_picking_inline_moves_tree_fast"/>
             <field name="context">{'fast_picking': True}</field>
             <field name="domain">[('pick_state', '=', 'delivered')]</field>
         </record>
@@ -187,6 +217,19 @@
                     action="action_stock_picking_manual_delivered_fast"
                     sequence="30"
                     />
+
+            <menuitem 
+                parent="menu_stock_picking_root" 
+                id="menu_stock_picking_ddt" 
+                name="DDT"
+                sequence="20"
+                />
+                <menuitem 
+                    parent="menu_stock_picking_ddt" 
+                    id="menu_stock_picking_ddt_wizard" 
+                    action="electrical_l10n_it_ddt.action_ddt_from_pickings_wizard"
+                    sequence="10"
+                    />
                 
             <menuitem 
                 parent="menu_stock_picking_root" 
@@ -194,6 +237,8 @@
                 action="action_stock_movement_manual"
                 sequence="50"
                 />
+            
+                
     </data>
 </openerp>
 

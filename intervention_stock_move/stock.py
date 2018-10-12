@@ -141,7 +141,7 @@ class HrAnalyticTimesheet(orm.Model):
             None, context=context)[partner_id]['pending_material_present']
         res['value']['pending_material_present'] = pending_material_present
         return res
-    """"
+    """
     
     # -------------------------------------------------------------------------
     # Utility:
@@ -236,6 +236,7 @@ class HrAnalyticTimesheet(orm.Model):
             'default_partner_id': current_proxy.intervent_partner_id.id,
             'default_intervention_id': current_proxy.id,
             'fast_picking': True,
+            'default_account_id': current_proxy.account_id.id,
             })
 
         return {

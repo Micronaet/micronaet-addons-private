@@ -31,6 +31,7 @@
         'base',
         'stock',
         'product',
+        'analytic',
         'stock_account',
         ],
     'init_xml': [],

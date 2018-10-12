@@ -203,6 +203,8 @@ class StockPicking(orm.Model):
         return False
     
     _columns = {
+        'account_id': fields.many2one(
+            'account.analytic.account', 'Account'),
         'pick_state': fields.selection([
             ('todo', 'To do'),
             ('ready', 'Ready'),
