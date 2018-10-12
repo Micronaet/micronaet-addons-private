@@ -111,7 +111,6 @@ _logger = logging.getLogger(__name__)
             move_id = move_pool.create(cr, uid, data, context=context)        
         # TODO create quants if done movement!!    
         return move_id
-        
 """
 
 class HrAnalyticTimesheet(orm.Model):
@@ -122,19 +121,28 @@ class HrAnalyticTimesheet(orm.Model):
     # -------------------------------------------------------------------------
     # On Change:
     # -------------------------------------------------------------------------
-    def onchange_intervent_partner_id(self, cr, uid, ids, partner_id, 
+    """
+    TODO loop procedure
+    def on_change_partner(self, cr, uid, ids, partner_id, account_id,
             context=None):
         ''' Update alert
-        '''    
+        '''
+        # Call super procedure:
+        ctx = context.copy()
+        res = super(HrAnalyticTimesheet, self).on_change_partner(
+            cr, uid, ids, partner_id, account_id, context=ctx)
+            
+        # Update extra data:    
         partner_pool = self.pool.get('res.partner')
-
-        res = {'value': {}}
+        if 'value' not in res:
+            res['value'] = {}
         pending_material_present = partner_pool._get_pending_stock_material(
             cr, uid, [partner_id], None, 
             None, context=context)[partner_id]['pending_material_present']
         res['value']['pending_material_present'] = pending_material_present
         return res
-
+    """"
+    
     # -------------------------------------------------------------------------
     # Utility:
     # -------------------------------------------------------------------------
@@ -273,7 +281,8 @@ class HrAnalyticTimesheet(orm.Model):
             'intervention_id': False,
             'picking_id': pick_id,
             }, context=context)
-        return True"""
+        return True
+        """
         
     _columns = {
         'delivered_ids': fields.one2many(

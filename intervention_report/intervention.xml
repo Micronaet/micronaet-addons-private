@@ -165,7 +165,7 @@
                    
                       <field name="intervent_partner_id" on_change="on_change_partner(intervent_partner_id,account_id)" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}"/>
                       <!--<field name="partner_id" on_change="on_change_partner(partner_id,account_id)"/>-->
-	                  <field name="mode" on_change="on_change_mode(mode)"/>
+	                  <field name="mode" on_change="on_change_mode(mode)" />
 	                  
                       <field name="user_id" on_change="on_change_user_id(user_id)" required="1"/>
 	                  <field name="ref" />
@@ -272,8 +272,7 @@
         <field name='model'>hr.analytic.timesheet</field>
         <field name='priority' eval='30' />
         <field name='arch' type='xml'>
-            <tree string="Intervent report" editable="bottom"> 
-
+            <tree string="Intervent report" editable="bottom">
                   <field name="name" on_change="on_change_name(name,intervention_request)" colspan="4"/>
                   <field name="intervent_partner_id" on_change="on_change_partner(intervent_partner_id,account_id)" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}"/>
                   <field name="mode" on_change="on_change_mode(mode)"/>
