@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       <!-- account.distribution.stats.wizard -->
+       <record id="account_distribution_stats_wizard_view" model="ir.ui.view">
+            <field name="name">Personal stats report</field>
+            <field name="model">account.distribution.stats.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Stats report" version="7.0">
+                   <header>
+                       <button string="Cancel" special="cancel" />
+                       <button name="action_print" string="Print" type="object" icon="gtk-print" class="oe_highlight" />
+                   </header>                   
+                   <group colspan="4" col="4">
+                        <separator string="Period" colspan="4"/>
+                        <field name="from_date" />
+                        <field name="to_date" />
+                   
+                        <separator string="Relation" colspan="4"/>
+                        <field name="user_id" />
+                        <newline/>
+                        <field name="partner_id" domain="[('is_company', '=', True)]" />                        
+                        <field name="account_id" domain="[('type', '!=', 'view')]"/>
+                        
+                        <field name="contract" />
+                        <field name="float_time" />
+                   </group>
+                </form>
+            </field>
+      </record>
+      <record model="ir.actions.act_window" id="action_account_distribution_stats_wizard">
+          <field name="name">Stats report</field>
+          <field name="res_model">account.distribution.stats.wizard</field>
+          <field name="view_type">form</field>
+          <field name="view_mode">form</field>
+          <field name="target">new</field>
+          <field name="view_id" ref="account_distribution_stats_wizard_view"/>
+      </record>      
+      <menuitem 
+           parent="menu_statistic_root" 
+           id="menu_account_distribution_report" 
+           action="action_account_distribution_stats_wizard"
+           sequence="20"
+           />
+      
+    </data>
+</openerp>

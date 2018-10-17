@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       <!-- hr.intervent.wizard -->
+       <!--<record id="hr_intervent_wizard_view" model="ir.ui.view">
+            <field name="name">Intervention analysis</field>
+            <field name="model">hr.intervent.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Analysis wizard" version="7.0">
+                   <header>
+                       <button string="Cancel" special="cancel" />
+                       <button name="action_print" string="Print" type="object" icon="gtk-jump-to" class="oe_highlight" />
+                   </header>                   
+                   <group colspan="4" col="4">
+                        <field name="detailed" />
+                        <newline/>
+                        <field name="from_date" />
+                        <field name="to_date" />
+                        <field name="user_id" />
+                        <field name="partner_id" />
+                   </group>
+                </form>
+            </field>
+      </record>
+
+    <act_window
+        id="act_hr_intervent_wizard"
+        name="Intervent analysis"
+        view_mode="form"
+        target="new"
+        res_model="hr.intervent.wizard"
+        key2="client_action_multi"
+        src_model="hr.analytic.timesheet"/>
+        
+    <record model="ir.actions.act_window" id="action_hr_intervent_wizard_menu_form">
+        <field name="name">Intervent analysys</field>
+        <field name="res_model">hr.intervent.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="hr_intervent_wizard_view"/>
+    </record>    
+    <menuitem 
+        parent="intervention_report.menu_base_intervention_report"
+        id="menu_hr_intervent_wizard_menu_form" 
+        action="action_hr_intervent_wizard_menu_form"
+        />-->
+    
+    </data>
+</openerp>

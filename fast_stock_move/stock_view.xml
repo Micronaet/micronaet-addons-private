@@ -231,6 +231,20 @@
                     />                
             <menuitem 
                 parent="menu_stock_picking_root" 
+                id="menu_stock_picking_invoice" 
+                name="Invoice"
+                sequence="30"
+                />
+                <menuitem 
+                    parent="menu_stock_picking_invoice" 
+                    id="menu_stock_ddt_invoice_wizard" 
+                    action="electrical_l10n_it_ddt.action_ddt_create_invoice"
+                    sequence="10"
+                    />                
+
+
+            <menuitem 
+                parent="menu_stock_picking_root" 
                 id="menu_stock_picking_move" 
                 action="action_stock_movement_manual"
                 sequence="50"
