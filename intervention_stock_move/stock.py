@@ -161,22 +161,28 @@ class HrAnalyticTimesheet(orm.Model):
     # -------------------------------------------------------------------------
     # Override WF:
     # -------------------------------------------------------------------------
+    #TODO Recursion problem
+    """
     def intervention_confirmed(self, cr, uid, ids, context=None):
         ''' Confirm picking when confirmed or create one
         '''
-        self.confirm_also_picking(cr, uid, ids, context=context)
-        
-        return super(HrAnalyticTimesheet, self).intervention_confirmed(
+        res = super(HrAnalyticTimesheet, self).intervention_confirmed(
             cr, uid, ids, context=context)
+            
+        # Confirm also picking:    
+        #self.confirm_also_picking(cr, uid, ids, context=context)
+        return res
 
     def intervention_close(self, cr, uid, ids, context=None):
         ''' Confirm picking when close or create one
         '''
-        self.confirm_also_picking(cr, uid, ids, context=context)
-        
-        return super(HrAnalyticTimesheet, self).intervention_close(
+        res = super(HrAnalyticTimesheet, self).intervention_close(
             cr, uid, ids, context=context)
-
+            
+        # Confirm also picking:    
+        #self.confirm_also_picking(cr, uid, ids, context=context)
+        return res
+    """
         
     # -------------------------------------------------------------------------
     # Button event:
