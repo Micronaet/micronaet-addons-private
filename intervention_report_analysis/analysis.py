@@ -38,7 +38,83 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
-"""class account_analytic_account(orm.Model):
+class hr_analytic_timesheet(osv.osv):
+    ''' Extra fields for account.invoice
+    '''
+    _inherit = 'hr.analytic.timesheet'
+    
+    def get_total_h_2_invoice(self, intervent, no_factor=False):
+        ''' Calculate total for intevent: 
+        '''
+        if no_factor:
+            factor = 1.0
+        else:
+            factor = intervent.to_invoice.factor / 100.0
+
+        if intervent.manual_total:
+            total = factor * intervent.intervent_total
+        else: # calculated:
+            trip_h = intervent.trip_hour if intervent.trip_require else 0.0
+            break_h = intervent.break_hour if intervent.break_require else 0.0
+            total = factor * (
+                intervent.intervent_duration + trip_h - break_h)
+        return total
+
+class account_analytic_account(orm.Model):
+    ''' Add extra info for account
+    '''
+    _inherit = 'account.analytic.account'
+
+    # -------------------------------------------------------------------------
+    # Function fields:
+    # -------------------------------------------------------------------------
+    def _get_done_hour_total(self, cr, uid, ids, fields, args, context=None):
+        ''' Fields function for calculate 
+        '''
+        res = dict.fromkeys(ids, 0)
+        
+        ts_pool = self.pool.get('hr.analytic.timesheet')
+        ts_ids = ts_pool.search(cr, uid, [
+            ('account_id', 'in', ids),
+            ], context=context)
+
+        # Calculate intervent marked hours:
+        for ts in ts_pool.browse(cr, uid, ts_ids, context=context):
+            invoiced_hour = 0.0
+            #XXX ex: ts_pool.get_total_h_2_invoice(ts, no_factor=True)
+            account_id = ts.account_id.id
+            res[account_id] += invoiced_hour 
+            
+        # Remove invoiced hours:    
+        #for account in self.browse(cr, uid, ids, context=context):
+        #    for invoice in account.invoice_ids:
+        #        res[account.id] -= invoice.hour_removed
+        return res
+        
+    _columns = {
+        # Amount:
+        'total_amount': fields.float('Total amount', 
+            digits=(16, 2), 
+            help='Total amount of contract'), 
+        'hour_cost': fields.float('Hour cost', 
+            digits=(16, 2),
+            help='Hour cost (total / number of hours)'), 
+        'hour_cost_customer': fields.related(
+            'partner_id', 'hour_cost', type='float', digits=(16, 2), 
+            string='Customer hour cost', 
+            help='Remember starndar customer hour cost'),
+
+        'hour_done': fields.function(
+            _get_done_hour_total, method=True,
+            type='float', string='Done hour', store=False), 
+                        
+        # Date period:
+        'from_date': fields.date('From'),
+        'to_date': fields.date('To'),
+        }
+
+"""
+class account_analytic_account(orm.Model):
     ''' Add extra info for account
     '''
     _inherit = 'account.analytic.account'
