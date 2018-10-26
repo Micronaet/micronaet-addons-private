@@ -65,6 +65,10 @@
 	                <!--<xpath expr="button[@name='do_unreserve']" position="attributes">
 	                    <attribute name="invisible">1</attribute>
 	                </xpath>-->
+	                <xpath expr="//button[@string='Reverse Transfer']" position="attributes">
+	                    <attribute name="invisible">1</attribute>
+	                </xpath>
+	                
 	                <field name="state" position="attributes">
 	                    <attribute name="invisible">1</attribute>
 	                </field>
