@@ -133,6 +133,11 @@ class StockPicking(orm.Model):
     def _delete_quants(self, cr, uid, picking_ids, context=None):
         ''' Create quants when done a movement
         '''
+        if context is None:  
+            context={}
+        
+        context['force_unlink'] = True # TODO delete quants
+
         # Pool used:
         quant_pool = self.pool.get('stock.quant')
         quant_ids = quant_pool.search(cr, uid, [

@@ -212,7 +212,7 @@ class HrAnalyticTimesheet(orm.Model):
         ''' Refresh
         '''
         return True
-        
+
     #def _get_partner_delivery_picking(
     #        self, cr, uid, ids, fields, args, context=None):
     #    ''' Fields function for calculate 
