@@ -143,7 +143,7 @@ class StockPicking(orm.Model):
         quant_ids = quant_pool.search(cr, uid, [
             ('stock_move_id.picking_id', 'in', picking_ids),
             ], context=context)
-        return quant_pool.unlink(cr, uid, quant_ids)    
+        return quant_pool.unlink(cr, uid, quant_ids, context=context)    
         
         
     def pickwf_ready(self, cr, uid, ids, context=None):
