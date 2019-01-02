@@ -79,6 +79,8 @@ class StockPickingManual(orm.Model):
     _columns = {
          'manual_picking_type_id': fields.many2one(
              'stock.picking.type', 'Picking type customer'),         
+         'manual_picking_type_in_id': fields.many2one(
+             'stock.picking.type', 'Picking type supplier'),         
          }
 
 class StockPicking(orm.Model):
@@ -105,6 +107,15 @@ class StockPicking(orm.Model):
     def _create_quants(self, cr, uid, picking_ids, context=None):
         ''' Create quants when done a movement
         '''
+        if context is None:
+            context = {}
+
+        move_sign = -1 # default = out
+        location_eval = 'move.location_id.id'
+        if context.get('fast_picking') and context.get('fast_move') == 'in':
+            move_sign = +1
+            location_eval = 'move.location_dest_id.id'
+
         # Pool used:
         quant_pool = self.pool.get('stock.quant')
 
@@ -113,10 +124,10 @@ class StockPicking(orm.Model):
                 # Create quants:
                 quant_pool.create(cr, uid, {
                      'stock_move_id': move.id,
-                     'qty': -move.product_qty,
+                     'qty': move_sign * move.product_qty,
                      # XXX Move price or current product price for cost:
                      'cost': move.price_unit or move.product_id.standard_price,
-                     'location_id': move.location_id.id,
+                     'location_id': eval(location_eval),#move.location_id.id,
                      'company_id': move.company_id.id,
                      'product_id': move.product_id.id,
                      'in_date': move.date,
@@ -144,7 +155,6 @@ class StockPicking(orm.Model):
             ('stock_move_id.picking_id', 'in', picking_ids),
             ], context=context)
         return quant_pool.unlink(cr, uid, quant_ids, context=context)    
-        
         
     def pickwf_ready(self, cr, uid, ids, context=None):
         ''' Restart procedure
@@ -193,6 +203,16 @@ class StockPicking(orm.Model):
     # -------------------------------------------------------------------------
     # Default function:
     # -------------------------------------------------------------------------
+    def get_default_picking_move(self, cr, uid, context=None):
+        ''' Update default depend on context data        
+        '''
+        if context is None:
+            return False
+
+        if context.get('fast_picking') and context.get('fast_move') == 'in':
+            return 'in'
+        return 'out' # default
+
     def get_default_picking_type_id(self, cr, uid, context=None):
         ''' Update default depend on context data        
         '''
@@ -202,9 +222,14 @@ class StockPicking(orm.Model):
         if context.get('fast_picking'): 
             company_pool = self.pool.get('res.company')
             company_ids = company_pool.search(cr, uid, [], context=context)
-            return company_pool.browse(
-                cr, uid, company_ids, 
-                context=context)[0].manual_picking_type_id.id
+            if context.get('fast_move') == 'in':
+                return company_pool.browse(
+                    cr, uid, company_ids, 
+                    context=context)[0].manual_picking_type_in_id.id
+            else: # default 'out'
+                return company_pool.browse(
+                    cr, uid, company_ids, 
+                    context=context)[0].manual_picking_type_id.id
         return False
     
     _columns = {
@@ -214,12 +239,18 @@ class StockPicking(orm.Model):
             ('todo', 'To do'),
             ('ready', 'Ready'),
             ('delivered', 'Delivered'),
-            ], 'Picking state')
+            ], 'Picking state'),
+        'pick_move': fields.selection([
+            ('in', 'Move IN'),
+            ('out', 'Move OUT'),
+            ], 'Pick move'),
         }
 
     _defaults = {
         'pick_state': lambda *x: 'todo',
         'picking_type_id': lambda s, cr, uid, ctx: 
             s.get_default_picking_type_id(cr, uid, ctx),
+        'pick_move': lambda s, cr, uid, ctx: 
+            s.get_default_picking_move(cr, uid, ctx),
         }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
