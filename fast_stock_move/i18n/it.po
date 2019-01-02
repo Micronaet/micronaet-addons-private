@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-26 08:41+0000\n"
-"PO-Revision-Date: 2018-10-26 10:42+0100\n"
+"POT-Creation-Date: 2019-01-02 10:21+0000\n"
+"PO-Revision-Date: 2019-01-02 11:22+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,7 @@ msgstr "Fatture"
 #. module: fast_stock_move
 #: view:stock.picking:fast_stock_move.view_stock_picking_inline_moves_tree_fast
 msgid "Lista Picking"
-msgstr "Lista Picking"
+msgstr "Lista Picking OUT"
 
 #. module: fast_stock_move
 #: view:stock.move:fast_stock_move.view_stock_move_fast_tree
@@ -64,9 +64,24 @@ msgid "Move"
 msgstr "Movimento"
 
 #. module: fast_stock_move
+#: selection:stock.picking,pick_move:0
+msgid "Move IN"
+msgstr "Move IN"
+
+#. module: fast_stock_move
+#: selection:stock.picking,pick_move:0
+msgid "Move OUT"
+msgstr "Movimento OUT"
+
+#. module: fast_stock_move
 #: model:ir.model,name:fast_stock_move.model_res_partner
 msgid "Partner"
 msgstr "Partner"
+
+#. module: fast_stock_move
+#: field:stock.picking,pick_move:0
+msgid "Pick move"
+msgstr "Movimento"
 
 #. module: fast_stock_move
 #: model:ir.model,name:fast_stock_move.model_stock_picking
@@ -75,27 +90,44 @@ msgstr "Lista prelievo"
 
 #. module: fast_stock_move
 #: model:ir.actions.act_window,name:fast_stock_move.action_stock_picking_manual_delivered_fast
+#: model:ir.actions.act_window,name:fast_stock_move.action_stock_picking_manual_delivered_fast_in
 #: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_picking_delivered_fast
+#: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_picking_delivered_fast_in
 msgid "Picking delivered"
 msgstr "Picking consegnati"
 
 #. module: fast_stock_move
+#: model:ir.actions.act_window,name:fast_stock_move.action_stock_picking_manual_fast_in
+#: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_picking_in
+msgid "Picking list in"
+msgstr "Picking list in"
+
+#. module: fast_stock_move
 #: model:ir.actions.act_window,name:fast_stock_move.action_stock_picking_manual_fast
 #: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_picking
-msgid "Picking list"
-msgstr "Lista picking"
+msgid "Picking list out"
+msgstr "Picking list out"
 
 #. module: fast_stock_move
 #: model:ir.actions.act_window,name:fast_stock_move.action_stock_picking_manual_ready_fast
+#: model:ir.actions.act_window,name:fast_stock_move.action_stock_picking_manual_ready_fast_in
 #: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_picking_ready_fast
+#: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_picking_ready_fast_in
 msgid "Picking ready"
 msgstr "Picking pronti"
 
 #. module: fast_stock_move
 #: model:ir.actions.act_window,name:fast_stock_move.action_stock_picking_manual_todo_fast
+#: model:ir.actions.act_window,name:fast_stock_move.action_stock_picking_manual_todo_fast_in
 #: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_picking_todo_fast
+#: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_picking_todo_fast_in
 msgid "Picking todo"
 msgstr "Picking da fare"
+
+#. module: fast_stock_move
+#: field:res.company,manual_picking_type_in_id:0
+msgid "Picking type supplier"
+msgstr "Tipo picking fornitore"
 
 #. module: fast_stock_move
 #: model:ir.model,name:fast_stock_move.model_stock_quant
@@ -106,6 +138,11 @@ msgstr "Quantità"
 #: view:stock.picking:fast_stock_move.view_stock_picking_header_wf_form
 msgid "Ready"
 msgstr "Pronte"
+
+#. module: fast_stock_move
+#: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_in_root
+msgid "Receiving management"
+msgstr "Gestione consegne"
 
 #. module: fast_stock_move
 #: view:stock.picking:fast_stock_move.view_stock_picking_header_wf_form
