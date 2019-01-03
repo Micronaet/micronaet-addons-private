@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <!--Document report-->
+    <template id="report_metel_label">
+            <div class="page">
+                 <div class="oe_structure"/>
+                 <!--<div t-field="o.dest_address_id"
+                    t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true}'/>-->
+                 
+                 <!--<t t-esc="parse_function()" />-->
+                 <table class="table">
+                     <tbody>
+                         <tr>
+                             <td class="text-center"><h3><t t-esc="o.default_code" /></h3></td>
+                         </tr>
+                         <tr>
+                             <td><h4><t t-esc="o.name" /></h4></td>
+                         </tr>    
+                         <tr t-if="not o.ean13">
+                             <td class="text-center"><img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', o.default_code, 150, 150)"/></td>                     
+                         </tr>    
+                         <tr t-if="o.ean13">
+                             <td class="text-center"><img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('EAN13', o.ean13, 350, 150)"/><br/><t t-esc="o.ean13" /></td>
+                         </tr>    
+                     </tbody>
+                 </table>
+            </div>
+    </template>
+        
+    <!--Loop for report-->
+    <template id="report_metel_label_translate">
+        <t t-call="report.html_container">
+            <t t-foreach="doc_ids" t-as="doc_id">
+                <t t-raw="translate_doc(doc_id, doc_model, 'company_id.partner_id.lang', 'qweb_report_metel_label.report_metel_label')"/>
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_metel_label" model="report.paperformat">
+        <field name="name">METEL Label</field>
+        <field name="default" eval="False"/>
+        <field name="format">custom</field>
+        <field name="page_height">70</field>
+        <field name="page_width">70</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">1</field>
+        <field name="margin_bottom">1</field>
+        <field name="margin_left">1</field>
+        <field name="margin_right">1</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">300</field>
+    </record>
+    
+    <!--Create action report-->
+    <record id="action_report_metel_label" model="ir.actions.report.xml">
+        <field name="string">Metel Label</field>
+        <field name="model">product.product</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">qweb_report_metel_label.report_metel_label_translate</field>
+        <field name="name">Metel Label Report</field>
+        <field name="file">qweb_report_metel_label.report_metel_label_translate</field>
+        <field name="attachment">'LABEL_' + (object.default_code or 'XXX').replace('/','') + '.pdf'</field>
+        <field name="paperformat_id" ref="paperformat_metel_label"/>
+    </record>
+  </data>
+</openerp>

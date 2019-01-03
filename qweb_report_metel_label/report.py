@@ -28,15 +28,15 @@
 
 from openerp import api, models
 
-class PartnerReport(models.AbstractModel):
+class ReportMetelLabel(models.AbstractModel):
     ''' Report parser 
     '''
-    _name = 'report.qweb_report_sample.report_partner'
+    _name = 'report.qweb_report_metel_label.report_metel_label_translate'
     
     def parse_function(self, ):
         ''' Parse function for export
         '''
-        res = "" # TODO
+        res = '' # TODO
         return res
         
     @api.multi
@@ -45,13 +45,14 @@ class PartnerReport(models.AbstractModel):
         '''
         report_obj = self.env['report']
         report = report_obj._get_report_from_name(
-            'qweb_report_sample.report_partner')
+            'qweb_report_metel_label.report_metel_label_translate')
         docargs = {
             'doc_ids': self._ids,
             'doc_model': report.model,
             'docs': self,
             'parse_function': self.parse_function,
         }
-        return report_obj.render('qweb_report_sample.report_partner', docargs)
+        return report_obj.render(
+            'qweb_report_metel_label.report_metel_label_translate', docargs)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

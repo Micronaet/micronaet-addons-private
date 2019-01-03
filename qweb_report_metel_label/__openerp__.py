@@ -21,11 +21,11 @@
 ##############################################################################
 
 {
-    'name': 'QWeb report sample',
+    'name': 'QWeb METEL Report',
     'version': '0.0.1',
-    'category': 'Report/Sample',
+    'category': 'Report/Label',
     'description': """
-        Base report for create new QWeb sample (and reuse in modules)
+        Qweb Metel Label report
         """,
     'author': 'Micronaet s.r.l.',
     'website': 'http://www.micronaet.it',
@@ -35,7 +35,7 @@
         ],
     'init_xml': [], 
     'data': [
-        'report/sample.xml',
+        'report/label.xml',
         ],
     'demo_xml': [],
     'active': False, 
