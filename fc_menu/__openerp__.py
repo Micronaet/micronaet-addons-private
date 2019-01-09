@@ -33,6 +33,7 @@
         'account',
         'analytic',
         'intervention_report',
+        'electrical_load_picking',
         ],
     'init_xml': [],
     'demo': [],

@@ -9,6 +9,8 @@
             <menuitem name="Amministrazione" id="menu_partner_fc_management" parent="menu_partner_fc_root" sequence="20" />
                 <menuitem id="menu_partner_fc_management_address_customer" parent="menu_partner_fc_management" name="Customer" sequence="10" action="base.action_partner_customer_form"/>
                 <menuitem id="menu_partner_fc_management_address_supplier" parent="menu_partner_fc_management" name="Supplier" sequence="20" action="base.action_partner_supplier_form"/>
+                <menuitem parent="menu_partner_fc_management" id="menu_supplier_delivery_load" action="electrical_load_picking.action_supplier_delivery_load" sequence="25"/>
+        
                 <menuitem parent="menu_partner_fc_management" id="menu_partner_fc_employee" action="hr.open_view_employee_list_my" sequence="30"/>                
                 <menuitem action="account.action_account_analytic_account_form" id="menu_partner_fc_management_account_analytic" parent="menu_partner_fc_management" sequence="30"/>
                     

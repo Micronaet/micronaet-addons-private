@@ -66,7 +66,6 @@ class StockQuants(orm.Model):
         
     _columns = {
          'stock_move_id': fields.many2one('stock.move', 'Generator move', 
-             ondelete='cascade',
              ),
          }
 
