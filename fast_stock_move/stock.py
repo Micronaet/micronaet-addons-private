@@ -56,17 +56,22 @@ class StockMove(orm.Model):
             product_proxy = self.pool.get('product.product').browse(
                 cr, uid, product_id)
             res['value']['price_unit'] = product_proxy.standard_price
-        return res    
+        return res 
+    
+    _columns = {
+        'auto_account_out_id': fields.many2one(
+            'account.analytic.account', 'Account',
+            help='This will create auto picking out document',
+            ),
+        }       
 
 class StockQuants(orm.Model):
     """ Model name: Stock Quants
     """    
     _inherit = 'stock.quant'
-    
         
     _columns = {
-         'stock_move_id': fields.many2one('stock.move', 'Generator move', 
-             ),
+         'stock_move_id': fields.many2one('stock.move', 'Generator move'),
          }
 
 class StockPickingManual(orm.Model):
@@ -86,6 +91,107 @@ class StockPicking(orm.Model):
     ''' Model name: StockPicking
     '''    
     _inherit = 'stock.picking'
+
+    # -------------------------------------------------------------------------
+    # Button
+    # -------------------------------------------------------------------------
+    def generate_pick_out_draft(self, cr, uid, ids, context=None):
+        ''' Create pick out document depend on account analytic
+        '''
+        # Pool used:
+        company_pool = self.pool.get('res.company')
+        picking_pool = self.pool.get('stock.picking')
+        move_pool = self.pool.get('stock.move')
+        
+        type_pool = self.pool.get('stock.picking.type')
+
+        # ---------------------------------------------------------------------
+        # Parameters:
+        # ---------------------------------------------------------------------
+        company_id = company_pool.search(cr, uid, [], context=context)[0]
+        now = ('%s' % datetime.now())[:19]
+
+        # Type ID:
+        type_ids = type_pool.search(cr, uid, [
+            ('code', '=', 'outgoing'),
+            ], context=context)
+        if not type_ids:
+            raise osv.except_osv(
+                _('Error'), 
+                _('Need setup of outgoing stock.picking.type!'),
+                )    
+        picking_type = type_pool.browse(cr, uid, type_ids, context=context)[0]
+        location_id = picking_type.default_location_src_id.id
+        location_dest_id = picking_type.default_location_dest_id.id
+        
+        pick_proxy = self.browse(cr, uid, ids, context=context)[0]        
+        test = [
+            True for item in pick_proxy.move_lines \
+                if item.auto_account_out_id.id]
+
+        if not test:
+            raise osv.except_osv(
+                _('Error'), 
+                _('Picking without auto account!'),
+                )
+        pickings = {}
+        for move in pick_proxy.move_lines:
+            pick_orig = move.picking_id
+            account = move.auto_account_out_id
+            if not account:
+                continue # No creation
+
+            partner = account.partner_id
+            origin = pick_orig.name
+            product = move.product_id
+
+            if account not in pickings:
+                pickings[account] = picking_pool.create(cr, uid, {
+                    'partner_id': partner.id,
+                    'account_id': account.id,
+                    'date': now,
+                    'min_date': now,
+                    'origin': origin, # Origin as an extra info                    
+                    'picking_type_id': picking_type.id,
+                    'pick_move': 'out',
+                    'pick_state': 'todo',
+                    'auto_generator_id': pick_orig.id,
+                    #'state': 'delivered', # XXX not real!
+                    }, context=context)
+            picking_id = pickings[account]
+            
+            move_pool.create(cr, uid, {
+                'name': move.name,
+                'product_uom': move.product_uom.id,
+                'picking_id': picking_id,
+                'picking_type_id': picking_type.id,
+                'origin': origin,
+                'product_id': product.id,
+                'product_uom_qty': move.product_uom_qty,
+                'date': now,
+                'location_id': location_id,
+                'location_dest_id': location_dest_id,
+                #'state': 'done',
+                }, context=context)
+                
+        #model_pool = self.pool.get('ir.model.data')
+        # model_pool.get_object_reference('module_name', 'view_name')[1]
+        view_id = False
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Pick created'),
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            #'res_id': 1,
+            'res_model': 'stock.picking',
+            'view_id': view_id, # False
+            'views': [(False, 'tree'), (False, 'form')],
+            'domain': [('id', 'in', pickings.values())],
+            'context': context,
+            'target': 'current', # 'new'
+            'nodestroy': False,
+            }
     
     # -------------------------------------------------------------------------
     # Second WF: Buttons
@@ -232,6 +338,8 @@ class StockPicking(orm.Model):
         return False
     
     _columns = {
+        'auto_generator_id': fields.many2one(
+            'stock.picking', 'Auto generator pick in'),
         'account_id': fields.many2one(
             'account.analytic.account', 'Account'),
         'pick_state': fields.selection([
@@ -252,4 +360,15 @@ class StockPicking(orm.Model):
         'pick_move': lambda s, cr, uid, ctx: 
             s.get_default_picking_move(cr, uid, ctx),
         }
+
+class StockPicking(orm.Model):
+    ''' Model name: StockPicking
+    '''    
+    _inherit = 'stock.picking'
+    
+    _columns = {
+        'auto_child_ids': fields.one2many(
+            'stock.picking', 'auto_generator_id', 'Auto Child out'),
+        }
+        
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
