@@ -45,7 +45,7 @@ msgstr "Consegnato"
 #. module: fast_stock_move
 #: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_root
 msgid "Delivery management"
-msgstr "Consegne cliente"
+msgstr "Gestione consegne cliente"
 
 #. module: fast_stock_move
 #: model:ir.ui.menu,name:fast_stock_move.menu_stock_picking_invoice
