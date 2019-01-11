@@ -32,6 +32,7 @@
         'stock',
         'product',
         'analytic',
+        'stock',
         'stock_account',
         'electrical_l10n_it_ddt',
         ],

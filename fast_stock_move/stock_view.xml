@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <record model="ir.ui.view" id="view_product_product_price_form">
+            <field name="name">product.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="standard_price" position="after">
+                    <field name="standard_price_date" />
+                </field>
+            </field>
+        </record>
+
         <!--res.company-->
         <record model="ir.ui.view" id="view_res_company_stock_page_parameter_form">
             <field name="name">res.company.stock.parameter.form</field>
@@ -84,9 +95,10 @@
                         <button name="pickwf_restart" string="Restart" type="object" attrs="{'invisible': [('pick_state','!=','delivered')]}" class="oe_highlight" />
                         <!--<field name="state" />-->
                         <field name="pick_state" widget="statusbar" />
-                    </field>    
+                    </field>
             </field>
         </record>
+
         <record model="ir.ui.view" id="view_stock_picking_inline_moves_tree_fast">
             <field name="name">stock.picking.form</field>
             <field name="model">stock.picking</field>
@@ -122,9 +134,10 @@
                     <field name="account_id" 
                         context="{'with_code': True,'default_use_timesheets': 1}" 
                         domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
-                    <field name="pick_move" />    
+                    <field name="pick_move" />
                 </field>
                 <field name="move_lines" position="replace">
+                    <button name="update_standard_price_product" string="Update cost price" type="object" class="oe_highlight" attrs="{'invisible': [('pick_move','!=','in')]}"/>
                     <field name="move_lines"
                         attrs="{'readonly': [['state', 'in', ['cancel', 'done']]]}" 
                         context="{'default_invoice_state': invoice_state, 'address_in_id': partner_id, 'default_picking_type_id': picking_type_id, 'default_picking_id': active_id}">
@@ -134,7 +147,7 @@
                             <field name="product_uom" />
                             <field name="product_uos" invisible="1"/>
                             <field name="name" invisible="1" />
-                            <field name="price_unit" invisible="1" />
+                            <field name="price_unit" invisible="context.get('fast_move', 'out') != 'in'" />
                             <field name="location_id" invisible="1"/>
                             <field name="location_dest_id" invisible="1" />
                             <field name="date_expected" invisible="1" />

@@ -39,6 +39,16 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 _logger = logging.getLogger(__name__)
 
 
+class ProductProduct(orm.Model):
+    """ Model name: Stock move
+    """    
+    _inherit = 'product.product'
+    
+    _columns = {
+        'standard_price_date': fields.date('Update Date', 
+            help='Update date for standard price'),
+        }
+
 class StockMove(orm.Model):
     """ Model name: Stock move
     """    
@@ -95,6 +105,43 @@ class StockPicking(orm.Model):
     # -------------------------------------------------------------------------
     # Button
     # -------------------------------------------------------------------------
+    def update_standard_price_product(self, cr, uid, ids, context=None):
+        ''' Update standard price on product if date passed
+        '''
+        product_pool = self.pool.get('product.product')
+        
+        picking = self.browse(cr, uid, ids, context=context)[0]
+        
+        # No cost update for out document:
+        if picking.pick_move != 'in':
+            return True 
+            
+        picking_date = (picking.min_date or picking.date or '')[:10]
+        if not picking_date:
+            raise osv.except_osv(
+                _('Error'), 
+                _('No date in picking document'),
+                )
+        
+        for move in picking.move_lines:
+            standard_price = move.price_unit
+            if not standard_price:
+                continue
+            product = move.product_id
+            
+            # -----------------------------------------------------------------
+            # Update price:
+            # -----------------------------------------------------------------
+            product_date = product.standard_price_date
+            
+            if not product_date or picking_date > product_date:
+                # If better date:
+                product_pool.write(cr, uid, product.id, {
+                    'standard_price': standard_price,
+                    'standard_price_date': picking_date,
+                    }, context=context)
+        return True
+
     def generate_pick_out_draft(self, cr, uid, ids, context=None):
         ''' Create pick out document depend on account analytic
         '''
@@ -178,6 +225,7 @@ class StockPicking(orm.Model):
         # model_pool.get_object_reference('module_name', 'view_name')[1]
         view_id = False
 
+        # TODO put in close status !!!
         return {
             'type': 'ir.actions.act_window',
             'name': _('Pick created'),
@@ -284,6 +332,8 @@ class StockPicking(orm.Model):
         # Update stock movement:
         self._set_stock_move_picked(#assigned
             cr, uid, ids, state='done', context=context)
+        
+        self.update_standard_price_product(cr, uid, ids, context=context)
         
         # Update picking:
         return self.write(cr, uid, ids, {
