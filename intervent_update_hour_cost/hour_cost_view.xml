@@ -31,8 +31,7 @@
             id="menu_action_product_product_employ" 
             action="action_product_product_employ_tree"
             sequence="30"
-            />
-        
+            />        
     </data>
 </openerp>
 
