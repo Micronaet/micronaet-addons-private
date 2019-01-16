@@ -1009,7 +1009,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
         # Get base parameter for PHP call:
         # ---------------------------------------------------------------------
         return excel_pool.return_attachment(
-            cr, uid, 'Statistiche', version='7.0', php=True,
+            cr, uid, 'Statistiche', #version='7.0', php=True,
             context=context)
 
     _columns = {
