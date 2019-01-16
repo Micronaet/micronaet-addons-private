@@ -11,7 +11,7 @@
                     <field name="standard_price" required="1" />
                     <field name="hr_date" required="1"/>
                     <!--<field name="hr_status" />-->
-                    <button name="update_hr_intervent" string="Update" type="object" icon="gtk-refresh" />
+                    <button name="update_hr_intervent" string="Update" type="object" icon="gtk-refresh" alert="Intervent from that date will e updated with new hour cost, confirm?"/>
                 </tree>
             </field>
         </record>        
