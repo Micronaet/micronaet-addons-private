@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_account_analytic_account_extra_form">
+            <field name="name">account.analytic.account.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="mode" />
+                </field>
+                <field name="from_date" position="after">
+                    <field name="to_date" />
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
+
