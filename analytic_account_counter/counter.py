@@ -59,17 +59,21 @@ class AccountAnalyticAccount(orm.Model):
         """
         sequence_pool = self.pool.get('ir.sequence')
         counter_mode = vals.get('counter_mode', False)
-        code = vals.get('counter_mode', False)
-        import pdb; pdb.set_trace()
+        code = vals.get('code', False)
+
         if not code:
-            if counter_mode == 'manutention':
-                sequence = 'account.analytic.account.manutention'
-            elif counter_mode == 'generic':
-                sequence = 'account.analytic.account.generic'
+            sequence_name = 'account.analytic.account.%s' % counter_mode
+            sequence_ids = sequence_pool.search(cr, uid, [
+                ('name', '=', sequence_name),
+                ], context=context)
+            if sequence_ids:                    
+                vals['code'] = sequence_pool.next_by_id(
+                    cr, uid, sequence_ids[0], context=context)
             else:
-                sequence = 'account.analytic.account.generic'
-            vals['code'] = sequence_pool.get(
-                cr, uid, sequence, context=context),
+                raise osv.except_osv(
+                    _('Error'), 
+                    _('Counter %s not found' % sequence_name)
+                    )
 
         return super(AccountAnalyticAccount, self).create(
             cr, uid, vals, context=context)
@@ -85,7 +89,7 @@ class AccountAnalyticAccount(orm.Model):
             ('generic', 'Generic'),
             ('manutention', 'Manutention'),
             ('analytic', 'Analytic'),
-            ], 'Mode'),
+            ], 'Mode', required=True),
         }
 
     _defaults = {

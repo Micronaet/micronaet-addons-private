@@ -5,15 +5,15 @@
 		    <field name="name">Contract code</field>
 		    <field name="code">account.analytic.account</field>
 	    </record>-->
-	    <record model="ir.sequence" id="seq_account_analytic">
-		    <field name="name">Manutention</field>
+	    <record model="ir.sequence" id="seq_account_manutention">
+		    <field name="name">account.analytic.account.manutention</field>
 		    <field name="code">account.analytic.account</field>
 		    <field name="prefix">M</field>
 		    <field name="suffix"></field>
 		    <field name="padding">3</field>
 	    </record>
 	    <record model="ir.sequence" id="seq_account_general">
-		    <field name="name">Generic</field>
+		    <field name="name">account.analytic.account.generic</field>
 		    <field name="code">account.analytic.account</field>
 		    <field name="prefix"></field>
 		    <field name="suffix"></field>
