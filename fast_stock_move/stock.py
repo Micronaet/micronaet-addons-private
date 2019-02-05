@@ -69,6 +69,7 @@ class StockMove(orm.Model):
         return res 
     
     _columns = {
+        'force_name': fields.text('Force name'),
         'auto_account_out_id': fields.many2one(
             'account.analytic.account', 'Account',
             help='This will create auto picking out document',
