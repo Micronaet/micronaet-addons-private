@@ -99,8 +99,22 @@
             </field>
         </record>
 
+        
+        <record model="ir.ui.view" id="view_stock_picking_extra_search">
+            <field name="name">stock.picking.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="contact_id" filter_domain="[('contact_id','=',self)]"/>
+                </field>   
+                <filter string="Status" position="after">
+                    <filter name="group_contact" string="Contact" context="{'group_by': 'contact_id'}"/>
+                </filter>    
+            </field>
+        </record>
         <record model="ir.ui.view" id="view_stock_picking_inline_moves_tree_fast">
-            <field name="name">stock.picking.form</field>
+            <field name="name">stock.picking.tree</field>
             <field name="model">stock.picking</field>
             <field name="priority" eval="30"/>
             <field name="arch" type="xml">
@@ -109,8 +123,9 @@
 	                <field name="date" />
 	                <field name="min_date" invisible="1" />
 	                <field name="partner_id" />
-	                <field name="location_dest_id" />
+	                <field name="location_dest_id" invisible="1"/>
                     <field name="account_id" />
+	                <field name="contact_id" />
 	                <field name="ddt_id" />
 	                <!--<field name="invoice_id" />-->
 	                <field name="origin" />
@@ -134,6 +149,7 @@
                     <field name="account_id" 
                         context="{'with_code': True,'default_use_timesheets': 1}" 
                         domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
+                    <field name="contact_id" />
                     <field name="pick_move" />
                 </field>
                 <field name="move_lines" position="replace">

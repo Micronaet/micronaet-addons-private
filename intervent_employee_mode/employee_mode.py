@@ -72,8 +72,7 @@ class ResPartnerHrModeRel(orm.Model):
 
     _sql_constraints = [
         ('name_uniq', 'unique(partner_id, mode_id)', 
-            'Parter - Mode must be unique!'),
-        
+            'Parter - Mode must be unique!'),        
         ]
 
 class ResPartner(orm.Model):

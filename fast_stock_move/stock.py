@@ -388,6 +388,8 @@ class StockPicking(orm.Model):
         return False
     
     _columns = {
+        'contact_id': fields.many2one(
+            'res.partner', 'Contact', help='Partner contact for information'),
         'auto_generator_id': fields.many2one(
             'stock.picking', 'Auto generator pick in'),
         'account_id': fields.many2one(

@@ -125,12 +125,12 @@ class HrAnalyticTimesheet(orm.Model):
 
         # Title:
         row = 0
-        #excel_pool.write_xls_line(WS_name, row, [
-        #    'Elenco rapportini contemplati nel periodo',
-        #    ], f_title)
+        excel_pool.write_xls_line(WS_name, row, [
+            'Elenco rapportini contemplati nel periodo',
+            ], f_title)
         
         # Header:
-        #row += 2
+        row += 2
         excel_pool.write_xls_line(WS_name, row, [
             # Intervent header information:
             'Numero',
@@ -386,7 +386,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                         continue
                     # account, user, partner browse obj    
                     res[(account, user, partner)] = [
-                        0.0,#todo,
+                        0.0, #todo,
                         0.0, # done pay
                         0.0, # done gratis
                         0.0, # invoiced                    
@@ -398,7 +398,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                         #todo = account_pool.get_account_distribution(
                         #    select_user.id, from_date, to_date, account)
                         res[(account, select_user, partner)] = [
-                            0.0,#todo,
+                            0.0, #todo,
                             0.0, # done pay
                             0.0, # done gratis
                             0.0, # invoiced                    
@@ -447,7 +447,7 @@ class AccountDistributionStatsWizard(orm.TransientModel):
                 #    select_user.id, from_date, to_date, account)
                 # Total hour, todo
                 res[key] = [
-                    0.0,#todo,
+                    0.0, #todo,
                     0.0, 
                     0.0, 
                     0.0, 
