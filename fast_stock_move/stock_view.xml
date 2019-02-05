@@ -105,14 +105,50 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_internal_search"/>
             <field name="arch" type="xml">
+                <filter name="draft" position="before">
+                    <filter name="pick_state_todo" string="TODO" domain="[('pick_state','=','todo')]"/>
+                    <filter name="pick_state_ready" string="Ready" domain="[('pick_state','=','ready')]"/>
+                    <filter name="pick_state_delivered" string="Delivered" domain="[('pick_state','=','delivered')]"/>
+                    
+                    <filter name="ddt_on" string="DDT on" domain="[('ddt_id','!=',False)]"/>
+                    <filter name="ddt_off" string="DDT off" domain="[('ddt_id','=',False)]"/>                    
+                </filter>    
+
                 <field name="partner_id" position="after">
                     <field name="contact_id" filter_domain="[('contact_id','=',self)]"/>
                 </field>   
                 <filter string="Status" position="after">
                     <filter name="group_contact" string="Contact" context="{'group_by': 'contact_id'}"/>
                 </filter>    
+
+                <!--Hide unused filter:-->
+                <filter name="draft" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </filter>
+                <filter name="available" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </filter>
+                <filter name="waiting" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </filter>
+                <filter name="confirmed" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </filter>
+                <filter name="done" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </filter>
+                <filter name="backorder" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </filter>
+                <filter string="Status" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </filter>
+                <filter string="Procurement Group" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </filter>
             </field>
         </record>
+        
         <record model="ir.ui.view" id="view_stock_picking_inline_moves_tree_fast">
             <field name="name">stock.picking.tree</field>
             <field name="model">stock.picking</field>
@@ -211,13 +247,13 @@
             <field name="context">{'fast_picking': True}</field>
             <field name="domain">[('pick_move', '=', 'out'),('ddt_id', '=', False),('pick_state', '=', 'ready')]</field>
         </record>
-        <record model="ir.actions.act_window" id="action_stock_picking_manual_delivered_fast">
+        <record model="ir.actions.act_window" id="action_stock_picking_manual_delivered_fast_no_ddt">
             <field name="name">Picking delivered</field>
             <field name="res_model">stock.picking</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_stock_picking_inline_moves_tree_fast"/>
-            <field name="context">{'fast_picking': True}</field>
+            <field name="context">{'fast_picking': True,'search_default_ddt_off':True}</field>
             <field name="domain">[('pick_move', '=', 'out'),('ddt_id', '=', False),('pick_state', '=', 'delivered')]</field>
         </record>
 
@@ -295,7 +331,7 @@
                 <menuitem 
                     parent="menu_stock_picking_picking" 
                     id="menu_stock_picking_picking_delivered_fast" 
-                    action="action_stock_picking_manual_delivered_fast"
+                    action="action_stock_picking_manual_delivered_fast_no_ddt"
                     sequence="30"
                     />
             <menuitem 
