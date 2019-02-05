@@ -106,10 +106,10 @@ class StockPicking(orm.Model):
     # Button
     # -------------------------------------------------------------------------
     def onchange_picking_partner_filter(self, cr, uid, ids, 
-            partner_id, account_no_partner, context=None):
+            partner_id, account_no_parent, context=None):
         ''' On change partner and check box
         '''
-        if account_no_partner:
+        if account_no_parent:
             domain = [
                 ('type', 'in', ['normal', 'contract']),
                 ('state', '!=', 'close'),
@@ -415,7 +415,7 @@ class StockPicking(orm.Model):
             'stock.picking', 'Auto generator pick in'),
         'account_id': fields.many2one(
             'account.analytic.account', 'Account'),
-        'account_no_parent': fields.boolean('Account no parent'),
+        'account_no_parent': fields.boolean('Account without partner'),
         'pick_state': fields.selection([
             ('todo', 'To do'),
             ('ready', 'Ready'),

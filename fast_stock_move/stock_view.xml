@@ -151,7 +151,7 @@
                 <field name="partner_id" position="after">
                     <field name="account_no_parent" on_change="onchange_picking_partner_filter(partner_id, account_no_parent)" />
                     <field name="account_id" 
-                        context="{'with_code': True,'default_use_timesheets': 1}" 
+                        context="{'with_code': True, 'default_use_timesheets': 1}" 
                         domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('partner_id','=',partner_id)]" />
                     <field name="contact_id" />
                     <field name="pick_move" />
