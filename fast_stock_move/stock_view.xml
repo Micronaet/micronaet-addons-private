@@ -306,7 +306,7 @@
         <!--PICKING OUT -->
         <menuitem 
             parent="stock.menu_stock_root" 
-            name="Delivery management"
+            name="Materiale cliente"
             id="menu_stock_picking_root" 
             sequence="0"
             />
@@ -370,7 +370,7 @@
         <!--PICKING IN -->
         <menuitem 
             parent="stock.menu_stock_root" 
-            name="Receiving management"
+            name="Materiale fornitore"
             id="menu_stock_picking_in_root" 
             sequence="0"
             />
