@@ -101,6 +101,7 @@ class StockPicking(orm.Model):
     ''' Model name: StockPicking
     '''    
     _inherit = 'stock.picking'
+    _order = 'name desc'
 
     # -------------------------------------------------------------------------
     # On change
