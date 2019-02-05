@@ -105,6 +105,27 @@ class StockPicking(orm.Model):
     # -------------------------------------------------------------------------
     # Button
     # -------------------------------------------------------------------------
+    def onchange_picking_partner_filter(self, cr, uid, ids, 
+            partner_id, account_no_partner, context=None):
+        ''' On change partner and check box
+        '''
+        if account_no_partner:
+            domain = [
+                ('type', 'in', ['normal', 'contract']),
+                ('state', '!=', 'close'),
+                ('partner_id', '=', False),
+                ]
+        else:        
+            domain = [
+                ('type', 'in', ['normal', 'contract']),
+                ('state', '!=', 'close'),
+                ('partner_id', '=', partner_id)
+                ]
+        return {'domain': {'account_id': domain, }}
+        
+    # -------------------------------------------------------------------------
+    # Button
+    # -------------------------------------------------------------------------
     def update_standard_price_product(self, cr, uid, ids, context=None):
         ''' Update standard price on product if date passed
         '''
@@ -394,6 +415,7 @@ class StockPicking(orm.Model):
             'stock.picking', 'Auto generator pick in'),
         'account_id': fields.many2one(
             'account.analytic.account', 'Account'),
+        'account_no_parent': fields.boolean('Account no parent'),
         'pick_state': fields.selection([
             ('todo', 'To do'),
             ('ready', 'Ready'),

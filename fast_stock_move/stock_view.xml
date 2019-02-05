@@ -145,10 +145,14 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock_account.view_picking_inherit_form2"/>
             <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="on_change">onchange_picking_partner_filter(partner_id, account_no_parent)</attribute>
+                </field>
                 <field name="partner_id" position="after">
+                    <field name="account_no_parent" on_change="onchange_picking_partner_filter(partner_id, account_no_parent)" />
                     <field name="account_id" 
                         context="{'with_code': True,'default_use_timesheets': 1}" 
-                        domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
+                        domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('partner_id','=',partner_id)]" />
                     <field name="contact_id" />
                     <field name="pick_move" />
                 </field>
