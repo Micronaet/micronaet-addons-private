@@ -411,6 +411,7 @@ class StockPicking(orm.Model):
         return False
     
     _columns = {
+        'verified': fields.boolean('Verified'),
         'contact_id': fields.many2one(
             'res.partner', 'Contact', help='Partner contact for information'),
         'auto_generator_id': fields.many2one(

@@ -155,6 +155,7 @@
             <field name="priority" eval="30"/>
             <field name="arch" type="xml">
                 <tree colors="blue:pick_state=='todo';green:pick_state=='ready';black:pick_state=='done';" string="Lista Picking">
+                    <field name="verified" />
 	                <field name="name" />
 	                <field name="date" />
 	                <field name="min_date" invisible="1" />
@@ -191,6 +192,7 @@
                         domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('partner_id','=',partner_id)]" />
                     <field name="contact_id" />
                     <field name="pick_move" />
+                    <field name="verified" attrs="{'invisible': [('pick_move','!=','in')]}"/>                    
                 </field>
                 <field name="move_lines" position="replace">
                     <button name="update_standard_price_product" string="Update cost price" type="object" class="oe_highlight" attrs="{'invisible': [('pick_move','!=','in')]}"/>
