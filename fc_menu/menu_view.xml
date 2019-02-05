@@ -5,7 +5,11 @@
             <menuitem name="Interventi" id="menu_partner_fc_intervent" parent="menu_partner_fc_root" sequence="10" />
                 <menuitem name="My intervent" parent="menu_partner_fc_intervent" id="menu_partner_fc_intervent_my" action="intervention_report.action_view_hr_analytic_timesheet_my" sequence="10" />        
                 <menuitem name="My intervent (lite)" parent="menu_partner_fc_intervent" id="menu_partner_fc_intervent_my_lite" action="intervention_report.action_view_hr_analytic_timesheet_my_lite" sequence="10" />     
-                
+
+            <menuitem name="Magazzino" id="menu_partner_fc_stock_management" parent="menu_partner_fc_root" sequence="15" />
+                <menuitem 
+                    parent="menu_partner_fc_stock_management" id="menu_action_openerp_model_product_tree" action="metel_product_search.action_metel_product_search_wizard_view" sequence="20" />                
+                  
             <menuitem name="Amministrazione" id="menu_partner_fc_management" parent="menu_partner_fc_root" sequence="20" />
                 <menuitem id="menu_partner_fc_management_address_customer" parent="menu_partner_fc_management" name="Customer" sequence="10" action="base.action_partner_customer_form"/>
                 <menuitem id="menu_partner_fc_management_address_supplier" parent="menu_partner_fc_management" name="Supplier" sequence="20" action="base.action_partner_supplier_form"/>

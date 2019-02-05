@@ -34,6 +34,7 @@
         'analytic',
         'intervention_report',
         'electrical_load_picking',
+        'metel_product_search',
         ],
     'init_xml': [],
     'demo': [],
