@@ -103,7 +103,7 @@ class StockPicking(orm.Model):
     _inherit = 'stock.picking'
 
     # -------------------------------------------------------------------------
-    # Button
+    # On change
     # -------------------------------------------------------------------------
     def onchange_picking_partner_filter(self, cr, uid, ids, 
             partner_id, account_no_parent, context=None):

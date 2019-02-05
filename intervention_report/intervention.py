@@ -266,19 +266,39 @@ class hr_analytic_timesheet_extra(osv.osv):
             } # True if customer
         return res
 
-    def on_change_partner(self, cr, uid, ids, partner_id, account_id, context=None):
+    def on_change_partner(self, cr, uid, ids, partner_id, account_id, 
+            account_no_parent, context=None):
         ''' If change partner:
             set up account_id if there's default 
             change trip hour if mode setted up to 'customer'        
         '''  
-        res={}
-        res['value']= {}
+        # ---------------------------------------------------------------------        
+        # Filter for account:
+        # ---------------------------------------------------------------------        
+        if account_no_parent:
+            domain = [
+                ('type', 'in', ['normal', 'contract']),
+                ('state', '!=', 'close'),
+                ('partner_id', '=', False),
+                ]
+        else:        
+            domain = [
+                ('type', 'in', ['normal', 'contract']),
+                ('state', '!=', 'close'),
+                ('partner_id', '=', partner_id)
+                ]
+
+        res = {
+            'value': {},
+            'domain': {'account_id': domain, },
+            }
+    
         if not partner_id:
             res['value']['account_id'] = False
             res['value']['trip_hour'] = 0.0
             return res
 
-        partner_proxy=self.pool.get("res.partner").browse(
+        partner_proxy = self.pool.get("res.partner").browse(
             cr, uid, partner_id, context=context)
         res['value']['account_id'] = partner_proxy.default_contract_id.id if \
             partner_proxy.default_contract_id else False
@@ -527,6 +547,9 @@ class hr_analytic_timesheet_extra(osv.osv):
         
         # Function fields (populated only in view not in DB:    
         'account_hour_status': fields.text('Account status', size=40),
+        'account_no_parent': fields.boolean(
+            'Account without partner', 
+            help='If checked show only account without partner'),
             
         # Google maps trip manage:
         'google_from':fields.selection([

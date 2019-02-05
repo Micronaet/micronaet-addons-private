@@ -29,7 +29,7 @@ class hr_analytic_timesheet_mail(osv.Model):
     _name = 'hr.analytic.timesheet'
     _inherit = ['hr.analytic.timesheet', 'mail.thread']
     _mail_flat_thread = False
-
+    
     def message_post(self, cr, uid, thread_id, **kwargs):
         """ Override related to hr.analytic.timesheet. In case of email message
             set it as private:
@@ -47,4 +47,5 @@ class hr_analytic_timesheet_mail(osv.Model):
             thread_id = False
         return super(hr_analytic_timesheet_mail, self).message_post(
             cr, uid, thread_id, **kwargs)
+            
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
