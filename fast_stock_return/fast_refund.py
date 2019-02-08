@@ -284,7 +284,7 @@ class FastStockPicking(orm.TransientModel):
                 20, 20, 20, 30, 10, 20, 30, 10, 10])
             row = 0
             excel_pool.write_xls_line(ws_name, row, [
-                'Elendo ti tutti i movimenti con i prodotti selezionati',
+                'Elenco ti tutti i movimenti con i prodotti selezionati',
                 ], default_format=f_title)
 
             row += 1
