@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_fast_stock_picking_wizard_form">
+            <field name="name">fast.stock.picking.wizard.form</field>
+            <field name="model">fast.stock.picking.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Refund inline" version="7.0">        
+                    <header>
+                         <button name="report_original_picking" string="Print preview" type="object" icon="gtk-print"/>
+                         <button name="update_original_picking" string="Refund" type="object" icon="gtk-execute" />
+                    </header>
+                    <sheet>                    
+                        <group col="4" colspan="4">
+                            <field name="partner_id" />
+                            <field name="account_id" />
+                            <field name="with_ddt" />
+                            <newline/>
+                            <separator string="Detail:" colspan="4"/>
+                            <field name="move_lines">
+                                <tree string="Return line:" editable="bottom">
+                                    <field name="product_id" />
+                                    <field name="product_qty" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>        
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_new_fast_stock_picking_wizard">
+            <field name="name">New refund product</field>
+            <field name="res_model">fast.stock.picking.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_fast_stock_picking_wizard_form"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <menuitem 
+            parent="fast_stock_move.menu_stock_picking_root" 
+            id="menu_new_fast_stock_picking_wizard"
+            action="action_new_fast_stock_picking_wizard"
+            sequence="40"
+            />
+        
+        
+        
+    </data>
+</openerp>
+
