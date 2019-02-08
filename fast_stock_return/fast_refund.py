@@ -55,7 +55,7 @@ class FastStockPicking(orm.TransientModel):
     def report_original_picking(self, cr, uid, ids, context=None):
         ''' Report mode button
         '''
-        if context in None:
+        if context is None:
             context = {}
         context['report_mode'] = True
         return self.update_original_picking(cr, uid, ids, context=context)
@@ -63,9 +63,9 @@ class FastStockPicking(orm.TransientModel):
     def update_original_picking(self, cr, uid, ids, context=None):
         ''' Force update picking active
         '''
-        if context in None:
+        if context is None:
             context = {}
-        report_mode = context.get('report_move', False)    
+        report_mode = context.get('report_mode', False)    
         
         picking_pool = self.pool.get('stock.picking')
         excel_pool = self.pool.get('excel.writer')
@@ -85,47 +85,56 @@ class FastStockPicking(orm.TransientModel):
         # ---------------------------------------------------------------------
         remove_db = {}
         for line in current_proxy.move_lines:
-            product_id = line.product_id.id
-            if product_id not in remove_db:
-                remove_db[product_id] = line.product_qty
+            product = line.product_id
+            if product not in remove_db:
+                remove_db[product] = line.product_qty
 
         # ---------------------------------------------------------------------
         # Picking to clean DB:
         # ---------------------------------------------------------------------        
         picking_ids = picking_pool.search(cr, uid, [
-            ('ddt_id.is_invoiced', '=', False), # Not invoiced DDT
+            #('ddt_id.is_invoiced', '=', False), # Not invoiced DDT
             ('partner_id', '=', partner_id),
             ('account_id', '=', account_id),
+            ('pick_move', '=', 'out'), # only out document
+            ('pick_state', '=', 'delivered'), # only delivered
             ], context=context)
 
-        clean_db = [] # Database used to clean data:        
+        clean_db = {} # Database used to clean data:        
         # picking_id: (move_id, new_qty, previous_qty)
-        
-        for picking in picking_pool.browse(cr, uid, picking_ids, 
-                context=context):                
+        for picking in sorted(
+                picking_pool.browse(cr, uid, picking_ids, context=context),
+                key=lambda x: x.create_date):              
+                  
             # Test if needed DDT:                    
             if not with_ddt and picking.ddt_id:
                 continue # Jump
+
+            # Invoiced:    
+            if picking.ddt_id and picking.ddt_id.is_invoiced:
+                continue # Jump
             
-            for line in picking.move_lines:
-                product_id = line.product_id.id
-                product_qty = line.product_uom_qty
-                if product_id not in remove_db:
+            for move in picking.move_lines:
+                product = move.product_id
+                product_qty = move.product_uom_qty
+                
+                if product not in remove_db:
                     continue # Product not used
-                remove_qty = remove_db[product_id]
+
+                remove_qty = remove_db[product]
                 if not remove_qty:
                     continue  # yet removed
                     
                 if remove_qty <= product_qty: # remove all
                     new_qty = product_qty - remove_qty
-                    remove_db[product_id] = 0 # No more removing
+                    remove_db[product] = 0 # No more removing
                 else:
                     new_qty = 0 # used all
-                    remove_db[product_id] -= product_qty # pick q. used
+                    remove_db[product] -= product_qty # pick q. used
                 
                 # Mark new picking (for unlock procedure)    
-                if picking not in clead_db:
-                    clead_db[picking] = []
+                if picking not in clean_db:
+                    clean_db[picking] = []
                     
                 clean_db[picking].append((
                     move, 
@@ -135,7 +144,7 @@ class FastStockPicking(orm.TransientModel):
         # ---------------------------------------------------------------------
         # Update procedure:
         # ---------------------------------------------------------------------        
-        if report_move:
+        if report_mode:
             # Create WS:
             ws_name = 'Reso cantiere'            
             excel_pool.create_worksheet(name=ws_name)
@@ -143,14 +152,14 @@ class FastStockPicking(orm.TransientModel):
             # Format:
             excel_pool.set_format()
             f_title = excel_pool.get_format('title')
-            f_title = excel_pool.get_format('header')
+            f_header = excel_pool.get_format('header')
             f_text_black = excel_pool.get_format('text')
             f_text_red = excel_pool.get_format('text_red')
             f_number_black = excel_pool.get_format('number')
             f_number_red = excel_pool.get_format('number_red')
-            
-            excel_pool.column_width([
-                20, 20, 20, 30, 5, 5, 2])
+
+            excel_pool.column_width(ws_name, [
+                20, 20, 20, 30, 10, 10, 5])
             row = 0
             excel_pool.write_xls_line(ws_name, row, [
                 'Correzioni effettuate sui picking di carico',
@@ -164,20 +173,22 @@ class FastStockPicking(orm.TransientModel):
                 'Prodotto',
                 'Q. prec.', 
                 'Q. nuova',
-                'Eliminata',
-                ], default_format=f_title)
+                'Canc.',
+                ], default_format=f_header)
             
         for picking in clean_db:
             picking_id = picking.id
             
             # Unlock picking and remove stock movement:
             if not report_mode:
-                picking_pool.pickwk_restart(cr, uid, [picking_id],             
+                picking_pool.pickwf_restart(cr, uid, [picking_id],             
                     context=context)
                 
             # Update movement:    
-            for record in clean_db[picking_id]:            
+            for record in clean_db[picking]:            
                 move, new_qty = record
+                move_id = move.id
+
                 if new_qty <= 0: # remove movement
                     if report_mode:
                         # Report format red (delete row)
@@ -205,14 +216,157 @@ class FastStockPicking(orm.TransientModel):
                         move.product_id.name,
                         move.product_uom_qty, 
                         new_qty,
-                        'X' if new_qty else '',
+                        '' if new_qty else 'X',
                         ], default_format=f_text)
 
             # Lock pickin (and generate stock movements)
             if not report_mode:
-                picking_pool.pickwk_delivered(cr, uid, [picking_ids],             
+                picking_pool.pickwf_delivered(cr, uid, [picking_id], 
                     context=context)                
-        return True        
+        
+        # ---------------------------------------------------------------------
+        # Check remain:
+        # ---------------------------------------------------------------------
+        remain = False
+        for product in remove_db:
+            if remove_db[product]:
+                remain = True 
+                break
+                    
+        if report_mode:
+            # -----------------------------------------------------------------
+            # Add remain page if present:
+            # -----------------------------------------------------------------
+            if remain:
+                # Create WS:
+                ws_name = 'Errate'
+                excel_pool.create_worksheet(name=ws_name)
+                
+                # Format:
+                excel_pool.set_format()
+
+                excel_pool.column_width(ws_name, [
+                    20, 40, 10])
+                row = 0
+                excel_pool.write_xls_line(ws_name, row, [
+                    'Prodotti non trovati nei DDT confermati (non fatturati)',
+                    ], default_format=f_title)
+
+                row += 1
+                excel_pool.write_xls_line(ws_name, row, [
+                    'Codice',
+                    'Nome',
+                    'Residuo', 
+                    ], default_format=f_header)
+                for product in remove_db:
+                    row += 1
+                    excel_pool.write_xls_line(ws_name, row, [
+                        product.default_code,
+                        product.name,
+                        remove_db[product], 
+                        ], default_format=f_text_black)
+        
+            # -----------------------------------------------------------------
+            # Add page with all material delivered:
+            # -----------------------------------------------------------------
+            move_ids = move_pool.search(cr, uid, [
+                ('picking_id.partner_id', '=', partner_id),
+                ('picking_id.account_id', '=', account_id),
+                ('picking_id.pick_move', '=', 'out'), # only out document
+                ('product_id', 'in', [item.id for item in remove_db])
+                ], context=context)
+            
+            # Create WS:
+            ws_name = 'Tutte le consegne'
+            excel_pool.create_worksheet(name=ws_name)
+            
+            excel_pool.column_width(ws_name, [
+                20, 20, 20, 30, 10, 20, 30, 10, 10])
+            row = 0
+            excel_pool.write_xls_line(ws_name, row, [
+                'Elendo ti tutti i movimenti con i prodotti selezionati',
+                ], default_format=f_title)
+
+            row += 1
+            excel_pool.write_xls_line(ws_name, row, [
+                'Data',            
+                'Picking',
+                'Stato', 
+                'DDT', 
+                'Fatturato',
+                'Codice',
+                'Prodotto',
+                'Q.',
+                'Modo',
+                ], default_format=f_header)
+            
+            move_proxy = sorted(
+                move_pool.browse(cr, uid, move_ids, context=context),
+                key=lambda x: (
+                    x.product_id.default_code, 
+                    x.picking_id.date,
+                    ))
+
+            for move in move_proxy:
+                # -------------------------------------------------------------        
+                # Readability:                        
+                # -------------------------------------------------------------        
+                picking = move.picking_id
+                ddt = picking.ddt_id
+                product = move.product_id
+                pick_move = picking.pick_move
+
+                if pick_move == 'out':
+                    f_text = f_text_black
+                    f_number = f_number_black
+                else:    
+                    f_text = f_text_red
+                    f_number = f_number_red
+
+                row += 1
+                excel_pool.write_xls_line(ws_name, row, [
+                    picking.date,
+                    picking.name,
+                    picking.pick_state, 
+                    ddt.name if ddt else '/', 
+                    'X' if ddt.is_invoiced else '',
+                    product.default_code or '',
+                    product.name,
+                    (move.product_uom_qty, f_number),
+                    picking.pick_move,
+                    ], default_format=f_text)
+            
+            if report_mode:
+                # Report format red (delete row)
+                f_text = f_text_red
+                f_number = f_number_red
+            
+            return excel_pool.return_attachment(cr, uid, 'Reso_Cantiere')   
+        else:
+            if remain:
+                raise osv.except_osv(
+                    _('Unload error'), 
+                    _('There are remain q. to unload!'),
+                    ) 
+        picking_ids = [item.id for item in clean_db]    
+        # model_pool = self.pool.get('ir.model.data')
+        # model_pool.get_object_reference('module_name', 'view_name')[1]
+        view_id = False
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Picking modificati'),
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            #'res_id': 1,
+            'res_model': 'stock.picking',
+            'view_id': False,
+            'views': [(False, 'tree'), (False, 'form')],
+            'domain': [('id', 'in', picking_ids)],
+            'context': context,
+            'target': 'current', # 'new'
+            'nodestroy': False,
+            }           
 
     # -------------------------------------------------------------------------
     # On change
@@ -239,7 +393,7 @@ class FastStockPicking(orm.TransientModel):
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', required=True),
         'account_id': fields.many2one('account.analytic.account', 'Account',
-            return=True),
+            required=True),
         #'account_no_parent': fields.boolean('Account without partner'),        
         'with_ddt': fields.boolean('With DDT', 
             help='Update also picking with DDT number (not invoiced)'),        
@@ -254,9 +408,9 @@ class FastStockMove(orm.TransientModel):
     _rec_name = 'product_id'
 
     _columns = {
-        'picking_id': fields.many2one('fast.stock.picking', 'Picking'),
+        'picking_id': fields.many2one('fast.stock.picking.wizard', 'Picking'),
         'product_id': fields.many2one('product.product', 'Product'),
-        'product_qty': fields.boolean('Q.'),
+        'product_qty': fields.float('Q.', digits=(16, 2)),
         }
         
 class FastStockPicking(orm.TransientModel):
