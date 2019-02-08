@@ -214,8 +214,8 @@ class FastStockPicking(orm.TransientModel):
                         picking.ddt_id.name or '/', 
                         move.product_id.default_code,
                         move.product_id.name,
-                        move.product_uom_qty, 
-                        new_qty,
+                        (move.product_uom_qty, f_number), 
+                        (new_qty, f_number),
                         '' if new_qty else 'X',
                         ], default_format=f_text)
 
@@ -309,7 +309,7 @@ class FastStockPicking(orm.TransientModel):
 
             for move in move_proxy:
                 # -------------------------------------------------------------        
-                # Readability:                        
+                # Readability:
                 # -------------------------------------------------------------        
                 picking = move.picking_id
                 ddt = picking.ddt_id
