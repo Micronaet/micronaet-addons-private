@@ -1,0 +1,146 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* fast_stock_return
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-08 14:22+0000\n"
+"PO-Revision-Date: 2019-02-08 15:25+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#. module: fast_stock_return
+#: field:fast.stock.picking.wizard,account_id:0
+msgid "Account"
+msgstr "Conto analitico"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.wizard,create_uid:0
+#: field:fast.stock.picking.wizard,create_uid:0
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.wizard,create_date:0
+#: field:fast.stock.picking.wizard,create_date:0
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: fast_stock_return
+#: field:fast.stock.picking.wizard,move_lines:0
+msgid "Detail"
+msgstr "Dettaglio"
+
+#. module: fast_stock_return
+#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+msgid "Detail:"
+msgstr "Dettaglio:"
+
+#. module: fast_stock_return
+#: model:ir.model,name:fast_stock_return.model_fast_stock_move_wizard
+msgid "Fast move wizard"
+msgstr "Carichi magazzino veloci"
+
+#. module: fast_stock_return
+#: model:ir.model,name:fast_stock_return.model_fast_stock_picking_wizard
+msgid "Fast picking wizard"
+msgstr "Carichi veloci"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.wizard,id:0 field:fast.stock.picking.wizard,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.wizard,write_uid:0
+#: field:fast.stock.picking.wizard,write_uid:0
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento di"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.wizard,write_date:0
+#: field:fast.stock.picking.wizard,write_date:0
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: fast_stock_return
+#: model:ir.actions.act_window,name:fast_stock_return.action_new_fast_stock_picking_wizard
+#: model:ir.ui.menu,name:fast_stock_return.menu_new_fast_stock_picking_wizard
+msgid "New refund product"
+msgstr "Nuovo reso cantiere"
+
+#. module: fast_stock_return
+#: field:fast.stock.picking.wizard,partner_id:0
+msgid "Partner"
+msgstr "Partner"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.wizard,picking_id:0
+msgid "Picking"
+msgstr "Picking"
+
+#. module: fast_stock_return
+#: code:addons/fast_stock_return/fast_refund.py:358
+#, python-format
+msgid "Picking modificati"
+msgstr "Picking modificati"
+
+#. module: fast_stock_return
+#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+msgid "Print preview"
+msgstr "Anteprima operazione"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.wizard,product_id:0
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.wizard,product_qty:0
+msgid "Q."
+msgstr "Q."
+
+#. module: fast_stock_return
+#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+msgid "Refund"
+msgstr "Reso"
+
+#. module: fast_stock_return
+#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+msgid "Refund inline"
+msgstr "Reso per storno"
+
+#. module: fast_stock_return
+#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+msgid "Return line:"
+msgstr "Rientri"
+
+#. module: fast_stock_return
+#: code:addons/fast_stock_return/fast_refund.py:349
+#, python-format
+msgid "There are remain q. to unload!"
+msgstr "Ci sono q. residue da scaricare!"
+
+#. module: fast_stock_return
+#: code:addons/fast_stock_return/fast_refund.py:348
+#, python-format
+msgid "Unload error"
+msgstr "Errore scarico"
+
+#. module: fast_stock_return
+#: help:fast.stock.picking.wizard,with_ddt:0
+msgid "Update also picking with DDT number (not invoiced)"
+msgstr "Aggiorna anche i picking che hanno già associato DDT"
+
+#. module: fast_stock_return
+#: field:fast.stock.picking.wizard,with_ddt:0
+msgid "With DDT"
+msgstr "Inclusi i DDT"
