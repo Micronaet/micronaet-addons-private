@@ -13,7 +13,9 @@
                     <sheet>                    
                         <group col="4" colspan="4">
                             <field name="partner_id" />
-                            <field name="account_id" />
+                            <field name="account_id" 
+                                context="{'default_use_timesheets': 1}" 
+                                domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('partner_id','=',partner_id)]" />
                             <field name="with_ddt" />
                             <newline/>
                             <separator string="Detail:" colspan="4"/>
