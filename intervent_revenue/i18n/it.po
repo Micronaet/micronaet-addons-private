@@ -142,7 +142,7 @@ msgstr "Listino partner"
 #. module: intervent_revenue
 #: view:res.partner:intervent_revenue.view_res_partner_user_mode_form
 msgid "Revenue mode"
-msgstr "Categoria utente"
+msgstr "Listino interventi"
 
 #. module: intervent_revenue
 #: view:res.partner:intervent_revenue.view_res_partner_user_mode_form
