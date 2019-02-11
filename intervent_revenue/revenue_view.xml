@@ -40,12 +40,12 @@
         </record>
 
         <!--res.partner-->
-        <!--<record model="ir.ui.view" id="view_res_partner_user_mode_form">
+        <record model="ir.ui.view" id="view_res_partner_user_mode_form">
             <field name="name">res.partner.form</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//page[2]" position="after">
+                <xpath expr="//page[@name='sales_purchases']" position="after">
                     <page string="Revenue mode">
                         <group col="4" colspan="4">
                              <separator string="Revenue price:" colspan="4"/>
@@ -67,7 +67,7 @@
                     </page>
                 </xpath> 
             </field>
-        </record>-->
+        </record>
 
         <record model="ir.ui.view" id="view_hr_analytic_timesheet_operation_form_mapping_case_form">
             <field name="name">hr.analytic.timesheet.operation.form</field>
@@ -85,7 +85,14 @@
                      </field>
                 </field>
             </field>
-        </record>        
+        </record>
+        
+        <menuitem 
+            parent="hr.menu_hr_configuration" 
+            id="menu_action_hr_intervent_user_mode_form" 
+            action="action_hr_intervent_user_mode_form"
+            />
+        
     </data>
 </openerp>
 
