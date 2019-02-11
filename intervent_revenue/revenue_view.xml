@@ -1,7 +1,93 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <!--hr.intervent.user.mode-->
+        <record model="ir.ui.view" id="view_hr_intervent_user_mode_form">
+            <field name="name">hr.intervent.user.mode.form</field>
+            <field name="model">hr.intervent.user.mode</field>
+            <field name="arch" type="xml">
+                <form string="Intervent user mode" version="7.0">        
+                    <sheet>
+                        <group col="4" colspan="4">
+                             <field name="name" />
+                             <field name="list_price" />
+                             <separator string="Note" colspan="4"/>
+                             <field name="note" colspan="4" nolabel="1" />
+                        </group>
+                    </sheet>        
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_hr_intervent_user_mode_tree">
+            <field name="name">hr.intervent.user.mode.tree</field>
+            <field name="model">hr.intervent.user.mode</field>
+            <field name="arch" type="xml">
+                <tree string="Intervent user mode">
+                     <field name="name" />
+                     <field name="list_price" />
+                     <field name="note" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_hr_intervent_user_mode_form">
+            <field name="name">Intervent user mode</field>
+            <field name="res_model">hr.intervent.user.mode</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hr_intervent_user_mode_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
 
+        <!--res.partner-->
+        <record model="ir.ui.view" id="view_res_partner_user_mode_form">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[1]" position="after">
+                    <page string="Revenue mode">
+                        <group col="4" colspan="4">
+                             <separator string="Revenue price:" colspan="4"/>
+                             <field name="mode_revenue_ids" colspan="4" nolabel="1">
+                                 <tree string="User mode revenue" editable="bottom">
+                                     <field name="mode_id" />
+                                     <field name="list_price" />
+                                 </tree>
+                             </field>
+
+                             <separator string="Mapping" colspan="4"/>
+                             <field name="mode_map_ids" colspan="4" nolabel="1">
+                                 <tree string="User mode mapping" editable="bottom">
+                                     <field name="user_id" />
+                                     <field name="from_id" />
+                                     <field name="to_id" />
+                                 </tree>
+                             </field>
+                                 
+                        </group>                       
+                    </page>
+                </xpath> 
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_hr_analytic_timesheet_operation_form_mapping_case_form">
+            <field name="name">hr.analytic.timesheet.operation.form</field>
+            <field name="model">hr.analytic.timesheet.operation</field>
+            <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_operation_form 	"/>
+            <field name="arch" type="xml">
+                <field name="note" position="after">
+                     <separator string="Mapping" colspan="4"/>
+                     <field name="mode_map_ids" colspan="4" nolabel="1">
+                         <tree string="User mode mapping" editable="bottom">
+                             <field name="user_id" />
+                             <field name="from_id" />
+                             <field name="to_id" />
+                         </tree>
+                     </field>
+                </field>
+            </field>
+        </record>        
     </data>
 </openerp>
 

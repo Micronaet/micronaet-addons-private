@@ -55,6 +55,7 @@ class HrInterventUserMode(orm.Model):
         'name': fields.char('Name', size=64, required=True),
         'list_price': fields.float(
             'List price', digits=(16, 2), required=True),
+        'note': fields.text('Note'),
         }
 
 class HrInterventUserModeMap(orm.Model):
@@ -69,11 +70,11 @@ class HrInterventUserModeMap(orm.Model):
         # ---------------------------------------------------------------------
         # Mapping details:
         # ---------------------------------------------------------------------
+        'user_id': fields.many2one('res.users', 'User'),
         'from_id': fields.many2one(
             'hr.intervent.user.mode', 'From category', required=True),
         'to_id': fields.many2one(
             'hr.intervent.user.mode', 'To category', required=True),
-        'user_id': fields.many2one('res.users', 'User'),
             
         # ---------------------------------------------------------------------
         # Linked objects:    
