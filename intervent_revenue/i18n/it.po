@@ -1,0 +1,186 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* intervent_revenue
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-11 10:47+0000\n"
+"PO-Revision-Date: 2019-02-11 11:50+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode,create_uid:0
+#: field:hr.intervent.user.mode.map,create_uid:0
+#: field:res.partner.mode.revenue,create_uid:0
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode,create_date:0
+#: field:hr.intervent.user.mode.map,create_date:0
+#: field:res.partner.mode.revenue,create_date:0
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: intervent_revenue
+#: model:ir.model,name:intervent_revenue.model_hr_employee
+msgid "Employee"
+msgstr "Dipendente"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode.map,from_id:0
+msgid "From category"
+msgstr "Dalla categoria"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode,id:0 field:hr.intervent.user.mode.map,id:0
+#: field:res.partner.mode.revenue,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: intervent_revenue
+#: view:hr.intervent.user.mode:intervent_revenue.view_hr_intervent_user_mode_form
+#: view:hr.intervent.user.mode:intervent_revenue.view_hr_intervent_user_mode_tree
+#: model:ir.actions.act_window,name:intervent_revenue.action_hr_intervent_user_mode_form
+#: model:ir.model,name:intervent_revenue.model_hr_intervent_user_mode
+#: model:ir.ui.menu,name:intervent_revenue.menu_action_hr_intervent_user_mode_form
+msgid "Intervent user mode"
+msgstr "Categoria utente"
+
+#. module: intervent_revenue
+#: model:ir.model,name:intervent_revenue.model_hr_intervent_user_mode_map
+msgid "Intervent user mode mapping"
+msgstr "Scambio categoria"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode,write_uid:0
+#: field:hr.intervent.user.mode.map,write_uid:0
+#: field:res.partner.mode.revenue,write_uid:0
+msgid "Last Updated by"
+msgstr "Aggiornato da"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode,write_date:0
+#: field:hr.intervent.user.mode.map,write_date:0
+#: field:res.partner.mode.revenue,write_date:0
+msgid "Last Updated on"
+msgstr "Aggiornato il"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode,list_price:0
+#: field:res.partner.mode.revenue,list_price:0
+msgid "List price"
+msgstr "Prezzo listino"
+
+#. module: intervent_revenue
+#: view:hr.analytic.timesheet.operation:intervent_revenue.view_hr_analytic_timesheet_operation_form_mapping_case_form
+#: view:res.partner:intervent_revenue.view_res_partner_user_mode_form
+msgid "Mapping"
+msgstr "Scambio"
+
+#. module: intervent_revenue
+#: field:res.partner.mode.revenue,mode_id:0
+msgid "Mode"
+msgstr "Modalità"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode,name:0
+msgid "Name"
+msgstr "Name"
+
+#. module: intervent_revenue
+#: view:hr.intervent.user.mode:intervent_revenue.view_hr_intervent_user_mode_form
+#: field:hr.intervent.user.mode,note:0
+msgid "Note"
+msgstr "Note"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode.map,operation_id:0
+msgid "Operation case"
+msgstr "Operazioni intervento"
+
+#. module: intervent_revenue
+#: field:hr.analytic.timesheet.operation,mode_map_ids:0
+msgid "Operation map"
+msgstr "Scambio oprazioni"
+
+#. module: intervent_revenue
+#: model:ir.model,name:intervent_revenue.model_res_partner
+msgid "Partner"
+msgstr "Partner"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode.map,partner_id:0
+#: field:res.partner.mode.revenue,partner_id:0
+msgid "Partner case"
+msgstr "Particolarità partner"
+
+#. module: intervent_revenue
+#: field:res.partner,mode_map_ids:0
+msgid "Partner map"
+msgstr "Scambio categoria"
+
+#. module: intervent_revenue
+#: model:ir.model,name:intervent_revenue.model_res_partner_mode_revenue
+msgid "Partner mode revenue"
+msgstr "Listino partner"
+
+#. module: intervent_revenue
+#: field:res.partner,mode_revenue_ids:0
+msgid "Partner revenue"
+msgstr "Listino partner"
+
+#. module: intervent_revenue
+#: view:res.partner:intervent_revenue.view_res_partner_user_mode_form
+msgid "Revenue mode"
+msgstr "Categoria utente"
+
+#. module: intervent_revenue
+#: view:res.partner:intervent_revenue.view_res_partner_user_mode_form
+msgid "Revenue price:"
+msgstr "Prezzo listino:"
+
+#. module: intervent_revenue
+#: model:ir.model,name:intervent_revenue.model_hr_analytic_timesheet_operation
+msgid "Timesheet operation"
+msgstr "Operazione intervento"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode.map,to_id:0
+msgid "To category"
+msgstr "Alla categoria"
+
+#. module: intervent_revenue
+#: field:hr.intervent.user.mode.map,user_id:0
+msgid "User"
+msgstr "Utente"
+
+#. module: intervent_revenue
+#: field:hr.employee,user_mode_id:0 field:res.users,user_mode_id:0
+msgid "User mode"
+msgstr "Modo utente"
+
+#. module: intervent_revenue
+#: view:hr.analytic.timesheet.operation:intervent_revenue.view_hr_analytic_timesheet_operation_form_mapping_case_form
+#: view:res.partner:intervent_revenue.view_res_partner_user_mode_form
+msgid "User mode mapping"
+msgstr "Scambio categoria utente"
+
+#. module: intervent_revenue
+#: view:res.partner:intervent_revenue.view_res_partner_user_mode_form
+msgid "User mode revenue"
+msgstr "Listino categorie utente"
+
+#. module: intervent_revenue
+#: model:ir.model,name:intervent_revenue.model_res_users
+msgid "Users"
+msgstr "Utenti"
