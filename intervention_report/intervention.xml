@@ -58,7 +58,7 @@
         <field name='arch' type='xml'>
             <field name="balance" position="after">
                 <field name="default_to_invoice" string="Default invoice intervent"/>
-                <field name="total_hours" />
+                <field name="total_hours" sum="Total" />
                 <field name="account_mode" />
             </field>
         </field>
@@ -70,7 +70,7 @@
         <field name='arch' type='xml'>
             <field name="manager_id" position="before">
                 <field name="default_to_invoice" string="Default invoice intervent"/>
-                <field name="total_hours" />
+                <field name="total_hours" sum="Total"/>
                 <field name="account_mode" />
                 <field name="account_approved" />
             </field>
@@ -97,7 +97,7 @@
                 <field name="account_approved" />
                 <field name="account_approved_ref" attrs="{'invisible': [('account_approved','=',False)]}"/>
                 <field name="default_to_invoice" />
-                <field name="total_hours" />
+                <field name="total_hours" sum="Total" />
             </field>
         </field>
     </record>
