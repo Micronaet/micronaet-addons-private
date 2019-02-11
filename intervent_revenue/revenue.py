@@ -58,6 +58,72 @@ class HrInterventUserMode(orm.Model):
         'note': fields.text('Note'),
         }
 
+class HrAnalyticTimesheet(orm.Model):
+    """ Model name: HR Analytic timesheet
+    """
+    
+    _inherit = 'hr.analytic.timesheet'
+    
+    def _get_current_user_mode(self, cr, uid, ids, fields, args, context=None):
+        ''' Fields function for calculate 
+        '''
+        res = {}
+        for intervent in self.browse(cr, uid, ids, context=context):        
+            res[intervent.id] = {
+                'user_mode_id': False,
+                'user_mode_map': '',
+                }
+
+                        
+            # -----------------------------------------------------------------
+            # Map default user category mode:
+            # -----------------------------------------------------------------
+            user = intervent.user_id
+            real_id = user.user_mode_id.id
+            res[intervent.id]['user_mode_map'] = '[utente]'
+            
+            # -----------------------------------------------------------------
+            # FORCE: Map mode depend on operation
+            # -----------------------------------------------------------------
+            for mapping in intervent.operation_id.mode_map_ids:
+                # If user present work with this rule:
+                if mapping.user_id.id == user.id:
+                    real_id = mapping.to_id.id
+                    res[intervent.id]['user_mode_map'] += '[operazione-utente]'
+                    break # Much force
+                if real_id == mapping.from_id.id:
+                    real_id = mapping.to_id.id
+                    res[intervent.id]['user_mode_map'] += '[operazione-da]'
+                    # Continue rules (XXX user is after? wasn't sorted?)
+
+            # -----------------------------------------------------------------
+            # FORCE: Map partner mode
+            # -----------------------------------------------------------------
+            for mapping in intervent.intervent_partner_id.mode_map_ids:
+                # If user present work with this rule:
+                if mapping.user_id.id == user.id:
+                    real_id = mapping.to_id.id
+                    res[intervent.id]['user_mode_map'] += '[cliente-utente]'
+                    break # Much force
+                if real_id == mapping.from_id.id:
+                    real_id = mapping.to_id.id
+                    res[intervent.id]['user_mode_map'] += '[cliente-da]'
+                    # Continue rules (XXX user is after? wasn't sorted?)
+
+            # Update data:        
+            res[intervent.id]['user_mode_id'] = real_id
+        return res            
+        
+    _columns = {
+        'user_mode_id': fields.function(
+            _get_current_user_mode, method=True,
+            type='many2one', string='User mode', 
+            relation='hr.intervent.user.mode', multi=True), 
+        'user_mode_map': fields.function(
+            _get_current_user_mode, method=True,
+            type='char', size=100, string='User text', multi=True), 
+        }
+
 class ResUsers(orm.Model):
     """ Model name: ResPartner
     """
@@ -75,11 +141,12 @@ class HrEmployee(orm.Model):
     
     _inherit = 'hr.employee'
     
+    
     _columns = {
         'user_mode_id': fields.related(
             'user_id', 'user_mode_id', 
             type='many2one', relation='hr.intervent.user.mode', 
-            string='User mode'),
+            string='User mode'),            
         }
 
 
@@ -97,7 +164,7 @@ class HrInterventUserModeMap(orm.Model):
         # ---------------------------------------------------------------------
         'user_id': fields.many2one('res.users', 'User'),
         'from_id': fields.many2one(
-            'hr.intervent.user.mode', 'From category', required=True),
+            'hr.intervent.user.mode', 'From category'),
         'to_id': fields.many2one(
             'hr.intervent.user.mode', 'To category', required=True),
             

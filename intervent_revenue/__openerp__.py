@@ -35,6 +35,7 @@
     'depends': [
         'base',
         'intervention_report',
+        'hr_timesheet',
         ],
     'init_xml': [],
     'demo': [],

@@ -39,6 +39,18 @@
             <field name="domain">[]</field>
         </record>
 
+        <!--hr.analytic.timesheet-->
+        <record model="ir.ui.view" id="view_hr_timesheet_revenue_form">
+            <field name="name">hr.analytic.timesheet.form</field>
+            <field name="model">hr.analytic.timesheet</field>
+            <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_form"/>
+            <field name="arch" type="xml">
+                <field name="amount" position="after">
+                    <field name="user_mode_id" readonly="1" />
+                </field>
+            </field>
+        </record>
+        
         <!--res.partner-->
         <record model="ir.ui.view" id="view_res_partner_user_mode_form">
             <field name="name">res.partner.form</field>
