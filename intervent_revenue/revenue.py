@@ -58,6 +58,31 @@ class HrInterventUserMode(orm.Model):
         'note': fields.text('Note'),
         }
 
+class ResUsers(orm.Model):
+    """ Model name: ResPartner
+    """
+    
+    _inherit = 'res.users'
+    
+    _columns = {
+        'user_mode_id': fields.many2one(
+            'hr.intervent.user.mode', 'User mode'),
+        }
+
+class HrEmployee(orm.Model):
+    """ Model name: HrEmployee
+    """
+    
+    _inherit = 'hr.employee'
+    
+    _columns = {
+        'user_mode_id': fields.related(
+            'user_id', 'user_mode_id', 
+            type='many2one', relation='hr.intervent.user.mode', 
+            string='User mode'),
+        }
+
+
 class HrInterventUserModeMap(orm.Model):
     """ Model name: InterventUserMode
     """

@@ -40,12 +40,12 @@
         </record>
 
         <!--res.partner-->
-        <record model="ir.ui.view" id="view_res_partner_user_mode_form">
+        <!--<record model="ir.ui.view" id="view_res_partner_user_mode_form">
             <field name="name">res.partner.form</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//page[1]" position="after">
+                <xpath expr="//page[2]" position="after">
                     <page string="Revenue mode">
                         <group col="4" colspan="4">
                              <separator string="Revenue price:" colspan="4"/>
@@ -55,7 +55,6 @@
                                      <field name="list_price" />
                                  </tree>
                              </field>
-
                              <separator string="Mapping" colspan="4"/>
                              <field name="mode_map_ids" colspan="4" nolabel="1">
                                  <tree string="User mode mapping" editable="bottom">
@@ -63,18 +62,17 @@
                                      <field name="from_id" />
                                      <field name="to_id" />
                                  </tree>
-                             </field>
-                                 
+                             </field>                                 
                         </group>                       
                     </page>
                 </xpath> 
             </field>
-        </record>
+        </record>-->
 
         <record model="ir.ui.view" id="view_hr_analytic_timesheet_operation_form_mapping_case_form">
             <field name="name">hr.analytic.timesheet.operation.form</field>
             <field name="model">hr.analytic.timesheet.operation</field>
-            <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_operation_form 	"/>
+            <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_operation_form"/>
             <field name="arch" type="xml">
                 <field name="note" position="after">
                      <separator string="Mapping" colspan="4"/>

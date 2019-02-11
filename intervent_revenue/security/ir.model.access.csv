@@ -1,5 +1,5 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-access_hr_intervent_user_category_user,hr.intervent.user.category,model_hr_intervent_user_category,base.group_user,1,1,1,1
-access_hr_intervent_user_category_map_user,hr.intervent.user.category.map,model_hr_intervent_user_category_map,base.group_user,1,1,1,1
+access_hr_intervent_user_mode_user,hr.intervent.user.mode,model_hr_intervent_user_mode,base.group_user,1,1,1,1
+access_hr_intervent_user_mode_map_user,hr.intervent.user.mode.map,model_hr_intervent_user_mode_map,base.group_user,1,1,1,1
 access_res_partner_mode_revenue_map_user,res.partner.mode.revenue,model_res_partner_mode_revenue,base.group_user,1,1,1,1
 
