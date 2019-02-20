@@ -39,7 +39,9 @@
     'init_xml': [],
     'demo': [],
     'data': [
+        'security/pick_management_group.xml',
         'security/ir.model.access.csv',    
+
         'stock_view.xml',
         ],
     'active': False,
