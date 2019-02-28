@@ -504,6 +504,7 @@ class hr_analytic_timesheet_extra(osv.osv):
         return res
        
     _columns = {
+        'is_invoiced': fields.boolean('Is invoiced'),
         'ref':fields.char('Ref.', size=12, required=False, readonly=False, 
             help="ID for intervent, actually manually configured, after became a sequence"),
         'operation_id': fields.many2one(

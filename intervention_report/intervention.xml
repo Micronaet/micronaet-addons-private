@@ -221,6 +221,7 @@
 	         	                   <field name="extra_invoiced_total"  widget="float_time" />
 	                               <field name="general_account_id" invisible="1" required="1" />
 	         	                   <field name="not_in_report" />
+	         	                   <field name="is_invoiced" />
 	                           </group> 
 	                       </page>
 	                  </notebook>        
