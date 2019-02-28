@@ -53,6 +53,7 @@ class StockMove(orm.Model):
     """ Model name: Stock move
     """    
     _inherit = 'stock.move'
+    _order = 'id'
 
     def onchange_product_id(self, cr, uid, ids, product_id=False, loc_id=False, 
             loc_dest_id=False, partner_id=False):
