@@ -510,6 +510,7 @@ class hr_analytic_timesheet_extra(osv.osv):
         'operation_id': fields.many2one(
             'hr.analytic.timesheet.operation', 'Operation'),
         'intervent_partner_id': fields.many2one('res.partner', 'Partner ref.'),        
+        'intervent_contact_id': fields.many2one('res.partner', 'Contact ref.'),        
         'intervention_request': fields.text('Intervention request', 
             help="Keep track of the origina request"),
         'intervention': fields.text('Intervention description', 
