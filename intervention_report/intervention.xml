@@ -167,11 +167,11 @@
                       <field name="name" on_change="on_change_name(name,intervention_request)" colspan="5"/>
                    
                       <field name="intervent_partner_id" on_change="on_change_partner(intervent_partner_id,account_id,account_no_parent)" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}" colspan="3"/>
+                      <field name="intervent_contact_id" domain="[('is_address','=',False)]" colspan="2"/>
                       <!--<field name="partner_id" on_change="on_change_partner(partner_id,account_id)"/>-->
-	                  <field name="mode" on_change="on_change_mode(mode)" />
 	                  
                       <field name="user_id" on_change="on_change_user_id(user_id)" required="1" colspan="3"/>
-                      <field name="intervent_contact_id" domain="[('is_address','=',False)]" colspan="2"/>
+	                  <field name="mode" on_change="on_change_mode(mode)" />
 
                   	  <!--<field name="date" invisible="1"/> NOT NECESSARY: on_change="on_change_date(date)" modifiers="{'required': true}"/>-->
 	                  <field name="account_id" colspan="4" required="1" context="{'with_code': True,'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',intervent_partner_id)]" on_change="on_change_account(account_id,intervent_partner_id,user_id)" />

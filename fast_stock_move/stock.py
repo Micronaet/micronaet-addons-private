@@ -445,6 +445,7 @@ class StockPicking(orm.Model):
     _inherit = 'stock.picking'
     
     _columns = {
+        'corresponding': fields.boolean('Corresponding'),
         'auto_child_ids': fields.one2many(
             'stock.picking', 'auto_generator_id', 'Auto Child out'),
         }
