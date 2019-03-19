@@ -247,9 +247,8 @@ class hr_analytic_timesheet_trip(osv.osv):
         return True
         
     # -------------------------------------------------------------------------    
-    # Utility function:
-    # -------------------------------------------------------------------------    
-    def google_distance_between_partner(
+    # XXX Not used vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    """def google_distance_between_partner(
             self, cr, uid, origin, destination, context=None):
         ''' Master function that calculate distance between origin and 
             destination partner id
@@ -316,9 +315,14 @@ class hr_analytic_timesheet_trip(osv.osv):
                 'distance']['value'] / 1000.0  # km
             return distance_km
         except:    
-            return 0.0
+            return 0.0"""
+    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    # XXX NOT USED
     # -------------------------------------------------------------------------        
 
+    # -------------------------------------------------------------------------    
+    # Utility function:
+    # -------------------------------------------------------------------------    
     def distance_between_partner(
             self, cr, uid, origin, destination, context=None):
         ''' Master function that calculate distance between origin and detination
@@ -397,7 +401,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         # Check if not correct call:
         # ---------------------------------------------------------------------        
         try:
-            if in response['guidance']['info']['statuscode'] == 400:
+            if response['guidance']['info']['statuscode'] == 400:
                 raise osv.except_osv(
                     _('Map quest error'),
                     _('Call error: %s' % response['guidance']['info']['messages']),
@@ -470,7 +474,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         'total_trip': fields.function(_function_calculate_distance, 
             method=True, type='float', string='Tot. distance', multi=True),
         'manual_total':fields.boolean('Manual', 
-            help='If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours'),
+            help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
         'manual_total_trip': fields.float('Manual total trip', digits=(16, 6), 
             help='Duration in Km of total trip, setted manual, used instead of Total trip'),
 
@@ -479,7 +483,7 @@ class hr_analytic_timesheet_trip(osv.osv):
             method=True, type='float', string='Tot. distance company', 
             multi=True),
         'manual_total_company':fields.boolean('Manual company', 
-            help='If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours'),
+            help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
         'manual_total_trip_company': fields.float('Manual total trip company', 
             digits=(16, 6), help='Duration in Km of total trip, setted manual, used instead of Total trip'),
 
