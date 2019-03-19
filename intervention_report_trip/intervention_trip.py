@@ -48,41 +48,49 @@ class hr_analytic_timesheet_trip(osv.osv):
     _description = 'HR timesheet trip'
     _order = 'date,user_id'
     
+    # -------------------------------------------------------------------------
     # Button function (and wizard action called):
+    # -------------------------------------------------------------------------
     def calculate_step_list(self, cr, uid, ids, context=None):
         ''' Delete all steps an compute from intervent list
         '''
-        # Utility functions: ##################################################
-        def create_record(self, cr, uid, from_id, to_id, trip_id, seq, from_name, to_name, company_trip=False, context=None):
+        # ---------------------------------------------------------------------
+        # Utility functions:
+        # ---------------------------------------------------------------------
+        def create_record(self, cr, uid, from_id, to_id, trip_id, seq, 
+                from_name, to_name, company_trip=False, context=None):
             ''' Create record:
                 from_id = id res.partner
                 to_id = id res.partner
                 trip_id = id of parent record
             '''
             if to_id and from_id and trip_id:
-                total_trip = self.distance_between_partner(cr, uid, from_id, to_id, context=context)
-                data={
+                total_trip = self.distance_between_partner(
+                    cr, uid, from_id, to_id, context=context)
+                data = {
                     'from_id': from_id,
                     'to_id': to_id,
-                    'name': "%02d. %s > %s"%(seq, from_name, to_name),
+                    'name': '%02d. %s > %s' % (seq, from_name, to_name),
                     'total_trip': total_trip,
-                }
+                    }
                 if company_trip:
-                    data['company_trip_id']=trip_id
-                    data['trip_id']=False
+                    data['company_trip_id'] = trip_id
+                    data['trip_id'] = False
                 else:
-                    data['company_trip_id']=False
+                    data['company_trip_id'] = False
                     data['trip_id']=trip_id
 
-                self.pool.get('hr.analytic.timesheet.trip.step').create(cr, uid, data, context=context)
+                self.pool.get('hr.analytic.timesheet.trip.step').create(
+                    cr, uid, data, context=context)
                 return True
             return False    
             
         # ---------------------------------------------------------------------
         # Start procedure
         # ---------------------------------------------------------------------
-        company_name = "Company"
-        home_name = "Home"
+        step_pool = self.pool.get('hr.analytic.timesheet.trip.step')
+        company_name = 'Company'
+        home_name = 'Home'
         for trip in self.browse(cr, uid, ids, context=context): 
             # -----------------------------------------------------------------
             # COMMON PART
@@ -91,13 +99,13 @@ class hr_analytic_timesheet_trip(osv.osv):
             home_partner_id = trip.user_id.partner_id.id
             company_partner_id = trip.user_id.company_id.partner_id.id
             # delete all            
-            step_ids=self.pool.get('hr.analytic.timesheet.trip.step').search(cr, uid, [
+            step_ids = step_pool.search(cr, uid, [
                 '|',
                 ('trip_id', '=', trip.id),
                 ('company_trip_id', '=', trip.id)
-            ],context=context)
+                ],context=context)
             if step_ids:
-                self.pool.get('hr.analytic.timesheet.trip.step').unlink(cr, uid, step_ids, context=context)
+                step_pool.unlink(cr, uid, step_ids, context=context)
 
             # -----------------------------------------------------------------
             # FROM HOME TO HOME
@@ -108,16 +116,19 @@ class hr_analytic_timesheet_trip(osv.osv):
             next_destination = False
             seq = 1
             for intervent in trip.intervent_ids:
-                if intervent.mode == 'customer' and not intervent.extra_planned: # only for customer
-                
-                    # FROM part ###############################################
+                if intervent.mode == 'customer' and not intervent.extra_planned: # only for customer                
+                    # ---------------------------------------------------------
+                    # FROM part
+                    # ---------------------------------------------------------
                     if intervent.google_from=='home':
                         from_id = home_partner_id
                         from_name = home_name
                         
                     elif intervent.google_from == 'company':
                         if seq==1: # first step home-company
-                            if create_record(self, cr, uid, home_partner_id, company_partner_id, trip.id, seq, home_name, company_name, context=context):
+                            if create_record(self, cr, uid, home_partner_id, 
+                                    company_partner_id, trip.id, seq, 
+                                    home_name, company_name, context=context):
                                 seq += 1                             
                         from_id = company_partner_id
                         from_name = company_name
@@ -129,22 +140,36 @@ class hr_analytic_timesheet_trip(osv.osv):
                         continue # jump intervent!!! #pass # TODO Error no previuos_id
 
 
+                    # ---------------------------------------------------------
                     # Create part A:
-                    if create_record(self, cr, uid, from_id, intervent.intervent_partner_id.id, trip.id, seq, from_name, intervent.intervent_partner_id.name, context=context):
+                    # ---------------------------------------------------------
+                    if create_record(self, cr, uid, from_id, 
+                            intervent.intervent_partner_id.id, trip.id, seq, 
+                            from_name, intervent.intervent_partner_id.name, 
+                            context=context):
                         seq += 1
 
                     # save parameters:  (next not home or company) 
                     previous_id = intervent.intervent_partner_id.id
                     previous_name = intervent.intervent_partner_id.name
 
-                    # TO part #################################################                  
+                    # ---------------------------------------------------------
+                    # TO part
+                    # ---------------------------------------------------------
                     if intervent.google_to == 'home':
-                        create_record(self, cr, uid, intervent.intervent_partner_id.id, home_partner_id, trip.id, seq, intervent.intervent_partner_id.name, home_name, context=context)
+                        create_record(self, cr, uid, 
+                            intervent.intervent_partner_id.id, home_partner_id, 
+                            trip.id, seq, intervent.intervent_partner_id.name, 
+                            home_name, context=context)
                         previous_id = home_partner_id
                         previous_name = home_name
                         seq += 1
                     elif intervent.google_to == 'company':
-                        create_record(self, cr, uid, intervent.intervent_partner_id.id, company_partner_id, trip.id, seq, intervent.intervent_partner_id.name, company_name, context=context)
+                        create_record(self, cr, uid, 
+                            intervent.intervent_partner_id.id, 
+                            company_partner_id, trip.id, seq, 
+                            intervent.intervent_partner_id.name, company_name, 
+                            context=context)
                         previous_id = company_partner_id
                         previous_name = company_name
                         seq += 1
@@ -158,7 +183,8 @@ class hr_analytic_timesheet_trip(osv.osv):
                     self, cr, uid, company_partner_id, home_partner_id, 
                     trip.id, 2, company_name, home_name, context=context)
             else:
-                if previous_id != home_partner_id: # not home (last destination)
+                # not home (last destination)
+                if previous_id != home_partner_id: 
                     create_record(
                         self, cr, uid, previous_id, home_partner_id, trip.id, 
                         seq, previous_name, home_name, context=context)            
@@ -175,7 +201,9 @@ class hr_analytic_timesheet_trip(osv.osv):
             for intervent in trip.intervent_ids:
                 if intervent.mode == 'customer': # only for customer
                     update_refund = True # after create step need to update refund for this trip
-                    # FROM part ################################################
+                    # ---------------------------------------------------------
+                    # FROM part
+                    # ---------------------------------------------------------
                     if intervent.google_from in ('home', 'company'):
                         from_id = company_partner_id
                         from_name = company_name
@@ -187,16 +215,25 @@ class hr_analytic_timesheet_trip(osv.osv):
                         continue # jump intervent!!! #pass # TODO Error no previuos_id
 
                     # Create part A:
-                    if create_record(self, cr, uid, from_id, intervent.intervent_partner_id.id, trip.id, seq, from_name, intervent.intervent_partner_id.name, True, context=context):
+                    if create_record(self, cr, uid, from_id, 
+                            intervent.intervent_partner_id.id, trip.id, seq, 
+                            from_name, intervent.intervent_partner_id.name, 
+                            True, context=context):
                         seq += 1
 
                     # save parameters:  (next not home or company) 
                     previous_id = intervent.intervent_partner_id.id
                     previous_name = intervent.intervent_partner_id.name
 
-                    # TO part ##################################################                    
+                    # ---------------------------------------------------------
+                    # TO part
+                    # ---------------------------------------------------------
                     if intervent.google_to in ('home', 'company'):
-                        create_record(self, cr, uid, intervent.intervent_partner_id.id, company_partner_id, trip.id, seq, intervent.intervent_partner_id.name, company_name, True, context=context)
+                        create_record(self, cr, uid, 
+                            intervent.intervent_partner_id.id, 
+                            company_partner_id, trip.id, seq, 
+                            intervent.intervent_partner_id.name, company_name, 
+                            True, context=context)
                         previous_id = company_partner_id
                         previous_name = company_name
                         seq += 1
@@ -208,8 +245,11 @@ class hr_analytic_timesheet_trip(osv.osv):
                             
         return True
         
+    # -------------------------------------------------------------------------    
     # Utility function:
-    def distance_between_partner(self, cr, uid, origin, destination, context=None):
+    # -------------------------------------------------------------------------    
+    def distance_between_partner(
+            self, cr, uid, origin, destination, context=None):
         ''' Master function that calculate distance between origin and detination
             partner id
             NOTE: correct function evalute start and to elements 
@@ -219,9 +259,11 @@ class hr_analytic_timesheet_trip(osv.osv):
             ''' Generate a string with all address parameter used for compute 
                 distances
             '''
-            partner = self.pool.get('res.partner').browse(cr, uid, [partner_id], context=context)[0]
+            partner = self.pool.get('res.partner').browse(
+                cr, uid, [partner_id], context=context)[0]
             
-            value = "%s %s %s %s"%(partner.street, partner.zip, partner.city, "Italia")
+            value = '%s %s %s %s' % (
+                partner.street, partner.zip, partner.city, 'Italia')
             return value.strip().replace(' ', '+').replace(',', '') # remove comma and transform blank in plus
             
         def distance_query(origin, destination):
@@ -230,7 +272,9 @@ class hr_analytic_timesheet_trip(osv.osv):
             '''
             try:
                 header = u'http://maps.googleapis.com/maps/api/distancematrix/json?'
-                google_page = header + "origins=" + prepare_element(self, cr, uid, origin, context=context) + "&destinations=" + prepare_element(self, cr, uid, destination, context=context) + "&sensor=false"
+                google_page = header + 'origins=' + prepare_element(
+                    self, cr, uid, origin, context=context) + '&destinations=' + prepare_element(
+                        self, cr, uid, destination, context=context) + '&sensor=false'
                 _logger.warning('Call google page: %s' % google_page)
                 return google_page
             except IOError:
@@ -312,24 +356,24 @@ class hr_analytic_timesheet_trip(osv.osv):
         
         'date': fields.date('Date'), 
         'refund_day':fields.boolean('Refund day', 
-            help="If checked the itinerary will be reported in a report"),
+            help='If checked the itinerary will be reported in a report'),
 
         # Trip field from Home:
         'total_trip': fields.function(_function_calculate_distance, 
             method=True, type='float', string='Tot. distance', multi=True),
         'manual_total':fields.boolean('Manual', 
-            help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
+            help='If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours'),
         'manual_total_trip': fields.float('Manual total trip', digits=(16, 6), 
-            help="Duration in Km of total trip, setted manual, used instead of Total trip"),
+            help='Duration in Km of total trip, setted manual, used instead of Total trip'),
 
         # Trip field from Company:
         'total_trip_company': fields.function(_function_calculate_distance, 
             method=True, type='float', string='Tot. distance company', 
             multi=True),
         'manual_total_company':fields.boolean('Manual company', 
-            help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
+            help='If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours'),
         'manual_total_trip_company': fields.float('Manual total trip company', 
-            digits=(16, 6), help="Duration in Km of total trip, setted manual, used instead of Total trip"),
+            digits=(16, 6), help='Duration in Km of total trip, setted manual, used instead of Total trip'),
 
         'total_intervent': fields.function(_function_calculate_total, 
             method=True, type='integer', string='Tot. intervent'),
@@ -341,7 +385,7 @@ class hr_analytic_timesheet_trip(osv.osv):
     }
     
     _defaults={
-         'name': lambda *a: "",
+         'name': lambda *a: '',
          'state': lambda *a: 'draft',
 
         # Trip field from Home:
@@ -366,7 +410,7 @@ class hr_analytic_timesheet_extra_trip(osv.osv):
 
     _columns = {
         'trip_id':fields.many2one('hr.analytic.timesheet.trip', 'Day trip', 
-            ondelete="set null",), # reset if delete trip
+            ondelete='set null',), # reset if delete trip
         }
 
 class hr_analytic_timesheet_trip_step(osv.osv):
@@ -378,14 +422,14 @@ class hr_analytic_timesheet_trip_step(osv.osv):
     _columns = {
         'name': fields.char('Description', size=80),
         'total_trip': fields.float('Distance', digits=(16, 6), 
-            help="Distance in Km from google maps"),
+            help='Distance in Km from google maps'),
         'from_id': fields.many2one('res.partner', 'From partner', ),
         'to_id': fields.many2one('res.partner', 'To partner', ),         
         'seq': fields.integer('Sequence'),
         
-        'trip_id': fields.many2one('hr.analytic.timesheet.trip', 'Trip'), #ondelete="cascade",), # 
+        'trip_id': fields.many2one('hr.analytic.timesheet.trip', 'Trip'), #ondelete='cascade',), # 
         'company_trip_id': fields.many2one('hr.analytic.timesheet.trip', 
-            'Company Trip'), #ondelete="cascade",), # 
+            'Company Trip'), #ondelete='cascade',), # 
     }
     _defaults = {
          'total_trip': lambda *x: 0.0,
@@ -414,9 +458,9 @@ class res_users_trip(osv.osv):
     _columns = {
          'compute_office_trip': fields.boolean(
              'Compute office trip', 
-             help="Compute office trip, all day will be tranfer in analytic trip for this user"),
+             help='Compute office trip, all day will be tranfer in analytic trip for this user'),
          'refund_user': fields.boolean(
-             'Refund user', help="Used that have refund day on intervent"),
+             'Refund user', help='Used that have refund day on intervent'),
         }
 
 class ResPartner(osv.osv):
