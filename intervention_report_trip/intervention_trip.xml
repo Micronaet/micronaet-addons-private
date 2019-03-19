@@ -1,6 +1,42 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+    <!-- res.company -->    
+    <record id='view_res_company_maps_quest_form' model='ir.ui.view'>
+        <field name='name'>Company trip Map</field>
+        <field name='model'>res.company</field>
+        <field name='inherit_id' ref='base.view_company_form' />
+        <field name='arch' type='xml'>
+            <xpath expr="//notebook/page[1]" position="after">
+                <page string="Map Quest ">
+                    <group colspan="4" col="4">
+                        <field name="map_key" />
+                        <field name="map_secret" />
+                        <field name="map_route_unit" />
+                        <field name="map_route_type" />
+                    </group>     
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- res.partner -->    
+    <record id='view_res_partner_maps_quest_form' model='ir.ui.view'>
+        <field name='name'>Partner trip Map</field>
+        <field name='model'>res.partner</field>
+        <field name='inherit_id' ref='base.view_partner_form' />
+        <field name='arch' type='xml'>
+            <xpath expr="//notebook/page[1]" position="after">
+                <page string="Map Quest">
+                    <group colspan="4" col="4">
+                        <field name="map_latitude" />
+                        <field name="map_longitude" />
+                    </group>     
+                </page>
+            </xpath>
+        </field>
+    </record>
+
     <!-- res.users -->    
     <record id='view_res_users_form_extra' model='ir.ui.view'>
         <field name='name'>User trip field</field>

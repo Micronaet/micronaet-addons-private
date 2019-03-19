@@ -52,7 +52,7 @@ class hr_analytic_timesheet_trip(osv.osv):
     def calculate_step_list(self, cr, uid, ids, context=None):
         ''' Delete all steps an compute from intervent list
         '''
-        # Utility functions: ###################################################
+        # Utility functions: ##################################################
         def create_record(self, cr, uid, from_id, to_id, trip_id, seq, from_name, to_name, company_trip=False, context=None):
             ''' Create record:
                 from_id = id res.partner
@@ -110,7 +110,7 @@ class hr_analytic_timesheet_trip(osv.osv):
             for intervent in trip.intervent_ids:
                 if intervent.mode == 'customer' and not intervent.extra_planned: # only for customer
                 
-                    # FROM part ################################################
+                    # FROM part ###############################################
                     if intervent.google_from=='home':
                         from_id = home_partner_id
                         from_name = home_name
@@ -137,7 +137,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                     previous_id = intervent.intervent_partner_id.id
                     previous_name = intervent.intervent_partner_id.name
 
-                    # TO part ##################################################                    
+                    # TO part #################################################                  
                     if intervent.google_to == 'home':
                         create_record(self, cr, uid, intervent.intervent_partner_id.id, home_partner_id, trip.id, seq, intervent.intervent_partner_id.name, home_name, context=context)
                         previous_id = home_partner_id
@@ -152,17 +152,20 @@ class hr_analytic_timesheet_trip(osv.osv):
             # Last step (to home)
             if seq == 1: # create home-company-home records
                 create_record(
-                    self, cr, uid, home_partner_id, company_partner_id, trip.id, 1, home_name, company_name, context=context)
+                    self, cr, uid, home_partner_id, company_partner_id, 
+                    trip.id, 1, home_name, company_name, context=context)
                 create_record(
-                    self, cr, uid, company_partner_id, home_partner_id, trip.id, 2, company_name, home_name, context=context)
+                    self, cr, uid, company_partner_id, home_partner_id, 
+                    trip.id, 2, company_name, home_name, context=context)
             else:
                 if previous_id != home_partner_id: # not home (last destination)
                     create_record(
-                        self, cr, uid, previous_id, home_partner_id, trip.id, seq, previous_name, home_name, context=context)            
+                        self, cr, uid, previous_id, home_partner_id, trip.id, 
+                        seq, previous_name, home_name, context=context)            
 
-            ####################################################################
-            # FROM COMPANY TO COMPANY ##########################################
-            ####################################################################
+            # -----------------------------------------------------------------
+            #                        FROM COMPANY TO COMPANY
+            # -----------------------------------------------------------------
             # Generate all the steps
             previous_id = company_partner_id # Always company first step
             previous_name = company_name
@@ -304,23 +307,32 @@ class hr_analytic_timesheet_trip(osv.osv):
         return True
         
     _columns={
-        'name':fields.char('Name', size=64, required=False, readonly=False,),
-        'user_id':fields.many2one('res.users', 'Users', required=False),
+        'name':fields.char('Name', size=64),
+        'user_id':fields.many2one('res.users', 'Users'),
         
         'date': fields.date('Date'), 
-        'refund_day':fields.boolean('Refund day', required=False, help="If checked the itinerary will be reported in a report"),
+        'refund_day':fields.boolean('Refund day', 
+            help="If checked the itinerary will be reported in a report"),
 
         # Trip field from Home:
-        'total_trip': fields.function(_function_calculate_distance, method=True, type='float', string='Tot. distance', store=False, multi=True),
-        'manual_total':fields.boolean('Manual', required=False, help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
-        'manual_total_trip': fields.float('Manual total trip', digits=(16, 6), help="Duration in Km of total trip, setted manual, used instead of Total trip"),
+        'total_trip': fields.function(_function_calculate_distance, 
+            method=True, type='float', string='Tot. distance', multi=True),
+        'manual_total':fields.boolean('Manual', 
+            help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
+        'manual_total_trip': fields.float('Manual total trip', digits=(16, 6), 
+            help="Duration in Km of total trip, setted manual, used instead of Total trip"),
 
         # Trip field from Company:
-        'total_trip_company': fields.function(_function_calculate_distance, method=True, type='float', string='Tot. distance company', store=False, multi=True),
-        'manual_total_company':fields.boolean('Manual company', required=False, help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
-        'manual_total_trip_company': fields.float('Manual total trip company', digits=(16, 6), help="Duration in Km of total trip, setted manual, used instead of Total trip"),
+        'total_trip_company': fields.function(_function_calculate_distance, 
+            method=True, type='float', string='Tot. distance company', 
+            multi=True),
+        'manual_total_company':fields.boolean('Manual company', 
+            help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
+        'manual_total_trip_company': fields.float('Manual total trip company', 
+            digits=(16, 6), help="Duration in Km of total trip, setted manual, used instead of Total trip"),
 
-        'total_intervent': fields.function(_function_calculate_total, method=True, type='integer', string='Tot. intervent', store=False),
+        'total_intervent': fields.function(_function_calculate_total, 
+            method=True, type='integer', string='Tot. intervent'),
         'state':fields.selection([
             ('draft', 'Draft'),              
             ('redraft', 'Re-Draft'),         
@@ -353,9 +365,9 @@ class hr_analytic_timesheet_extra_trip(osv.osv):
     _inherit = 'hr.analytic.timesheet'
 
     _columns = {
-        'trip_id':fields.many2one('hr.analytic.timesheet.trip', 'Day trip', required=False, ondelete="set null",), # reset if delete trip
-    }
-hr_analytic_timesheet_extra_trip()
+        'trip_id':fields.many2one('hr.analytic.timesheet.trip', 'Day trip', 
+            ondelete="set null",), # reset if delete trip
+        }
 
 class hr_analytic_timesheet_trip_step(osv.osv):
     ''' Step computed for the trip
@@ -364,42 +376,83 @@ class hr_analytic_timesheet_trip_step(osv.osv):
     _description = 'Trip step'
 
     _columns = {
-        'name':fields.char('Description', size=80, required=False, readonly=False),
-        'total_trip': fields.float('Distance', digits=(16, 6), help="Distance in Km from google maps"),
-        'from_id':fields.many2one('res.partner', 'From partner', required=False),
-        'to_id':fields.many2one('res.partner', 'To partner', required=False),         
+        'name': fields.char('Description', size=80),
+        'total_trip': fields.float('Distance', digits=(16, 6), 
+            help="Distance in Km from google maps"),
+        'from_id': fields.many2one('res.partner', 'From partner', ),
+        'to_id': fields.many2one('res.partner', 'To partner', ),         
         'seq': fields.integer('Sequence'),
         
-        'trip_id':fields.many2one('hr.analytic.timesheet.trip', 'Trip', required=False, ), #ondelete="cascade",), # 
-        'company_trip_id':fields.many2one('hr.analytic.timesheet.trip', 'Company Trip', required=False, ), #ondelete="cascade",), # 
+        'trip_id': fields.many2one('hr.analytic.timesheet.trip', 'Trip'), #ondelete="cascade",), # 
+        'company_trip_id': fields.many2one('hr.analytic.timesheet.trip', 
+            'Company Trip'), #ondelete="cascade",), # 
     }
     _defaults = {
          'total_trip': lambda *x: 0.0,
     }
-hr_analytic_timesheet_trip_step()
 
 class hr_analytic_timesheet_trip(osv.osv):
     ''' Trip for intervent daily for user
     '''
-    _name = 'hr.analytic.timesheet.trip'
     _inherit = 'hr.analytic.timesheet.trip'
 
     _columns = {
-         'intervent_ids':fields.one2many('hr.analytic.timesheet', 'trip_id', 'Intervent', required=False),
-         'step_ids':fields.one2many('hr.analytic.timesheet.trip.step', 'trip_id', 'Trip step', required=False),
-         'company_step_ids':fields.one2many('hr.analytic.timesheet.trip.step', 'company_trip_id', 'Company Trip step', required=False),
-    }
-hr_analytic_timesheet_trip()
+         'intervent_ids':fields.one2many(
+             'hr.analytic.timesheet', 'trip_id', 'Intervent'),
+         'step_ids':fields.one2many(
+             'hr.analytic.timesheet.trip.step', 'trip_id', 'Trip step'),
+         'company_step_ids':fields.one2many(
+             'hr.analytic.timesheet.trip.step', 'company_trip_id', 
+             'Company Trip step'),
+        }
 
 class res_users_trip(osv.osv):
     ''' Extra field for user
     '''
-    _name = 'res.users'
     _inherit = 'res.users'
 
     _columns = {
-         'compute_office_trip':fields.boolean('Compute office trip', required=False, help="Compute office trip, all day will be tranfer in analytic trip for this user"),
-         'refund_user':fields.boolean('Refund user', required=False, help="Used that have refund day on intervent"),         
-    }
-res_users_trip()
+         'compute_office_trip': fields.boolean(
+             'Compute office trip', 
+             help="Compute office trip, all day will be tranfer in analytic trip for this user"),
+         'refund_user': fields.boolean(
+             'Refund user', help="Used that have refund day on intervent"),
+        }
+
+class ResPartner(osv.osv):
+    ''' Company parameter
+    '''
+    _inherit = 'res.partner'
+
+    _columns = {
+        'map_latitude': fields.char('Map Latitude', size=18),
+        'map_longitude': fields.char('Map Longitude', size=18),
+        }
+        
+class ResCompany(osv.osv):
+    ''' Company parameter
+    '''
+    _inherit = 'res.company'
+
+    _columns = {
+        'map_key': fields.char('Map Customer Key', size=40),
+        'map_secret': fields.char('Map Customer Secret', size=40),
+        'map_route_unit': fields.selection([
+            ('k', 'Km'),
+            ('m', 'Miles'),
+            ], 'Unit', required=True),
+        'map_route_type': fields.selection([
+            ('fastest', 'Quickest driving'),
+            ('shortest', 'Shortest driving'),
+            ('pedestrian', 'Walking'),
+            ('bicycle', 'Bicycle'),
+            ('multimodal', 'Combination walk and public transit'),
+            ], 'Unit', required=True),
+        }
+    
+    _defaults = {
+        'map_route_unit': lambda *x: 'k',
+        'map_route_type': lambda *x: 'fastest',
+        }
+        
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
