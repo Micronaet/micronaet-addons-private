@@ -23,7 +23,8 @@ import os
 import sys
 import logging
 import openerp
-import urllib    
+import urllib
+import json
 from osv import osv, fields
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -248,12 +249,18 @@ class hr_analytic_timesheet_trip(osv.osv):
     # -------------------------------------------------------------------------    
     # Utility function:
     # -------------------------------------------------------------------------    
-    def distance_between_partner(
+    def google_distance_between_partner(
             self, cr, uid, origin, destination, context=None):
-        ''' Master function that calculate distance between origin and detination
-            partner id
+        ''' Master function that calculate distance between origin and 
+            destination partner id
             NOTE: correct function evalute start and to elements 
+            
         '''
+        # ---------------------------------------------------------------------
+        # XXX 19/03/2019: Removed Google calc maps mode
+        # XXX Note: not used (old function that passedin payment mode!!!!!!!!!!
+        # ---------------------------------------------------------------------
+        
         # private function
         def prepare_element(self, cr, uid, partner_id, context=None):
             ''' Generate a string with all address parameter used for compute 
@@ -264,7 +271,8 @@ class hr_analytic_timesheet_trip(osv.osv):
             
             value = '%s %s %s %s' % (
                 partner.street, partner.zip, partner.city, 'Italia')
-            return value.strip().replace(' ', '+').replace(',', '') # remove comma and transform blank in plus
+            # remove comma and transform blank in plus                
+            return value.strip().replace(' ', '+').replace(',', '') 
             
         def distance_query(origin, destination):
             ''' Generate query string for compute km from origin to destination
@@ -304,9 +312,109 @@ class hr_analytic_timesheet_trip(osv.osv):
                 )
                     
         try:
-            distance_km = response['rows'][0]['elements'][0]['distance']['value'] / 1000.0  # km
+            distance_km = response['rows'][0]['elements'][0][
+                'distance']['value'] / 1000.0  # km
             return distance_km
         except:    
+            return 0.0
+    # -------------------------------------------------------------------------        
+
+    def distance_between_partner(
+            self, cr, uid, origin, destination, context=None):
+        ''' Master function that calculate distance between origin and detination
+            partner id
+            NOTE: correct function evalute start and to elements 
+            Use Map Quest web site (need a registration and a Key management)
+        '''
+        # ---------------------------------------------------------------------
+        # Private function:
+        # ---------------------------------------------------------------------
+        def prepare_element(self, cr, uid, partner_id, context=None):
+            ''' Generate a string with all address parameter used for compute 
+                distances
+            '''
+            partner = self.pool.get('res.partner').browse(
+                cr, uid, [partner_id], context=context)[0]
+            
+            if partner.map_latitude and partner.map_longitude:
+                value = ('%s,%s' % (
+                    partner.map_latitude,
+                    partner.map_longitude,
+                    )).replace(' ', '')    
+            else:            
+                value = '%s %s %s %s' % (
+                    partner.street, partner.zip, partner.city, 'Italia')
+                # Remove comma and transform blank in plus    
+                value = value.strip().replace(' ', '+').replace(',', '')
+            return value    
+            
+        def distance_query(origin, destination, unit, routeType):
+            ''' Generate query string for compute km from origin to destination
+                element in string ask for return json object
+            '''
+            try:
+                header = u'https://open.mapquestapi.com/guidance/v2/route'
+                maps_page = '%s?from=%s&to=%s&unit=%s&routeType=%s' % (
+                    header,
+                    prepare_element(
+                        self, cr, uid, origin, context=context),
+                    prepare_element(
+                        self, cr, uid, destination, context=context),
+                    unit,
+                    routeType,
+                    )
+                _logger.warning('Call maps quest page: %s' % maps_page)
+                return maps_page
+            except IOError:
+                _logger.error('Error generate google page: %s' % maps_page)
+                return None
+
+        # ---------------------------------------------------------------------        
+        # Call Google page:
+        # ---------------------------------------------------------------------        
+        # Read paremeters:
+        company_pool = self.pool.get('res.company')
+        company_ids = company_pool.search(cr, uid, [], context=context)
+        company = company_pool.browse(
+            cr, uid, company_ids, context=context)[0]
+    
+        key = company,map_key
+        secret = company,map_secret
+        unit = company.maps_route_unit
+        routeType = company.maps_route_type
+
+        query = distance_query(origin, destination, unit, routeType)
+        try:
+            response_json = urllib.urlopen(query).read()            
+            response = json.loads(response_json)
+        except:
+            raise osv.except_osv(
+                _('Map Quest error'), 
+                _('Error asking: %s' % query),
+                )
+                
+        # ---------------------------------------------------------------------        
+        # Check if not correct call:
+        # ---------------------------------------------------------------------        
+        try:
+            if in response['guidance']['info']['statuscode'] == 400:
+                raise osv.except_osv(
+                    _('Map quest error'),
+                    _('Call error: %s' % response['guidance']['info']['messages']),
+                    )
+        except:            
+            raise osv.except_osv(
+                _('Map quest error'),
+                _('Error reading response from Maps site!'),
+                )
+        try:
+            distance_km = response['guidance']['summary']['length'] # km
+            return distance_km
+        except:    
+            raise osv.except_osv(
+                _('Map quest error'),
+                _('Distance not found in reply message!'),
+                )
             return 0.0
     
     # fields function:
