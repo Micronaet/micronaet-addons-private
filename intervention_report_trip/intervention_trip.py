@@ -83,7 +83,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                     data['trip_id'] = False
                 else:
                     data['company_trip_id'] = False
-                    data['trip_id']=trip_id
+                    data['trip_id'] = trip_id
 
                 self.pool.get('hr.analytic.timesheet.trip.step').create(
                     cr, uid, data, context=context)
