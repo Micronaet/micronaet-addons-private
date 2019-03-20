@@ -253,10 +253,10 @@ class hr_analytic_timesheet_trip(osv.osv):
             if update_refund:                
                 self.write(cr, uid, trip.id, {
                     'refund_day': True,
-                }, context=context)                            
+                    }, context=context)                            
         
         # Return log file:
-        return self._excel_log['wb'].return_attachment(cr, uid, name, 
+        return self._excel_log['wb'].return_attachment(cr, uid, 'Trip Log', 
             name_of_file='trip_log', context=context)
         
     # -------------------------------------------------------------------------    
