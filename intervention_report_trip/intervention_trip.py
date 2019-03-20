@@ -156,7 +156,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                                     company_partner, trip.id, seq, 
                                     context=context):
                                 seq += 1                             
-                        from_partner = company_partner_id
+                        from_partner = company_partner
                         
                     elif intervent.google_from == 'previous' and previous_id: 
                         from_partner = previous_partner
@@ -186,7 +186,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                     elif intervent.google_to == 'company':
                         create_record(self, cr, uid, 
                             intervent.intervent_partner_id, 
-                            company_partner_id, trip.id, seq, 
+                            company_partner, trip.id, seq, 
                             context=context)
                         previous_partner = company_partner
                         seq += 1
