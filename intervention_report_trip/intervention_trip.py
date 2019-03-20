@@ -352,14 +352,16 @@ class hr_analytic_timesheet_trip(osv.osv):
                 value = value.strip().replace(' ', '+')
             return value    
             
-        def distance_query(origin, destination, unit, routeType):
+        def distance_query(key, origin, destination, unit, routeType):
             ''' Generate query string for compute km from origin to destination
                 element in string ask for return json object
             '''
             try:
                 header = u'https://open.mapquestapi.com/guidance/v2/route'
-                maps_page = '%s?from=%s&to=%s&unit=%s&routeType=%s' % (
+                
+                maps_page = '%s?key=%s&from=%s&to=%s&unit=%s&routeType=%s' % (
                     header,
+                    key,
                     prepare_element(
                         self, cr, uid, origin, context=context),
                     prepare_element(
@@ -376,19 +378,18 @@ class hr_analytic_timesheet_trip(osv.osv):
         # ---------------------------------------------------------------------        
         # Call Google page:
         # ---------------------------------------------------------------------        
-        import pdb; pdb.set_trace()
         # Read paremeters:
         company_pool = self.pool.get('res.company')
         company_ids = company_pool.search(cr, uid, [], context=context)
         company = company_pool.browse(
             cr, uid, company_ids, context=context)[0]
     
-        key = company,map_key
-        secret = company,map_secret
-        unit = company.maps_route_unit
-        routeType = company.maps_route_type
+        key = company.map_key
+        secret = company.map_secret
+        unit = company.map_route_unit
+        routeType = company.map_route_type
 
-        query = distance_query(origin, destination, unit, routeType)
+        query = distance_query(key, origin, destination, unit, routeType)
         try:
             response_json = urllib.urlopen(query).read()            
             response = json.loads(response_json)
@@ -402,7 +403,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         # Check if not correct call:
         # ---------------------------------------------------------------------        
         try:
-            if response['guidance']['info']['statuscode'] == 400:
+            if response['guidance']['info']['statuscode']: # 400:
                 raise osv.except_osv(
                     _('Map quest error'),
                     _('Call error: %s' % response['guidance']['info']['messages']),
