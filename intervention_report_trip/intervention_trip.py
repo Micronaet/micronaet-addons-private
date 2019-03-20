@@ -106,7 +106,7 @@ class hr_analytic_timesheet_trip(osv.osv):
             step_ids = step_pool.search(cr, uid, ['|',
                 ('trip_id', '=', trip.id),
                 ('company_trip_id', '=', trip.id)
-                ],context=context)
+                ], context=context)
             if step_ids:
                 step_pool.unlink(cr, uid, step_ids, context=context)
 
@@ -137,7 +137,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                     elif intervent.google_from == 'previous' and previous_id: 
                         from_partner = previous_partner
                     else:
-                        continue # jump intervent!!! #pass # TODO Error no previuos_id
+                        continue # jump intervent! # TODO Error no previuos_id
 
                     # ---------------------------------------------------------
                     # Create part A:
@@ -192,17 +192,19 @@ class hr_analytic_timesheet_trip(osv.osv):
             update_refund = False
             for intervent in trip.intervent_ids:
                 if intervent.mode == 'customer': # only for customer
-                    update_refund = True # after create step need to update refund for this trip
+                    # After create step need to update refund for this trip
+                    update_refund = True 
                     # ---------------------------------------------------------
                     # FROM part
                     # ---------------------------------------------------------
                     if intervent.google_from in ('home', 'company'):
                         from_partner = company_partner_id
                         
-                    elif intervent.google_from == 'previous' and previous_partner: 
+                    elif intervent.google_from == 'previous' \
+                            and previous_partner: 
                         from_partner = previous_partner
                     else:
-                        continue # jump intervent!!! #pass # TODO Error no previuos_id
+                        continue # jump intervent! # TODO Error no previuos_id
 
                     # Create part A:
                     if create_record(self, cr, uid, from_partner, 
