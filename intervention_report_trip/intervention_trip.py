@@ -222,7 +222,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                     # FROM part
                     # ---------------------------------------------------------
                     if intervent.google_from in ('home', 'company'):
-                        from_partner = company_partner_id
+                        from_partner = company_partner
                         
                     elif intervent.google_from == 'previous' \
                             and previous_partner: 
