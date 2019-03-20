@@ -325,8 +325,8 @@ class hr_analytic_timesheet_trip(osv.osv):
     # -------------------------------------------------------------------------    
     def distance_between_partner(
             self, cr, uid, origin, destination, context=None):
-        ''' Master function that calculate distance between origin and detination
-            partner id
+        ''' Master function that calculate distance between origin and 
+            destination partner id
             NOTE: correct function evalute start and to elements 
             Use Map Quest web site (need a registration and a Key management)
         '''
@@ -346,10 +346,10 @@ class hr_analytic_timesheet_trip(osv.osv):
                     partner.map_longitude,
                     )).replace(' ', '')    
             else:            
-                value = '%s %s %s %s' % (
-                    partner.street, partner.zip, partner.city, 'Italia')
-                # Remove comma and transform blank in plus    
-                value = value.strip().replace(' ', '+').replace(',', '')
+                value = '%s,%s+%s,Italia' % (
+                    partner.street, partner.zip, partner.city)
+                # Remove comma and transform blank in plus 
+                value = value.strip().replace(' ', '+')
             return value    
             
         def distance_query(origin, destination, unit, routeType):
@@ -376,6 +376,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         # ---------------------------------------------------------------------        
         # Call Google page:
         # ---------------------------------------------------------------------        
+        import pdb; pdb.set_trace()
         # Read paremeters:
         company_pool = self.pool.get('res.company')
         company_ids = company_pool.search(cr, uid, [], context=context)
