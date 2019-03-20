@@ -588,7 +588,7 @@ class ResPartner(osv.osv):
     _inherit = 'res.partner'
 
     _columns = {
-        #'map_partner_name': fields.char('Partner name for map', size=64),
+        'map_partner_name': fields.char('Partner name for map', size=64),
         'map_latitude': fields.char('Map Latitude', size=18),
         'map_longitude': fields.char('Map Longitude', size=18),
         }
