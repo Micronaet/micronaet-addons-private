@@ -257,7 +257,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         
         # Return log file:
         return self._excel_log['wb'].return_attachment(cr, uid, 'Trip Log', 
-            name_of_file='trip_log', context=context)
+            name_of_file='trip_log', version='7.0', php=True, context=context)
         
     # -------------------------------------------------------------------------    
     # XXX Not used vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
