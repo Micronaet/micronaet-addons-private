@@ -403,7 +403,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         # Check if not correct call:
         # ---------------------------------------------------------------------        
         try:
-            if response['guidance']['info']['statuscode']: # 400:
+            if response['guidance']['info']['statuscode'] == 400:
                 raise osv.except_osv(
                     _('Map quest error'),
                     _('Call error: %s' % response['guidance']['info']['messages']),
