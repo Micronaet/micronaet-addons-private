@@ -409,10 +409,9 @@ class hr_analytic_timesheet_trip(osv.osv):
                     _('Call error: %s' % response['guidance']['info']['messages']),
                     )
         except:    
-            import pdb; pdb.set_trace()        
             raise osv.except_osv(
                 _('Map quest error'),
-                _('Error reading response from Maps site!'),
+                _('Error reading response from Maps site!\nLink: %s') % query,
                 )
         try:
             distance_km = response['guidance']['summary']['length'] # km
