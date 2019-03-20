@@ -408,7 +408,8 @@ class hr_analytic_timesheet_trip(osv.osv):
                     _('Map quest error'),
                     _('Call error: %s' % response['guidance']['info']['messages']),
                     )
-        except:            
+        except:    
+            import pdb; pdb.set_trace()        
             raise osv.except_osv(
                 _('Map quest error'),
                 _('Error reading response from Maps site!'),
