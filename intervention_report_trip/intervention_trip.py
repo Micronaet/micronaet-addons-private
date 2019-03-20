@@ -92,8 +92,27 @@ class hr_analytic_timesheet_trip(osv.osv):
             
         # ---------------------------------------------------------------------
         # Start procedure
-        # ---------------------------------------------------------------------
+        # ---------------------------------------------------------------------        
         step_pool = self.pool.get('hr.analytic.timesheet.trip.step')
+        
+        # ---------------------------------------------------------------------        
+        # Excel log file:
+        # ---------------------------------------------------------------------        
+        if self._excel_log: # Remove previous file:
+            del(self._excel_log)     
+            
+        # Create new Excel log block for manage file:    
+        self._excel_log = {
+            'wb': self.pool.get('excel.writer'),
+            'row': 0,
+            'ws_name': 'trip log',
+            'format': {},
+            }
+        self._excel_log['wb'].write_xls_line(
+            self._excel_log['ws_name'], 
+            self._excel_log['row'], ['Da', 'A', 'Errore', 'Link'])
+        self._excel_log['row'] += 1    
+        
         for trip in self.browse(cr, uid, ids, context=context): 
             # -----------------------------------------------------------------
             # COMMON PART
@@ -230,7 +249,10 @@ class hr_analytic_timesheet_trip(osv.osv):
                 self.write(cr, uid, trip.id, {
                     'refund_day': True,
                 }, context=context)                            
-        return True
+        
+        # Return log file:
+        return self._excel_log.return_attachment(cr, uid, name, 
+            name_of_file='trip_log', context=context)
         
     # -------------------------------------------------------------------------    
     # XXX Not used vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -368,44 +390,36 @@ class hr_analytic_timesheet_trip(osv.osv):
         unit = company.map_route_unit
         routeType = company.map_route_type
 
+        error = False
         query = distance_query(key, origin, destination, unit, routeType)
         try:
             response_json = urllib.urlopen(query).read()            
             response = json.loads(response_json)
         except:
-            raise osv.except_osv(
-                _('Map Quest error'), 
-                _('Error asking: %s' % query),
-                )
+            error = 'MAP Quest generic error!'
                 
         # ---------------------------------------------------------------------        
         # Check if not correct call:
         # ---------------------------------------------------------------------        
-        try:
-            if response['guidance']['info']['statuscode'] == 400:
-                raise osv.except_osv(
-                    _('Map quest error'),
-                    _('Call error: %s' % response[
-                        'guidance']['info']['messages']),
-                    )
-        except:    
-            raise osv.except_osv(
-                _('Map quest error'),
-                _('Error in response from Maps site [%s-%s]!\nLink: %s') % (
-                    origin.name,
-                    destination.name,
-                    query,
-                    )
-                )
-        try:
-            distance_km = response['guidance']['summary']['length'] # km
-            return distance_km
-        except:    
-            raise osv.except_osv(
-                _('Map quest error'),
-                _('Distance not found in reply message!'),
-                )
+        if not error:
+            try:
+                if response['guidance']['info']['statuscode'] == 400:
+                    error = response['guidance']['info']['messages']
+            except:
+                error = 'Error reading MAPS reply message!'
+            try:
+                distance_km = response['guidance']['summary']['length'] # km
+            except:    
+                error = 'Error getting KM returned!'
+        
+        if error: # Error present:
+            self._excel_log['wb'].write_xls_line(
+                self._excel_log['ws_name'], self._excel_log['row'], 
+                [origin.name, destination.name, error, query])
+            self._excel_log['row'] += 1    
             return 0.0
+        else:    
+            return distance_km
     
     # fields function:
     def _function_calculate_total(self, cr, uid, ids, field, name, 
