@@ -98,20 +98,25 @@ class hr_analytic_timesheet_trip(osv.osv):
         # ---------------------------------------------------------------------        
         # Excel log file:
         # ---------------------------------------------------------------------        
-        if self._excel_log: # Remove previous file:
+        try:
             del(self._excel_log)     
+        except:
+            pass
             
         # Create new Excel log block for manage file:    
         self._excel_log = {
             'wb': self.pool.get('excel.writer'),
             'row': 0,
-            'ws_name': 'trip log',
+            'ws_name': 'Log viaggi',
             'format': {},
             }
+        self._excel_log['wb'].create_worksheet(self._excel_log['ws_name'])
         self._excel_log['wb'].write_xls_line(
-            self._excel_log['ws_name'], 
-            self._excel_log['row'], ['Da', 'A', 'Errore', 'Link'])
-        self._excel_log['row'] += 1    
+            self._excel_log['ws_name'],
+            self._excel_log['row'], 
+            ['Da', 'A', 'Errore', 'Link'],
+            )
+        self._excel_log['row'] += 1
         
         for trip in self.browse(cr, uid, ids, context=context): 
             # -----------------------------------------------------------------
@@ -251,7 +256,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                 }, context=context)                            
         
         # Return log file:
-        return self._excel_log.return_attachment(cr, uid, name, 
+        return self._excel_log['wb'].return_attachment(cr, uid, name, 
             name_of_file='trip_log', context=context)
         
     # -------------------------------------------------------------------------    

@@ -45,7 +45,7 @@
         'report_aeroo_ooo',
         'hr',
         'hr_timesheet_invoice',
-        'excel_export,
+        'excel_export',
         ],
     'init_xml': [],
     'demo_xml': [],
