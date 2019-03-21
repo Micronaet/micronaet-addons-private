@@ -41,9 +41,11 @@ class hr_analytic_timesheet_trip_wizard(osv.osv_memory):
         if not wiz_proxy.all_user:
             domain.append(('user_id','=',wiz_proxy.user_id.id))
         if wiz_proxy.from_date:
-            domain.append(('date_start','>=',"%s 00:00:00"%(wiz_proxy.from_date,)))            
+            domain.append(
+                ('date_start', '>=', "%s 00:00:00" % wiz_proxy.from_date))
         if wiz_proxy.to_date:
-            domain.append(('date_start','<',"%s 00:00:00"%(wiz_proxy.to_date,)))            
+            domain.append(
+                ('date_start', '<', "%s 00:00:00" % wiz_proxy.to_date))            
 
         date_list_for_user = {} 
         user_get_from_id={}
