@@ -158,7 +158,8 @@ class hr_analytic_timesheet_trip(osv.osv):
                                 seq += 1                             
                         from_partner = company_partner
                         
-                    elif intervent.google_from == 'previous' and previous_id: 
+                    elif intervent.google_from == 'previous' and \
+                            previous_partner: 
                         from_partner = previous_partner
                     else:
                         continue # jump intervent! # TODO Error no previuos_id
