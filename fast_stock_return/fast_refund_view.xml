@@ -1,14 +1,46 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-        <record model="ir.ui.view" id="view_fast_stock_picking_wizard_form">
-            <field name="name">fast.stock.picking.wizard.form</field>
-            <field name="model">fast.stock.picking.wizard</field>
+        <record model="ir.ui.view" id="view_fast_stock_picking_returned_search">
+            <field name="name">fast.stock.picking.returned.search</field>
+            <field name="model">fast.stock.picking.returned</field>
+            <field name="arch" type="xml">
+                <search string="String" version="7.0">        
+                    <field name="partner_id" filter_domain="[('partner_id','=',self)]"/>
+                    <field name="account_id" filter_domain="[('partner_id','=',self)]"/>
+                    <filter name="state_open" string="Open" domain="[('done','=',False)]"/>
+                    <filter name="state_close" string="Close" domain="[('done','=',True)]"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
+                        <filter name="group_account" string="Account" context="{'group_by': 'account_id'}"/>
+                        <filter string="Status" context="{'group_by': 'done'}" />
+                    </group>                
+                </search>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_fast_stock_picking_returned_color_tree">
+            <field name="name">fast.stock.picking.returned.tree</field>
+            <field name="model">fast.stock.picking.returned</field>
+            <field name="arch" type="xml">
+                <tree string="Pending return" colors="grey:done==False;green:done==True">
+                    <field name="partner_id" />
+                    <field name="account_id" />
+                    <field name="with_ddt" />
+                    <field name="done" />
+                    <button name="report_original_picking" string="Print preview" type="object" icon="gtk-print" attrs="{'invisible': [('done','=',True)]}"/>
+                    <button name="update_original_picking" string="Refund" type="object" icon="gtk-execute" attrs="{'invisible': [('done','=',True)]}" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_fast_stock_picking_returned_form">
+            <field name="name">fast.stock.picking.returned.form</field>
+            <field name="model">fast.stock.picking.returned</field>
             <field name="arch" type="xml">
                 <form string="Refund inline" version="7.0">        
                     <header>
-                         <button name="report_original_picking" string="Print preview" type="object" icon="gtk-print"/>
-                         <button name="update_original_picking" string="Refund" type="object" icon="gtk-execute" />
+                         <button name="report_original_picking" string="Print preview" type="object" icon="gtk-print" attrs="{'invisible': [('done','=',True)]}" />
+                         <button name="update_original_picking" string="Refund" type="object" icon="gtk-execute" attrs="{'invisible': [('done','=',True)]}" />
                     </header>
                     <sheet>                    
                         <group col="4" colspan="4">
@@ -17,7 +49,7 @@
                                 context="{'default_use_timesheets': 1}" 
                                 domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('partner_id','=',partner_id)]" />
                             <field name="with_ddt" />
-                            <newline/>
+                            <field name="done" readonly="1"/>
                             <separator string="Detail:" colspan="4"/>
                             <field name="move_lines" colspan="4" nolabel="1">
                                 <tree string="Return line:" editable="bottom">
@@ -30,25 +62,44 @@
                 </form>
             </field>
         </record>
-        <record model="ir.actions.act_window" id="action_new_fast_stock_picking_wizard">
+        <record model="ir.actions.act_window" id="action_new_fast_stock_picking_returned">
             <field name="name">New refund product</field>
-            <field name="res_model">fast.stock.picking.wizard</field>
+            <field name="res_model">fast.stock.picking.returned</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
-            <field name="view_id" ref="view_fast_stock_picking_wizard_form"/>
+            <field name="view_id" ref="view_fast_stock_picking_returned_form"/>
             <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        <record model="ir.actions.act_window" id="action_new_fast_stock_picking_returned_opened_tree">
+            <field name="name">Refund pending</field>
+            <field name="res_model">fast.stock.picking.returned</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_fast_stock_picking_returned_color_tree"/>
+            <field name="context">{'search_default_state_open': True}</field>
             <field name="domain">[]</field>
         </record>
         
         <menuitem 
             parent="fast_stock_move.menu_stock_picking_root" 
-            id="menu_new_fast_stock_picking_wizard"
-            action="action_new_fast_stock_picking_wizard"
+            id="menu_new_fast_stock_refund_root"
+            name="Product return"
             sequence="40"
             />
         
-        
-        
+        <menuitem 
+            parent="menu_new_fast_stock_refund_root" 
+            id="menu_new_fast_stock_picking_returned_new"
+            action="action_new_fast_stock_picking_returned"
+            sequence="10"
+            />
+        <menuitem 
+            parent="menu_new_fast_stock_refund_root" 
+            id="menu_new_fast_stock_picking_returned_pending"
+            action="action_new_fast_stock_picking_returned_opened_tree"
+            sequence="20"
+            />
     </data>
 </openerp>
 

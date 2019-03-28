@@ -42,10 +42,10 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
-class FastStockPicking(orm.TransientModel):
+class FastStockPickingReturnet(orm.Model):
     """ Model name: Fast Stock Picking
     """
-    _name = 'fast.stock.picking.wizard'
+    _name = 'fast.stock.picking.returned'
     _description = 'Fast picking wizard'
     _rec_name = 'partner_id'
 
@@ -348,11 +348,20 @@ class FastStockPicking(orm.TransientModel):
                     _('Unload error'), 
                     _('There are remain q. to unload!'),
                     ) 
+
+        # ---------------------------------------------------------------------
+        # Delete current refund document and subline:
+        # ---------------------------------------------------------------------
         picking_ids = [item.id for item in clean_db]    
         # model_pool = self.pool.get('ir.model.data')
         # model_pool.get_object_reference('module_name', 'view_name')[1]
         view_id = False
         
+        # Marked as done:
+        self.write(cr, uid, ids, {
+            'done': True,
+            }, context=context)
+
         return {
             'type': 'ir.actions.act_window',
             'name': _('Picking modificati'),
@@ -397,18 +406,20 @@ class FastStockPicking(orm.TransientModel):
         #'account_no_parent': fields.boolean('Account without partner'),        
         'with_ddt': fields.boolean('With DDT', 
             help='Update also picking with DDT number (not invoiced)'),        
+        'done': fields.boolean('Done'),
         }
 
-class FastStockMove(orm.TransientModel):
-    """ Model name: Fast Stock Move
+class FastStockMoveReturned(orm.TransientModel):
+    """ Model name: Fast Stock Move Returned
     """
     
-    _name = 'fast.stock.move.wizard'
+    _name = 'fast.stock.move.returned'
     _description = 'Fast move wizard'
     _rec_name = 'product_id'
 
     _columns = {
-        'picking_id': fields.many2one('fast.stock.picking.wizard', 'Picking'),
+        'picking_id': fields.many2one(
+            'fast.stock.picking.returned', 'Picking', ondelete='cascade'),
         'product_id': fields.many2one('product.product', 'Product'),
         'product_qty': fields.float('Q.', digits=(16, 2)),
         }
@@ -416,11 +427,11 @@ class FastStockMove(orm.TransientModel):
 class FastStockPicking(orm.TransientModel):
     """ Model name: Fast Stock Picking
     """
-    _inherit = 'fast.stock.picking.wizard'
+    _inherit = 'fast.stock.picking.returned'
     
     _columns = {
         'move_lines': fields.one2many(
-            'fast.stock.move.wizard', 'picking_id', 'Detail'),
+            'fast.stock.move.returned', 'picking_id', 'Detail'),
         }
         
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

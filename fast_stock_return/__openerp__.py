@@ -31,7 +31,7 @@
     'author': 'Micronaet S.r.l. - Nicola Riolini',
     'website': 'http://www.micronaet.it',
     'license': 'AGPL-3',
-    'depends': [
+    'depends': [       
         'base',
         'fast_stock_move',
         'excel_export',
@@ -39,6 +39,7 @@
     'init_xml': [],
     'demo': [],
     'data': [
+        'security/ir.model.access.csv',
         'fast_refund_view.xml',
         ],
     'active': False,

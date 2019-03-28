@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+access_fast_stock_picking_returned_user,fast.stock.picking.returned,model_fast_stock_picking_returned,base.group_user,1,1,1,1
+access_fast_stock_move_returned_user,fast.stock.move.returned,model_fast_stock_move_returned,base.group_user,1,1,1,1
+
