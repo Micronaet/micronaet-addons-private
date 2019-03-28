@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-08 14:22+0000\n"
-"PO-Revision-Date: 2019-02-08 15:25+0100\n"
+"POT-Creation-Date: 2019-03-28 14:21+0000\n"
+"PO-Revision-Date: 2019-03-28 15:24+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,110 +18,162 @@ msgstr ""
 "X-Generator: Poedit 1.6.10\n"
 
 #. module: fast_stock_return
-#: field:fast.stock.picking.wizard,account_id:0
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_search
+#: field:fast.stock.picking.returned,account_id:0
 msgid "Account"
-msgstr "Conto analitico"
+msgstr "Commessa"
 
 #. module: fast_stock_return
-#: field:fast.stock.move.wizard,create_uid:0
-#: field:fast.stock.picking.wizard,create_uid:0
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_search
+msgid "Close"
+msgstr "Chiusi"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.returned,create_uid:0
+#: field:fast.stock.picking.returned,create_uid:0
 msgid "Created by"
 msgstr "Creato da"
 
 #. module: fast_stock_return
-#: field:fast.stock.move.wizard,create_date:0
-#: field:fast.stock.picking.wizard,create_date:0
+#: field:fast.stock.move.returned,create_date:0
+#: field:fast.stock.picking.returned,create_date:0
 msgid "Created on"
 msgstr "Creato il"
 
 #. module: fast_stock_return
-#: field:fast.stock.picking.wizard,move_lines:0
+#: field:fast.stock.picking.returned,move_lines:0
 msgid "Detail"
 msgstr "Dettaglio"
 
 #. module: fast_stock_return
-#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_form
 msgid "Detail:"
-msgstr "Dettaglio:"
+msgstr "Dettagli:"
 
 #. module: fast_stock_return
+#: field:fast.stock.picking.returned,done:0
+msgid "Done"
+msgstr "Fatto"
+
+#. module: fast_stock_return
+#: model:ir.model,name:fast_stock_return.model_fast_stock_move_returned
 #: model:ir.model,name:fast_stock_return.model_fast_stock_move_wizard
 msgid "Fast move wizard"
 msgstr "Carichi magazzino veloci"
 
 #. module: fast_stock_return
+#: model:ir.model,name:fast_stock_return.model_fast_stock_picking_returned
 #: model:ir.model,name:fast_stock_return.model_fast_stock_picking_wizard
 msgid "Fast picking wizard"
 msgstr "Carichi veloci"
 
 #. module: fast_stock_return
-#: field:fast.stock.move.wizard,id:0 field:fast.stock.picking.wizard,id:0
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_search
+msgid "Group By..."
+msgstr "Raggruppa per..."
+
+#. module: fast_stock_return
+#: field:fast.stock.move.returned,id:0 field:fast.stock.picking.returned,id:0
 msgid "ID"
 msgstr "ID"
 
 #. module: fast_stock_return
-#: field:fast.stock.move.wizard,write_uid:0
-#: field:fast.stock.picking.wizard,write_uid:0
+#: field:fast.stock.move.returned,write_uid:0
+#: field:fast.stock.picking.returned,write_uid:0
 msgid "Last Updated by"
-msgstr "Ultimo aggiornamento di"
+msgstr "Ultimo aggiornamento da"
 
 #. module: fast_stock_return
-#: field:fast.stock.move.wizard,write_date:0
-#: field:fast.stock.picking.wizard,write_date:0
+#: field:fast.stock.move.returned,write_date:0
+#: field:fast.stock.picking.returned,write_date:0
 msgid "Last Updated on"
 msgstr "Ultimo aggiornamento il"
 
 #. module: fast_stock_return
-#: model:ir.actions.act_window,name:fast_stock_return.action_new_fast_stock_picking_wizard
-#: model:ir.ui.menu,name:fast_stock_return.menu_new_fast_stock_picking_wizard
+#: model:ir.actions.act_window,name:fast_stock_return.action_new_fast_stock_picking_returned
+#: model:ir.ui.menu,name:fast_stock_return.menu_new_fast_stock_picking_returned_new
 msgid "New refund product"
 msgstr "Nuovo reso cantiere"
 
 #. module: fast_stock_return
-#: field:fast.stock.picking.wizard,partner_id:0
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_search
+msgid "Open"
+msgstr "Aperti"
+
+#. module: fast_stock_return
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_search
+#: field:fast.stock.picking.returned,partner_id:0
 msgid "Partner"
 msgstr "Partner"
 
 #. module: fast_stock_return
-#: field:fast.stock.move.wizard,picking_id:0
-msgid "Picking"
-msgstr "Picking"
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_color_tree
+msgid "Pending return"
+msgstr "Resi pendenti"
 
 #. module: fast_stock_return
-#: code:addons/fast_stock_return/fast_refund.py:358
+#: field:fast.stock.move.returned,picking_id:0
+msgid "Picking"
+msgstr "Documenti di scarico"
+
+#. module: fast_stock_return
+#: code:addons/fast_stock_return/fast_refund.py:367
 #, python-format
 msgid "Picking modificati"
 msgstr "Picking modificati"
 
 #. module: fast_stock_return
-#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_color_tree
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_form
 msgid "Print preview"
-msgstr "Anteprima operazione"
+msgstr "Stampa anteprima"
 
 #. module: fast_stock_return
-#: field:fast.stock.move.wizard,product_id:0
+#: field:fast.stock.move.returned,product_id:0
 msgid "Product"
 msgstr "Prodotto"
 
 #. module: fast_stock_return
-#: field:fast.stock.move.wizard,product_qty:0
+#: model:ir.ui.menu,name:fast_stock_return.menu_new_fast_stock_refund_root
+msgid "Product return"
+msgstr "Prodotto ritornato"
+
+#. module: fast_stock_return
+#: field:fast.stock.move.returned,product_qty:0
 msgid "Q."
 msgstr "Q."
 
 #. module: fast_stock_return
-#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_color_tree
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_form
 msgid "Refund"
 msgstr "Reso"
 
 #. module: fast_stock_return
-#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_form
 msgid "Refund inline"
-msgstr "Reso per storno"
+msgstr "Reso"
 
 #. module: fast_stock_return
-#: view:fast.stock.picking.wizard:fast_stock_return.view_fast_stock_picking_wizard_form
+#: model:ir.actions.act_window,name:fast_stock_return.action_new_fast_stock_picking_returned_opened_tree
+#: model:ir.ui.menu,name:fast_stock_return.menu_new_fast_stock_picking_returned_pending
+msgid "Refund pending"
+msgstr "Resi pendenti"
+
+#. module: fast_stock_return
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_form
 msgid "Return line:"
-msgstr "Rientri"
+msgstr "Righe tornate:"
+
+#. module: fast_stock_return
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_search
+msgid "Status"
+msgstr "Stato"
+
+#. module: fast_stock_return
+#: view:fast.stock.picking.returned:fast_stock_return.view_fast_stock_picking_returned_search
+msgid "String"
+msgstr "Stringa"
 
 #. module: fast_stock_return
 #: code:addons/fast_stock_return/fast_refund.py:349
@@ -136,11 +188,12 @@ msgid "Unload error"
 msgstr "Errore scarico"
 
 #. module: fast_stock_return
-#: help:fast.stock.picking.wizard,with_ddt:0
+#: help:fast.stock.picking.returned,with_ddt:0
 msgid "Update also picking with DDT number (not invoiced)"
-msgstr "Aggiorna anche i picking che hanno già associato DDT"
+msgstr ""
+"Aggiorna anche i picking con il numero di DDT assegnato (non fatturati però)"
 
 #. module: fast_stock_return
-#: field:fast.stock.picking.wizard,with_ddt:0
+#: field:fast.stock.picking.returned,with_ddt:0
 msgid "With DDT"
-msgstr "Inclusi i DDT"
+msgstr "Con DDT"
