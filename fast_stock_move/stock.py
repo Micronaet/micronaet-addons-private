@@ -55,6 +55,20 @@ class StockMove(orm.Model):
     _inherit = 'stock.move'
     _order = 'id'
 
+class StockMove(orm.Model):
+    """ Model name: StockMove
+    """
+    
+    _inherit = 'stock.move'
+    
+    def _get_subtotal_total(self, cr, uid, ids, fields, args, context=None):
+        ''' Fields function for calculate 
+        '''
+        res = {}
+        for move in self.browse(cr, uid, ids, context=context):
+            res[move.id] = move.price_unit * move.product_uom_qty
+        return res
+    
     def onchange_product_id(self, cr, uid, ids, product_id=False, loc_id=False, 
             loc_dest_id=False, partner_id=False):
         ''' Update price during creation of movement
@@ -70,6 +84,11 @@ class StockMove(orm.Model):
         return res 
     
     _columns = {
+        'subtotal': fields.function(
+            _get_subtotal_total, method=True, 
+            type='float', string='Subtotal', 
+            ),
+
         'force_name': fields.text('Force name'),
         'auto_account_out_id': fields.many2one(
             'account.analytic.account', 'Account',

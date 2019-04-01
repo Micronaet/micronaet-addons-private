@@ -216,7 +216,8 @@
                             <field name="date_expected" invisible="1"/>
                             <field name="picking_id" invisible="1" />
                             <field name="picking_type_id" invisible="1"/>
-                            <field name="invoice_state" invisible="1"/>                    
+                            <field name="invoice_state" invisible="1"/>            
+                            <field name="subtotal" />        
                         </tree>
                     </field>
                 </field>
