@@ -1,0 +1,225 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--telegram.token-->
+        <record model="ir.ui.view" id="view_telegram_token_tree">
+            <field name="name">telegram.token.tree</field>
+            <field name="model">telegram.token</field>
+            <field name="arch" type="xml">
+                <tree string="Token" editable="bottom" colors="red:keyword==False">
+                    <field name="required" />
+                    <field name="name" readonly="1"/>
+                    <field name="keyword" />
+                    <field name="note" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_telegram_token_form">
+            <field name="name">Telegram token</field>
+            <field name="res_model">telegram.token</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_telegram_token_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!--telegram.token.location-->
+        <record model="ir.ui.view" id="view_telegram_token_location_tree">
+            <field name="name">telegram.token.location.tree</field>
+            <field name="model">telegram.token.location</field>
+            <field name="arch" type="xml">
+                <tree string="Token location" editable="bottom" colors="red:keyword==False">
+                    <field name="name" readonly="1"/>
+                    <field name="keyword" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_telegram_token_location_form">
+            <field name="name">Telegram token location</field>
+            <field name="res_model">telegram.token.location</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_telegram_token_location_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!--res.users-->
+        <record model="ir.ui.view" id="view_res_users_load_tree">
+            <field name="name">res.users.tree</field>
+            <field name="model">res.users</field>
+            <field name="priority" eval="40" />
+            <field name="arch" type="xml">
+                <tree string="Users" editable="bottom">
+                    <field name="name" readonly="1"/>
+                    <field name="telegram_login" />
+                    <button name="load_telegram_intervent" string="Load" type="object" icon="gtk-refresh"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_rec_users_load">
+            <field name="name">Users load messages</field>
+            <field name="res_model">res.users</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_res_users_load_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <!--telegram.message-->
+        <record model="ir.ui.view" id="view_telegram_message_tree">
+            <field name="name">telegram.message.tree</field>
+            <field name="model">telegram.message</field>
+            <field name="arch" type="xml">
+                <tree string="Telegram message" colors="red:intervent_id==False">
+                    <field name="datetime" />
+                    <field name="username" />
+                    <field name="user_id" />
+                    <field name="intervent_id" />
+                    <field name="missing_field" />
+                    <field name="telegram_id" />
+                    <button name="create_intervent_from_message" string="Create intervent" type="object" attrs="{'invisible': [('intervent_id','!=',False)]}"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_telegram_message_form">
+            <field name="name">telegram.message.form</field>
+            <field name="model">telegram.message</field>
+            <field name="arch" type="xml">
+                <form string="Telegram message" version="7.0">
+                    <header>
+                         <button name="create_intervent_from_message" string="Create intervent" type="object" attrs="{'invisible': [('intervent_id','!=',False)]}"/>
+                    </header>
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="datetime" />
+                            <field name="telegram_id" />
+
+                            <field name="username" />
+                            <field name="user_id" />
+                            
+                            <field name="missing_field" />
+                            <field name="intervent_id" />
+                            
+                            <separator string="Text" colspan="4"/>
+                            <field name="text" colspan="4" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_telegram_message_search">
+            <field name="name">telegram.message.search</field>
+            <field name="model">telegram.message</field>
+            <field name="arch" type="xml">
+                <search string="Telegram message" version="7.0">        
+                    <field name="username" />
+                    <field name="user_id" />
+                    <field name="telegram_id" />
+                    <field name="text" />
+                    <group expand="0" string="Group By...">
+                        <filter name="group_username" string="Username" context="{'group_by': 'username'}"/>
+                        <filter name="group_user" string="User" context="{'group_by': 'user_id'}"/>
+                        <filter name="group_date" string="Date" context="{'group_by': 'datetime'}"/>
+                    </group>                
+                </search>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_telegram_message_form">
+            <field name="name">Telegram message</field>
+            <field name="res_model">telegram.message</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_telegram_message_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!--res.company-->
+        <record model="ir.ui.view" id="view_res_company_setup_tree">
+            <field name="name">res.company.tree</field>
+            <field name="model">res.company</field>
+            <field name="priority" eval="40" />
+            <field name="arch" type="xml">
+                <tree string="Setup" editable="bottom">
+                    <field name="name" readonly="1"/>
+                    <field name="telegram_token" />
+                    <field name="telegram_group" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_res_company_telegram_form">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[2]" position="after">
+                    <page string="Intervent Telegram">
+                        <group colspan="4" col="4">
+                            <field name="telegram_token" />
+                            <field name="telegram_group" />
+                        </group>    
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_rec_company_setup">
+            <field name="name">Company setup</field>
+            <field name="res_model">res.company</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_res_company_setup_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+        
+        <menuitem 
+            parent="hr.menu_hr_main" 
+            id="menu_telegram_root" 
+            name="Telegram"
+            sequence="20"
+            />
+            <menuitem 
+                parent="menu_telegram_root" 
+                id="menu_res_user_load_message" 
+                action="action_rec_users_load"
+                sequence="10"
+                />
+            <menuitem 
+                parent="menu_telegram_root" 
+                id="menu_res_telegram_message" 
+                action="action_telegram_message_form"
+                sequence="20"
+                />
+            
+            <menuitem 
+                parent="menu_telegram_root" 
+                id="menu_telegram_configuration_root" 
+                sequence="90"
+                name="Configuration"
+                />
+           
+                <menuitem 
+                    parent="menu_telegram_configuration_root" 
+                    id="menu_telegram_token" 
+                    action="action_telegram_token_form"
+                    sequence="10"
+                    />
+                <menuitem 
+                    parent="menu_telegram_configuration_root" 
+                    id="menu_telegram_token_location" 
+                    action="action_telegram_token_location_form"
+                    sequence="20"
+                    />                    
+                
+                <menuitem 
+                    parent="menu_telegram_configuration_root" 
+                    id="menu_res_company_setup" 
+                    action="action_rec_company_setup"
+                    sequence="90"
+                    />
+    </data>
+</openerp>
+

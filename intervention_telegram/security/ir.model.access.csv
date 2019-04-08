@@ -1,0 +1,5 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+access_telegram_token_user,telegram.token,model_telegram_token,base.group_user,1,1,1,1
+access_telegram_token_month_user,telegram.token.month,model_telegram_token_month,base.group_user,1,1,1,1
+access_telegram_token_location_user,telegram.token.location,model_telegram_token_location,base.group_user,1,1,1,1
+access_telegram_message_user,telegram.message,model_telegram_message,base.group_user,1,1,1,1

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+   <data>
+        <!--telegram.token-->
+        <record id="token_partner" model="telegram.token">
+            <field name="name">partner</field>
+            <field name="keyword">cliente|ditta|partner</field>
+            <field name="required" eval="True" />
+            <field name="note">Subject or title of intervent</field>
+        </record>
+        <record id="token_time" model="telegram.token">
+            <field name="name">time</field>
+            <field name="keyword">orario|ora|ore|dalle</field>
+            <field name="required" eval="True" />
+            <field name="note">Subject or title of intervent</field>
+        </record>
+        <record id="token_date" model="telegram.token">
+            <field name="name">date</field>
+            <field name="keyword">data|giorno|il</field>
+            <field name="required" eval="True" />
+            <field name="note">Subject or title of intervent</field>
+        </record>
+        <record id="token_duration" model="telegram.token">
+            <field name="name">duration</field>
+            <field name="keyword">durata|totale</field>
+            <field name="required" eval="True" />
+            <field name="note">Subject or title of intervent</field>
+        </record>
+        <record id="token_location" model="telegram.token">
+            <field name="name">location</field>
+            <field name="keyword">location|posto|luogo</field>
+            <field name="required" eval="True" />
+            <field name="note">Subject or title of intervent</field>
+        </record>
+        <record id="token_subject" model="telegram.token">
+            <field name="name">subject</field>
+            <field name="keyword">oggetto|soggetto|titolo|richiesta</field>
+            <field name="required" eval="True" />
+            <field name="note">Subject or title of intervent</field>
+        </record>
+        <record id="token_description" model="telegram.token">
+            <field name="name">description</field>
+            <field name="keyword">intervento|testo|descrizione</field>
+            <field name="required" eval="True" />
+            <field name="note">Subject or title of intervent</field>
+        </record>
+
+        <!--telegram.token.location-->
+        <record id="telegram_token_location_phone" model="telegram.token.location">
+            <field name="name">phone</field>
+            <field name="keyword">telefonica|telefonico|telefono</field>
+        </record>
+        <record id="telegram_token_location_customer" model="telegram.token.location">
+            <field name="name">customer</field>
+            <field name="keyword">dal cliente|cliente</field>
+        </record>
+        <record id="telegram_token_location_passenger" model="telegram.token.location">
+            <field name="name">passenger</field>
+            <field name="keyword">passeggero</field>
+        </record>
+        <record id="telegram_token_location_connection" model="telegram.token.location">
+            <field name="name">connection</field>
+            <field name="keyword">connessione|teleassistenza|tele assistenza|tele-assistenza</field>
+        </record>
+        <record id="telegram_token_location_company" model="telegram.token.location">
+            <field name="name">company</field>
+            <field name="keyword">azienda|sede|ufficio</field>
+        </record>
+
+        <!--telegram.token.month-->
+        <record id="telegram_token_month_01" model="telegram.token.month">
+            <field name="name">gennaio</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_02" model="telegram.token.month">
+            <field name="name">febbraio</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_03" model="telegram.token.month">
+            <field name="name">marzo</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_04" model="telegram.token.month">
+            <field name="name">aprile</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_05" model="telegram.token.month">
+            <field name="name">maggio</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_06" model="telegram.token.month">
+            <field name="name">giugno</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_07" model="telegram.token.month">
+            <field name="name">luglio</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_08" model="telegram.token.month">
+            <field name="name">agosto</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_09" model="telegram.token.month">
+            <field name="name">settembre</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_10" model="telegram.token.month">
+            <field name="name">ottobre</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_11" model="telegram.token.month">
+            <field name="name">novembre</field>
+            <field name="value">01</field>
+        </record>
+        <record id="telegram_token_month_12" model="telegram.token.month">
+            <field name="name">dicembre</field>
+            <field name="value">01</field>
+        </record>
+   </data>
+</openerp>
