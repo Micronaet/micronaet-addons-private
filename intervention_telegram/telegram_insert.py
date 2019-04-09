@@ -25,6 +25,7 @@ import os
 import sys
 import logging
 import openerp
+import telepot
 import openerp.netsvc as netsvc
 import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv, expression, orm
@@ -53,16 +54,9 @@ class TelegramMessage(orm.Model):
     # -------------------------------------------------------------------------
     # Utility:
     # -------------------------------------------------------------------------
-    def get_telegram_gmt(self, seconds):
-        ''' Date from 1970-01-01 00:00:00
-        '''
-        datetime_format = '%Y-%m-%d %H:%M:%S'
-        origin = datetime.strptime('1970-01-01 00:00:00', datetime_format)
-        return datetime.strftime(
-            origin + timedelta(seconds=seconds), datetime_format)
-
-    def get_user(self, user):
+    def get_user(self, cr, uid, user, context=None):
         ''' Return user ID
+            Not used for now
         '''
         user_ids = user_pool.search(cr, uid, [
             '|',
@@ -73,9 +67,10 @@ class TelegramMessage(orm.Model):
             return user_ids[0]
         return False
 
-    def get_partner(self, partner_name):
+    def get_partner(self, cr, uid, partner_name, context=None):
         ''' Return user ID
         '''
+        partner_pool = self.pool.get('res.partner')
         partner_ids = partner_pool.search(cr, uid, [
             '|',
             ('name', 'ilike', partner_name),
@@ -85,18 +80,19 @@ class TelegramMessage(orm.Model):
             return partner_ids[0]
         return False
 
-    def get_datetime(self, date, time):
+    def get_datetime(self, date, time, months):
         ''' Return datetime from date-time
         '''
+        import pdb; pdb.set_trace()
         if '/' in date or '-' in date:
             date_formatted = date
         else:    
             # Format Date:
-            date_part = date.split(' ')
+            date_part = date.lower().split(' ')
             try:
                 day = int(date_part[0].strip())
                 
-                month = date_part[1].strip().lower()
+                month = date_part[1].strip()
                 if not month.isdigit():
                     month = months.get(month)
                 month = int(month)
@@ -161,9 +157,10 @@ class TelegramMessage(orm.Model):
         '''
         # Pool used:
         partner_pool = self.pool.get('res.partner')
-        intervent_pool = self.pool.get('account.analytic.intervent')
+        intervent_pool = self.pool.get('hr.analytic.timesheet')
         token_pool = self.pool.get('telegram.token')
         location_pool = self.pool.get('telegram.token.location')
+        month_pool = self.pool.get('telegram.token.month')
 
         # ---------------------------------------------------------------------
         # Load token list:
@@ -177,14 +174,24 @@ class TelegramMessage(orm.Model):
         # ---------------------------------------------------------------------
         # Load token location list:
         # ---------------------------------------------------------------------
-        location_ids = token_pool.search(cr, uid, [], context=context)
+        location_ids = location_pool.search(cr, uid, [], context=context)
         location_db = {}
         for location in location_pool.browse(
                 cr, uid, location_ids, context=context):
-            location_list[location.name] = location.keyword.split('|')
+            location_db[location.name] = location.keyword.split('|')
+
+        # ---------------------------------------------------------------------
+        # Load months translation:
+        # ---------------------------------------------------------------------
+        month_ids = month_pool.search(cr, uid, [], context=context)
+        month_db = {}
+        for month in month_pool.browse(
+                cr, uid, month_ids, context=context):
+            month_db[month.name] = month.value
 
         for message in self.browse(cr, uid, ids, context=context):
-            message_text = message.text        
+            message_text = message.text      
+            message_date = message.datetime  
             user_id = message.user_id.id
 
             telegram_part = message_text.split(' ')
@@ -222,19 +229,38 @@ class TelegramMessage(orm.Model):
                 continue # not an intervent
 
             intervent_data = {
+                'telegram_id': message.id,
                 'name': subject,
-                'description': token_value.get('description', ''),
+                'intervention_request': subject,
+                'intervention': token_value.get('description', ''),
                 'user_id': user_id,
                 }
+                
+            # -----------------------------------------------------------------
+            # Update extra information for user:
+            # -----------------------------------------------------------------
+            res = intervent_pool.on_change_user_id(
+                cr, uid, False, user_id)
+            intervent_data.update(res.get('value', {}))
+                
             incomplete = []
             
             # -----------------------------------------------------------------
             # Partner: 
             # -----------------------------------------------------------------
             if 'partner' in token_value:
-                partner_id = self.get_partner(token_value['partner'])
+                partner_id = self.get_partner(
+                    cr, uid, token_value['partner'], context=context)
                 if partner_id:
                     intervent_data['intervent_partner_id'] = partner_id
+                    
+                    # ---------------------------------------------------------
+                    # Put default account:
+                    # ---------------------------------------------------------
+                    res = intervent_pool.on_change_partner(
+                        cr, uid, False, partner_id, False, context=context)
+                    intervent_data.update(res.get('value', {}))
+
                 else:
                     incomplete.append('partner')
             else:
@@ -245,9 +271,9 @@ class TelegramMessage(orm.Model):
             # -----------------------------------------------------------------
             date = token_value.get('date', message_date[:10])
             time = token_value.get('time', message_date[-8:])
-            from_date = self.get_datetime(date, time)
+            from_date = self.get_datetime(date, time, month_db)
             if from_date:
-                intervent_data['from_date'] = from_date
+                intervent_data['date_start'] = from_date
             else:
                 incomplete.append('from_date')
 
@@ -257,7 +283,7 @@ class TelegramMessage(orm.Model):
             if 'duration' in token_value:
                 duration = self.get_duration(token_value['duration'])
                 if duration:
-                    intervent_data['duration'] = duration
+                    intervent_data['intervent_duration'] = duration
                 else:
                     incomplete.append('duration')
             else:
@@ -270,9 +296,29 @@ class TelegramMessage(orm.Model):
                 location = self.get_location(
                     token_value['location'], location_db)
                 if location:
-                    intervent_data['location'] = location
+                    intervent_data['mode'] = location
+                    
+                    # Update trip info:
+                    res = intervent_pool.on_change_mode(
+                        cr, uid, False, location, context=context)
+                    intervent_data.update(res.get('value', {}))    
                 else:
                     incomplete.append('location')
+            
+            # -----------------------------------------------------------------
+            # Create intervent: 
+            # -----------------------------------------------------------------            
+            try:                
+                intervent_id = intervent_pool.create(
+                    cr, uid, intervent_data, context=context)
+                # Update back referente on message
+                self.write(cr, uid, message.id, {
+                    'intervent_id': intervent_id,
+                    'missing_field': ', '.join(incomplete),
+                    }, context=context)        
+            except:
+                _logger.error('Error creating intervent: %s' % intervent_data)
+                continue
 
         return {
             'type': 'ir.actions.act_window',
@@ -290,14 +336,14 @@ class TelegramMessage(orm.Model):
             }
         
     _columns = {
-        'datetime': fields.date('Date'),
+        'datetime': fields.datetime('Date'),
         'username': fields.char('Username', size=64, required=True),
         'user_id': fields.many2one('res.users', 'User'),
         
         'text': fields.text('Text'),
         'intervent_id': fields.many2one('hr.analytic.timesheet', 'Intervent'),
         
-        'missing_field': fields.char('Telegram text', size=100),
+        'missing_field': fields.char('Missing', size=120),
         'telegram_id': fields.integer('Message ID'),
         'update_id': fields.integer('Update ID'),
         'telegram_group': fields.char('Telegram group', size=64),
@@ -371,6 +417,15 @@ class ResUsers(osv.osv):
     '''
     _inherit = 'res.users'
 
+    # Utility:
+    def get_telegram_gmt(self, seconds):
+        ''' Date from 1970-01-01 00:00:00
+        '''
+        datetime_format = '%Y-%m-%d %H:%M:%S'
+        origin = datetime.strptime('1970-01-01 00:00:00', datetime_format)
+        return datetime.strftime(
+            origin + timedelta(seconds=seconds), datetime_format)
+
     # TODO schedule procedure for import every hours:
 
     def load_telegram_intervent(self, cr, uid, ids, context=None):
@@ -383,7 +438,7 @@ class ResUsers(osv.osv):
         user = self.browse(cr, uid, ids, context=context)[0]
         company = user.company_id
         telegram_group = company.telegram_group
-        telegram_username = user.telegram_user
+        telegram_username = user.telegram_login
         telegram_user_id = ids[0] # This user 
 
         # ---------------------------------------------------------------------
@@ -394,8 +449,8 @@ class ResUsers(osv.osv):
             ('username', '=', telegram_username),
             ('telegram_group', '=', telegram_group),
             ], context=context)
-        telegram_ids = [item.telegram_id for item in message_pool.browse(
-                cr, uid, message_ids, context=context)
+        telegram_ids = [msg.telegram_id for msg in message_pool.browse(
+                cr, uid, message_ids, context=context)]
         
         # ---------------------------------------------------------------------
         # Comunicate Telegram message:
@@ -414,7 +469,7 @@ class ResUsers(osv.osv):
             # -----------------------------------------------------------------
             # 2. Only message in chat group selected:
             try:
-                if message['chat']['id'] != telegram_group:
+                if message['chat']['id'] != int(telegram_group):
                     continue # not in chat group
             except:
                 continue
@@ -443,21 +498,27 @@ class ResUsers(osv.osv):
             # -----------------------------------------------------------------
             # Read Message:
             # -----------------------------------------------------------------
-            message_text = message_text.strip()
+            message_text = message['text'].strip()
 
             message_data = {
                 'text': message_text,
                 'update_id': record['update_id'],
-                'datetime': get_telegram_gmt(message['date']), 
+                'datetime': self.get_telegram_gmt(message['date']), 
                 'username': username,
                 'user_id': telegram_user_id,
                 'telegram_group': telegram_group,
-                'telegram_id': telegram_id,
+                'telegram_id': message_id,
                 }
             new_message_ids.append(message_pool.create(
                 cr, uid, message_data, context=context))
 
-
+        # ---------------------------------------------------------------------
+        # Create intervent:
+        # ---------------------------------------------------------------------
+        if new_message_ids:
+            return message_pool.create_intervent_from_message(
+                cr, uid, new_message_ids, context=context)        
+        _logger.warning('No new telegram message')
         return True
 
     _columns = {
@@ -470,7 +531,7 @@ class ResCompany(osv.osv):
     _inherit = 'res.company'
     
     _columns = {
-        'telegram_token': fields.char('Telegram token', size=40),
+        'telegram_token': fields.char('Telegram token', size=80),
         'telegram_group': fields.char('Telegram group', size=20),
         }
         

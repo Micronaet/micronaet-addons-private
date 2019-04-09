@@ -54,7 +54,7 @@
                 <tree string="Users" editable="bottom">
                     <field name="name" readonly="1"/>
                     <field name="telegram_login" />
-                    <button name="load_telegram_intervent" string="Load" type="object" icon="gtk-refresh"/>
+                    <button name="load_telegram_intervent" string="Load" type="object" icon="gtk-refresh" attrs="{'invisible': [('telegram_login','=',False)]}"/>
                 </tree>
             </field>
         </record>
