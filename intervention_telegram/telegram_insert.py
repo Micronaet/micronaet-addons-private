@@ -151,6 +151,27 @@ class TelegramMessage(orm.Model):
     # -------------------------------------------------------------------------
     # Button event:
     # -------------------------------------------------------------------------
+    def show_intervent_from_message(self, cr, uid, ids, context=None):
+        ''' Show intervent
+        '''
+        current_proxy = self.browse(cr, uid, ids, context=context)[0]
+        intervent_id = current_proxy.intervent_id.id
+        
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Message imported'),
+            'view_type': 'form',
+            'view_mode': 'form,tree',
+            'res_id': intervent_id,
+            'res_model': 'hr.analytic.timesheet',
+            'view_id': False, #view_id, # False
+            'views': [(False, 'form'), (False, 'tree')],
+            'domain': [],
+            'context': context,
+            'target': 'current', # 'new'
+            'nodestroy': False,
+            }
+        
     def create_intervent_from_message(self, cr, uid, ids, context=None):
         ''' Create intervent parsing message        
             Also used during import process with more ids

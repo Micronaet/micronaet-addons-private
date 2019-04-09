@@ -1,6 +1,28 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <!--res.partner-->
+        <record model="ir.ui.view" id="view_res_partner_nickname_tree">
+            <field name="name">res.partner.tree</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <tree string="Partner nickname" editable="bottom">
+                    <field name="is_company" invisible="1"/>
+                    <field name="name" readonly="1"/>
+                    <field name="telegram_nickname" />
+                </tree>
+            </field>
+        </record>        
+        <record model="ir.actions.act_window" id="action_res_partner_form">
+            <field name="name">Partner nickname</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_res_partner_nickname_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
         <!--telegram.token-->
         <record model="ir.ui.view" id="view_telegram_token_tree">
             <field name="name">telegram.token.tree</field>
@@ -80,7 +102,8 @@
                     <field name="intervent_id" />
                     <field name="missing_field" />
                     <field name="telegram_id" />
-                    <button name="create_intervent_from_message" string="Create intervent" type="object" attrs="{'invisible': [('intervent_id','!=',False)]}"/>
+                    <button name="create_intervent_from_message" string="Create intervent" type="object" attrs="{'invisible': [('intervent_id','!=',False)]}" icon="gtk-execute"/>
+                    <button name="show_intervent_from_message" string="Show intervent" type="object" attrs="{'invisible': [('intervent_id','=',False)]}" icon="gtk-go-forward"/>
                 </tree>
             </field>
         </record>
@@ -90,7 +113,8 @@
             <field name="arch" type="xml">
                 <form string="Telegram message" version="7.0">
                     <header>
-                         <button name="create_intervent_from_message" string="Create intervent" type="object" attrs="{'invisible': [('intervent_id','!=',False)]}"/>
+                         <button name="create_intervent_from_message" string="Create intervent" type="object" attrs="{'invisible': [('intervent_id','!=',False)]}" icon="gtk-execute"/>
+                         <button name="show_intervent_from_message" string="Show intervent" type="object" attrs="{'invisible': [('intervent_id','=',False)]}" icon="gtk-go-forward"/>
                     </header>
                     <sheet>
                         <group colspan="4" col="4">
@@ -213,6 +237,12 @@
                     action="action_telegram_token_location_form"
                     sequence="20"
                     />                    
+                <menuitem 
+                    parent="menu_telegram_configuration_root" 
+                    id="menu_telegram_partner_nickname" 
+                    action="action_res_partner_form"
+                    sequence="30"
+                    />
                 
                 <menuitem 
                     parent="menu_telegram_configuration_root" 
