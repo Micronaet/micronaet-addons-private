@@ -202,12 +202,9 @@ class FastStockPickingReturnet(orm.Model):
                         f_text = f_text_black
                         f_number = f_number_black
                     else:    
-                        try:
-                            move_pool.write(cr, uid, [move_id], {
-                                'product_uom_qty': new_qty,
-                                }, context=context)
-                        except:
-                            import pdb; pdb.set_trace()        
+                        move_pool.write(cr, uid, [move_id], {
+                            'product_uom_qty': new_qty,
+                            }, context=context)
 
                 # Print line:
                 if report_mode:
