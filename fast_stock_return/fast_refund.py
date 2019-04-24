@@ -205,8 +205,13 @@ class FastStockPickingReturnet(orm.Model):
                         try:
                             move_pool.write(cr, uid, [move_id], {
                                 'product_uom_qty': new_qty,
+                                'product_uom': move.product_id.uom_id.id,
                                 }, context=context)
                         except:
+                            #move = move_pool.browse(
+                            #    cr, uid, [move_id], context=context)[0]
+                            #move.product_id.uom_id
+                                
                             import pdb; pdb.set_trace()        
 
                 # Print line:
