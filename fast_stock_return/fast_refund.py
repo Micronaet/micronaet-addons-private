@@ -208,12 +208,10 @@ class FastStockPickingReturnet(orm.Model):
                                 'product_uom': move.product_id.uom_id.id,
                                 }, context=context)
                         except:
-                            #move = move_pool.browse(
-                            #    cr, uid, [move_id], context=context)[0]
-                            #move.product_id.uom_id
-                                
-                            import pdb; pdb.set_trace()        
-
+                            raise osv.except_osv(
+                                _('Errore'), 
+                                _(u'Problema aggiornando unita di misura'),
+                                )
                 # Print line:
                 if report_mode:
                     row += 1
