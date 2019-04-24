@@ -409,7 +409,7 @@ class FastStockPickingReturnet(orm.Model):
         'done': fields.boolean('Done'),
         }
 
-class FastStockMoveReturned(orm.TransientModel):
+class FastStockMoveReturned(orm.Model):
     """ Model name: Fast Stock Move Returned
     """
     
@@ -424,7 +424,7 @@ class FastStockMoveReturned(orm.TransientModel):
         'product_qty': fields.float('Q.', digits=(16, 2)),
         }
         
-class FastStockPicking(orm.TransientModel):
+class FastStockPicking(orm.Model):
     """ Model name: Fast Stock Picking
     """
     _inherit = 'fast.stock.picking.returned'
