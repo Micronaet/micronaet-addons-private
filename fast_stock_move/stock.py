@@ -55,6 +55,27 @@ class StockMove(orm.Model):
     _inherit = 'stock.move'
     _order = 'id'
     
+    def open_product_movement(self, cr, uid, ids, context=None):  
+        ''' Open product form
+        '''
+        #model_pool = self.pool.get('ir.model.data')
+        #view_id = model_pool.get_object_reference('module_name', 'view_name')[1]
+        move_proxy = self.browse(cr, uid, ids, context=context)[0]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Movimenti prodotto'),
+            'view_type': 'form',
+            'view_mode': 'tree,form',
+            'res_id': False,
+            'res_model': 'stock.move',
+            'view_id': False,
+            'views': [(False, 'form'), (False, 'tree')],
+            'domain': [('product_id', '=', move_proxy.product_id.id)],
+            'context': context,
+            'target': 'current', # 'new'
+            'nodestroy': False,
+            }
+
     def open_product_form(self, cr, uid, ids, context=None):  
         ''' Open product form
         '''
