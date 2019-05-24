@@ -145,7 +145,8 @@ class StockMove(orm.Model):
             help='This will create auto picking out document',
             ),
         'corresponding': fields.related(
-            'picking_id', 'corresponding', type='boolean', 'Corresponding'),
+            'picking_id', 'corresponding', type='boolean', 
+            string='Corresponding'),
         }       
 
 class StockQuants(orm.Model):
