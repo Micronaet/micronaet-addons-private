@@ -69,7 +69,7 @@ class StockMove(orm.Model):
             'res_id': False,
             'res_model': 'stock.move',
             'view_id': False,
-            'views': [(False, 'form'), (False, 'tree')],
+            'views': [(False, 'tree'), (False, 'form')],
             'domain': [('product_id', '=', move_proxy.product_id.id)],
             'context': context,
             'target': 'current', # 'new'
