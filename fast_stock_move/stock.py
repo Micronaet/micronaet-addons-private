@@ -44,6 +44,11 @@ class ProductProduct(orm.Model):
     """    
     _inherit = 'product.product'
     
+    def dummy_save(self, cr, uid, ids, context=None):
+        ''' Dummy save
+        '''
+        return True
+
     _columns = {
         'standard_price_date': fields.date('Update Date', 
             help='Update date for standard price'),
@@ -79,6 +84,9 @@ class StockMove(orm.Model):
     def open_product_form(self, cr, uid, ids, context=None):  
         ''' Open product form
         '''
+        if context is None:
+            context = {}
+        context['popup_mode'] = True
         #model_pool = self.pool.get('ir.model.data')
         #view_id = model_pool.get_object_reference('module_name', 'view_name')[1]
         move_proxy = self.browse(cr, uid, ids, context=context)[0]

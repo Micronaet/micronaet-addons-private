@@ -11,6 +11,18 @@
                 </field>
             </field>
         </record>
+        <record model="ir.ui.view" id="view_product_product_save_button_form">
+            <field name="name">product.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml"> 
+                <sheet position="before">
+                    <header>
+                        <button name="dummy_save" string="Salva" type="object" invisible="not context.get('popup_mode', False)" class="oe_highlight"/>
+                    </header>
+                </sheet>
+            </field>
+        </record>
 
         <!--res.company-->
         <record model="ir.ui.view" id="view_res_company_stock_page_parameter_form">
