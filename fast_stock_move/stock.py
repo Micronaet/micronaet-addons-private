@@ -177,7 +177,7 @@ class StockPicking(orm.Model):
             # -----------------------------------------------------------------
             product_date = product.standard_price_date
             
-            if not product_date or picking_date > product_date:
+            if not product_date or picking_date >= product_date:
                 # If better date:
                 product_pool.write(cr, uid, product.id, {
                     'standard_price': standard_price,
