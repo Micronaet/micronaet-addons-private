@@ -281,7 +281,7 @@
             <field name="res_model">stock.move</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree</field>
-            <field name="domain">[('corresponding', '=', False),('picking_id.pick_move', '=', 'out')]</field>
+            <field name="domain">[('picking_id.corresponding', '=', False),('picking_id.pick_move', '=', 'out')]</field>
         </record>
 
         <!-- PICKING IN -->
