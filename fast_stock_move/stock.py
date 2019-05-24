@@ -54,6 +54,27 @@ class StockMove(orm.Model):
     """    
     _inherit = 'stock.move'
     _order = 'id'
+    
+    def open_product_form(self, cr, uid, ids, context=None):  
+        ''' Open product form
+        '''
+        #model_pool = self.pool.get('ir.model.data')
+        #view_id = model_pool.get_object_reference('module_name', 'view_name')[1]
+        move_proxy = self.browse(cr, uid, ids, context=context)[0]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Prodotto'),
+            'view_type': 'form',
+            'view_mode': 'form,tree',
+            'res_id': move_proxy.product_id.id,
+            'res_model': 'product.product',
+            'view_id': False
+            'views': [(False, 'form'), (False, 'tree')],
+            'domain': [],
+            'context': context,
+            'target': 'new', # 'new'
+            'nodestroy': False,
+            }
 
 class StockMove(orm.Model):
     """ Model name: StockMove
