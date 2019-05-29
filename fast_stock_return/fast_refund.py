@@ -298,6 +298,8 @@ class FastStockPickingReturnet(orm.Model):
                     'Residuo', 
                     ], default_format=f_header)
                 for product in remove_db:
+                    if remove_db[product] <= 0.0:
+                        continue # all removed
                     row += 1
                     excel_pool.write_xls_line(ws_name, row, [
                         product.default_code,
@@ -323,7 +325,7 @@ class FastStockPickingReturnet(orm.Model):
                 20, 20, 20, 30, 10, 20, 30, 10, 10])
             row = 0
             excel_pool.write_xls_line(ws_name, row, [
-                'Elenco ti tutti i movimenti con i prodotti selezionati',
+                'Elenco di tutti i movimenti con i prodotti selezionati',
                 ], default_format=f_title)
 
             row += 1
