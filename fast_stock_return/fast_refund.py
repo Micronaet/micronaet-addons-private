@@ -66,12 +66,27 @@ class FastStockPickingReturnet(orm.Model):
         def pick_sort_mode(record):
             ''' Sort picking for check returned product
             '''
-            pick_state = {
-                'todo': 1,
-                'ready': 2,
-                'delivered': 3,
-                }
-            return pick_state.get(record.pick_state, 0), record.create_date
+            pick_state = record.pick_state
+            if pick_state == 'todo':
+                pick_position = 0,
+            elif pick_state == 'ready': 
+                pick_position = 1
+            else: # delivered
+                pick_position = 2
+
+            if record.ddt_id:
+                if record.ddt_id.is_invoiced:
+                    invoice_state = 2
+                else:    
+                    invoice_state = 1
+            else:    
+                invoice_state = 0
+
+            return (
+                invoice_state,
+                pick_position,
+                record.create_date,
+                )
 
         if context is None:
             context = {}
