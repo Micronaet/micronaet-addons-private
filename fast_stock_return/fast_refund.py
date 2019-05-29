@@ -102,6 +102,7 @@ class FastStockPickingReturnet(orm.Model):
         # Wizard parameters:
         # ---------------------------------------------------------------------
         partner_id = current_proxy.partner_id.id
+        contact_id = current_proxy.contact_id.id or False
         account_id = current_proxy.account_id.id
         #with_ddt = current_proxy.with_ddt
         
@@ -121,6 +122,7 @@ class FastStockPickingReturnet(orm.Model):
             ('partner_id', '=', partner_id),
             ('account_id', '=', account_id),
             ('pick_move', '=', 'out'), # only out document
+            ('contact_id', '=', contact_id), # False if not present
             # All pick_state! ('pick_state', '=', 'delivered'),
             ], context=context)
 
@@ -442,6 +444,7 @@ class FastStockPickingReturnet(orm.Model):
     
     _columns = {
         'partner_id': fields.many2one('res.partner', 'Partner', required=True),
+        'contact_id': fields.many2one('res.partner', 'Contatto',),
         'account_id': fields.many2one('account.analytic.account', 'Account',
             required=True),
         #'account_no_parent': fields.boolean('Account without partner'),        
