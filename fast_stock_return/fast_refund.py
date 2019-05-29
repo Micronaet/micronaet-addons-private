@@ -63,6 +63,16 @@ class FastStockPickingReturnet(orm.Model):
     def update_original_picking(self, cr, uid, ids, context=None):
         ''' Force update picking active
         '''
+        def pick_sort_mode(record):
+            ''' Sort picking for check returned product
+            '''
+            pick_state = {
+                'todo': 1,
+                'ready': 2,
+                'delivered': 3,
+                }
+            return pick_state.get(record.pick_state, 0), record.create_date
+
         if context is None:
             context = {}
         report_mode = context.get('report_mode', False)    
@@ -78,7 +88,7 @@ class FastStockPickingReturnet(orm.Model):
         # ---------------------------------------------------------------------
         partner_id = current_proxy.partner_id.id
         account_id = current_proxy.account_id.id
-        with_ddt = current_proxy.with_ddt
+        #with_ddt = current_proxy.with_ddt
         
         # ---------------------------------------------------------------------
         # Line product to clean:
@@ -93,26 +103,25 @@ class FastStockPickingReturnet(orm.Model):
         # Picking to clean DB:
         # ---------------------------------------------------------------------        
         picking_ids = picking_pool.search(cr, uid, [
-            #('ddt_id.is_invoiced', '=', False), # Not invoiced DDT
             ('partner_id', '=', partner_id),
             ('account_id', '=', account_id),
             ('pick_move', '=', 'out'), # only out document
-            ('pick_state', '=', 'delivered'), # only delivered
+            #('pick_state', '=', 'delivered'), # only delivered XXX All!
             ], context=context)
 
         clean_db = {} # Database used to clean data:        
         # picking_id: (move_id, new_qty, previous_qty)
         for picking in sorted(
                 picking_pool.browse(cr, uid, picking_ids, context=context),
-                key=lambda x: x.create_date):              
+                key=lambda x: pick_sort_mode(x)):              
                   
             # Test if needed DDT:                    
-            if not with_ddt and picking.ddt_id:
-                continue # Jump
+            #if not with_ddt and picking.ddt_id:
+            #    continue # Jump
 
             # Invoiced:    
-            if picking.ddt_id and picking.ddt_id.is_invoiced:
-                continue # Jump
+            #if picking.ddt_id and picking.ddt_id.is_invoiced:
+            #    continue # Jump
             
             for move in picking.move_lines:
                 product = move.product_id
@@ -159,7 +168,7 @@ class FastStockPickingReturnet(orm.Model):
             f_number_red = excel_pool.get_format('number_red')
 
             excel_pool.column_width(ws_name, [
-                20, 20, 20, 30, 10, 10, 5])
+                20, 20, 5, 20, 30, 10, 10, 5])
             row = 0
             excel_pool.write_xls_line(ws_name, row, [
                 'Correzioni effettuate sui picking di carico',
@@ -169,6 +178,7 @@ class FastStockPickingReturnet(orm.Model):
             excel_pool.write_xls_line(ws_name, row, [
                 'Picking',
                 'DDT', 
+                'Fatt.',
                 'Codice',
                 'Prodotto',
                 'Q. prec.', 
@@ -218,6 +228,7 @@ class FastStockPickingReturnet(orm.Model):
                     excel_pool.write_xls_line(ws_name, row, [
                         picking.name,
                         picking.ddt_id.name or '/', 
+                        'X' if picking.ddt_id.is_invoiced else '',
                         move.product_id.default_code,
                         move.product_id.name,
                         (move.product_uom_qty, f_number), 
