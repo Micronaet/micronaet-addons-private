@@ -168,7 +168,7 @@ class FastStockPickingReturnet(orm.Model):
             f_number_red = excel_pool.get_format('number_red')
 
             excel_pool.column_width(ws_name, [
-                20, 20, 5, 20, 30, 10, 10, 5])
+                20, 12, 20, 5, 20, 10, 30, 10, 10, 5])
             row = 0
             excel_pool.write_xls_line(ws_name, row, [
                 'Correzioni effettuate sui picking di carico',
@@ -177,8 +177,10 @@ class FastStockPickingReturnet(orm.Model):
             row += 1
             excel_pool.write_xls_line(ws_name, row, [
                 'Picking',
+                'Stato',
                 'DDT', 
                 'Fatt.',
+                'N. ft.',
                 'Codice',
                 'Prodotto',
                 'Q. prec.', 
@@ -222,13 +224,18 @@ class FastStockPickingReturnet(orm.Model):
                                 _('Errore'), 
                                 _(u'Problema aggiornando unita di misura'),
                                 )
+
+                # -------------------------------------------------------------                
                 # Print line:
+                # -------------------------------------------------------------                
                 if report_mode:
                     row += 1
                     excel_pool.write_xls_line(ws_name, row, [
                         picking.name,
+                        picking.pick_state,
                         picking.ddt_id.name or '/', 
                         'X' if picking.ddt_id.is_invoiced else '',
+                        picking.ddt_id.invoice_number or '',
                         move.product_id.default_code,
                         move.product_id.name,
                         (move.product_uom_qty, f_number), 
