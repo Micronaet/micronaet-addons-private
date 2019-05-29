@@ -121,7 +121,7 @@ class FastStockPickingReturnet(orm.Model):
             ('partner_id', '=', partner_id),
             ('account_id', '=', account_id),
             ('pick_move', '=', 'out'), # only out document
-            #('pick_state', '=', 'delivered'), # only delivered XXX All!
+            # All pick_state! ('pick_state', '=', 'delivered'),
             ], context=context)
 
         clean_db = {} # Database used to clean data:        
