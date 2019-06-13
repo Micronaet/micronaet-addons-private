@@ -269,7 +269,6 @@ class StockPicking(orm.Model):
         location_dest_id = picking_type.default_location_dest_id.id
         
         pick_proxy = self.browse(cr, uid, ids, context=context)[0]        
-        import pdb; pdb.set_trace()
         if not default_account_id:
             test = [
                 True for item in pick_proxy.move_lines \
@@ -284,7 +283,7 @@ class StockPicking(orm.Model):
         pickings = {}
         for move in pick_proxy.move_lines:
             pick_orig = move.picking_id
-            account = move.auto_account_out_id or default_account_id
+            account_id = move.auto_account_out_id.id or default_account_id
             if not account:
                 continue # No creation
 
@@ -295,7 +294,7 @@ class StockPicking(orm.Model):
             if account not in pickings:
                 pickings[account] = picking_pool.create(cr, uid, {
                     'partner_id': partner.id,
-                    'account_id': account.id,
+                    'account_id': account_id,
                     'date': now,
                     'min_date': now,
                     'origin': origin, # Origin as an extra info                    
