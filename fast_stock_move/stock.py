@@ -284,7 +284,7 @@ class StockPicking(orm.Model):
         for move in pick_proxy.move_lines:
             pick_orig = move.picking_id
             account_id = move.auto_account_out_id.id or default_account_id
-            if not account:
+            if not account_id:
                 continue # No creation
 
             partner = account.partner_id
