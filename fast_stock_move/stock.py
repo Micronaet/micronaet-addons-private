@@ -240,15 +240,22 @@ class StockPicking(orm.Model):
         '''
         if context is None:
             context = {}
-        default_account = context.get('default_account', False)
             
         # Pool used:
         company_pool = self.pool.get('res.company')
         picking_pool = self.pool.get('stock.picking')
         move_pool = self.pool.get('stock.move')
+        account_pool = self.pool.get('account.analytic.account')
         
         type_pool = self.pool.get('stock.picking.type')
 
+        default_account_id = context.get('default_account_id', False)
+        if default_account_id:
+            default_account = account_pool.browse(
+                cr, uid, default_account_id, context=context)
+        else:
+            default_account = False        
+        
         # ---------------------------------------------------------------------
         # Parameters:
         # ---------------------------------------------------------------------
@@ -269,7 +276,7 @@ class StockPicking(orm.Model):
         location_dest_id = picking_type.default_location_dest_id.id
         
         pick_proxy = self.browse(cr, uid, ids, context=context)[0]        
-        if not default_account:
+        if not default_account_id:
             test = [
                 True for item in pick_proxy.move_lines \
                     if item.auto_account_out_id.id]
