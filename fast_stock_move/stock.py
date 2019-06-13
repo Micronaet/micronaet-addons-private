@@ -240,7 +240,7 @@ class StockPicking(orm.Model):
         '''
         if context is None:
             context = {}
-        default_account_id = context.get('default_account_id', False)
+        default_account = context.get('default_account', False)
             
         # Pool used:
         company_pool = self.pool.get('res.company')
@@ -269,7 +269,7 @@ class StockPicking(orm.Model):
         location_dest_id = picking_type.default_location_dest_id.id
         
         pick_proxy = self.browse(cr, uid, ids, context=context)[0]        
-        if not default_account_id:
+        if not default_account:
             test = [
                 True for item in pick_proxy.move_lines \
                     if item.auto_account_out_id.id]
@@ -283,8 +283,8 @@ class StockPicking(orm.Model):
         pickings = {}
         for move in pick_proxy.move_lines:
             pick_orig = move.picking_id
-            account_id = move.auto_account_out_id.id or default_account_id
-            if not account_id:
+            account = move.auto_account_out_id or default_account
+            if not account:
                 continue # No creation
 
             partner = account.partner_id
@@ -294,7 +294,7 @@ class StockPicking(orm.Model):
             if account not in pickings:
                 pickings[account] = picking_pool.create(cr, uid, {
                     'partner_id': partner.id,
-                    'account_id': account_id,
+                    'account_id': account.id,
                     'date': now,
                     'min_date': now,
                     'origin': origin, # Origin as an extra info                    
