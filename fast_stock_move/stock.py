@@ -255,7 +255,7 @@ class StockPicking(orm.Model):
         company_id = company_pool.search(cr, uid, [], context=context)[0]
         now = ('%s' % datetime.now())[:19]
 
-        # Type ID:
+        # Type ID:        
         type_ids = type_pool.search(cr, uid, [
             ('code', '=', 'outgoing'),
             ], context=context)
@@ -269,6 +269,7 @@ class StockPicking(orm.Model):
         location_dest_id = picking_type.default_location_dest_id.id
         
         pick_proxy = self.browse(cr, uid, ids, context=context)[0]        
+        import pdb; pdb.set_trace()
         if not default_account_id:
             test = [
                 True for item in pick_proxy.move_lines \
@@ -281,7 +282,6 @@ class StockPicking(orm.Model):
                     )
 
         pickings = {}
-        import pdb; pdb.set_trace()
         for move in pick_proxy.move_lines:
             pick_orig = move.picking_id
             account = move.auto_account_out_id or default_account_id
