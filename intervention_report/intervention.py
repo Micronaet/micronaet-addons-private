@@ -75,6 +75,10 @@ class account_analytic_account(osv.osv):
             'Total hour', digits=(16, 2), 
             help = "Total hour for this contract for all period",
             ),
+        'total_amount': fields.float(
+            'Total amount', digits=(16, 2), 
+            help = "Total amount without VAT",
+            ),
         'is_extra_report': fields.boolean(
             'Extra report', help='Hided in reports'),
         'account_mode': fields.selection([
