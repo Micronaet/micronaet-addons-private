@@ -238,6 +238,7 @@ class StockPicking(orm.Model):
     def generate_pick_out_draft(self, cr, uid, ids, context=None):
         ''' Create pick out document depend on account analytic
         '''
+        import pdb; pdb.set_trace()
         if context is None:
             context = {}
         default_account = context.get('default_account', False)
