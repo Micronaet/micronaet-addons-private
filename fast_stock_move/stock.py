@@ -238,7 +238,10 @@ class StockPicking(orm.Model):
     def generate_pick_out_draft(self, cr, uid, ids, context=None):
         ''' Create pick out document depend on account analytic
         '''
-        import pdb; pdb.set_trace()
+        if context is None:
+            context = {}
+        default_account_id = context.get('default_account_id', False)
+            
         # Pool used:
         company_pool = self.pool.get('res.company')
         picking_pool = self.pool.get('stock.picking')
@@ -266,19 +269,22 @@ class StockPicking(orm.Model):
         location_dest_id = picking_type.default_location_dest_id.id
         
         pick_proxy = self.browse(cr, uid, ids, context=context)[0]        
-        test = [
-            True for item in pick_proxy.move_lines \
-                if item.auto_account_out_id.id]
+        if not default_account_id:
+            test = [
+                True for item in pick_proxy.move_lines \
+                    if item.auto_account_out_id.id]
 
-        if not test:
-            raise osv.except_osv(
-                _('Error'), 
-                _('Picking without auto account!'),
-                )
+            if not test:
+                raise osv.except_osv(
+                    _('Error'), 
+                    _('Picking without auto account!'),
+                    )
+
         pickings = {}
+        import pdb; pdb.set_trace()
         for move in pick_proxy.move_lines:
             pick_orig = move.picking_id
-            account = move.auto_account_out_id
+            account = move.auto_account_out_id or default_account_id
             if not account:
                 continue # No creation
 
