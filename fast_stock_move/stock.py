@@ -245,10 +245,10 @@ class StockPicking(orm.Model):
         company_pool = self.pool.get('res.company')
         picking_pool = self.pool.get('stock.picking')
         move_pool = self.pool.get('stock.move')
-        account_pool = self.pool.get('account.analytic.account')
-        
+        account_pool = self.pool.get('account.analytic.account')        
         type_pool = self.pool.get('stock.picking.type')
 
+        # Get default account proxy:
         default_account_id = context.get('default_account_id', False)
         if default_account_id:
             default_account = account_pool.browse(
@@ -324,6 +324,7 @@ class StockPicking(orm.Model):
                 'date': now,
                 'location_id': location_id,
                 'location_dest_id': location_dest_id,
+                'price_unit': move.price_unit, # same price
                 #'state': 'done',
                 }, context=context)
                 
