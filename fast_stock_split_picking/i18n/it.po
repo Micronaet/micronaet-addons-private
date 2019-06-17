@@ -1,0 +1,74 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* fast_stock_split_picking
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-06-17 09:03+0000\n"
+"PO-Revision-Date: 2019-06-17 11:05+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: it\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#. module: fast_stock_split_picking
+#: view:stock.picking:fast_stock_split_picking.view_stock_picking_inline_moves_form_split
+msgid "Change line selected to new picking or selected one"
+msgstr ""
+"Sposta le linee selezionate ad un nuovo documento oppure a quello selezionato"
+
+#. module: fast_stock_split_picking
+#: view:stock.picking:fast_stock_split_picking.view_stock_picking_inline_moves_form_split
+msgid "Change line to new or selected picking?"
+msgstr "Sposto le righe ad un nuovo documento o a quello selezionato?"
+
+#. module: fast_stock_split_picking
+#: view:stock.picking:fast_stock_split_picking.view_stock_picking_inline_moves_form_split
+msgid "Change parent picking"
+msgstr "Cambia testata documento"
+
+#. module: fast_stock_split_picking
+#: help:stock.picking,move_to_picking_id:0
+msgid "If not selected will be create another picking from this"
+msgstr "Se non selezionato creerà un nuovo picking come quello attuale"
+
+#. module: fast_stock_split_picking
+#: field:stock.picking,move_to_picking_id:0
+msgid "Move to"
+msgstr "Muovi a"
+
+#. module: fast_stock_split_picking
+#: model:ir.model,name:fast_stock_split_picking.model_stock_picking
+msgid "Picking List"
+msgstr "Lista picking"
+
+#. module: fast_stock_split_picking
+#: view:stock.picking:fast_stock_split_picking.view_stock_picking_inline_moves_form_split
+msgid "Select"
+msgstr "Seleziona"
+
+#. module: fast_stock_split_picking
+#: field:stock.move,move_selection:0
+msgid "Selected for move"
+msgstr "Selezionato per spostamento"
+
+#. module: fast_stock_split_picking
+#: view:stock.picking:fast_stock_split_picking.view_stock_picking_inline_moves_form_split
+msgid "Split line"
+msgstr "Sposta righe"
+
+#. module: fast_stock_split_picking
+#: model:ir.model,name:fast_stock_split_picking.model_stock_move
+msgid "Stock Move"
+msgstr "Movimento di magazzino"
+
+#. module: fast_stock_split_picking
+#: view:stock.picking:fast_stock_split_picking.view_stock_picking_inline_moves_form_split
+msgid "Unselect"
+msgstr "Deseleziona"

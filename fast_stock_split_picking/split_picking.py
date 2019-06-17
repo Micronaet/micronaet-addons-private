@@ -59,24 +59,27 @@ class StockPicking(orm.Model):
         
         move_ids = move_pool.search(cr, uid, [
             ('picking_id', '=', picking_id),
+            ('move_selection', '=', True),
             ], context=context)
         if not move_ids:
             raise osv.except_osv(
                 _('Error'), 
                 _('No line selected'),
-                )    
+                )
+                
         picking = self.browse(cr, uid, picking_id, context=context)
         move_to_picking_id = picking.move_to_picking_id.id
         update = True
         if not move_to_picking_id:
             update = False
-            move_to_picking_id = picking_pool.create(cr, uid, {
+            now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            move_to_picking_id = self.create(cr, uid, {
                 'partner_id': picking.partner_id.id,
                 'account_id': picking.account_id.id,
                 'date': now,
                 'min_date': now,
                 'origin': '',
-                'picking_type_id': picking.picking_type.id,
+                'picking_type_id': picking.picking_type_id.id,
                 'pick_move': 'out',
                 'pick_state': 'todo',
                 #'auto_generator_id': pick_orig.id,
@@ -92,6 +95,7 @@ class StockPicking(orm.Model):
         if update:
             self.write(cr, uid, ids, {
                 'move_to_picking_id': False,
+                # TODO update other related fields?
                 }, context=context)     
                 
         #model_pool = self.pool.get('ir.model.data')

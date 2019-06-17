@@ -1,6 +1,26 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+        <record model="ir.ui.view" id="view_stock_picking_inline_moves_form_split">
+            <field name="name">stock.picking.split.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="fast_stock_move.view_stock_picking_inline_moves_form_fast"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='move_lines']//tree/field[@name='product_id']" position="before">
+                    <button name="move_selection_on" string="Select" type="object" attrs="{'invisible': [('move_selection','=',True)]}" icon="star-on" groups="fast_stock_move.group_fast_pick_manager"/>
+                    <button name="move_selection_off" string="Unselect" type="object" attrs="{'invisible': [('move_selection','=',False)]}" icon="star-off" groups="fast_stock_move.group_fast_pick_manager"/>
+                    <field name="move_selection" invisible="1" />                    
+                </xpath>
+                <xpath expr="//page[1]" position="after">
+                    <page string="Split line" groups="fast_stock_move.group_fast_pick_manager">
+                        <group colspan="4" col="4">
+                            <field name="move_to_picking_id" domain="[('pick_move', '=', 'out')]"/>
+                            <button name="split_stock_move" string="Change parent picking" type="object" icon="gtk-goto-last" help="Change line selected to new picking or selected one" confirm="Change line to new or selected picking?"/>
+                        </group>
+                    </page>
+                </xpath>                
+            </field>     
+        </record>    
 
     </data>
 </openerp>
