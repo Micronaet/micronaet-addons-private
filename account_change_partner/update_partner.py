@@ -58,19 +58,11 @@ class AccountAnalyticAccount(orm.Model):
         account_id = account.id
         partner_id = account.partner_id.id
 
-        # Table:
-        # stock_picking
-        # stock_ddt 
-        # manual_account_invoice
-        # account_move_line
-        # hr_analytic_timesheet intervent_partner_id
-
         # Not used:
         # sale_order (no account_id)
         # stock_move (no account_id)        
         # account_move (no account_id)
         # stock_quant (no account_id)
-        
                 
         # ---------------------------------------------------------------------
         # Picking:
@@ -130,13 +122,10 @@ class AccountAnalyticAccount(orm.Model):
                    WHERE account_id = %s
                    );
             '''
-        import pdb; pdb.set_trace()
         cr.execute(query, (
             partner_id, partner_id,
             partner_id, partner_id, 
             account_id, 
             ))
-
         return True
-
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
