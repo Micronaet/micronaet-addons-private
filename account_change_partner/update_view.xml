@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_account_analytic_change_partner_form">
+            <field name="name">account.analytic.account.partner.change.form</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <button name="update_partner_changed" string="Update partner" type="object" icon="gtk-refresh" confirm="Change partner in all document with this account (picking, invoice, intervent, DDT)?"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
+
