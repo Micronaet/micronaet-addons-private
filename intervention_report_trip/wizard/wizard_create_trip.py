@@ -128,11 +128,13 @@ class hr_analytic_timesheet_trip_wizard(osv.osv_memory):
                                     day not in date_list_for_user[key]): # work day not present
 
                              # Create empty trip
-                             trip_id = trip_pool.search(cr, uid, [
+                             trip_ids = trip_pool.search(cr, uid, [
                                  ('date','=',day),
                                  ('user_id','=',key),
                                  ], context=context)
-                             if not trip_id: # create trip_header before:
+                             if trip_id: # create trip_header before:
+                                 trip_id = trip_ids[0]
+                             else:
                                  trip_id = trip_pool.create(cr, uid, {
                                      'date': "%s-%s-%s" % (
                                          day[:4],
