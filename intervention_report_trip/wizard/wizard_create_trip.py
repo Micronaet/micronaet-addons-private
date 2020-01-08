@@ -132,7 +132,7 @@ class hr_analytic_timesheet_trip_wizard(osv.osv_memory):
                                  ('date','=',day),
                                  ('user_id','=',key),
                                  ], context=context)
-                             if trip_id: # create trip_header before:
+                             if trip_ids: # create trip_header before:
                                  trip_id = trip_ids[0]
                              else:
                                  trip_id = trip_pool.create(cr, uid, {
