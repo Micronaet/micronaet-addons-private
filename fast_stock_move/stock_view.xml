@@ -224,6 +224,7 @@
                         attrs="{'readonly': [['state', 'in', ['cancel', 'done']]]}" 
                         context="{'default_invoice_state': invoice_state, 'address_in_id': partner_id, 'default_picking_type_id': picking_type_id, 'default_picking_id': active_id}">
                         <tree string="Move" editable="bottom">
+                            <field name="pre_filter" on_change="onchange_move_prefilter_id(pre_filter)" />
                             <field name="product_id" on_change="onchange_product_id(product_id,location_id,location_dest_id, False)"/>
                             <button name="open_product_form" string="Scheda dettaglio prodotto" type="object" icon="gtk-goto-last"/>
                             <button name="open_product_movement" string="Dettaglio movimenti prodotto" type="object" icon="gtk-justify-fill"/>

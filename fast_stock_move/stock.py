@@ -132,8 +132,24 @@ class StockMove(orm.Model):
                 cr, uid, product_id)
             res['value']['price_unit'] = product_proxy.standard_price
         return res 
+
+    def onchange_move_prefilter_id(self, cr, uid, ids, pre_filter, context=None):
+        ''' Force domain of product   
+        '''
+        res = {
+            'domain': {
+                'product_id': []},
+            'value': {},
+            }
+        if pre_filter:
+            res['domain']['product_id'].append(
+                ('default_code', 'ilike', pre_filter))
+            res['value']['pre_filter'] = False # XXX reset filter
+        return res
     
     _columns = {
+        'pre_filter': fields.char('Pre filter', size=50),
+
         'subtotal': fields.function(
             _get_subtotal_total, method=True, 
             type='float', string='Subtotal', 
