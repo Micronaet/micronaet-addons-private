@@ -148,7 +148,7 @@ class StockMove(orm.Model):
         return res
     
     _columns = {
-        'pre_filter': fields.char('Pre filter', size=50),
+        'pre_filter': fields.char('Pre filtro', size=50),
 
         'subtotal': fields.function(
             _get_subtotal_total, method=True, 
