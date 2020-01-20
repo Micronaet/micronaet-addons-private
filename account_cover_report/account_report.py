@@ -21,30 +21,34 @@
 #
 ###############################################################################
 
-{
-    'name': 'Account cover report',
-    'version': '0.1',
-    'category': 'Report',
-    'description': '''   
-        Report cover for analytic account or contract     
-        ''',
-    'author': 'Micronaet S.r.l. - Nicola Riolini',
-    'website': 'http://www.micronaet.it',
-    'license': 'AGPL-3',
-    'depends': [
-        'base',
-        'report_aeroo',
-        #'report_aeroo_ooo',
-        'analytic',
-        ],
-    'init_xml': [],
-    'demo': [],
-    'data': [
-        #'security/ir.model.access.csv',    
-        'cover_view.xml',
-        'report/report_cover.xml',        
-        ],
-    'active': False,
-    'installable': True,
-    'auto_install': False,
-    }
+import os
+import sys
+import logging
+import openerp
+import openerp.netsvc as netsvc
+import openerp.addons.decimal_precision as dp
+from openerp.osv import fields, osv, expression, orm
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+from openerp import SUPERUSER_ID, api
+from openerp import tools
+from openerp.tools.translate import _
+from openerp.tools.float_utils import float_round as round
+from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT, 
+    DEFAULT_SERVER_DATETIME_FORMAT, 
+    DATETIME_FORMATS_MAP, 
+    float_compare)
+
+
+_logger = logging.getLogger(__name__)
+
+class AccountAnalyticAccount(orm.Model):
+    """ Model name: AccountAnalyticAccount
+    """
+    
+    _inherit = 'account.analytic.account'
+    
+    _columns = {
+        'cover_description': fields.text('Cover description'),
+        }
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
