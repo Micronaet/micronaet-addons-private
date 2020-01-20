@@ -137,14 +137,14 @@ class StockMove(orm.Model):
         ''' Force domain of product   
         '''
         res = {
-            'domain': {
-                'product_id': []},
+            'domain': {'product_id': []},
             'value': {},
             }
+
         if pre_filter:
             res['domain']['product_id'].append(
                 ('default_code', 'ilike', pre_filter))
-            res['value']['pre_filter'] = False # XXX reset filter
+            res['value']['pre_filter'] = False
         return res
     
     _columns = {
