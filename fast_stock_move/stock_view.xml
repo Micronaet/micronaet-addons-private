@@ -103,7 +103,7 @@
 
 	                <field name="partner_id" position="attributes">
 	                    <attribute name="domain">[('is_company', '=', True)]</attribute>
-	                    <attribute name="options">{'no_create': True, 'no_create_edit':True}</attribute>
+	                    <!--<attribute name="options">{'no_create': True, 'no_create_edit':True}</attribute>-->
 	                </field>
 
 	                <xpath expr="//button[@string='Reverse Transfer']" position="attributes">
