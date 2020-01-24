@@ -20,6 +20,7 @@
                     <field name="name"/>
                     <field name="intervention"/>
                     <field name="intervent_partner_id"/>
+                    <field name="intervent_contact_id"/>
                     <separator/>
                 
                     <filter name="check_month" string="Check month" domain="[('date_start','&gt;=',context_today().strftime('%%Y-%%m-01 00:00:00')),]" context="{'group_by':['to_invoice','account_id','intervent_partner_id']}" icon="terp-dolar"/>
@@ -42,6 +43,7 @@
                     <group expand="0" string="Group By...">
                         <filter string="Users" icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
                         <filter string="Partner" icon="terp-personal" domain="[]" context="{'group_by':'intervent_partner_id'}"/>
+                        <filter string="Rif. contatto" icon="terp-personal" domain="[]" context="{'group_by':'intervent_contact_id'}"/>
                         <filter string="Analytic account" icon="terp-folder-green" domain="[]" context="{'group_by':'account_id'}"/>
                         <filter string="Operation" icon="terp-personal" domain="[]" context="{'group_by': 'operation_id'}"/>
                         <filter string="State" icon="terp-personal" domain="[]" context="{'group_by':'state'}"/>
