@@ -138,9 +138,11 @@
                 </filter>    
 
                 <field name="partner_id" position="after">
+                    <field name="account_id" filter_domain="[('account_id','=',self)]"/>
                     <field name="contact_id" filter_domain="[('contact_id','=',self)]"/>
                 </field>   
                 <filter string="Status" position="after">
+                    <filter name="group_contact" string="Commessa" context="{'group_by': 'account_id'}"/>
                     <filter name="group_contact" string="Contact" context="{'group_by': 'contact_id'}"/>
                 </filter>    
 
