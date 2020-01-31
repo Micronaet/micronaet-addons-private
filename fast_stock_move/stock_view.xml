@@ -230,7 +230,7 @@
                     <field name="move_lines"
                         attrs="{'readonly': [['state', 'in', ['cancel', 'done']]]}" 
                         context="{'default_invoice_state': invoice_state, 'address_in_id': partner_id, 'default_picking_type_id': picking_type_id, 'default_picking_id': active_id}">
-                        <tree string="Move" editable="bottom">
+                        <tree string="Move" editable="bottom" colors="blue:report_comment!=False">
                             <field name="pre_filter" on_change="onchange_move_prefilter_id(pre_filter)" />
                             <field name="product_id" on_change="onchange_product_id(product_id,location_id,location_dest_id, False)"/>
                             <button name="open_product_form" string="Scheda dettaglio prodotto" type="object" icon="gtk-goto-last"/>
@@ -250,13 +250,43 @@
                             <field name="picking_id" invisible="1" />
                             <field name="picking_type_id" invisible="1"/>
                             <field name="invoice_state" invisible="1"/>            
-                            <field name="subtotal" />        
+                            <field name="subtotal" />      
+                            <field name="report_comment" invisible="1"/>
+                            <button name="open_product_print_detail" string="Dettaglio riga per annotazioni stampa" type="object" icon="terp-stock_zoom"/>                              
                         </tree>
                     </field>
                 </field>
             </field>
         </record>
-        
+        <!--<record model="ir.ui.view" id="view_stock_picking_inline_moves_comment_tree">
+            <field name="name">stock.picking.comment.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree"/>
+            <field name="arch" type="xml">
+                <field name="product_id" position="after">
+                    <field name="report_comment" />
+                </field>
+            </field>
+        </record> -->
+        <record model="ir.ui.view" id="view_stock_picking_report_note_form">
+            <field name="name">stock.move.form</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <form string="Dettaglio riga" version="7.0">        
+                    <header>
+                        <button name="dummy_save" string="Salva" type="object" class="oe_highlight" icon="gtk-save"/>
+                    </header>
+                    <sheet>
+                        <group col="4" colspan="4">
+                             <field name="product_id" readonly="1" />
+                             <separator string="Note di stampa" colspan="4"/>      
+                             <field name="report_comment" colspan="4" nolabel="1" />
+                        </group>
+                    </sheet>        
+                </form>
+            </field>
+        </record>        
+
         <!-- PICKING OUT -->
         <record model="ir.actions.act_window" id="action_stock_picking_manual_fast">
             <field name="name">Picking list out</field>

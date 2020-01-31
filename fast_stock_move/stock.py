@@ -60,6 +60,36 @@ class StockMove(orm.Model):
     _inherit = 'stock.move'
     _order = 'id'
     
+    def dummy_save(self, cr, uid, ids, context=None):
+        ''' Dummy save
+        '''
+        return True
+
+    def open_product_print_detail(self, cr, uid, ids, context=None):  
+        ''' Open product form (extra data form movement)
+        '''
+        model_pool = self.pool.get('ir.model.data')
+        view_id = model_pool.get_object_reference(
+            cr, uid, 
+            'fast_stock_move', 'view_stock_picking_report_note_form'
+            )[1]
+            
+        move_proxy = self.browse(cr, uid, ids, context=context)[0]
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Dettaaglio per stampa'),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_id': ids[0],
+            'res_model': 'stock.move',
+            'view_id': view_id,
+            'views': [(view_id, 'form')],
+            'domain': [('id', '=', ids[0])],
+            'context': context,
+            'target': 'new',
+            'nodestroy': False,
+            }
+
     def open_product_movement(self, cr, uid, ids, context=None):  
         ''' Open product form
         '''
@@ -154,7 +184,7 @@ class StockMove(orm.Model):
             _get_subtotal_total, method=True, 
             type='float', string='Subtotal', 
             ),
-
+        'report_comment': fields.text('Commento in stampa'),
         'force_name': fields.text('Force name'),
         'auto_account_out_id': fields.many2one(
             'account.analytic.account', 'Account',
