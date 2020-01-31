@@ -13,9 +13,25 @@
                 <page string="Accounting" position="before">
                        <page string="Delivery">                           
                            <group colspan="4" col="4">                               
-                               <separator string="Delivered material:" colspan="3"/>
-                               <button name="create_picking" string="Create picking" type="object" colspan="1"/>
-                               <field name="delivered_ids" nolabel="1" colspan="4" context="{'embedded': True}" readonly="1" /> <!--options="{'create': false}"-->
+                               <separator string="Delivered material:" colspan="2"/>
+                               <button name="create_picking" string="Create nuovo picking" type="object" colspan="1" icon="gtk-new"/>
+                               <button name="link_all_delivery_pending" string="Collega picking" type="object" colspan="1" icon="STOCK_SORT_DESCENDING" attrs="{'invisible': [('pending_material_present', '=', False)]}" />
+
+                               <field name="delivered_ids" nolabel="1" colspan="4" context="{'embedded': True}" readonly="1">
+                                   <tree string="Picking" editable="bottom" colors="blue:pick_state=='todo';green:pick_state=='ready';black:pick_state=='done';"> 
+                                       <field name="date" />
+                                       <field name="min_date" />                                       
+                                       <field name="name" />
+                                       <field name="account_id" />
+                                       <field name="pick_move" />
+                                       <field name="ddt_id" />
+                                       <field name="priority" />
+                                       <field name="pick_state" />
+                                       <field name="state" invisible="1" />
+                                       <field name="intervention_id" invisible="1" />
+                                       <button name="unlink_picking" string="Scollega" type="object" />
+                                   </tree>
+                               </field> <!--options="{'create': false}"-->
                                <field name="pending_material_detail" invisible="1" />
                                <field name="pending_material_present" invisible="1" />
 
@@ -23,7 +39,7 @@
                                <field name="pending_material_detail" readonly="1" />-->
 
                                <!--<separator string="Picking:" colspan="2"/>
-                               <button name="link_all_delivery_pending" string="Link all" type="object" colspan="1"/>
+                               
                                <button name="dummy_button" string="Refresh" type="object" colspan="1"/>
                                <field name="picking_ids" nolabel="1" readonly="1" colspan="4" />-->
                            </group> 

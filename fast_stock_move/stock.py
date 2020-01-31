@@ -135,12 +135,41 @@ class StockMove(orm.Model):
             'nodestroy': False,
             }
 
-class StockMove(orm.Model):
+class StockMovePrefilter(orm.Model):
     """ Model name: StockMove
     """
     
     _inherit = 'stock.move'
     
+    def create(self, cr, uid, vals, context=None):
+        """ Create a new record for a model ClassName
+            @param cr: cursor to database
+            @param uid: id of current user
+            @param vals: provides a data for new record
+            @param context: context arguments, like lang, time zone
+            
+            @return: returns a id of new record
+        """
+        # Clean prefilter:
+        vals['pre_filter'] = False
+        return super(StockMovePrefilter, self).create(
+            cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids, vals, context=None):
+        """ Update redord(s) comes in {ids}, with new value comes as {vals}
+            return True on success, False otherwise
+            @param cr: cursor to database
+            @param uid: id of current user
+            @param ids: list of record ids to be update
+            @param vals: dict of new values to be set
+            @param context: context arguments, like lang, time zone
+            
+            @return: True on success, False otherwise
+        """
+        vals['pre_filter'] = False
+        return super(StockMovePrefilter, self).write(
+            cr, uid, ids, vals, context=context)
+        
     def _get_subtotal_total(self, cr, uid, ids, fields, args, context=None):
         ''' Fields function for calculate 
         '''

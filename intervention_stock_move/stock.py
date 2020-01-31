@@ -113,7 +113,7 @@ _logger = logging.getLogger(__name__)
         return move_id
 """
 
-class HrAnalyticTimesheet(orm.Model):
+class HrAnalyticTimesheetForcePicking(orm.Model):
     ''' Add extra data for delivery
     '''
     _inherit = 'hr.analytic.timesheet'
@@ -153,41 +153,40 @@ class HrAnalyticTimesheet(orm.Model):
         
         # Confirm Picking delivery:
         current_proxy = self.browse(cr, uid, ids, context=context)[0]
-        pick_ids = [pick.id for pick in current_proxy.picking_ids]
+        pick_ids = [pick.id for pick in current_proxy.delivered_ids if \
+            pick.pick_state in ('todo', 'ready')]
         
         # Update with WF action:
-        return pick_pool.pickwf_delivered(cr, uid, pick_ids, context=context)
-        
+        if pick_ids:
+            _logger.warning('Closed also %s picking' % len(pick_ids))
+            return pick_pool.pickwf_delivered(cr, uid, pick_ids, context=context)
+        else:
+            return True        
     # -------------------------------------------------------------------------
     # Override WF:
     # -------------------------------------------------------------------------
-    #TODO Recursion problem
-    """
     def intervention_confirmed(self, cr, uid, ids, context=None):
         ''' Confirm picking when confirmed or create one
         '''
-        res = super(HrAnalyticTimesheet, self).intervention_confirmed(
-            cr, uid, ids, context=context)
-            
         # Confirm also picking:    
-        #self.confirm_also_picking(cr, uid, ids, context=context)
-        return res
+        self.confirm_also_picking(cr, uid, ids, context=context)
+
+        return super(HrAnalyticTimesheetForcePicking, self).intervention_confirmed(
+            cr, uid, ids, context=context)
 
     def intervention_close(self, cr, uid, ids, context=None):
         ''' Confirm picking when close or create one
         '''
-        res = super(HrAnalyticTimesheet, self).intervention_close(
-            cr, uid, ids, context=context)
-            
         # Confirm also picking:    
-        #self.confirm_also_picking(cr, uid, ids, context=context)
-        return res
-    """
+        self.confirm_also_picking(cr, uid, ids, context=context)
+
+        return super(HrAnalyticTimesheetForcePicking, self).intervention_close(
+            cr, uid, ids, context=context)
         
     # -------------------------------------------------------------------------
     # Button event:
     # -------------------------------------------------------------------------
-    """def link_all_delivery_pending(self, cr, uid, ids, context=None):
+    def link_all_delivery_pending(self, cr, uid, ids, context=None):
         ''' Link all pending delivery:
         '''
         # Pool used:
@@ -197,7 +196,7 @@ class HrAnalyticTimesheet(orm.Model):
         partner_id = current_proxy.intervent_partner_id.id
         
         picking_ids = picking_pool.search(cr, uid, [
-            ('state', 'in', ('todo', 'ready')), # in status to delivery
+            ('pick_state', 'in', ('todo', 'ready')), # in status to delivery
             ('partner_id', '=', partner_id), # with selected partner
             ('intervention_id', '=', False), # not linked
             ], context=context)
@@ -207,7 +206,7 @@ class HrAnalyticTimesheet(orm.Model):
         return picking_pool.write(cr, uid, picking_ids, {
             'intervention_id': ids[0],
             }, context=context)    
-    """    
+       
     def dummy_button(self, cr, uid, ids, context=None):
         ''' Refresh
         '''
@@ -375,6 +374,17 @@ class StockPicking(orm.Model):
     '''    
     _inherit = 'stock.picking'
     
+    def unlink_picking(self, cr, uid, ids, context=None):
+        """ Remove reference for picking
+        """        
+        self.write(cr, uid, ids, {
+            'intervention_id': False,
+            }, context=context)
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+            }
+        
     # -------------------------------------------------------------------------
     # UTILITY:
     # -------------------------------------------------------------------------
