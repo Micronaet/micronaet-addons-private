@@ -35,6 +35,7 @@
         'stock',
         'stock_account',
         'electrical_l10n_it_ddt',
+        'web_m2x_options',
         ],
     'init_xml': [],
     'demo': [],
