@@ -17,6 +17,12 @@
         
                 <menuitem parent="menu_partner_fc_management" id="menu_partner_fc_employee" action="hr.open_view_employee_list_my" sequence="30"/>                
                 <menuitem action="account.action_account_analytic_account_form" id="menu_partner_fc_management_account_analytic" parent="menu_partner_fc_management" sequence="30"/>
+                    <menuitem 
+                        parent="menu_partner_fc_management_account_analytic" 
+                        id="menu_account_analytic_account_cost_tree" 
+                        action="electrical_account_stats.action_account_analytic_account_cost_tree"
+                        groups="electrical_account_stats.group_stats_manager"
+                        />
                     
             <menuitem name="Analisi" id="menu_partner_fc_analysis" parent="menu_partner_fc_root" sequence="50" />
                 <menuitem name="Intervent" parent="menu_partner_fc_analysis" id="menu_partner_fc_analysis_intervent" action="intervention_report.action_view_hr_analytic_timesheet" sequence="20" />        
@@ -28,6 +34,8 @@
             
             <menuitem name="Configurazione" id="menu_partner_fc_configuration" parent="menu_partner_fc_root" sequence="99" />               
                  <menuitem name="Timesheet operation" parent="menu_partner_fc_configuration" id="menu_menu_partner_fc_configuration_operation_list" action="intervention_report.action_hr_analytic_timesheet_operation" sequence="10" />
+
+
 
     </data>
 </openerp>
