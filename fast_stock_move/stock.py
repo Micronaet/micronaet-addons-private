@@ -318,6 +318,7 @@ class StockPicking(orm.Model):
                 continue
             import pdb; pdb.set_trace()
             move_ids = stock_move.search(cr, uid, [
+                ('picking_id.corresponding', '=', False),
                 ('picking_id.pick_move', '=', 'out'),
                 ('product_id', '=', product.id),
                 ('date', '>=', '%s 00:00:00' % picking_date),
