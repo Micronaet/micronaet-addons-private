@@ -276,6 +276,7 @@ class StockPicking(orm.Model):
     def update_standard_price_product(self, cr, uid, ids, context=None):
         ''' Update standard price on product if date passed
         '''
+        import pdb; pdb.set_trace()
         product_pool = self.pool.get('product.product')
         
         picking = self.browse(cr, uid, ids, context=context)[0]
