@@ -277,7 +277,7 @@ class StockPicking(orm.Model):
         ''' Update standard price on product if date passed
         '''
         product_pool = self.pool.get('product.product')
-        stock_move = self.pool.get('stock.move')
+        move_pool = self.pool.get('stock.move')
         
         picking = self.browse(cr, uid, ids, context=context)[0]
         
@@ -317,7 +317,7 @@ class StockPicking(orm.Model):
             if default_code != 'CV-FS17.1,5BI':
                 continue
             import pdb; pdb.set_trace()
-            move_ids = stock_move.search(cr, uid, [
+            move_ids = move_pool.search(cr, uid, [
                 ('picking_id.corresponding', '=', False),
                 ('picking_id.pick_move', '=', 'out'),
                 ('product_id', '=', product.id),
@@ -327,13 +327,10 @@ class StockPicking(orm.Model):
                 move_pool.write(cr, uid, move_ids, {
                     'price_unit': standard_price,
                     }, context=context)    
-                _logger.warning('Updating %s move for product %s' % (
+                _logger.warning('Updating # %s move for product %s' % (
                     len(move_ids),
-                    product.default_code,
+                    default_code,
                     ))    
-            
-            
-                    
         return True
 
     def generate_pick_out_draft(self, cr, uid, ids, context=None):
