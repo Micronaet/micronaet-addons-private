@@ -276,8 +276,8 @@ class StockPicking(orm.Model):
     def update_standard_price_product(self, cr, uid, ids, context=None):
         ''' Update standard price on product if date passed
         '''
-        import pdb; pdb.set_trace()
         product_pool = self.pool.get('product.product')
+        stock_move = self.pool.get('stock.move')
         
         picking = self.browse(cr, uid, ids, context=context)[0]
         
@@ -297,9 +297,10 @@ class StockPicking(orm.Model):
             if not standard_price:
                 continue
             product = move.product_id
+            default_code = product.default_code
             
             # -----------------------------------------------------------------
-            # Update price:
+            # Update product price:
             # -----------------------------------------------------------------
             product_date = product.standard_price_date
             
@@ -309,6 +310,29 @@ class StockPicking(orm.Model):
                     'standard_price': standard_price,
                     'standard_price_date': picking_date,
                     }, context=context)
+
+            # -----------------------------------------------------------------
+            # Update product price:
+            # -----------------------------------------------------------------
+            if default_code != 'CV-FS17.1,5BI':
+                continue
+            import pdb; pdb.set_trace()
+            move_ids = stock_move.search(cr, uid, [
+                ('picking_id.pick_move', '=', 'out'),
+                ('product_id', '=', product.id),
+                ('date', '>=', '%s 00:00:00' % picking_date),
+                ], context=context)
+            if move_ids:
+                move_pool.write(cr, uid, move_ids, {
+                    'price_unit': standard_price,
+                    }, context=context)    
+                _logger.warning('Updating %s move for product %s' % (
+                    len(move_ids),
+                    product.default_code,
+                    ))    
+            
+            
+                    
         return True
 
     def generate_pick_out_draft(self, cr, uid, ids, context=None):
