@@ -314,9 +314,6 @@ class StockPicking(orm.Model):
             # -----------------------------------------------------------------
             # Update product price:
             # -----------------------------------------------------------------
-            if default_code != 'CV-FS17.1,5BI':
-                continue
-            import pdb; pdb.set_trace()
             move_ids = move_pool.search(cr, uid, [
                 ('picking_id.corresponding', '=', False),
                 ('picking_id.pick_move', '=', 'out'),
