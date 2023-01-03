@@ -49,7 +49,7 @@ class hr_analytic_timesheet_trip_wizard(osv.osv_memory):
         wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
         domain = [
             ('mode', '=', 'customer'),
-        ]  # todo what about state?
+            ]  # todo what about state?
         if not wiz_proxy.all_user:
             domain.append(
                 ('user_id', '=', wiz_proxy.user_id.id))
