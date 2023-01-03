@@ -374,12 +374,9 @@ class hr_analytic_timesheet_trip(osv.osv):
             """ Generate query string for compute km from origin to destination
                 element in string ask for return json object
             """
-            pdb.set_trace()
             try:
-                # header = u'https://open.mapquestapi.com/guidance/v2/route'
-
                 maps_page = '%s?key=%s&from=%s&to=%s&unit=%s&routeType=%s' % (
-                    endpoint,  # header
+                    endpoint,
                     key,
                     prepare_element(
                         self, cr, uid, origin, context=context),
