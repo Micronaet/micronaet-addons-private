@@ -40,7 +40,6 @@ from openerp.tools import (
     float_compare,
     )
 
-
 _logger = logging.getLogger(__name__)
 
 
@@ -50,6 +49,8 @@ class hr_analytic_timesheet_trip(osv.osv):
     _name = 'hr.analytic.timesheet.trip'
     _description = 'HR timesheet trip'
     _order = 'date,user_id'
+
+    _map_cache = {}  # Map cache for similar calls
 
     # -------------------------------------------------------------------------
     # Button function (and wizard action called):
@@ -403,19 +404,27 @@ class hr_analytic_timesheet_trip(osv.osv):
         routeType = company.map_route_type
 
         error = False
+        distance_km = 0.0
         query = distance_query(
             endpoint, key, origin, destination, unit, routeType)
         try:
-            reply = urllib.urlopen(query)
-            response_json = reply.read()
-            response = json.loads(response_json)
+            if query in self._map_cache:
+                distance_km = self._map_cache[query]
+            else:
+                reply = urllib.urlopen(query)
+                response_json = reply.read()
+                response = json.loads(response_json)
         except:
             error = 'MAP Quest generic error!'
 
         # ---------------------------------------------------------------------
         # Check if not correct call:
         # ---------------------------------------------------------------------
-        distance_km = 0.0
+        if distance_km:  # Cache mode found!
+            _logger.info('Cache mode: %s >> %s' % (distance_km, query))
+            return distance_km
+
+        # Not in cache:
         if not error:
             try:
                 if reply.code == 400:
@@ -425,6 +434,7 @@ class hr_analytic_timesheet_trip(osv.osv):
             try:
                 # distance_km = response['route']['summary']['length']  # km
                 distance_km = response['route']['distance']
+                self._map_cache[query] = distance_km
             except:
                 error = 'Error getting KM returned!'
 
