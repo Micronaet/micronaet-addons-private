@@ -406,7 +406,6 @@ class hr_analytic_timesheet_trip(osv.osv):
         query = distance_query(
             endpoint, key, origin, destination, unit, routeType)
         try:
-            pdb.set_trace()
             reply = urllib.urlopen(query)
             response_json = reply.read()
             response = json.loads(response_json)
@@ -416,25 +415,25 @@ class hr_analytic_timesheet_trip(osv.osv):
         # ---------------------------------------------------------------------
         # Check if not correct call:
         # ---------------------------------------------------------------------
+        distance_km = 0.0
         if not error:
             try:
-                if response['route']['info']['statuscode'] == 400:
-                    error = response['route']['info']['messages']
+                if reply.code == 400:
+                    error = 'Error calling URL: %s' % reply.url
             except:
-                error = 'Error reading MAPS reply message!'
+                error = 'Generic error reading MAPS reply message!'
             try:
-                distance_km = response['route']['summary']['length']  # km
+                # distance_km = response['route']['summary']['length']  # km
+                distance_km = response['route']['distance']
             except:
                 error = 'Error getting KM returned!'
 
-        if error: # Error present:
+        if error:  # Error present:
             self._excel_log['wb'].write_xls_line(
                 self._excel_log['ws_name'], self._excel_log['row'],
                 [origin.name, destination.name, error, query])
             self._excel_log['row'] += 1
-            return 0.0
-        else:
-            return distance_km
+        return distance_km
 
     # fields function:
     def _function_calculate_total(
