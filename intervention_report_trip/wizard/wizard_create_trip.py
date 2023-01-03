@@ -21,8 +21,11 @@
 #
 ##############################################################################
 
+import logging
 from osv import fields, osv
 from datetime import datetime
+
+_logger = logging.getLogger(__name__)
 
 
 class hr_analytic_timesheet_trip_wizard(osv.osv_memory):
@@ -35,8 +38,14 @@ class hr_analytic_timesheet_trip_wizard(osv.osv_memory):
 
     # Button function:
     def create_trip(self, cr, uid, ids, context=None):
-        """ Create trip for choosen day and users (deleting previous elements
+        """ Create trip for chosen day and users (deleting previous elements)
         """
+        # Pool used:
+        trip_pool = self.pool.get('hr.analytic.timesheet.trip')
+
+        _logger.warning('Cleaning cache for this generation:')
+        trip_pool._map_cache = {}
+
         wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
         domain = [
             ('mode', '=', 'customer'),
