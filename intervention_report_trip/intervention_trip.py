@@ -385,7 +385,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                     unit,
                     routeType,
                     )
-                _logger.warning('Call maps quest page: %s' % maps_page)
+                _logger.info('Call maps quest page: %s' % maps_page)
                 return maps_page
             except IOError:
                 _logger.error('Error generate google page: %s' % maps_page)
@@ -394,11 +394,11 @@ class hr_analytic_timesheet_trip(osv.osv):
         # ---------------------------------------------------------------------
         # Call Google page:
         # ---------------------------------------------------------------------
-        # Read paremeters:
+        # Read parameters:
         company = origin.company_id
         endpoint = company.map_endpoint
         key = company.map_key
-        secret = company.map_secret
+        # secret = company.map_secret
         unit = company.map_route_unit
         routeType = company.map_route_type
 
