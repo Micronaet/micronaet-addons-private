@@ -406,7 +406,9 @@ class hr_analytic_timesheet_trip(osv.osv):
         query = distance_query(
             endpoint, key, origin, destination, unit, routeType)
         try:
-            response_json = urllib.urlopen(query).read()
+            pdb.set_trace()
+            reply = urllib.urlopen(query)
+            response_json = reply.read()
             response = json.loads(response_json)
         except:
             error = 'MAP Quest generic error!'
@@ -416,12 +418,12 @@ class hr_analytic_timesheet_trip(osv.osv):
         # ---------------------------------------------------------------------
         if not error:
             try:
-                if response['guidance']['info']['statuscode'] == 400:
-                    error = response['guidance']['info']['messages']
+                if response['route']['info']['statuscode'] == 400:
+                    error = response['route']['info']['messages']
             except:
                 error = 'Error reading MAPS reply message!'
             try:
-                distance_km = response['guidance']['summary']['length'] # km
+                distance_km = response['route']['summary']['length']  # km
             except:
                 error = 'Error getting KM returned!'
 
