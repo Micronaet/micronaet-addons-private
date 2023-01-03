@@ -369,16 +369,17 @@ class hr_analytic_timesheet_trip(osv.osv):
                 value = value.strip().replace(' ', '+')
             return value
 
-        def distance_query(key, origin, destination, unit, routeType):
+        def distance_query(
+                endpoint, key, origin, destination, unit, routeType):
             """ Generate query string for compute km from origin to destination
                 element in string ask for return json object
             """
             pdb.set_trace()
             try:
-                header = u'https://open.mapquestapi.com/guidance/v2/route'
+                # header = u'https://open.mapquestapi.com/guidance/v2/route'
 
                 maps_page = '%s?key=%s&from=%s&to=%s&unit=%s&routeType=%s' % (
-                    header,
+                    endpoint,  # header
                     key,
                     prepare_element(
                         self, cr, uid, origin, context=context),
@@ -398,13 +399,15 @@ class hr_analytic_timesheet_trip(osv.osv):
         # ---------------------------------------------------------------------
         # Read paremeters:
         company = origin.company_id
+        endpoint = company.map_endpoint
         key = company.map_key
         secret = company.map_secret
         unit = company.map_route_unit
         routeType = company.map_route_type
 
         error = False
-        query = distance_query(key, origin, destination, unit, routeType)
+        query = distance_query(
+            endpoint, key, origin, destination, unit, routeType)
         try:
             response_json = urllib.urlopen(query).read()
             response = json.loads(response_json)
@@ -602,12 +605,14 @@ class ResPartner(osv.osv):
         'map_longitude': fields.char('Map Longitude', size=18),
         }
 
+
 class ResCompany(osv.osv):
     """ Company parameter
     """
     _inherit = 'res.company'
 
     _columns = {
+        'map_endpoint': fields.char('Map End point', size=180),
         'map_key': fields.char('Map Customer Key', size=40),
         'map_secret': fields.char('Map Customer Secret', size=40),
         'map_route_unit': fields.selection([
