@@ -46,7 +46,7 @@ msgstr "Oggi"
 #. module: intervention_report
 #: model:ir.ui.menu,name:intervention_report.menu_base_intervention_report_only_my
 msgid "My intervent (+/-3 gg.)"
-msgstr "Interventi personali (+/-3 gg.)"
+msgstr "Interventi personali"
 
 #. module: intervention_report
 #: selection:hr.analytic.timesheet.trip.wizard,month:0
@@ -946,7 +946,7 @@ msgstr "Utenti"
 #. module: intervention_report
 #: view:hr.analytic.timesheet:0
 msgid "Near today (+/-3 gg)"
-msgstr "In questi giorni (+/-3 gg)"
+msgstr "In questi giorni"
 
 #. module: intervention_report
 #: model:ir.actions.act_window,name:intervention_report.action_view_hr_analytic_timesheet

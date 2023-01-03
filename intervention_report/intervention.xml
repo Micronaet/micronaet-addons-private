@@ -20,24 +20,24 @@
                     <field name="intervention"/>
                     <field name="intervent_partner_id"/>
                     <separator/>
-                
+
                     <filter name="check_month" string="Check month" domain="[('date_start','&gt;=',context_today().strftime('%%Y-%%m-01 00:00:00')),]" context="{'group_by':['to_invoice','account_id','intervent_partner_id']}" icon="terp-dolar"/>
                     <separator/>
-                    
+
                     <filter name="is_opened" string="To close" domain="[('state','not in',('close','reported')),]" />
                     <filter name="is_closed" string="Closed" domain="[('state','in',('close','reported')),]" />
                     <separator/>
-               
+
                     <filter name="today" string="Today" domain="[('date_start','&gt;=',context_today().strftime('%%Y-%%m-%%d 00:00:00')),('date_start','&lt;=',context_today().strftime('%%Y-%%m-%%d 23:59:59'))]" icon="terp-dolar"/>
-                    <filter name="near_today" string="Near today (+/-3 gg)" domain="[('date_start','&lt;',(context_today()+relativedelta(days=3)).strftime('%%Y-%%m-%%d 00:00:00')),('date_start','&gt;',(context_today()-relativedelta(days=3)).strftime('%%Y-%%m-%%d 00:00:00'))]" icon="terp-dolar"/>
+                    <filter name="near_today" string="In questi giorni (+/-3 gg)" domain="[('date_start','&lt;',(context_today()+relativedelta(days=3)).strftime('%%Y-%%m-%%d 00:00:00')),('date_start','&gt;',(context_today()-relativedelta(days=3)).strftime('%%Y-%%m-%%d 00:00:00'))]" icon="terp-dolar"/>
                     <filter name="this_year" string="This year" domain="[('date_start','&gt;=',context_today().strftime('%%Y-01-01 00:00:00')),('date_start','&lt;=',context_today().strftime('%%Y-12-31 23:59:59'))]" icon="terp-dolar"/>
                     <separator/>
-                
+
                     <filter name="with_trip" string="With Trip" domain="[('trip_require','=',True),]" icon="terp-dolar"/>
                     <filter name="with_break" string="With Break" domain="[('break_require','=',True),]" icon="terp-dolar"/>
                     <separator/>
                     <filter name="extra" string="Extra Planned" domain="[('extra_planned','=',True),]" icon="terp-dolar"/>
-                    
+
                     <group expand="0" string="Group By...">
                         <filter string="Users" icon="terp-personal" domain="[]" context="{'group_by':'user_id'}"/>
                         <filter string="Partner" icon="terp-personal" domain="[]" context="{'group_by':'intervent_partner_id'}"/>
@@ -50,7 +50,7 @@
                 </search>
             </field>
         </record>
-      
+
     <record id='view_account_analytic_account_tree_add_fields' model='ir.ui.view'>
         <field name='name'>Account extra</field>
         <field name='model'>account.analytic.account</field>
@@ -82,7 +82,7 @@
         <field name='model'>account.analytic.account</field>
         <field name="inherit_id" ref="hr_timesheet.account_analytic_account_timesheet_form"/>
         <field name='arch' type='xml'>
-            <field name="use_timesheets" position="before">    
+            <field name="use_timesheets" position="before">
             </field>
         </field>
     </record>-->
@@ -130,8 +130,8 @@
             </field>
         </field>
     </record>
-    
-    <!-- hr.analytic.timesheet -->    
+
+    <!-- hr.analytic.timesheet -->
     <record id='view_hr_analytic_timesheet_form' model='ir.ui.view'>
         <field name='name'>HR analytic timesheet</field>
         <field name='model'>hr.analytic.timesheet</field>
@@ -143,14 +143,14 @@
 
                     <button name="intervention_waiting" string="Waiting" states="draft" icon="gtk-execute" />
                     <button name="intervention_confirmed" string="Confirmed" states="draft" icon="gtk-go-forward" />
-                    
+
                     <button name="intervention_waiting_cancel" string="Cancel" states="waiting" icon="gtk-cancel" />
                     <button name="intervention_reschedule" string="Reschedule" states="waiting" icon="gtk-go-back" />
                     <button name="intervention_waiting_confirmed" string="Confirmed" states="waiting" icon="gtk-go-forward" />
-                    
+
                     <button name="intervention_confirmed_cancel" string="Cancel" states="confirmed" icon="gtk-cancel" />
                     <button name="intervention_report_send_and_close" string="Sent report by mail" type="object" states="confirmed,close,reported" class="oe_highlight" />
-                    
+
                     <!--<button name="intervention_report_close" string="Close with report" states="confirmed" icon="gtk-go-forward" />-->
                     <button name="intervention_close" string="Close" states="confirmed" icon="gtk-ok" />
 
@@ -158,13 +158,13 @@
                     <field name="state" widget="statusbar" statusbar_visible="cancel,draft,waiting,confirmed,close,reported" readonly="1"/>
                 </header>
                 <sheet>
-                   <group colspan="4" col="4">                   
+                   <group colspan="4" col="4">
                       <field name="name" on_change="on_change_name(name,intervention_request)" colspan="4"/>
-                   
+
                       <field name="intervent_partner_id" on_change="on_change_partner(intervent_partner_id,account_id)" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}"/>
                       <!--<field name="partner_id" on_change="on_change_partner(partner_id,account_id)"/>-->
 	                  <field name="mode" on_change="on_change_mode(mode)"/>
-	                  
+
                       <field name="user_id" on_change="on_change_user_id(user_id)" required="1"/>
 	                  <field name="ref" />
 
@@ -176,7 +176,7 @@
                       <field name="request_reference" />
 
 	                  <field name="date_start" required="1" />
-                      <field name="intervent_duration" widget="float_time" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)" required="1" /> 
+                      <field name="intervent_duration" widget="float_time" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)" required="1" />
                       <!--<field name="date_end" /> -->
 
 	                  <field name="manual_total" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
@@ -184,18 +184,18 @@
 
 	                  <field name="manual_total_internal" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
                       <field name="unit_amount" widget="float_time" string="Internal total (eff.)" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)" attrs="{'required':[('manual_total_internal','=',True)]}" help="Internal purpose, not visible for customers" />
-	                
+
                       <notebook colspan="4">
 	                       <page string="Map route">
 	                           <group colspan="4" col="4">
 	                               <field name="google_from" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" />
-	                               <field name="google_to" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" />	                           
-	                              
+	                               <field name="google_to" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" />
+
 	                               <field name="trip_require" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
-	                               <field name="trip_hour" widget="float_time" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/> 
+	                               <field name="trip_hour" widget="float_time" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
 	                               <newline />
 	                               <field name="break_require" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
-	                               <field name="break_hour"  widget="float_time" attrs="{'invisible':[('break_require','=',False)],'required':[('break_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/> 
+	                               <field name="break_hour"  widget="float_time" attrs="{'invisible':[('break_require','=',False)],'required':[('break_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
 	                               <newline />
 	                           </group>
 	                       </page>
@@ -209,26 +209,26 @@
 	                       </page>
 	                       <page string="Accounting">
 	                           <group colspan="4" col="4">
-	                               <field name="product_uom_id" on_change="on_change_unit_amount(product_id,unit_amount,False,product_uom_id,journal_id)" /> 
-	                               <field name="journal_id" invisible="1" required="1"/> 
+	                               <field name="product_uom_id" on_change="on_change_unit_amount(product_id,unit_amount,False,product_uom_id,journal_id)" />
+	                               <field name="journal_id" invisible="1" required="1"/>
 	                               <field name="amount" />
                                    <field name="product_id" domain="[('type','=','service')]" on_change="on_change_unit_amount(product_id,unit_amount,False,product_uom_id,journal_id)" invisible="1" required="1" />
 	         	                   <field name="to_invoice" />
 	         	                   <field name="extra_invoiced_total"  widget="float_time" />
 	                               <field name="general_account_id" invisible="1" required="1" />
 	         	                   <field name="not_in_report" />
-	                           </group> 
+	                           </group>
 	                       </page>
-	                  </notebook>        
-	               </group> 
-	            </sheet>     
+	                  </notebook>
+	               </group>
+	            </sheet>
 	         	<div class="oe_chatter">
 		             <field name="message_follower_ids" widget="mail_followers" modifiers="{}"/>
 		             <field name="message_ids" widget="mail_thread" placeholder="Share a message..." modifiers="{}"/>
 	            </div>
             </form>
         </field>
-    </record>  
+    </record>
     <record id='view_hr_analytic_timesheet_tree' model='ir.ui.view'>
         <field name='name'>HR analytic timesheet list</field>
         <field name='model'>hr.analytic.timesheet</field>
@@ -236,33 +236,33 @@
         <field name='arch' type='xml'>
             <tree string="Intervent report">
                 <field name="ref" />
-                <field name="date_start" /> 
+                <field name="date_start" />
                 <field name="intervent_duration" widget="float_time"/>
-                <field name="user_id" /> 
-                <field name="intervent_partner_id" /> 
+                <field name="user_id" />
+                <field name="intervent_partner_id" />
                 <field name="name" />
                 <field name="account_id" invisible="1" />
                 <field name="to_invoice" />
                 <field name="mode" />
-                
+
                 <button name="intervention_draft" string="Draft" states="cancel" icon="gtk-go-back" />
 
                 <button name="intervention_waiting" string="Waiting" states="draft" icon="gtk-execute" />
                 <button name="intervention_confirmed" string="Confirmed" states="draft" icon="gtk-go-forward" />
-                
+
                 <button name="intervention_waiting_cancel" string="Cancel" states="waiting" icon="gtk-cancel" />
                 <button name="intervention_reschedule" string="Reschedule" states="waiting" icon="gtk-go-back" />
                 <button name="intervention_waiting_confirmed" string="Confirmed" states="waiting" icon="gtk-go-forward" />
-                
+
                 <button name="intervention_confirmed_cancel" string="Cancel" states="confirmed" icon="gtk-cancel" />
                 <button name="intervention_report_close" string="Close with report" states="confirmed" icon="gtk-go-forward" />
                 <button name="intervention_close" string="Close" states="confirmed" icon="gtk-ok" />
-                
+
                 <!--<button name="intervention_report_after_close" string="Report after close" states="close" icon="gtk-ok" />-->
-                <field name="state" />                
+                <field name="state" />
             </tree>
         </field>
-    </record>  
+    </record>
 
     <record model="ir.ui.view" id="view_hr_analytic_timesheet_graph">
         <field name="name">intervention.report.graph</field>
@@ -288,7 +288,7 @@
                 <field name="mode"/>
             </calendar>
         </field>
-    </record>      
+    </record>
         <record model="ir.ui.view" id="view_hr_analytic_timesheet_calendar_insert">
         <field name="name">intervention.report.insert.calendar</field>
         <field name="model">hr.analytic.timesheet</field>
@@ -299,10 +299,10 @@
                 <field name="intervent_partner_id"/>
                 <field name="name"/>
                 <field name="state"/>
-                <field name="mode"/>                
+                <field name="mode"/>
             </calendar>
         </field>
-    </record>    
+    </record>
     <record model="ir.ui.view" id="view_hr_analytic_timesheet_calendar_state">
         <field name="name">intervention.report.insert.calendar</field>
         <field name="model">hr.analytic.timesheet</field>
@@ -312,10 +312,10 @@
                 <field name="user_id"/>
                 <field name="intervent_partner_id"/>
                 <field name="name"/>
-                <field name="mode"/>                
+                <field name="mode"/>
             </calendar>
         </field>
-    </record>    
+    </record>
     <record model="ir.ui.view" id="view_hr_analytic_timesheet_calendar_location">
         <field name="name">intervention.report.insert.calendar</field>
         <field name="model">hr.analytic.timesheet</field>
@@ -325,10 +325,10 @@
                 <field name="user_id"/>
                 <field name="intervent_partner_id"/>
                 <field name="name"/>
-                <field name="mode"/>                
+                <field name="mode"/>
             </calendar>
         </field>
-    </record>    
+    </record>
     <record model="ir.ui.view" id="view_hr_analytic_timesheet_calendar_pay">
         <field name="name">intervention.report.insert.calendar</field>
         <field name="model">hr.analytic.timesheet</field>
@@ -338,19 +338,19 @@
                 <field name="user_id"/>
                 <field name="intervent_partner_id"/>
                 <field name="name"/>
-                <field name="mode"/>                
+                <field name="mode"/>
             </calendar>
         </field>
-    </record>  
-    
-    <!--ACTION (different calendar)-->          
+    </record>
+
+    <!--ACTION (different calendar)-->
     <record id="action_view_hr_analytic_timesheet_my" model="ir.actions.act_window">
             <field name="name">My intervent</field>
             <field name="res_model">hr.analytic.timesheet</field>
             <field name="view_type">form</field>
             <field name="view_mode">calendar,tree,form,graph</field>
             <field name="view_id" ref="view_hr_analytic_timesheet_calendar_state"/>
-            <field name="search_view_id" ref="hr_timesheet_line_search"/>            
+            <field name="search_view_id" ref="hr_timesheet_line_search"/>
             <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,'search_default_user_id':uid}</field>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
@@ -367,7 +367,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">calendar,tree,form,graph</field>
             <field name="view_id" ref="view_hr_analytic_timesheet_tree"/> <!--Open in tree mode -->
-            <field name="search_view_id" ref="hr_timesheet_line_search"/>            
+            <field name="search_view_id" ref="hr_timesheet_line_search"/>
             <field name="context">{'form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,}</field>
             <field name="domain">[('extra_planned','=', False)]</field>
             <field name="help" type="html">
@@ -384,7 +384,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">calendar,tree,form,graph</field>
             <field name="view_id" ref="view_hr_analytic_timesheet_calendar_insert"/>
-            <field name="search_view_id" ref="hr_timesheet_line_search"/>            
+            <field name="search_view_id" ref="hr_timesheet_line_search"/>
             <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,}</field>
             <field name="domain">[('extra_planned','=', False)]</field>
             <field name="help" type="html">
@@ -401,7 +401,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">calendar,tree,form,graph</field>
             <field name="view_id" ref="view_hr_analytic_timesheet_calendar_state"/>
-            <field name="search_view_id" ref="hr_timesheet_line_search"/>            
+            <field name="search_view_id" ref="hr_timesheet_line_search"/>
             <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,}</field>
             <field name="domain">[('extra_planned','=', False)]</field>
             <field name="help" type="html">
@@ -418,7 +418,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">calendar,tree,form,graph</field>
             <field name="view_id" ref="view_hr_analytic_timesheet_calendar_location"/>
-            <field name="search_view_id" ref="hr_timesheet_line_search"/>            
+            <field name="search_view_id" ref="hr_timesheet_line_search"/>
             <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,}</field>
             <field name="domain">[('extra_planned','=', False)]</field>
             <field name="help" type="html">
@@ -434,7 +434,7 @@
             <field name="res_model">hr.analytic.timesheet</field>
             <field name="view_type">form</field>
             <field name="view_mode">calendar,tree,form,graph</field>
-            <field name="search_view_id" ref="hr_timesheet_line_search"/>            
+            <field name="search_view_id" ref="hr_timesheet_line_search"/>
             <field name="view_id" ref="view_hr_analytic_timesheet_calendar_pay"/>
             <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,}</field>
             <field name="domain">[('extra_planned','=', False)]</field>
@@ -451,7 +451,7 @@
             <field name="res_model">hr.analytic.timesheet</field>
             <field name="view_type">form</field>
             <field name="view_mode">calendar,tree,form,graph</field>
-            <field name="search_view_id" ref="hr_timesheet_line_search"/>            
+            <field name="search_view_id" ref="hr_timesheet_line_search"/>
             <field name="view_id" ref="view_hr_analytic_timesheet_calendar_insert"/>
             <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,'search_default_extra':1}</field>
             <!--<field name="domain">[('extra_planned','=', True)]</field>-->
@@ -464,21 +464,21 @@
             </field>
         </record>
 
-       <!-- Menu -->       
+       <!-- Menu -->
     <menuitem name="Intervent report" parent="hr.menu_hr_root" id="menu_base_intervention_report" sequence="0" />
-        <menuitem name="My intervent (+/-3 gg.)" parent="menu_base_intervention_report" id="menu_base_intervention_report_only_my" action="action_view_hr_analytic_timesheet_my" sequence="10" />        
-    
-        <menuitem name="All intervent" parent="menu_base_intervention_report" id="menu_base_intervention_report_all" action="action_view_hr_analytic_timesheet" sequence="20" />        
-            <menuitem name="User" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_insert" action="action_view_hr_analytic_timesheet_insert" sequence="20" />        
-            <menuitem name="State" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_state" action="action_view_hr_analytic_timesheet_state" sequence="30" />        
-            <menuitem name="Mode" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_location" action="action_view_hr_analytic_timesheet_location" sequence="40" />        
+        <menuitem name="I Miei interventi" parent="menu_base_intervention_report" id="menu_base_intervention_report_only_my" action="action_view_hr_analytic_timesheet_my" sequence="10" />
+
+        <menuitem name="All intervent" parent="menu_base_intervention_report" id="menu_base_intervention_report_all" action="action_view_hr_analytic_timesheet" sequence="20" />
+            <menuitem name="User" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_insert" action="action_view_hr_analytic_timesheet_insert" sequence="20" />
+            <menuitem name="State" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_state" action="action_view_hr_analytic_timesheet_state" sequence="30" />
+            <menuitem name="Mode" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_location" action="action_view_hr_analytic_timesheet_location" sequence="40" />
             <menuitem name="Invoice type" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_pay" action="action_view_hr_analytic_timesheet_pay" sequence="50" />
             <menuitem name="Extra Planned" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_extra" action="action_view_hr_analytic_timesheet_extra" sequence="60"/>
 
-       <menuitem name="Invoice and trip" 
-                 parent="hr.menu_hr_root" 
-                 id="menu_base_intervention_trip_root" 
-                 sequence="2" /> <!--for inherited modules-->       
+       <menuitem name="Invoice and trip"
+                 parent="hr.menu_hr_root"
+                 id="menu_base_intervention_trip_root"
+                 sequence="2" /> <!--for inherited modules-->
 
     </data>
 </openerp>
