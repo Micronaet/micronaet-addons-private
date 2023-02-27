@@ -182,7 +182,7 @@ class hr_analytic_timesheet_extra(osv.osv):
     def intervention_report_close(self, cr, uid, ids, context=None):
         """ Test if is not present ref, calculate and change status
         """
-        self.write(cr, uid, ids, {'state': 'reported',})
+        self.write(cr, uid, ids, {'state': 'reported'})
         return True
 
     # Utility function for workflow:
@@ -191,7 +191,7 @@ class hr_analytic_timesheet_extra(osv.osv):
         """
         item_proxy = self.browse(cr, uid, ids[0], context=context)
         if not item_proxy.ref:
-           return self.get_intervent_number(cr, uid, context=context)
+            return self.get_intervent_number(cr, uid, context=context)
         return False
 
     def intervention_report_send_and_close(self, cr, uid, ids, context=None):

@@ -9,7 +9,7 @@
                 <form string="Intervent report wizard">
                     <field name="month" on_change="on_change_month(month)"/>
                     <newline />
-                    
+
                     <field name="from_date"/>
                     <field name="to_date"/>
 
@@ -18,14 +18,14 @@
 
                     <field name="user_id"/>
                     <field name="partner_id"/>
-                    
-                    
+
+
                     <separator string="Print selected report:" />
                     <field name="report_type"/>
                     <button icon="gtk-cancel" special="cancel" string="Cancel"/>
                     <button icon="gtk-ok" name="print_intervent_report" string="Print" type="object"/>
 
-                    <separator string="Partner list (for save PDF with previuous filter):" />
+                    <separator string="Partner list (to save PDF with previous filter):" />
                     <label string=" " colspan="2" />
                     <button icon="gtk-ok" name="print_load_partner" string="Load partner" type="object"/>
                     <button icon="gtk-ok" name="print_save_partner_report" string="Save report" type="object"/>
@@ -47,7 +47,7 @@
             target="new"
             key2="client_action_multi"
             id="action_wizard_intervent_report"
-            view_id="wizard_intervent_report" 
+            view_id="wizard_intervent_report"
             context="{'default_from_date':time.strftime('%Y-%m-01 00:00:00')}" />
     </data>
 </openerp>
