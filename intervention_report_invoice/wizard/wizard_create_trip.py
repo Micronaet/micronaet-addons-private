@@ -561,7 +561,6 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         model = 'account.invoice'
         report_name = 'invoice_intervent_report_list'
 
-        pdb.set_trace()
         for invoice in invoices:
             invoice_id = invoice.id
             invoice_ids = [invoice_id]
@@ -593,14 +592,15 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             _logger.warning('Printing report ID %s' % id_report)
             time.sleep(4)
             report = printsock.report_get(db, uid, pwd, id_report)
-            pdb.set_trace()
             result = base64.decodestring(report['result'])
+            extension = report['format']
 
             # Generate file:
-            filename = 'Interventi_%s-%s_%s.odt' % (
+            filename = 'Interventi_%s-%s_%s.%s' % (
                 month,
                 year,
                 self.clean_for_file(partner.name),
+                extension,
             )
             fullname = os.path.join(path, filename)
             _logger.info('Generating: [%s] %s...' % (
