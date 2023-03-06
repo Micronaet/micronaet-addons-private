@@ -588,7 +588,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 }
 
             id_report = printsock.report(
-                db, uid, pwd, report_name, ids, action)
+                db, uid, pwd, report_name, invoice_ids, action)
 
             _logger.warning('Printing report ID %s' % id_report)
             time.sleep(4)
