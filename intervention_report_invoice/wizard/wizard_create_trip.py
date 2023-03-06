@@ -541,16 +541,19 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         report_name = 'invoice_intervent_report_list'
         pdb.set_trace()
         for invoice in invoices:
+            invoice_id = invoice.id
+            invoice_ids = [invoice_id]
+
             printsock = xmlrpclib.ServerProxy(
                 'http://localhost:8069/xmlrpc/report')
 
             datas = {
-                'ids': ids,
-                'record_ids': ids,
+                'ids': invoice_ids,
+                'record_ids': invoice_ids,
                 'model': model,
                 'active_model': model,
-                'active_id': invoice.id,
-                'active_ids': [invoice.id],
+                'active_id': invoice_id,
+                'active_ids': invoice_ids,
             }
 
             action = {
