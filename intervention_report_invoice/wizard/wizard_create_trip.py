@@ -27,6 +27,9 @@ import sys
 import logging
 import openerp
 import xlsxwriter
+import xmlrpclib
+import time
+import base64
 import openerp.netsvc as netsvc
 import openerp.addons.decimal_precision as dp
 from osv import fields, osv
@@ -530,10 +533,6 @@ class account_invoice_intervent_wizard(osv.osv_memory):
     def create_intervent_list_odt(self, cr, uid, ids, context=None):
         """ Create list as ODT
         """
-        import xmlrpclib
-        import time
-        import base64
-
         if context is None:
             context = {}
 
@@ -564,6 +563,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         for invoice in invoices:
             invoice_id = invoice.id
             invoice_ids = [invoice_id]
+            partner = invoice.intervent_partner_id
 
             printsock = xmlrpclib.ServerProxy(
                 'http://localhost:8069/xmlrpc/report')
@@ -600,9 +600,10 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             filename = 'Interventi_%s-%s_%s.odt' % (
                 month,
                 year,
-                self.clean_for_file(invoice.partner_id.name),
+                self.clean_for_file(partner.name),
             )
-            _logger.info('Generating: %s...' % filename)
+            _logger.info('Generating: [%s] %s...' % (
+                filename, partner.name)
 
             fullname = os.path.join(
                 path,
