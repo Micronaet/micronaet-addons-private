@@ -603,7 +603,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 self.clean_for_file(partner.name),
             )
             _logger.info('Generating: [%s] %s...' % (
-                partner.name
+                partner.name,
                 filename,
             )
 
