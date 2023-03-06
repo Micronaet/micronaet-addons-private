@@ -512,6 +512,28 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         import time
         import base64
 
+        def clean_for_file(self, name):
+            """ Clean name for filename
+            """
+            substitute = {
+                u' ': '_',
+                u'/': '_',
+                u'\\': '_',
+                u':': '',
+
+                u'à': 'a',
+                u'ù': 'u',
+                u'è': 'e',
+                u'é': 'e',
+                u'ì': 'i',
+                u'ò': 'u',
+            }
+
+            res = ''
+            for c in name:
+                res += substitute.get(c, c)
+            return res
+
         if context is None:
             context = {}
 
@@ -579,8 +601,9 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             filename = 'Dettaglio_%s-%s_%s.odt' % (
                 month,
                 year,
-                invoice.partner_id.name.replace('"', ''),
+                self.clean_for_file(invoice.partner_id.name),
             )
+
             fullname = os.path.join(
                 path,
                 filename,
