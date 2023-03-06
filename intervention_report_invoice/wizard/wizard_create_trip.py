@@ -560,6 +560,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         pwd = user_proxy.password
         model = 'account.invoice'
         report_name = 'invoice_intervent_report_list'
+
         for invoice in invoices:
             invoice_id = invoice.id
             invoice_ids = [invoice_id]
@@ -580,20 +581,18 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             action = {
                 'type': 'ir.actions.report.xml',
                 'report_name': report_name,  # TODO one for all??
-
                 # 'report_type': 'pdf',
                 'model': model,
-
                 'datas': datas,
                 }
 
             id_report = printsock.report(
                 db, uid, pwd, report_name, ids, action)
+
             _logger.warning('Printing report ID %s' % id_report)
             time.sleep(4)
-
-            _logger.warning('Printing report id: %s' % id_report)
             report = printsock.report_get(db, uid, pwd, id_report)
+            pdb.set_trace()
             result = base64.decodestring(report['result'])
 
             # Generate file:
@@ -602,15 +601,11 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 year,
                 self.clean_for_file(partner.name),
             )
+            fullname = os.path.join(path, filename)
             _logger.info('Generating: [%s] %s...' % (
                 partner.name,
                 filename,
             ))
-
-            fullname = os.path.join(
-                path,
-                filename,
-            )
 
             file_odt = open(fullname, 'wb')
             file_odt.write(result)
