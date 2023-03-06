@@ -479,6 +479,28 @@ class account_invoice_intervent_wizard(osv.osv_memory):
     #                           INTERVENT LIST:
     # -------------------------------------------------------------------------
     # Utility:
+    def clean_for_file(self, name):
+        """ Clean name for filename
+        """
+        substitute = {
+            u' ': '_',
+            u'/': '_',
+            u'\\': '_',
+            u':': '',
+
+            u'à': 'a',
+            u'ù': 'u',
+            u'è': 'e',
+            u'é': 'e',
+            u'ì': 'i',
+            u'ò': 'u',
+        }
+
+        res = ''
+        for c in name:
+            res += substitute.get(c, c)
+        return res
+
     def get_wizard_invoices(self, cr, uid, ids, context=None):
         """ Generate domain list
         """
@@ -512,27 +534,6 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         import time
         import base64
 
-        def clean_for_file(self, name):
-            """ Clean name for filename
-            """
-            substitute = {
-                u' ': '_',
-                u'/': '_',
-                u'\\': '_',
-                u':': '',
-
-                u'à': 'a',
-                u'ù': 'u',
-                u'è': 'e',
-                u'é': 'e',
-                u'ì': 'i',
-                u'ò': 'u',
-            }
-
-            res = ''
-            for c in name:
-                res += substitute.get(c, c)
-            return res
 
         if context is None:
             context = {}
@@ -603,6 +604,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 year,
                 self.clean_for_file(invoice.partner_id.name),
             )
+            _logger.info('Generating: %s...' % filename)
 
             fullname = os.path.join(
                 path,
