@@ -478,6 +478,33 @@ class account_invoice_intervent_wizard(osv.osv_memory):
     # -------------------------------------------------------------------------
     #                           INTERVENT LIST:
     # -------------------------------------------------------------------------
+    # Utility:
+    def get_wizard_invoices(self, cr, uid, ids, context=None):
+        """ Generate domain list
+        """
+        invoice_pool = self.pool.get('account.invoice')
+
+        # Read parameters:
+        wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
+
+        year = wiz_proxy.year
+        month = wiz_proxy.month
+        invoice_id = wiz_proxy.invoice_id.id
+
+        if invoice_id:
+            invoice_ids = [invoice_id]
+        else:
+            from_date, to_date = self.extra_from_to(year, month)
+            invoice_ids = invoice_pool.search(cr, uid, [
+                ('date_invoice', '>=', from_date),
+                ('date_invoice', '<', to_date),
+                ], context=context)
+
+        invoices = invoice_pool.browse(
+            cr, uid, invoice_ids, context=context)
+        return invoices
+
+    # ODT:
     def create_intervent_list_odt(self, cr, uid, ids, context=None):
         """ Create list as ODT
         """
@@ -562,38 +589,14 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             os.system('chmod 777 %s' % fullname)
         return True
 
-    def get_wizard_invoices(self, cr, uid, ids, context=None):
-        """ Generate domain list
+    # XLSX:
+    def create_intervent_list(self, cr, uid, ids, context=None):
+        """ Create list of intervent depend on selection
         """
         # Generate ODF file
         self.create_intervent_list_odt(cr, uid, ids, context=context)
 
         # Generate XLSX file:
-        invoice_pool = self.pool.get('account.invoice')
-
-        # Read parameters:
-        wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
-
-        year = wiz_proxy.year
-        month = wiz_proxy.month
-        invoice_id = wiz_proxy.invoice_id.id
-
-        if invoice_id:
-            invoice_ids = [invoice_id]
-        else:
-            from_date, to_date = self.extra_from_to(year, month)
-            invoice_ids = invoice_pool.search(cr, uid, [
-                ('date_invoice', '>=', from_date),
-                ('date_invoice', '<', to_date),
-                ], context=context)
-
-        invoices = invoice_pool.browse(
-            cr, uid, invoice_ids, context=context)
-        return invoices
-
-    def create_intervent_list(self, cr, uid, ids, context=None):
-        """ Create list of intervent depend on selection
-        """
         # Pool used:
         intervent_pool = self.pool.get('hr.analytic.timesheet')
         invoices = self.get_wizard_invoices(cr, uid, ids, context=context)
