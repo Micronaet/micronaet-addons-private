@@ -590,7 +590,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             id_report = printsock.report(
                 db, uid, pwd, report_name, ids, action)
             _logger.warning('Printing report ID %s' % id_report)
-            time.sleep(5)
+            time.sleep(7)
 
             _logger.warning('Printing report id: %s' % id_report)
             report = printsock.report_get(db, uid, pwd, id_report)
