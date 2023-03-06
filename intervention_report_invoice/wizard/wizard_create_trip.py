@@ -597,7 +597,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             result = base64.decodestring(report['result'])
 
             # Generate file:
-            filename = 'Interventi_%s-%s_%s.pdf' % (
+            filename = 'Interventi_%s-%s_%s.odt' % (
                 month,
                 year,
                 self.clean_for_file(invoice.partner_id.name),
