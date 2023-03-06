@@ -563,7 +563,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         for invoice in invoices:
             invoice_id = invoice.id
             invoice_ids = [invoice_id]
-            partner = invoice.intervent_partner_id
+            partner = invoice.partner_id
 
             printsock = xmlrpclib.ServerProxy(
                 'http://localhost:8069/xmlrpc/report')
