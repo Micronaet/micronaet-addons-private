@@ -53,7 +53,9 @@ class intervent_report_collection_wizard(osv.osv_memory):
     def _get_action_report_to_return(self, cr, uid, ids, intervent_ids, report_name, title, context=None):
         """ Compose action to return according to passed: intervent_ids, report_name, title
         """
-        datas = {'ids': intervent_ids,}
+        datas = {
+            'ids': intervent_ids,
+        }
         datas['model'] = 'intervention.report'
         datas['form'] = self.read(cr, uid, ids)[0]
         datas['title'] = title
