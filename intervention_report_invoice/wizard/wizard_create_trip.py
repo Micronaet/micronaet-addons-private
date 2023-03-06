@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution    
+#    OpenERP, Open Source Management Solution
 #    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>). All Rights Reserved
 #    Copyright (C) 2004-2012 Micronaet srl. All Rights Reserved
 #    d$
@@ -22,6 +22,7 @@
 ##############################################################################
 
 import os
+import pdb
 import sys
 import logging
 import openerp
@@ -35,41 +36,41 @@ from openerp import SUPERUSER_ID#, api
 from openerp import tools
 from openerp.tools.translate import _
 from openerp.tools.float_utils import float_round as round
-from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT, 
-    DEFAULT_SERVER_DATETIME_FORMAT, 
-    DATETIME_FORMATS_MAP, 
+from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
+    DEFAULT_SERVER_DATETIME_FORMAT,
+    DATETIME_FORMATS_MAP,
     float_compare)
 
 _logger = logging.getLogger(__name__)
 
 
 class account_invoice_intervent_wizard(osv.osv_memory):
-    ''' Wizard: 
+    """ Wizard:
         Create invoice and link intervent list for print report
         Create XLSX report for sent intervent list
-    '''
-    _name = 'account.invoice.intervent.wizard'   
+    """
+    _name = 'account.invoice.intervent.wizard'
     _xls_format_db = {}
 
     # -------------------------------------------------------------------------
-    # Utility:    
+    # Utility:
     # -------------------------------------------------------------------------
-    def get_xls_format(self, mode, WB=None, num_format='#,##0.00'):  
-        ''' Database for format cells
+    def get_xls_format(self, mode, WB=None, num_format='#,##0.00'):
+        """ Database for format cells
             first call is with mode not present and WB pased
             next call with only mode
-        '''
+        """
         # if not present generate database for format:
         #if not mode or not self._xls_format_db:
         self._xls_format_db = {
             'title' : WB.add_format({
-                'bold': True, 
+                'bold': True,
                 'font_name': 'Courier 10 pitch', # 'Arial'
                 'font_size': 11,
                 'align': 'left',
                 }),
             'header': WB.add_format({
-                'bold': True, 
+                'bold': True,
                 'font_color': 'black',
                 'font_name': 'Courier 10 pitch', # 'Arial'
                 'font_size': 9,
@@ -87,7 +88,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'border': 1,
                 }),
             'text_total': WB.add_format({
-                'bold': True, 
+                'bold': True,
                 'font_color': 'black',
                 'font_name': 'Courier 10 pitch',
                 'font_size': 9,
@@ -101,12 +102,12 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'align': 'center',
                 'border': 1,
                 }),
-                
+
             # -------------------------------------------------------------
             # With text color:
             # -------------------------------------------------------------
             'bg_red': WB.add_format({
-                'bold': True, 
+                'bold': True,
                 'font_color': 'black',
                 'bg_color': '#ff420e',
                 'font_name': 'Courier 10 pitch',
@@ -115,7 +116,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'border': 1,
                 }),
             'bg_green': WB.add_format({
-                'bold': True, 
+                'bold': True,
                 'font_color': 'black',
                 'bg_color': '#99cc66',
                 'font_name': 'Courier 10 pitch',
@@ -124,7 +125,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'border': 1,
                 }),
             'bg_order': WB.add_format({
-                'bold': True, 
+                'bold': True,
                 'font_color': 'black',
                 'bg_color': '#cc9900',
                 'font_name': 'Courier 10 pitch',
@@ -176,7 +177,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'font_size': 9,
                 'align': 'left',
                 'border': 1,
-                }),                
+                }),
             'text_wrap': WB.add_format({
                 'font_color': 'black',
                 'font_name': 'Courier 10 pitch',
@@ -187,7 +188,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 }),
 
             'text_bg_yellow': WB.add_format({
-                'bold': True, 
+                'bold': True,
                 'font_color': 'black',
                 'bg_color': '#ffff99',
                 'font_name': 'Courier 10 pitch',
@@ -195,7 +196,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'align': 'left',
                 'border': 1,
                 }),
-                
+
             'number': WB.add_format({
                 'font_name': 'Courier 10 pitch',
                 'font_size': 9,
@@ -212,7 +213,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'num_format': num_format,
                 }),
             'text_total': WB.add_format({
-                'bold': True, 
+                'bold': True,
                 'font_color': 'black',
                 'font_name': 'Courier 10 pitch',
                 'font_size': 9,
@@ -222,7 +223,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 #'text_wrap': True,
                 }),
             'number_total': WB.add_format({
-                'bold': True, 
+                'bold': True,
                 'font_name': 'Courier 10 pitch',
                 'font_size': 9,
                 'align': 'right',
@@ -234,8 +235,8 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         return self._xls_format_db.get(mode, False)
 
     def write_xlsx_line(self, WS, row, line, format_default=False):
-        ''' Write cell, the row
-        '''
+        """ Write cell, the row
+        """
         col = -1
         for item in line:
             col += 1
@@ -249,60 +250,60 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 value = item
             if format_type:
                 WS.write(row, col, value, format_type)
-            else:    
-                WS.write(row, col, value)            
-        return True        
-    
+            else:
+                WS.write(row, col, value)
+        return True
+
     def extra_from_to(self, year, month):
-        ''' Extrat from to date from year month
-        '''
+        """ Extrat from to date from year month
+        """
         # Generate month filter:
         next_month = int(month) + 1
         next_year = int(year)
         if next_month == 13:
             next_month = 1
             next_year += 1
-            
+
         return (
             '%s-%s-01' % (year, month),
             '%s-%02d-01' % (next_year, next_month),
             )
-        
+
     # -------------------------------------------------------------------------
     # Onchange:
     # -------------------------------------------------------------------------
     def onchange_date_search_invoice(self, cr, uid, ids, month, year,
             context=None):
-        ''' Set domain depend on filter
-        '''    
+        """ Set domain depend on filter
+        """
         res = {}
         res['domain'] = {}
-        
+
         from_date, to_date = self.extra_from_to(year, month)
-                
-        # Set domain for invoice:        
+
+        # Set domain for invoice:
         res['domain']['invoice_id'] = [
             ('date_invoice', '>=', from_date),
             ('date_invoice', '<', to_date),
             ]
         return res
-        
+
     # -------------------------------------------------------------------------
     #                           BUTTON FUNCTION:
     # -------------------------------------------------------------------------
     # -------------------------------------------------------------------------
-    #                           STATISTIC MONTH:      
+    #                           STATISTIC MONTH:
     # -------------------------------------------------------------------------
     def create_month_statistic(self, cr, uid, ids, context=None):
-        ''' Statistic for month and invoice status
-        '''        
+        """ Statistic for month and invoice status
+        """
         # Pool used:
-        account_pool = self.pool.get('account.analytic.account')        
+        account_pool = self.pool.get('account.analytic.account')
         intervent_pool = self.pool.get('hr.analytic.timesheet')
-                
+
         # Read paremeters:
         wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
-        
+
         month = wiz_proxy.month
         year = wiz_proxy.year
         user_id = wiz_proxy.user_id.id
@@ -312,8 +313,8 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             wiz_proxy.year,
             wiz_proxy.month,
             )
-        filename = os.path.expanduser(filename)   
-        _logger.info('Export filename: %s' % filename) 
+        filename = os.path.expanduser(filename)
+        _logger.info('Export filename: %s' % filename)
 
         WB = xlsxwriter.Workbook(filename)
         WS = WB.add_worksheet('Statistica %s-%s' % (
@@ -321,14 +322,14 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             wiz_proxy.month,
             ))
         WS_all = WB.add_worksheet('Dettaglio')
-            
+
         # ---------------------------------------------------------------------
         # 0. Set column dimension:
         # ---------------------------------------------------------------------
         WS.set_column('A:A', 20)
-        
+
         WS_all.set_column('A:A', 20)
-        
+
         # ---------------------------------------------------------------------
         #                         1. Header title:
         # ---------------------------------------------------------------------
@@ -339,12 +340,12 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 u'Commessa',
                 u'Dati commessa', # XXX explode in columns
                 u'Utente',
-                u'H.', 
+                u'H.',
                 u'Fabb. H.',
                 u'Scost.',
                 u'Subtotale',
                 ], format_header)
-                
+
         self.write_xlsx_line(
             WS_all, 0, [
                 u'Cliente',
@@ -357,14 +358,14 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 u'Pausa',
                 u'Durata',
                 u'Totale manuale',
-                u'Subtotale',                
+                u'Subtotale',
                 ], format_header)
-        
+
         # ---------------------------------------------------------------------
         #                      2. Table: list of intervent
         # ---------------------------------------------------------------------
         intervent_db = {}
-        from_date, to_date = self.extra_from_to(year, month)                
+        from_date, to_date = self.extra_from_to(year, month)
 
         # ---------------------------------
         # Search all analytic account open:
@@ -372,10 +373,10 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         account_ids = account_pool.search(cr, uid, [
             # TODO Filter only active
             ], context=context)
-        for account in account_pool.browse(cr, uid, account_ids, 
+        for account in account_pool.browse(cr, uid, account_ids,
                 context=context):
             intervent_db[account] = {}
-        
+
         # -----------------------------------------------------
         # Search all intervent to be invoiced and collect data:
         # -----------------------------------------------------
@@ -388,40 +389,40 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             ]
         if user_id:
             domain.append(('user_id', '=', user_id))
-                
+
         intervent_ids = intervent_pool.search(cr, uid, domain, context=context)
-        
+
         row_all = 0
-        for intervent in sorted(intervent_pool.browse(cr, uid, intervent_ids, 
+        for intervent in sorted(intervent_pool.browse(cr, uid, intervent_ids,
                 context=context), key=lambda x: (
                     x.intervent_partner_id.name if \
-                        x.intervent_partner_id else False, 
+                        x.intervent_partner_id else False,
                     x.account_id.name,
                     x.user_id.name,
                     #x.ref,
                     x.date_start,
-                    )):                
-            row_all += 1      
+                    )):
+            row_all += 1
             account = intervent.account_id
             user = intervent.user_id
-                          
+
             # 1. Write detail
             total = intervent_pool.get_total_h_2_invoice(intervent)
-            
+
             self.write_xlsx_line(
                 WS_all, row_all, [
                     intervent.intervent_partner_id.name,
                     account.name,
                     intervent.user_id.name,
                     intervent.ref,
-                    intervent.intervention_request,                    
+                    intervent.intervention_request,
                     intervent.date_start,
                     #intervent.mode,
                     intervent.trip_hour if intervent.trip_require \
                         else '/',
                     intervent.break_hour if intervent.break_require \
                         else '/',
-                    
+
                     intervent.intervent_duration, # total intervent
                     intervent.intervent_total, # manual
                     total,
@@ -429,35 +430,35 @@ class account_invoice_intervent_wizard(osv.osv_memory):
 
             # Collect data:
             if account not in intervent_db:
-                _logger.warning('Account was closed: %s' % account.name)                               
-                intervent_db[account] = {} 
+                _logger.warning('Account was closed: %s' % account.name)
+                intervent_db[account] = {}
             if mode == 'summary':
                 if '/' in intervent_db[account]:
                     intervent_db[account]['/'] += total
-                else:    
+                else:
                     intervent_db[account]['/'] = total
             else: # 'detaued'
                 if user in intervent_db[account]:
                     intervent_db[account][user] += total
                 else:
                     intervent_db[account][user] = total
-                
+
             # Populate database:
-                
-                
-            #intervent_db[intervent.account_id] 
-            
+
+
+            #intervent_db[intervent.account_id]
+
         # ----------------
         # Generate report:
         # ----------------
-        row = 0        
-        for account in sorted(intervent_db, 
+        row = 0
+        for account in sorted(intervent_db,
                 key=lambda x: (
                     x.partner_id.name if x.partner_id else False,
                     x.name,
                     )):
             for user in intervent_db[account]:
-                row += 1                    
+                row += 1
                 self.write_xlsx_line(
                     WS, row, [
                         account.partner_id.name,
@@ -469,39 +470,116 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                         u'Scost.',
                         u'Subtotale',
                         ], format_text)
-          
+
         # End operations:
         WB.close()
         return True
-    
-    # -------------------------------------------------------------------------
-    #                           INTERVENT LIST:      
-    # -------------------------------------------------------------------------
-    def create_intervent_list(self, cr, uid, ids, context=None):
-        ''' Create list of intervent depend on selection
-        ''' 
-        # Pool used:
-        intervent_pool = self.pool.get('hr.analytic.timesheet')
-        invoice_pool = self.pool.get('account.invoice')    
 
-        # Read paremeters:
+    # -------------------------------------------------------------------------
+    #                           INTERVENT LIST:
+    # -------------------------------------------------------------------------
+    def create_intervent_list_odt(self, cr, uid, ids, context=None):
+        """ Create list as ODT
+        """
+        import xmlrpclib
+        import time
+        import base64
+
+        if context is None:
+            context = {}
+
+        user_pool = self.pool.get('res.users')
+        user_proxy = user_pool.browse(cr, uid, uid, context=context)
+
+        # Parameters from wizard:
         wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
-        
+        year = wiz_proxy.year
+        month = wiz_proxy.month
+
+        path = os.path.expanduser(
+            '~/filestore/samba/detail/%s_%s' % (year, month))
+        try:
+            os.system('mkdir -p %s' % path)
+        except:
+            _logger.error('Cannot create detail folder: %s' % path)
+
+        # Invoice loop:
+        invoices = self.get_wizard_invoices(cr, uid, ids, context=context)
+
+        # XMLRPC Parameters:
+        db = cr.dbname
+        uid = uid
+        pwd = user_proxy.password
+        model = 'account.invoice'
+        report_name = 'invoice_intervent_report_list'
+        pdb.set_trace()
+        for invoice in invoices:
+            printsock = xmlrpclib.ServerProxy(
+                'http://localhost:8069/xmlrpc/report')
+
+            datas = {
+                'ids': ids,
+                'record_ids': ids,
+                'model': model,
+                'active_model': model,
+                'active_id': invoice.id,
+                'active_ids': [invoice.id],
+            }
+
+            action = {
+                'type': 'ir.actions.report.xml',
+                'report_name': report_name,  # TODO one for all??
+
+                # 'report_type': 'pdf',
+                'model': model,
+
+                'datas': datas,
+                }
+
+            id_report = printsock.report(
+                db, uid, pwd, report_name, ids, action)
+            _logger.warning('Printing report ID %s' % id_report)
+            time.sleep(2)
+
+            _logger.warning('Printing report id: %s' % id_report)
+            report = printsock.report_get(db, uid, pwd, id_report)
+            result = base64.decodestring(report['result'])
+
+            # Generate file:
+            filename = 'Dettaglio_%s-%s_%s.odt' % (
+                month,
+                year,
+                invoice.partner_id.name.replace('"', ''),
+            )
+            fullname = os.path.join(
+                path,
+                filename,
+            )
+
+            file_odt = open(fullname, 'wb')
+            file_odt.write(result)
+            file_odt.close()
+            os.system('chmod 777 %s' % fullname)
+        return True
+
+    def get_wizard_invoices(self, cr, uid, ids, context=None):
+        """ Generate domain list
+        """
+        # Generate ODF file
+        self.create_intervent_list_odt(cr, uid, ids, context=context)
+
+        # Generate XLSX file:
+        invoice_pool = self.pool.get('account.invoice')
+
+        # Read parameters:
+        wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
+
         year = wiz_proxy.year
         month = wiz_proxy.month
         invoice_id = wiz_proxy.invoice_id.id
-        #user_id = wiz_proxy.user_id.id
-
-        # Parameters:
-        smb_root = '~/filestore/samba/intervent/%s_%s' % (year, month)
-        smb_root = os.path.expanduser(smb_root)        
-        try:
-            os.system('mkdir -p %s' % smb_root)
-        except:
-            _logger.error('Cannot create folder: %s' % smb_root)    
 
         if invoice_id:
-            invoice_ids = [invoice_id]                
+            invoice_ids = [invoice_id]
         else:
             from_date, to_date = self.extra_from_to(year, month)
             invoice_ids = invoice_pool.search(cr, uid, [
@@ -509,23 +587,46 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 ('date_invoice', '<', to_date),
                 ], context=context)
 
-        for invoice in invoice_pool.browse(cr, uid, invoice_ids, 
-                context=context):
+        invoices = invoice_pool.browse(
+            cr, uid, invoice_ids, context=context)
+        return invoices
+
+    def create_intervent_list(self, cr, uid, ids, context=None):
+        """ Create list of intervent depend on selection
+        """
+        # Pool used:
+        intervent_pool = self.pool.get('hr.analytic.timesheet')
+        invoices = self.get_wizard_invoices(cr, uid, ids, context=context)
+
+        # Parameters:
+        wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
+        year = wiz_proxy.year
+        month = wiz_proxy.month
+
+        smb_root = '~/filestore/samba/intervent/%s_%s' % (year, month)
+        smb_root = os.path.expanduser(smb_root)
+        try:
+            os.system('mkdir -p %s' % smb_root)
+        except:
+            _logger.error('Cannot create folder: %s' % smb_root)
+
+        for invoice in invoices:
+
             # -----------------------------------------------------------------
-            # Open file XSLX:
+            # Open file XLSX:
             # -----------------------------------------------------------------
-            name = invoice.partner_id.name if invoice.partner_id else 'Manca'            
-            filename = os.path.join(smb_root, 'Interventi_%s.xlsx' % name)            
+            name = invoice.partner_id.name if invoice.partner_id else 'Manca'
+            filename = os.path.join(smb_root, 'Interventi_%s.xlsx' % name)
             WB = xlsxwriter.Workbook(filename)
 
-            # Format used:                
+            # Format used:
             format_title = self.get_xls_format('title', WB)
             format_header = self.get_xls_format('header', WB)
             format_text = self.get_xls_format('text', WB)
             format_text_total = self.get_xls_format('text_total', WB)
             format_center = self.get_xls_format('text_center', WB)
             format_number = self.get_xls_format('number', WB)
-                
+
             # -----------------------------------------------------------------
             # 0. Set column dimension:
             # -----------------------------------------------------------------
@@ -535,12 +636,12 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             WS.set_column('C:C', 20)
             WS.set_column('D:D', 30)
             WS.set_column('E:E', 15)
-            WS.set_column('F:F', 30) # Subject
-            WS.set_column('G:G', 30) # Description
+            WS.set_column('F:F', 30)  # Subject
+            WS.set_column('G:G', 30)  # Description
             WS.set_column('H:H', 15)
             WS.set_column('I:I', 15)
             # 4 col standard
-            
+
             # Sheet Contract:
             WS_c = WB.add_worksheet('Contratti %s-%s' % (year, month))
             WS_c.set_column('A:A', 30)
@@ -549,13 +650,13 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             WS_c.set_column('D:D', 10)
             WS_c.set_column('E:E', 10)
             WS_c.set_column('F:F', 10)
-            
+
             # XXX WS.merge_range(row, 0, row, 12, '') # merge cell
 
             # -----------------------------------------------------------------
             # 1. Partner header:
             # -----------------------------------------------------------------
-            #WS.write_rich_string(row, col, *record)
+            # WS.write_rich_string(row, col, *record)
             # Sheet Intervent:
             self.write_xlsx_line(WS, 0, [
                 u'Interventi (dettaglio): %s' % name,
@@ -565,7 +666,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             self.write_xlsx_line(WS_c, 0, [
                 u'Contratti (sommario): %s' % name,
                 ], format_title)
-            
+
             # -----------------------------------------------------------------
             # 2. Header title:
             # -----------------------------------------------------------------
@@ -574,17 +675,17 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 WS, 2, [
                     u'Commessa',
                     u'Num.',
-                    u'Data', 
+                    u'Data',
                     u'Richiesta',
                     u'Tecnico',
-                    u'Oggetto', 
-                    u'Dettaglio', 
+                    u'Oggetto',
+                    u'Dettaglio',
                     u'Modalita\'',
                     u'Fatturabile',
                     u'Traferta',
                     u'Pausa',
                     u'Effettivo',
-                    u'Fatturato',            
+                    u'Fatturato',
                     ], format_header)
 
             # Sheet Contract:
@@ -592,12 +693,12 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 WS_c, 2, [
                     u'Commessa',
                     u'Num.',
-                    u'Responsabile', 
+                    u'Responsabile',
                     u'Dalla data',
                     u'Alla data',
                     u'Fatturato',
                     ], format_header)
-                        
+
             # -----------------------------------------------------------------
             # 3. Table: list of intervent
             # -----------------------------------------------------------------
@@ -609,14 +710,14 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 request = intervent.intervention_request or ''
                 total = intervent_pool.get_total_h_2_invoice(
                     intervent)
-                final_total += total    
+                final_total += total
                 if request == 'Nuovo evento':
-                    request = intevent.name
+                    request = intervent.name
                 self.write_xlsx_line(
                     WS, row, [
                         intervent.account_id.name,
                         (intervent.ref, format_center),
-                        (intervent.date_start, format_center), # TODO better!
+                        (intervent.date_start, format_center),  # todo better!
                         intervent.intervention_request,
                         intervent.user_id.name,
                         request,
@@ -628,23 +729,23 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                         (intervent.break_hour if intervent.break_require \
                             else '/', format_number),
                         (intervent.intervent_total, format_number),
-                        (total, format_number),  
+                        (total, format_number),
                         ], format_text)
                 if intervent.account_id not in res:
                     res[intervent.account_id] = total
-                else:    
+                else:
                     res[intervent.account_id] += total
-           
+
             # Write total
             self.write_xlsx_line(
                 WS, row + 1, [
-                    u'', u'', u'', u'', u'', u'', u'', u'', u'', u'', 
-                    ('Totale', format_text_total), 
+                    u'', u'', u'', u'', u'', u'', u'', u'', u'', u'',
+                    ('Totale', format_text_total),
                     (final_total, format_text_total),
                     ], format_text_total)
-            #WS.write_formula(row + 1, 10, 'SUM(), format_text_total)
-                        
-            # Summary mode need write after total:                    
+            # WS.write_formula(row + 1, 10, 'SUM(), format_text_total)
+
+            # Summary mode need write after total:
             row = 2
             for account in sorted(res, key=lambda x: x.name):
                 row += 1
@@ -656,41 +757,41 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                         account.from_date or '',
                         account.to_date or '',
                         (res[account], format_number),
-                        ], format_text)                 
+                        ], format_text)
             # End operations:
             WB.close()
-            
-        # File zip with folder: # TODO         
-        # Return ZIP file # TODO 
+
+        # File zip with folder: # todo
+        # Return ZIP file # todo
         return True
-        
+
     def create_invoice(self, cr, uid, ids, context=None):
-        ''' Create trip for choosen month for all partner in the list
-        '''
+        """ Create trip for chosen month for all partner in the list
+        """
         domain = [
             ('intervent_partner_id', '!=', False),
             ('extra_planned', '=', False),
             ]
 
         wiz_proxy = self.browse(cr, uid, ids, context=context)[0]
-        
+
         domain.append(
             ('date_start', '>=', '%s-%s-01 00:00:00' % (
-                wiz_proxy.year,wiz_proxy.month)))
-            
-        intervent_pool = self.pool.get('hr.analytic.timesheet')    
+                wiz_proxy.year, wiz_proxy.month)))
+
+        intervent_pool = self.pool.get('hr.analytic.timesheet')
         invoice_pool = self.pool.get('account.invoice')
-        
+
         intervent_ids = intervent_pool.search(
             cr, uid, domain, order='partner_id,date_start', context=context)
         intervent_proxy = intervent_pool.browse(
             cr, uid, intervent_ids, context=context)
         partner_invoice = {} # partner_id : invoice_id
-        for intervent in intervent_proxy: #loop all intervent 
+        for intervent in intervent_proxy: #loop all intervent
             # test if <= end of month
-            if intervent.date_start[5:7] != wiz_proxy.month:    
+            if intervent.date_start[5:7] != wiz_proxy.month:
                 continue
-            partner = intervent.intervent_partner_id    
+            partner = intervent.intervent_partner_id
             if partner.id not in partner_invoice:
                 invoice_ids = invoice_pool.search(cr, uid, [
                     ('partner_id','=', partner.id),
@@ -725,7 +826,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             ('summary', 'Summary'),
             ('detailed', 'Detailed'),
             ], 'Mode', required=True),
-            
+
         'month': fields.selection([
             ('01', 'January'),
             ('02', 'February'),
@@ -738,10 +839,10 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             ('09', 'September'),
             ('10', 'October'),
             ('11', 'November'),
-            ('12', 'December'),            
+            ('12', 'December'),
             ],'Month', select=True, required=True),
         }
-        
+
     _defaults = {
         'year': lambda *a:int(datetime.now().strftime('%Y')),
         'month': lambda *a: '%02d' % (
