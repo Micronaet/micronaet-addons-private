@@ -56,12 +56,12 @@ class intervent_report_collection_wizard(osv.osv_memory):
         datas = {'ids': intervent_ids,}
         datas['model'] = 'intervention.report'
         datas['form'] = self.read(cr, uid, ids)[0]
-        datas['title']= title
+        datas['title'] = title
 
         # return action:
         return {
             'type': 'ir.actions.report.xml',
-            'report_name': report_name, # TODO one for all??
+            'report_name': report_name,  # TODO one for all??
             'datas': datas,
         }
 
