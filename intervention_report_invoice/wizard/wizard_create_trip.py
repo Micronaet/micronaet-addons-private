@@ -605,7 +605,7 @@ class account_invoice_intervent_wizard(osv.osv_memory):
             _logger.info('Generating: [%s] %s...' % (
                 partner.name,
                 filename,
-            )
+            ))
 
             fullname = os.path.join(
                 path,
