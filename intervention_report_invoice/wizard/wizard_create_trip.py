@@ -562,7 +562,6 @@ class account_invoice_intervent_wizard(osv.osv_memory):
         pwd = user_proxy.password
         model = 'account.invoice'
         report_name = 'invoice_intervent_report_list'
-        pdb.set_trace()
         for invoice in invoices:
             invoice_id = invoice.id
             invoice_ids = [invoice_id]
