@@ -100,7 +100,7 @@ class AccountAnalyticTicketInherit(osv.osv):
         data = {
             'state': 'open',
         }
-        if ticket.ref:
+        if not ticket.ref:
             data['ref'] = self.pool.get('ir.sequence').get(
                 cr, uid, 'account.analytic.ticket')
 
