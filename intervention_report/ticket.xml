@@ -24,7 +24,7 @@
 
                         <field name="partner_id"/>
                         <field name="contact_id"/>
-                        <field name="account_id"/>
+                        <field name="account_id" invisible="1"/>
 
                         <field name="user_id"/>
 
@@ -51,7 +51,7 @@
                             <filter string="Chiusura" domain="[]" context="{'group_by':'invoice_date'}"/>
 
                             <filter string="Cliente" domain="[]" context="{'group_by':'partner_id'}"/>
-                            <filter string="Contatto" domain="[]" context="{'group_by':'contact_id'}"/>
+                            <filter string="Contatto" domain="[]" context="{'group_by':'contact_id'}" invisible="1"/>
                             <filter string="Assegnato a" domain="[]" context="{'group_by':'user_id'}"/>
 
                             <filter string="Commessa" domain="[]" context="{'group_by':'account_id'}"/>
@@ -76,7 +76,7 @@
 
                         <field name="partner_id" />
                         <field name="contact_id" />
-                        <field name="account_id" />
+                        <field name="account_id" invisible="1" />
 
                         <field name="max_hours" widget="float_time"/>
 
@@ -127,7 +127,9 @@
                               <field name="user_id" />
                               <field name="priority" />
 
-                              <field name="account_id" colspan="4" context="{'with_code': True,'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
+                              <field name="account_id" colspan="4" invisible="1"
+                                     context="{'with_code': True,'default_use_timesheets': 1}"
+                                     domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
                               <!--<field name="account_no_parent" nolabel="1" on_change="on_change_partner(partner_id,account_id,account_no_parent)"/>-->
 
                               <notebook colspan="5">
