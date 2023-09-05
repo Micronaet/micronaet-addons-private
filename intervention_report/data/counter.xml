@@ -2,7 +2,7 @@
 <openerp>
     <data>
 	    <record model="ir.sequence" id="seq_account_analytic_ticket">
-		    <field name="name">account.analytic.ticket.counter</field>
+		    <field name="name">account.analytic.ticket</field>
 		    <field name="code">account.analytic.ticket</field>
 		    <field name="prefix">TK/%(y)s/</field>
 		    <field name="padding">5</field>
