@@ -94,6 +94,7 @@ class AccountAnalyticTicketInherit(osv.osv):
 
             'default_intervent_partner_id': ticket.partner_id.id,
             'default_intervent_contact_id': ticket.contact_id.id,
+            'default_account_no_parent': True,  # todo to see all account
             'default_account_id': ticket.account_id.id,
 
             'default_date_start': datetime.now().strftime(
