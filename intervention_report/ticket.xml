@@ -91,6 +91,7 @@
                         <button name="wkf_closed" string="Chiuso" type="object" states="open" icon="STOCK_APPLY" />
                         <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-revert-to-saved" />
                         <field name="state" />
+                        <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" state="done" />
                     </tree>
             </field>
         </record>
@@ -111,7 +112,6 @@
                             <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-revert-to-saved" />
 
                             <field name="state" widget="statusbar" readonly="1"/>
-                            <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" state="done" />
                         </header>
                         <sheet>
                            <group colspan="4" col="4">

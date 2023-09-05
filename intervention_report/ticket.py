@@ -82,8 +82,23 @@ class AccountAnalyticTicketInherit(osv.osv):
 
         ctx = context.copy()
         ctx.update({
+            'default_name': ticket.name,
+            'default_intervention_request': ticket.name,
+            'default_internal_note': ticket.solution,
+
+            'default_request_by': ticket.contact_id.name or False,
+
+            'default_account_id': ticket.account_id.id,
+
             'default_ticket_id': ticket.id,
             'default_user_id': ticket.user_id.id,
+
+            'default_intervention_partner_id': ticket.partner_id.id,
+            'default_intervention_contact_id': ticket.contact_id.id,
+
+            'default_date_start': datetime.now().strftime(
+                DEFAULT_SERVER_DATETIME_FORMAT),
+            'default_intervent_duration': 1.0,
             })
         return {
             'type': 'ir.actions.act_window',
