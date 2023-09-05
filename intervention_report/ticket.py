@@ -127,7 +127,7 @@ class AccountAnalyticTicketInherit(osv.osv):
         }, context=context)
 
     _columns = {
-        'ref': fields.char('Rif.', size=15),
+        'ref': fields.char('Rif.', size=15, readonly=True),
         'name': fields.char('Oggetto', size=90, required=True),
         'date': fields.datetime('Data'),
         'deadline': fields.date('Scadenza'),
