@@ -88,6 +88,7 @@ class AccountAnalyticTicketInherit(osv.osv):
         self.write_log_chatter_message(cr, uid, ids, message, context=context)
         return self.write(cr, uid, ids, {
             'state': 'draft',
+            'invoice_date': False,
         }, context=context)
 
     def wkf_open(self, cr, uid, ids, context=None):
@@ -98,7 +99,6 @@ class AccountAnalyticTicketInherit(osv.osv):
         self.write_log_chatter_message(cr, uid, ids, message, context=context)
         data = {
             'state': 'open',
-            'invoice_date': False,
         }
         if ticket.ref:
             data['ref'] = self.pool.get('ir.sequence').get(
