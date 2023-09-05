@@ -20,6 +20,7 @@
 #
 ##############################################################################
 import os
+import pdb
 import sys
 import logging
 import openerp
@@ -67,6 +68,7 @@ class AccountAnalyticTicketInherit(osv.osv):
     def assign_to_me(self, cr, uid, ids, context=None):
         """ Assign me to ticket operator
         """
+        pdb.set_trace()
         message = 'Cambio stato ticket: Riavviato'
         self.write_log_chatter_message(cr, uid, ids, message, context=context)
         return self.write(cr, uid, ids, {

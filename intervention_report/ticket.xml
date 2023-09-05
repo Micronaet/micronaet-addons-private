@@ -84,12 +84,12 @@
                         <field name="user_id" />
                         <field name="priority" />
 
-                        <button name="assign_to_me" string="Assegna a me" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
+                        <button name="assign_to_me" string="Assegna a me" type="object" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
 
-                        <button name="wkf_open" string="Confermato" states="draft,suspended" icon="gtk-execute" />
-                        <button name="wkf_suspended" string="Sospendi" states="open" icon="terp-gtk-media-pause" />
-                        <button name="wkf_closed" string="Chiuso" states="open" icon="STOCK_APPLY" />
-                        <button name="wkf_restart" string="Riattiva" states="closed" icon="gtk-revert-to-saved" />
+                        <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-execute" />
+                        <button name="wkf_suspended" string="Sospendi" type="object" states="open" icon="terp-gtk-media-pause" />
+                        <button name="wkf_closed" string="Chiuso" type="object" states="open" icon="STOCK_APPLY" />
+                        <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-revert-to-saved" />
                         <field name="state" />
                     </tree>
             </field>
@@ -101,12 +101,12 @@
                 <field name='arch' type='xml'>
                     <form string="Ticket" version="7.0">
                         <header>
-                            <button name="assign_to_me" string="Assegna a me" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
+                            <button name="assign_to_me" string="Assegna a me" type="object" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
 
-                            <button name="wkf_open" string="Confermato" states="draft,suspended" icon="gtk-execute" />
-                            <button name="wkf_suspended" string="Sospendi" states="open" icon="terp-gtk-media-pause" />
-                            <button name="wkf_closed" string="Chiuso" states="open" icon="STOCK_APPLY" />
-                            <button name="wkf_restart" string="Riattiva" states="closed" icon="gtk-revert-to-saved" />
+                            <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-execute" />
+                            <button name="wkf_suspended" string="Sospendi" type="object" states="open" icon="terp-gtk-media-pause" />
+                            <button name="wkf_closed" string="Chiuso" type="object" states="open" icon="STOCK_APPLY" />
+                            <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-revert-to-saved" />
 
                             <field name="state" widget="statusbar" readonly="1"/>
                         </header>
