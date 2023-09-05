@@ -67,7 +67,7 @@
                 <field name="name">account.analytic.ticket.tree</field>
                 <field name="model">account.analytic.ticket</field>
                 <field name='arch' type='xml'>
-                    <tree string="Ticket" colors="grey:state=='suspended';blue:state=='open';green:state=='completed'" font="bold:state=='draft'">
+                    <tree string="Ticket" colors="grey:state=='suspended';blue:state=='open';green:state=='completed'" fonts="bold:state=='draft'">
                         <field name="ref" />
                         <field name="name" />
                         <field name="date" />
