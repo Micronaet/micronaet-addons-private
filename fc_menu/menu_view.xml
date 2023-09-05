@@ -2,7 +2,7 @@
 <openerp>
     <data>
         <menuitem name="FC" id="menu_partner_fc_root" sequence="10" />
-            <menuitem name="Ticket" parent="hr.menu_hr_root" id="menu_partner_fc_root" sequence="5" />
+            <menuitem name="Ticket" parent="menu_partner_fc_root" id="menu_base_ticket" sequence="5" />
                 <menuitem name="Ticket totali" parent="menu_base_ticket" id="menu_action_account_analytic_ticket_tree"
                           action="intervention_report.action_account_analytic_ticket_tree" sequence="10" />
                 <menuitem name="Ticket assegnati" parent="menu_base_ticket" id="menu_action_my_account_analytic_ticket_tree"
