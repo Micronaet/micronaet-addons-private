@@ -65,6 +65,40 @@ class AccountAnalyticTicketInherit(osv.osv):
         body = '%s\n[User: %s]' % (message, user.name)
         return self.message_post(cr, uid, ids, body=body, context=context)
 
+    def create_new_intervention_for_ticket(self, cr, uid, ids, context=None):
+        """ Create new intervent for this ticket
+        """
+        if context is None:
+            context = {}
+
+        ticket = self.browse(cr, uid, ids, context=context)[0]
+
+        model_pool = self.pool.get('ir.model.data')
+        # view_tree_id = model_pool.get_object_reference(cr, uid,
+        #    'intervention_report', 'view_hr_analytic_timesheet_tree')[1]
+        view_form_id = model_pool.get_object_reference(cr, uid,
+            'intervention_report', 'view_hr_analytic_timesheet_form')[1]
+
+        ctx = context.copy()
+        ctx.update({
+            'default_ticket_id': ticket.id,
+            'default_user_id': ticket.user_id.id,
+            })
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Nuovo intervento per il ticket',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_id': False,  # New record
+            'res_model': 'hr.analytic.timesheet',
+            'view_id': view_form_id,
+            'views': [(view_form_id, 'form')],
+            'domain': [],
+            'context': ctx,
+            'target': 'new',
+            'nodestroy': False,
+            }
+
     def assign_to_me(self, cr, uid, ids, context=None):
         """ Assign me to ticket operator
         """
