@@ -54,13 +54,11 @@
         'security/intervent_group.xml',
         'security/ir.model.access.csv',
 
-
-        'intervent_sequence.xml',
         'intervention.xml',
         'intervention_workflow.xml',
         'ticket.xml',
 
-        'data/counter.xml',
+        'intervent_sequence.xml',
         ],
     'active': False,
     'installable': True,

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data noupdate="1">
-        <!-- Intervent sequence: -->
+        <!-- Intervention sequence: -->
         <record model="ir.sequence.type" id="seq_intervent_type">
                 <field name="name">Intervent report</field>
                 <field name="code">hr.intervent.report</field>
-
         </record>
         <record model="ir.sequence" id="seq_intervent_number">
                 <field name="name">Intervent</field>
@@ -13,6 +12,18 @@
                 <field name="padding" eval="5" />
                 <field name="prefix">INT</field>
         </record>
+
+        <record model="ir.sequence.type" id="seq_account_analytic_ticket_type">
+                <field name="name">Ticket</field>
+                <field name="code">account.analytic.ticket</field>
+        </record>
+	    <record model="ir.sequence" id="seq_account_analytic_ticket">
+		    <field name="name">Ticket</field>
+		    <field name="code">account.analytic.ticket</field>
+		    <field name="prefix">TIK/%(y)s/</field>
+		    <field name="padding" eval="5"/>
+	    </record>
+
     </data>
 </openerp>
 
