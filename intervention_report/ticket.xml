@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+         <!-- account.analytic.ticket -->
+         <record id="view_account_analytic_ticket_search" model="ir.ui.view">
+                <field name="name">account.analytic.ticket.search</field>
+                <field name="model">account.analytic.ticket</field>
+                <field name="arch" type="xml">
+                    <search string="Ticket">
+                        <field name="ref"/>
+                        <field name="name"/>
+
+                        <field name="date"/>
+                        <field name="date" string="Dalla data" filter_domain="[('date','&gt;=',self)]"/>
+                        <field name="date" string="Alla data" filter_domain="[('date','&lt;=',self)]"/>
+
+                        <field name="deadline"/>
+                        <field name="deadline" string="Dalla scadenza" filter_domain="[('deadline','&gt;=',self)]"/>
+                        <field name="deadline" string="Alla scadenza" filter_domain="[('deadline','&lt;=',self)]"/>
+
+                        <field name="invoice_date"/>
+                        <field name="invoice_date" string="Dalla chiusura" filter_domain="[('invoice_date','&gt;=',self)]"/>
+                        <field name="invoice_date" string="Alla chiusura" filter_domain="[('invoice_date','&lt;=',self)]"/>
+
+                        <field name="partner_id"/>
+                        <field name="contact_id"/>
+                        <field name="account_id"/>
+
+                        <field name="user_id"/>
+
+                        <field name="priority"/>
+                        <field name="state"/>
+                        <separator/>
+
+                        <filter name="priority_low" string="Priorità Bassa" domain="[('priority','=','low')]" />
+                        <filter name="priority_normal" string="Priorità Normale" domain="[('priority','=','normal')]" />
+                        <filter name="priority_high" string="Priorità Alta" domain="[('priority','=','high')]" />
+                        <separator/>
+
+                        <filter name="state_draft" string="Bozza" domain="[('state','=','draft')]" />
+                        <filter name="state_open" string="Aperti" domain="[('state','=','open')]" />
+                        <filter name="state_suspended" string="Sospesi" domain="[('state','=','suspended')]" />
+                        <filter name="state_completed" string="Completi" domain="[('state','=','closed')]" />
+                        <separator/>
+
+                        <group expand="0" string="Raggruppa per...">
+                            <filter string="Date" domain="[]" context="{'group_by':'date'}"/>
+                            <filter string="Scadenza" domain="[]" context="{'group_by':'deadline'}"/>
+                            <filter string="Chiusura" domain="[]" context="{'group_by':'invoice_date'}"/>
+
+                            <filter string="Cliente" domain="[]" context="{'group_by':'partner_id'}"/>
+                            <filter string="Contatto" domain="[]" context="{'group_by':'contact_id'}"/>
+                            <filter string="Assegnato a" domain="[]" context="{'group_by':'user_id'}"/>
+
+                            <filter string="Commessa" domain="[]" context="{'group_by':'account_id'}"/>
+
+                            <filter string="Priorità" domain="[]" context="{'group_by':'priority'}"/>
+                            <filter string="Stato" domain="[]" context="{'group_by':'state'}"/>
+                        </group>
+                    </search>
+                </field>
+            </record>
+
+         <record id="view_account_analytic_ticket_tree" model="ir.ui.view">
+                <field name="name">account.analytic.ticket.tree</field>
+                <field name="model">account.analytic.ticket</field>
+                <field name='arch' type='xml'>
+                    <tree string="Ticket">
+                        <field name="ref" />
+                        <field name="name" />
+                        <field name="date" />
+                        <field name="deadline" />
+                        <field name="invoice_date" />
+
+                        <field name="partner_id" />
+                        <field name="contact_id" />
+                        <field name="account_id" />
+
+                        <field name="max_hours" widget="float_time"/>
+
+                        <field name="assigned_user_ids" widget="many2many_tags"/>
+                        <field name="user_id" />
+                        <field name="priority" />
+
+                        <button name="assign_to_me" string="Assegna a me" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
+
+                        <button name="wkf_open" string="Apri" states="draft,suspended" icon="gtk-execute" />
+                        <button name="wkf_suspended" string="Sospendi" states="open" icon="terp-gtk-media-pause" />
+                        <button name="wkf_closed" string="Chiuso" states="open" icon="STOCK_APPLY" />
+                        <button name="wkf_restart" string="Riattiva" states="closed" icon="gtk-revert-to-saved" />
+                        <field name="state" />
+                    </tree>
+            </field>
+        </record>
+
+         <record id="view_account_analytic_ticket_form" model="ir.ui.view">
+                <field name="name">account.analytic.ticket.form</field>
+                <field name="model">account.analytic.ticket</field>
+                <field name='arch' type='xml'>
+                    <form string="Ticket" version="7.0">
+                        <header>
+                            <button name="assign_to_me" string="Assegna a me" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
+
+                            <button name="wkf_open" string="Apri" states="draft,suspended" icon="gtk-execute" />
+                            <button name="wkf_suspended" string="Sospendi" states="open" icon="terp-gtk-media-pause" />
+                            <button name="wkf_closed" string="Chiuso" states="open" icon="STOCK_APPLY" />
+                            <button name="wkf_restart" string="Riattiva" states="closed" icon="gtk-revert-to-saved" />
+
+                            <field name="state" widget="statusbar" readonly="1"/>
+                        </header>
+                        <sheet>
+                           <group colspan="4" col="5">
+                              <field name="ref" attrs="{'invisible': [('ref','=',False)]}"/>
+                              <newline/>
+
+                              <field name="name" on_change="on_change_name(name,intervention_request)" colspan="4"/>
+
+                              <field name="partner_id" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}" />
+                              <field name="contact_id" domain="[('is_address','=',False)]" />
+
+                              <field name="user_id" />
+                              <field name="mode" on_change="on_change_mode(mode)" />
+
+                              <field name="account_id" colspan="4" required="1" context="{'with_code': True,'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',intervent_partner_id)]" on_change="on_change_account(account_id,intervent_partner_id,user_id)" />
+                              <field name="account_no_parent" nolabel="1" on_change="on_change_partner(intervent_partner_id,account_id,account_no_parent)"/>
+
+                              <field name="max_hours" widget="float_time" />
+
+                              <notebook colspan="5">
+                                   <page string="Interventi" name="page_interventions">
+                                       <group colspan="4" col="4">
+
+                                       </group>
+                                   </page>
+                                   <page string="Dettagli">
+                                       <group colspan="4" col="4">
+
+                                       </group>
+                                   </page>
+                              </notebook>
+                           </group>
+                        </sheet>
+                        <div class="oe_chatter">
+                             <field name="message_follower_ids" widget="mail_followers" />
+                             <field name="message_ids" widget="mail_thread" placeholder="Messaggi..." />
+                        </div>
+                    </form>
+                </field>
+         </record>
+         <record id="view_account_analytic_ticket_calendar" model="ir.ui.view">
+                <field name="name">account.analytic.ticket.calendar</field>
+                <field name="model">account.analytic.ticket</field>
+                <field name="arch" type="xml">
+                    <calendar color="user_id" date_start="deadline" string="Ticket" mode="week">
+                        <field name="partner_id"/>
+                        <field name="contact_id"/>
+                        <field name="name"/>
+                        <field name="state"/>
+                        <field name="priority"/>
+                    </calendar>
+                </field>
+        </record>
+        <record id="action_account_analytic_ticket_tree" model="ir.actions.act_window">
+            <field name="name">Ticket</field>
+            <field name="res_model">account.analytic.ticket</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_id" ref="view_account_analytic_ticket_tree"/>
+            <field name="search_view_id" ref="view_account_analytic_ticket_search"/>
+            <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,'search_default_user_id':uid}</field>
+        </record>
+        <record id="action_my_account_analytic_ticket_tree" model="ir.actions.act_window">
+            <field name="name">Ticket assegnati</field>
+            <field name="res_model">account.analytic.ticket</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_id" ref="view_account_analytic_ticket_tree"/>
+            <field name="search_view_id" ref="view_account_analytic_ticket_search"/>
+            <field name="context">{'default_user_id':uid}</field>
+        </record>
+        <record id="action_unassigned_account_analytic_ticket_tree" model="ir.actions.act_window">
+            <field name="name">Ticket da assegnare</field>
+            <field name="res_model">account.analytic.ticket</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_id" ref="view_account_analytic_ticket_tree"/>
+            <field name="search_view_id" ref="view_account_analytic_ticket_search"/>
+            <field name="cdomain">[('user_id', '=', False)]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem name="Ticket" parent="hr.menu_hr_root" id="menu_base_ticket" sequence="0" />
+            <menuitem name="Ticket totali" parent="menu_base_ticket" id="menu_action_account_analytic_ticket_tree"
+                      action="action_account_analytic_ticket_tree" sequence="10" />
+            <menuitem name="Ticket assegnati" parent="menu_base_ticket" id="menu_action_my_account_analytic_ticket_tree"
+                      action="action_my_account_analytic_ticket_tree" sequence="20" />
+            <menuitem name="Ticket da assegnare" parent="menu_base_ticket" id="menu_action_unassigned_account_analytic_ticket_tree"
+                      action="action_unassigned_account_analytic_ticket_tree" sequence="30" />
+
+    </data>
+</openerp>

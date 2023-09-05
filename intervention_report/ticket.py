@@ -53,6 +53,15 @@ class AccountAnalyticTicketInherit(osv.osv):
         body = '%s\n[User: %s]' % (message, user.name)
         return self.message_post(cr, uid, ids, body=body, context=context)
 
+    def assign_to_me(self, cr, uid, ids, context=None):
+        """ Assign me to ticket operator
+        """
+        message = 'Cambio stato ticket: Riavviato'
+        self.write_log_chatter_message(cr, uid, ids, message, context=context)
+        return self.write(cr, uid, ids, {
+            'user_id': uid,
+        }, context=context)
+
     # -------------------------------------------------------------------------
     #                            Fast Workflow:
     # -------------------------------------------------------------------------
@@ -68,12 +77,17 @@ class AccountAnalyticTicketInherit(osv.osv):
     def wkf_open(self, cr, uid, ids, context=None):
         """ Open ticket
         """
+        ticket = self.browse(cr, uid, ids, context=context)[0]
         message = 'Cambio stato ticket: Aperto'
         self.write_log_chatter_message(cr, uid, ids, message, context=context)
-        return self.write(cr, uid, ids, {
+        data = {
             'state': 'open',
             'invoice_date': False,
-        }, context=context)
+        }
+        if ticket.ref:
+            data['ref'] = False  # todo sequence!
+
+        return self.write(cr, uid, ids, data, context=context)
 
     def wkf_suspended(self, cr, uid, ids, context=None):
         """ Open ticket
@@ -96,6 +110,7 @@ class AccountAnalyticTicketInherit(osv.osv):
         }, context=context)
 
     _columns = {
+        'ref': fields.char('Rif.', size=15),
         'name': fields.char('Oggetto', size=90),
         'date': fields.datetime('Data'),
         'deadline': fields.date('Scadenza'),

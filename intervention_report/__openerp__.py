@@ -43,26 +43,22 @@
         'base',
         'product',
         'report_aeroo',
-        #'report_aeroo_ooo',
+        # 'report_aeroo_ooo',
         'hr',
         'hr_timesheet_invoice',
-        'invervention_code_search', # Extra search for code
+        'invervention_code_search',  # Extra search for code
         ],
     'init_xml': [],
     'demo_xml': [],
     'data': [
         'security/intervent_group.xml',
         'security/ir.model.access.csv',
-        
-        #'data/factor.xml',
-        'intervent_sequence.xml',        
-        'intervention.xml',  
+
+        'intervent_sequence.xml',
+        'intervention.xml',
         'intervention_workflow.xml',
-        #'report/report_intervent.xml',
-        #'data/intervent_mail_template.xml',
+        'ticket.xml',
         ],
     'active': False,
     'installable': True,
     }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
