@@ -38,6 +38,17 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 _logger = logging.getLogger(__name__)
 
 
+class HrAnalyticTimesheetInherit(osv.osv):
+    """ Intervention
+    """
+
+    _inherit = 'hr.analytic.timesheet'
+
+    _columns = {
+        'ticket_id': fields.many2one('account.analytic.ticket', 'Ticket')
+        }
+
+
 class AccountAnalyticTicketInherit(osv.osv):
     """ Ticket Management
     """
