@@ -197,6 +197,10 @@
 	                  <field name="manual_total_internal" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)" colspan="3" />
                       <field name="unit_amount" widget="float_time" string="Internal total (eff.)" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)" attrs="{'required':[('manual_total_internal','=',True)]}" help="Internal purpose, not visible for customers" />
 
+                      <field name="ticket_id" domain="[('partner_id', '=', intervent_partner_id), ('state', '=', 'open')]"/>
+                      <!--close ticket button?-->
+                      <newline/>
+
                       <notebook colspan="5">
 	                       <page string="Map route">
 	                           <group colspan="4" col="4">
