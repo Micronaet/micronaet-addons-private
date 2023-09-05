@@ -119,7 +119,7 @@
                               <field name="contact_id" domain="[('is_address','=',False)]" />
 
                               <field name="user_id" />
-                              <field name="mode" on_change="on_change_mode(mode)" />
+                              <field name="priority" />
 
                               <field name="account_id" colspan="4" required="1" context="{'with_code': True,'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',intervent_partner_id)]" />
                               <!--<field name="account_no_parent" nolabel="1" on_change="on_change_partner(intervent_partner_id,account_id,account_no_parent)"/>-->
@@ -167,7 +167,7 @@
             <field name="view_mode">tree,form,calendar</field>
             <field name="view_id" ref="view_account_analytic_ticket_tree"/>
             <field name="search_view_id" ref="view_account_analytic_ticket_search"/>
-            <field name="context">{'tree_view_ref':'intervention_report.view_hr_analytic_timesheet_tree','form_view_ref':'intervention_report.view_hr_analytic_timesheet_form','default_user_id':uid,'search_default_user_id':uid}</field>
+            <field name="context">{}</field>
         </record>
         <record id="action_my_account_analytic_ticket_tree" model="ir.actions.act_window">
             <field name="name">Ticket assegnati</field>
