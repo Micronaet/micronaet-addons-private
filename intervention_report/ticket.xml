@@ -101,6 +101,8 @@
                 <field name='arch' type='xml'>
                     <form string="Ticket" version="7.0">
                         <header>
+                            <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" state="done" />
+
                             <button name="assign_to_me" string="Assegna a me" type="object" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
 
                             <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-execute" />
@@ -109,6 +111,7 @@
                             <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-revert-to-saved" />
 
                             <field name="state" widget="statusbar" readonly="1"/>
+                            <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" state="done" />
                         </header>
                         <sheet>
                            <group colspan="4" col="4">
@@ -145,7 +148,9 @@
 
                                    <page string="Interventi" name="page_interventions">
                                        <group colspan="4" col="4">
-                                           <separator string="Interventi abbinati" colspan="4" />
+                                           <separator string="Interventi abbinati" colspan="3" />
+                                           <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" state="done" colspan="1"/>
+
                                           <field name="intervention_ids"  colspan="4" nolabel="1" readonly="1"/>
                                        </group>
                                    </page>

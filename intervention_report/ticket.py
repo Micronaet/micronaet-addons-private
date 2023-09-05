@@ -76,7 +76,8 @@ class AccountAnalyticTicketInherit(osv.osv):
         model_pool = self.pool.get('ir.model.data')
         # view_tree_id = model_pool.get_object_reference(cr, uid,
         #    'intervention_report', 'view_hr_analytic_timesheet_tree')[1]
-        view_form_id = model_pool.get_object_reference(cr, uid,
+        view_form_id = model_pool.get_object_reference(
+            cr, uid,
             'intervention_report', 'view_hr_analytic_timesheet_form')[1]
 
         ctx = context.copy()
