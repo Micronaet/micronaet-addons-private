@@ -122,7 +122,7 @@
                               <field name="user_id" />
                               <field name="priority" />
 
-                              <field name="account_id" colspan="4" required="1" context="{'with_code': True,'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
+                              <field name="account_id" colspan="4" context="{'with_code': True,'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
                               <!--<field name="account_no_parent" nolabel="1" on_change="on_change_partner(partner_id,account_id,account_no_parent)"/>-->
 
                               <notebook colspan="5">
