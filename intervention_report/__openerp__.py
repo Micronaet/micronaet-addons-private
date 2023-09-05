@@ -54,6 +54,8 @@
         'security/intervent_group.xml',
         'security/ir.model.access.csv',
 
+        'data/counter.xml',
+
         'intervent_sequence.xml',
         'intervention.xml',
         'intervention_workflow.xml',

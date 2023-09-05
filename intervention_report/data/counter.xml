@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+	    <record model="ir.sequence" id="seq_account_analytic_ticket">
+		    <field name="name">account.analytic.ticket</field>
+		    <field name="code">account.analytic.ticket</field>
+		    <field name="prefix">TK/%(y)s/</field>
+		    <field name="suffix"></field>
+		    <field name="padding">5</field>
+	    </record>
+    </data>
+</odoo>

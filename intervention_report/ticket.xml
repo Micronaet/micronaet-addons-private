@@ -109,7 +109,7 @@
                             <field name="state" widget="statusbar" readonly="1"/>
                         </header>
                         <sheet>
-                           <group colspan="4" col="5">
+                           <group colspan="4" col="4">
                               <field name="ref" attrs="{'invisible': [('ref','=',False)]}"/>
                               <newline/>
 

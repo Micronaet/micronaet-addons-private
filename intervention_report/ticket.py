@@ -85,7 +85,8 @@ class AccountAnalyticTicketInherit(osv.osv):
             'invoice_date': False,
         }
         if ticket.ref:
-            data['ref'] = False  # todo sequence!
+            data['ref'] = self.pool.get('ir.sequence').get(
+                cr, uid, 'account.analytic.ticket')
 
         return self.write(cr, uid, ids, data, context=context)
 
