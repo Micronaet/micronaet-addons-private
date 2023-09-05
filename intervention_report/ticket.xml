@@ -113,7 +113,7 @@
                               <field name="ref" attrs="{'invisible': [('ref','=',False)]}"/>
                               <newline/>
 
-                              <field name="name" on_change="on_change_name(name,intervention_request)" colspan="4"/>
+                              <field name="name"  colspan="4"/>
 
                               <field name="partner_id" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}" />
                               <field name="contact_id" domain="[('is_address','=',False)]" />
