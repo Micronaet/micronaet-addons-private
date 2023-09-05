@@ -32,6 +32,8 @@
                         <field name="state"/>
                         <separator/>
 
+                        <filter name="my_ticket" string="Miei ticket" domain="[('user_id','=',uid)]" />
+
                         <filter name="priority_low" string="Priorità Bassa" domain="[('priority','=','low')]" />
                         <filter name="priority_normal" string="Priorità Normale" domain="[('priority','=','normal')]" />
                         <filter name="priority_high" string="Priorità Alta" domain="[('priority','=','high')]" />
@@ -65,7 +67,7 @@
                 <field name="name">account.analytic.ticket.tree</field>
                 <field name="model">account.analytic.ticket</field>
                 <field name='arch' type='xml'>
-                    <tree string="Ticket">
+                    <tree string="Ticket" colors="grey:state=='suspended';blue:state=='open';green:state=='completed'" font="bold:state=='draft'">
                         <field name="ref" />
                         <field name="name" />
                         <field name="date" />
@@ -84,7 +86,7 @@
 
                         <button name="assign_to_me" string="Assegna a me" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
 
-                        <button name="wkf_open" string="Apri" states="draft,suspended" icon="gtk-execute" />
+                        <button name="wkf_open" string="Confermato" states="draft,suspended" icon="gtk-execute" />
                         <button name="wkf_suspended" string="Sospendi" states="open" icon="terp-gtk-media-pause" />
                         <button name="wkf_closed" string="Chiuso" states="open" icon="STOCK_APPLY" />
                         <button name="wkf_restart" string="Riattiva" states="closed" icon="gtk-revert-to-saved" />
@@ -101,7 +103,7 @@
                         <header>
                             <button name="assign_to_me" string="Assegna a me" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
 
-                            <button name="wkf_open" string="Apri" states="draft,suspended" icon="gtk-execute" />
+                            <button name="wkf_open" string="Confermato" states="draft,suspended" icon="gtk-execute" />
                             <button name="wkf_suspended" string="Sospendi" states="open" icon="terp-gtk-media-pause" />
                             <button name="wkf_closed" string="Chiuso" states="open" icon="STOCK_APPLY" />
                             <button name="wkf_restart" string="Riattiva" states="closed" icon="gtk-revert-to-saved" />
@@ -135,16 +137,16 @@
                                           <field name="max_hours" widget="float_time" />
 
                                           <separator string="Descrizione problema" colspan="4" />
-                                          <field name="description"  colspan="4"/>
+                                          <field name="description"  colspan="4" nolabel="1"/>
                                           <separator string="Intervento da effettuare" colspan="4" />
-                                          <field name="solution"  colspan="4"/>
+                                          <field name="solution"  colspan="4" nolabel="1"/>
                                        </group>
                                    </page>
 
                                    <page string="Interventi" name="page_interventions">
                                        <group colspan="4" col="4">
                                            <separator string="Interventi abbinati" colspan="4" />
-                                          <field name="intervention_ids"  colspan="4" nolabel="1"/>
+                                          <field name="intervention_ids"  colspan="4" nolabel="1" readonly="1"/>
                                        </group>
                                    </page>
                               </notebook>
@@ -186,7 +188,7 @@
             <field name="view_mode">tree,form,calendar</field>
             <field name="view_id" ref="view_account_analytic_ticket_tree"/>
             <field name="search_view_id" ref="view_account_analytic_ticket_search"/>
-            <field name="context">{'default_user_id':uid}</field>
+            <field name="context">{'search_default_my_ticket': True}</field>
         </record>
         <record id="action_unassigned_account_analytic_ticket_tree" model="ir.actions.act_window">
             <field name="name">Ticket da assegnare</field>
@@ -195,7 +197,7 @@
             <field name="view_mode">tree,form,calendar</field>
             <field name="view_id" ref="view_account_analytic_ticket_tree"/>
             <field name="search_view_id" ref="view_account_analytic_ticket_search"/>
-            <field name="cdomain">[('user_id', '=', False)]</field>
+            <field name="domain">[('user_id', '=', False)]</field>
             <field name="context">{}</field>
         </record>
 

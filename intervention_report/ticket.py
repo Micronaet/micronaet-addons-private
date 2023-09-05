@@ -123,7 +123,7 @@ class AccountAnalyticTicketInherit(osv.osv):
 
     _columns = {
         'ref': fields.char('Rif.', size=15),
-        'name': fields.char('Oggetto', size=90),
+        'name': fields.char('Oggetto', size=90, required=True),
         'date': fields.datetime('Data'),
         'deadline': fields.date('Scadenza'),
         'invoice_date': fields.date(
@@ -140,7 +140,7 @@ class AccountAnalyticTicketInherit(osv.osv):
                  ' come deve intervenire, di solito rilasciate dal '
                  'responsabile)'),
         'partner_id': fields.many2one(
-            'res.partner', 'Cliente',
+            'res.partner', 'Cliente', required=True,
             help='Cliente che ha aperto il ticket'),
         'account_id': fields.many2one(
             'account.analytic.account', 'Contratto',
