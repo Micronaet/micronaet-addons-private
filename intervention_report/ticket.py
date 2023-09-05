@@ -88,13 +88,13 @@ class AccountAnalyticTicketInherit(osv.osv):
 
             'default_request_by': ticket.contact_id.name or False,
 
-            'default_account_id': ticket.account_id.id,
 
             'default_ticket_id': ticket.id,
             'default_user_id': ticket.user_id.id,
 
-            'default_intervention_partner_id': ticket.partner_id.id,
-            'default_intervention_contact_id': ticket.contact_id.id,
+            'default_intervent_partner_id': ticket.partner_id.id,
+            'default_intervent_contact_id': ticket.contact_id.id,
+            'default_account_id': ticket.account_id.id,
 
             'default_date_start': datetime.now().strftime(
                 DEFAULT_SERVER_DATETIME_FORMAT),
