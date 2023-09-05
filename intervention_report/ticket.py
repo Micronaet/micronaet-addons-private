@@ -68,8 +68,11 @@ class AccountAnalyticTicketInherit(osv.osv):
     def assign_to_me(self, cr, uid, ids, context=None):
         """ Assign me to ticket operator
         """
-        pdb.set_trace()
-        message = 'Cambio stato ticket: Riavviato'
+        user_pool = self.pool.get('res.users')
+        user = user_pool.browse(cr, uid, uid, context=context)
+
+        message = 'Autoassegnazione ticket: %s' % user.name
+
         self.write_log_chatter_message(cr, uid, ids, message, context=context)
         return self.write(cr, uid, ids, {
             'user_id': uid,
