@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--sale.order-->
+        <record model="ir.ui.view" id="view_sale_order_delivered_page_form">
+            <field name="name">Deliverd page</field>
+            <field name="model">sale.order</field>
+            <field name="priority" eval="40" />
+            <field name="arch" type="xml">           
+                <form string="Sales Order">
+                    <header>
+                        <button name="action_quotation_send" string="Send by Email" type="object" states="draft" class="oe_highlight" groups="base.group_user"/>
+                        <button name="action_quotation_send" string="Send by Email" type="object" states="sent,progress,manual" groups="base.group_user"/>
+                        <button name="print_quotation" string="Print" type="object" states="draft" class="oe_highlight" groups="base.group_user"/>
+                        <button name="print_quotation" string="Print" type="object" states="sent,progress,manual" groups="base.group_user"/>
+                        <button name="action_button_confirm" states="draft" string="Confirm Sale" type="object" groups="base.group_user"/>
+                        <button name="action_button_confirm" states="sent" string="Confirm Sale" class="oe_highlight" type="object" groups="base.group_user"/>
+                        <button name="copy_quotation" states="cancel" string="New Copy of Quotation" type="object"/>
+                        <button name="cancel" states="draft,sent" string="Cancel Quotation" groups="base.group_user"/>
+                        <button name="action_cancel" states="manual,progress" string="Cancel Order" type="object" groups="base.group_user"/>
+                        <button name="invoice_cancel" states="invoice_except" string="Cancel Order" groups="base.group_user"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,sent,progress,done" statusbar_colors="{&quot;invoice_except&quot;:&quot;red&quot;,&quot;waiting_date&quot;:&quot;blue&quot;}"/>
+                   </header>
+                   <sheet>
+                      <h1>
+                        <label string="Quotation " attrs="{'invisible': [('state','not in',('draft','sent'))]}"/>
+                        <label string="Sales Order " attrs="{'invisible': [('state','in',('draft','sent'))]}"/>
+                        <field name="name" class="oe_inline" readonly="1"/>
+                      </h1>
+                    <group>
+                        <group>
+                            <field name="partner_id" on_change="onchange_partner_id(partner_id, context)" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1}" options="{&quot;always_reload&quot;: True}"/>
+                            <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'invoice'}"/>
+                            <field name="partner_shipping_id" on_change="onchange_delivery_id(company_id, partner_id, partner_shipping_id, fiscal_position)" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
+                            <field name="project_id" context="{'partner_id':partner_invoice_id, 'manager_id': user_id, 'default_pricelist_id':pricelist_id, 'default_name':name, 'default_type': 'contract'}" groups="sale.group_analytic_accounting" domain="[('type','in',['view','normal','contract'])]"/>
+                        </group>
+                        <group>
+                            <field name="date_order"/>
+                            <field name="client_order_ref"/>
+                            <field domain="[('type','=','sale')]" name="pricelist_id" groups="product.group_sale_pricelist" on_change="onchange_pricelist_id(pricelist_id,order_line)"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Lines">
+                              <field name="order_line" nolabel="1" colspan="4">
+                                    <tree string="Stock" colors="green:delivered_qty + this_delivery_qty==product_uom_qty;red:delivered_qty + this_delivery_qty&lt;product_uom_qty;blue:delivered_qty + this_delivery_qty + this_delivery_qty&gt;product_uom_qty">
+                                        <field name="block_id"  readonly="1"/>
+                                        <field name="product_id"  readonly="1"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="product_uom_qty" readonly="1"/>
+                                        <field name="delivered_qty" readonly="1" />
+                                        <button name="delivery_remain" string="All" type="object" icon="gtk-goto-last"/>
+                                        <field name="this_delivery_qty" />
+                                        <field name="state" invisible="1" />
+                                        <field name="completed" invisible="1" />
+                                        <button name="delivery_done" string="End delivery" type="object" icon="gtk-save-as"/>
+                                    </tree>                              
+                              </field>
+
+
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline">
+                                    <label for="amount_total"/>
+                                    <button name="button_dummy" states="draft,sent" string="(update)" type="object" class="oe_edit_only oe_link"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <div class="oe_clear"/>
+                            <field name="note" class="oe_inline" placeholder="Terms and conditions..."/>
+                        </page>
+                        <page string="Other Information" groups="base.group_user">
+                            <group>
+                                <group name="sales_person" groups="base.group_user">
+                                    <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_invoice', 'base.group_sale_salesman_all_leads']}"/>
+                                    <field name="section_id" options="{'no_create': True}" groups="base.group_multi_salesteams"/>
+                                    <field groups="base.group_no_one" name="origin"/>
+                                </group>
+                                <group name="sale_pay">
+                                    <field name="payment_term" options="{'no_create': True}"/>
+                                    <field name="fiscal_position" options="{'no_create': True}" on_change="onchange_fiscal_position(fiscal_position, order_line, context)"/>
+                                    <field name="company_id" widget="selection" groups="base.group_multi_company"/>
+                                </group>
+                                <group>
+                                    <field name="invoiced"/>
+                                    <field name="invoice_exists" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>                        
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_order_stock_form">
+            <field name="name">Stock order</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'form_view_ref': 'remain_sale_preload.view_sale_order_delivered_page_form'}</field>
+            <field name="domain">[]</field>
+        </record>
+        <menuitem 
+            parent="base.menu_sales" 
+            id="menu_action_sale_order_stock" 
+            action="action_order_stock_form"
+            sequence="50"
+            />
+        
+
+    
+        <record model="ir.ui.view" id="view_sale_order_line_unlidevered_search">
+            <field name="name">sale.order.line.search</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <search string="Sale order line" version="7.0">        
+                    <field name="name" />
+                    <field name="partner_id" filter_domain="[('partner_id.name','ilike',self)]"/>
+                    <field name="order_id" filter_domain="[('order_id.name','ilike',self)]"/>
+                    <field name="block_id" filter_domain="[('block_id','=',self)]"/>
+                    <filter name="state_draft" string="Draft state" domain="[('state','=','draft')]"/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
+                        <filter name="group_order" string="Order" context="{'group_by': 'order_id'}"/>
+                        <filter name="group_block" string="Block" context="{'group_by': 'block_id'}"/>
+                        <filter name="group_product" string="Product" context="{'group_by': 'product_id'}"/>
+                        <filter string="Status" context="{'group_by': 'state'}" />
+                    </group>                
+                </search>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_sale_order_line_undelivered_tree">
+            <field name="name">sale.order.line.tree</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <tree string="String" editable="bottom" colors="green:delivered_qty + this_delivery_qty==product_uom_qty;red:delivered_qty + this_delivery_qty&lt;product_uom_qty;blue:delivered_qty + this_delivery_qty + this_delivery_qty&gt;product_uom_qty">
+                    <field name="partner_id" readonly="1"/>
+                    <field name="order_id" readonly="1"/>
+                    <field name="block_id"  readonly="1"/>
+                    <field name="product_id"  readonly="1"/>
+                    <field name="name" readonly="1"/>
+                    <field name="product_uom_qty" readonly="1"/>
+                    <field name="delivered_qty" readonly="1" />
+                    <button name="delivery_remain" string="All" type="object" icon="gtk-goto-last"/>
+                    <field name="this_delivery_qty" />
+                    <field name="state" invisible="1" />
+                    <field name="completed" invisible="1" />
+                    <button name="delivery_done" string="End delivery" type="object" icon="gtk-save-as"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_sale_order_line_undelivered_form">
+            <field name="name">Consegne pendenti</field>
+            <field name="res_model">sale.order.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_sale_order_line_undelivered_tree"/>
+            <field name="search_view_id" ref="view_sale_order_line_unlidevered_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[('completed', '=', False)]</field>
+        </record>
+        <menuitem 
+            parent="base.menu_sales" 
+            id="menu_action_sale_order_line_undelivered" 
+            action="action_sale_order_line_undelivered_form"
+            sequence="50"
+            />
+
+    </data>
+</openerp>
+
