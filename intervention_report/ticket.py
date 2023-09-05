@@ -169,6 +169,9 @@ class AccountAnalyticTicketInherit(osv.osv):
             ('closed', 'Chiusa'),
             ('suspended', 'Sospesa'),
             ], string='Stato', required=True, readonly=True),
+        'intervention_ids': fields.one2many(
+            'hr.analytic.timesheet', 'ticket_id', 'Interventi collegati',
+            ),
         }
 
     _defaults = {

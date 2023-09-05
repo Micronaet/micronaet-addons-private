@@ -114,6 +114,7 @@
                               <newline/>
 
                               <field name="name"  colspan="4"/>
+                              <field name="assigned_user_ids"  colspan="4"/>
 
                               <field name="partner_id" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}" />
                               <field name="contact_id" domain="[('is_address','=',False)]" />
@@ -124,17 +125,24 @@
                               <field name="account_id" colspan="4" required="1" context="{'with_code': True,'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
                               <!--<field name="account_no_parent" nolabel="1" on_change="on_change_partner(partner_id,account_id,account_no_parent)"/>-->
 
-                              <field name="max_hours" widget="float_time" />
-
                               <notebook colspan="5">
-                                   <page string="Interventi" name="page_interventions">
-                                       <group colspan="4" col="4">
-
-                                       </group>
-                                   </page>
                                    <page string="Dettagli">
                                        <group colspan="4" col="4">
+                                          <field name="date" />
+                                          <field name="deadline" />
 
+                                          <field name="invoice_date" />
+                                          <field name="max_hours" widget="float_time" />
+
+                                          <field name="description"  colspan="4"/>
+                                          <field name="solution"  colspan="4"/>
+                                       </group>
+                                   </page>
+
+                                   <page string="Interventi" name="page_interventions">
+                                       <group colspan="4" col="4">
+                                           <separator string="Interventi abbinati" colspan="4" />
+                                          <field name="intervention_ids"  colspan="4" nolabel="1"/>
                                        </group>
                                    </page>
                               </notebook>
