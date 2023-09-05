@@ -134,7 +134,9 @@
                                           <field name="invoice_date" />
                                           <field name="max_hours" widget="float_time" />
 
+                                          <separator string="Descrizione problema" colspan="4" />
                                           <field name="description"  colspan="4"/>
+                                          <separator string="Intervento da effettuare" colspan="4" />
                                           <field name="solution"  colspan="4"/>
                                        </group>
                                    </page>
