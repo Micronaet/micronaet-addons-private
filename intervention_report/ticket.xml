@@ -102,7 +102,7 @@
                 <field name='arch' type='xml'>
                     <form string="Ticket" version="7.0">
                         <header>
-                            <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" state="open" />
+                            <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" states="open" />
 
                             <button name="assign_to_me" string="Assegna a me" type="object" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
 
@@ -151,7 +151,7 @@
                                    <page string="Interventi" name="page_interventions">
                                        <group colspan="4" col="4">
                                            <separator string="Interventi abbinati" colspan="3" />
-                                           <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" state="open" colspan="1"/>
+                                           <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" states="open" colspan="1"/>
 
                                           <field name="intervention_ids"  colspan="4" nolabel="1" readonly="1"/>
                                        </group>
