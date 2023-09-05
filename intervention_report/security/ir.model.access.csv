@@ -1,3 +1,4 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
 access_hr_analytic_timesheet_operation_user,hr.analytic.timesheet.operation,model_hr_analytic_timesheet_operation,base.group_user,1,1,1,1
+access_account_analytic_ticket_user,account.analytic.ticket,model_account_analytic_ticket,base.group_user,1,1,1,1
 

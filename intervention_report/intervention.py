@@ -41,6 +41,16 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 _logger = logging.getLogger(__name__)
 
 
+# Managed in different module file:
+class AccountAnalyticTicket(osv.osv):
+    """ Ticket Management
+    """
+
+    _name = 'account.analytic.ticket'
+    _inherit = ['mail.thread']
+    _description = 'Ticket'
+
+
 class account_analytic_account(osv.osv):
     """ Add extra fields to account.analytic.account
     """
