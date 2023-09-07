@@ -57,6 +57,32 @@ class AccountAnalyticTicketInherit(osv.osv):
     _inherit = 'account.analytic.ticket'
     _order = 'date desc'
 
+    def name_get(self, cr, uid, ids, context=None):
+        """ Return a list of tupples contains id, name.
+            result format : {[(id, name), (id, name), ...]}
+
+            @param cr: cursor to database
+            @param uid: id of current user
+            @param ids: list of ids for which name should be read
+            @param context: context arguments, like lang, time zone
+
+            @return: returns a list of tupples contains id, name
+        """
+
+        if isinstance(ids, (list, tuple)) and not len(ids):
+            return []
+        if isinstance(ids, (float, int)):
+            ids = [ids]
+        res = []
+        for record in self.browse(cr, uid, ids, context=context):
+            ref = record.ref
+            if ref:
+                res.append((record.id, '[%s] %s' % (
+                    ref, record.name)))
+            else:
+                res.append((record.id, record.name))
+        return res
+
     def write_log_chatter_message(self, cr, uid, ids, message, context=None):
         """ Write message for log operation in order chatter
         """
