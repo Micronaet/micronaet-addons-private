@@ -177,7 +177,7 @@ class AccountAnalyticTicketInherit(osv.osv):
         }, context=context)
 
     _columns = {
-        'ref': fields.char('Rif.', size=15, readonly=True),
+        'ref': fields.char('Rif.', size=15, readonly=True, copy=False),
         'name': fields.char('Oggetto', size=90, required=True),
         'date': fields.datetime('Data'),
         'scheduled': fields.date('Schedulare per'),
@@ -219,12 +219,11 @@ class AccountAnalyticTicketInherit(osv.osv):
                  'di potere portare a termina (se non assegnato direttamente)'
             ),
         'user_id': fields.many2one(
-            'res.users', 'Assegnato a',
+            'res.users', 'Assegnato a', copy=False,
             help='Il tecnico può assegnarsi il ticket oppure gli può '
                  'già venire assegnato dalla amministrazione o da chi '
                  'ha preso il ticket.'),
 
-        # todo invoice_mode (at the end of ticket, at intervention)
         'priority': fields.selection([
             ('low', 'Bassa'),
             ('normal', 'Normale'),
