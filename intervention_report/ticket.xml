@@ -246,9 +246,10 @@
             <field name="context">{}</field>
         </record>
 
-        <menuitem name="Ticket" parent="hr.menu_hr_root" id="menu_base_ticket" sequence="0" />
+        <menuitem name="Ticket" parent="hr.menu_hr_root" id="menu_base_ticket" sequence="0" groups="intervention_report.group_ticket_manager,intervention_report.group_ticket_operator"/>
             <menuitem name="Ticket totali" parent="menu_base_ticket" id="menu_action_account_analytic_ticket_tree"
-                      action="action_account_analytic_ticket_tree" sequence="10" />
+                      action="action_account_analytic_ticket_tree" sequence="10" groups="intervention_report.group_ticket_manager"/>
+
             <menuitem name="Ticket assegnati" parent="menu_base_ticket" id="menu_action_my_account_analytic_ticket_tree"
                       action="action_my_account_analytic_ticket_tree" sequence="20" />
             <menuitem name="Ticket da assegnare" parent="menu_base_ticket" id="menu_action_unassigned_account_analytic_ticket_tree"
