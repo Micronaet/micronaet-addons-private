@@ -277,7 +277,8 @@ class AccountAnalyticTicketInherit(osv.osv):
         }
 
     _defaults = {
-        'date': lambda *x: datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT),
+        'date': lambda *x: datetime.now().strftime(
+            DEFAULT_SERVER_DATETIME_FORMAT),
         'priority': lambda *x: 'normal',
         'invoice_mode': lambda *x: 'end',
         'state': lambda *x: 'draft',
