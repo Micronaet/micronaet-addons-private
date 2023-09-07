@@ -88,7 +88,6 @@ class AccountAnalyticTicketInherit(osv.osv):
 
             'default_request_by': ticket.contact_id.name or False,
 
-
             'default_ticket_id': ticket.id,
             'default_user_id': ticket.user_id.id,
 
@@ -181,6 +180,7 @@ class AccountAnalyticTicketInherit(osv.osv):
         'ref': fields.char('Rif.', size=15, readonly=True),
         'name': fields.char('Oggetto', size=90, required=True),
         'date': fields.datetime('Data'),
+        'scheduled': fields.date('Schedulare per'),
         'deadline': fields.date('Scadenza'),
         'invoice_date': fields.date(
             'Data chiusura',
@@ -230,6 +230,16 @@ class AccountAnalyticTicketInherit(osv.osv):
             ('normal', 'Normale'),
             ('high', 'Alta'),
             ], string='Priorità', required=True),
+        'invoice_mode': fields.selection([
+            ('month', 'Mensilmente'),
+            ('end', 'Alla chiusura'),
+            ('excluded', 'Non fatturare'),
+            ], string='Modo fatturazione', required=True,
+            help='Indica la modalità di fatturare gli interventi che '
+                 'potrebbero essere fatti per questi ticket, es. se ' 
+                 'il ticket dura più di un mese verrebbero fatturati '
+                 'nel periodo di competenza, oppure è necessario aspettare '
+                 'la fine del mese oppure non è da fatturare'),
         'state': fields.selection([
             ('draft', 'Bozza'),
             ('open', 'Aperta'),
@@ -244,5 +254,6 @@ class AccountAnalyticTicketInherit(osv.osv):
     _defaults = {
         'date': lambda *x: datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT),
         'priority': lambda *x: 'normal',
+        'invoice_mode': lambda *x: 'end',
         'state': lambda *x: 'draft',
         }

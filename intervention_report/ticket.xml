@@ -18,6 +18,10 @@
                         <field name="deadline" string="Dalla scadenza" filter_domain="[('deadline','&gt;=',self)]"/>
                         <field name="deadline" string="Alla scadenza" filter_domain="[('deadline','&lt;=',self)]"/>
 
+                        <field name="scheduled"/>
+                        <field name="scheduled" string="Dalla data schedulazione" filter_domain="[('scheduled','&gt;=',self)]"/>
+                        <field name="scheduled" string="Alla data schedulazione" filter_domain="[('scheduled','&lt;=',self)]"/>
+
                         <field name="invoice_date"/>
                         <field name="invoice_date" string="Dalla chiusura" filter_domain="[('invoice_date','&gt;=',self)]"/>
                         <field name="invoice_date" string="Alla chiusura" filter_domain="[('invoice_date','&lt;=',self)]"/>
@@ -48,6 +52,7 @@
                         <group expand="0" string="Raggruppa per...">
                             <filter string="Date" domain="[]" context="{'group_by':'date'}"/>
                             <filter string="Scadenza" domain="[]" context="{'group_by':'deadline'}"/>
+                            <filter string="Schedulazione" domain="[]" context="{'group_by':'scheduled'}"/>
                             <filter string="Chiusura" domain="[]" context="{'group_by':'invoice_date'}"/>
 
                             <filter string="Cliente" domain="[]" context="{'group_by':'partner_id'}"/>
@@ -72,6 +77,7 @@
                         <field name="name" />
                         <field name="date" />
                         <field name="deadline" />
+                        <field name="scheduled" />
                         <field name="invoice_date" />
 
                         <field name="partner_id" />
@@ -86,12 +92,12 @@
 
                         <button name="assign_to_me" string="Assegna a me" type="object" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
 
-                        <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-execute" />
+                        <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-media-play" />
                         <button name="wkf_suspended" string="Sospendi" type="object" states="open" icon="terp-gtk-media-pause" />
-                        <button name="wkf_closed" string="Chiuso" type="object" states="open" icon="STOCK_APPLY" />
-                        <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-revert-to-saved" />
+                        <button name="wkf_closed" string="Chiuso" type="object" states="open" icon="gtk-media-stop" />  <!--STOCK_APPLY-->
+                        <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-media-previous" /> <!--gtk-revert-to-saved-->
                         <field name="state" />
-                        <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" state="done" />
+                        <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" states="open" />
                     </tree>
             </field>
         </record>
@@ -106,10 +112,10 @@
 
                             <button name="assign_to_me" string="Assegna a me" type="object" icon="terp-personal" attrs="{'invisible': [('user_id', '!=', False)]}" />
 
-                            <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-execute" />
+                            <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-media-play" />
                             <button name="wkf_suspended" string="Sospendi" type="object" states="open" icon="terp-gtk-media-pause" />
-                            <button name="wkf_closed" string="Chiuso" type="object" states="open" icon="STOCK_APPLY" />
-                            <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-revert-to-saved" />
+                            <button name="wkf_closed" string="Chiuso" type="object" states="open" icon="gtk-media-stop" />  <!--STOCK_APPLY-->
+                            <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-media-previous" /> <!--gtk-revert-to-saved-->
 
                             <field name="state" widget="statusbar" readonly="1"/>
                         </header>
@@ -125,12 +131,13 @@
                               <field name="contact_id" domain="[('is_address','=',False)]" />
 
                               <field name="user_id" />
-                              <field name="priority" />
-
-                              <field name="account_id" colspan="4" invisible="1"
+                              <field name="account_id" colspan="4"
                                      context="{'with_code': True,'default_use_timesheets': 1}"
                                      domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',False),('partner_id','=',partner_id)]" />
                               <!--<field name="account_no_parent" nolabel="1" on_change="on_change_partner(partner_id,account_id,account_no_parent)"/>-->
+
+                              <field name="invoice_mode" />
+                              <field name="priority" />
 
                               <notebook colspan="5">
                                    <page string="Dettagli">
@@ -138,6 +145,7 @@
                                           <field name="date" />
                                           <field name="deadline" />
 
+                                          <field name="scheduled" />
                                           <field name="invoice_date" />
                                           <field name="max_hours" widget="float_time" />
 
@@ -153,7 +161,37 @@
                                            <separator string="Interventi abbinati" colspan="3" />
                                            <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" states="open" colspan="1"/>
 
-                                          <field name="intervention_ids"  colspan="4" nolabel="1" readonly="1"/>
+                                           <field name="intervention_ids" colspan="4" nolabel="1">
+                                               <tree string="Interventi">
+                                                    <field name="ref"/>
+                                                    <field name="date_start"/>
+                                                    <field name="intervent_duration" widget="float_time"/>
+                                                    <field name="user_id"/>
+                                                    <!--<field name="intervent_partner_id"/>
+                                                    <field name="operation_id"/>-->
+                                                    <field name="account_id" />
+                                                    <field name="name"/>
+                                                    <field name="mode"/>
+                                                    <field name="state"/>
+                                                    <!--<field name="to_invoice"/>
+                                                    <field name="mode"/>
+
+                                                    <button name="intervention_draft" string="Draft" states="cancel" icon="gtk-go-back"/>
+
+                                                    <button name="intervention_waiting" string="Waiting" states="draft" icon="gtk-execute"/>
+                                                    <button name="intervention_confirmed" string="Confirmed" states="draft" icon="gtk-go-forward"/>
+
+                                                    <button name="intervention_waiting_cancel" string="Cancel" states="waiting" icon="gtk-cancel"/>
+                                                    <button name="intervention_reschedule" string="Reschedule" states="waiting" icon="gtk-go-back"/>
+                                                    <button name="intervention_waiting_confirmed" string="Confirmed" states="waiting" icon="gtk-go-forward"/>
+
+                                                    <button name="intervention_confirmed_cancel" string="Cancel" states="confirmed" icon="gtk-cancel"/>
+                                                    <button name="intervention_report_close" string="Close with report" states="confirmed" icon="gtk-go-forward"/>
+                                                    <button name="intervention_close" string="Close" states="confirmed" icon="gtk-ok"/>
+
+                                                    <button name="intervention_report_after_close" string="Report after close" states="close" icon="gtk-ok" />-->
+                                               </tree>
+                                           </field>
                                        </group>
                                    </page>
                               </notebook>
