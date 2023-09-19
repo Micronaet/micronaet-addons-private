@@ -20,6 +20,7 @@
 #
 ##############################################################################
 import os
+import pdb
 import sys
 import logging
 import openerp
@@ -329,7 +330,6 @@ class hr_analytic_timesheet_extra(osv.osv):
         if force_account_id:
             _logger.warning('Forced account onchange call for partner!')
             res['value']['account_id'] = force_account_id
-            del(context['force_account_id'])
         else:
             res['value']['account_id'] = partner_proxy.default_contract_id.id \
                 if partner_proxy.default_contract_id else False
@@ -572,24 +572,25 @@ class hr_analytic_timesheet_extra(osv.osv):
         """
         find_account_id = self.find_account_id.id
         account_pool = self.env['account.analytic.account']
-        res = {}
-
         if not find_account_id:
-            return res
+            return
 
         # todo raise error if != 1?
         account = account_pool.browse(find_account_id)
 
-        res['value'] = {
-            'find_account_id': False,
-            'intervent_partner_id': account.partner_id.id,
-            'account_id': account.id,
-            }
-
         # Force context for account ID
-        self.env.context = self.with_context(
-            force_account_id=account.id).env.context
-        return res
+        # self.env.context = self.with_context(force_account_id=account.id).env.context
+        self.find_account_id = False
+        self.intervent_partner_id = account.partner_id.id
+        self.account_id = account.id
+        return
+        # pdb.set_trace()
+        # self
+        '''
+                'find_account_id': False,
+                'intervent_partner_id': account.partner_id.id,
+                'account_id': account.id,
+                })'''
 
     _columns = {
         'is_invoiced': fields.boolean('Is invoiced'),

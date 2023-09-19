@@ -108,6 +108,8 @@ class AccountAnalyticTicketInherit(osv.osv):
 
         ctx = context.copy()
         ctx.update({
+            'force_account_id': ticket.account_id.id,
+
             'default_name': ticket.name,
             'default_intervention_request': ticket.name,
             'default_internal_note': ticket.solution,
