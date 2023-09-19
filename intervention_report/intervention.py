@@ -321,7 +321,7 @@ class hr_analytic_timesheet_extra(osv.osv):
             cr, uid, partner_id, context=context)
         res['value']['account_id'] = partner_proxy.default_contract_id.id if \
             partner_proxy.default_contract_id else False
-        res['value']['trip_hour'] = partner_proxy.trip_duration # hide if non required
+        res['value']['trip_hour'] = partner_proxy.trip_duration  # hide if non required
         return res
 
     def on_change_account(self, cr, uid, ids, account_id, partner_id,
@@ -346,7 +346,7 @@ class hr_analytic_timesheet_extra(osv.osv):
         month_3x = \
             '%s01' % (datetime.now() + relativedelta(months=1)).strftime(
                 DEFAULT_SERVER_DATE_FORMAT)[:8]
-        day_month = (datetime.strptime(month_3x, DEFAULT_SERVER_DATE_FORMAT)\
+        day_month = (datetime.strptime(month_3x, DEFAULT_SERVER_DATE_FORMAT) \
             - datetime.strptime(month_01, DEFAULT_SERVER_DATE_FORMAT)).days
 
         if account_id:
@@ -429,8 +429,9 @@ class hr_analytic_timesheet_extra(osv.osv):
                                     font_red if \
                                         total > account_proxy.total_hours else\
                                             font_black,
-                                    total, # done total
-                                    account_proxy.total_hours, # contract total
+                                    total,  # done total
+                                    account_proxy.total_hours,
+                                    # contract total
                                     user_font,
                                     total_user,
 
@@ -463,8 +464,9 @@ class hr_analytic_timesheet_extra(osv.osv):
                                     font_red if \
                                         total > account_proxy.total_hours \
                                             else font_black,
-                                    total, # done total
-                                    account_proxy.total_hours, # contract total
+                                    total,  # done total
+                                    account_proxy.total_hours,
+                                    # contract total
 
                                     user_font,
                                     total_user,  # done personal
@@ -485,7 +487,7 @@ class hr_analytic_timesheet_extra(osv.osv):
     def on_change_duration_elements(
             self, cr, uid, ids, intervent_duration,
             manual_total, manual_total_internal, trip_require, trip_hour,
-            break_require,break_hour, context=None):
+            break_require, break_hour, context=None):
         """ Calculate total duration and total intenal duration depending on
             parameter passed
             (TODO: cost)
@@ -515,7 +517,7 @@ class hr_analytic_timesheet_extra(osv.osv):
             res_id = self.pool.get('ir.model.data').read(
                 cr, uid, ids, ('id','res_id'), context=context)
             return res_id[0]['res_id']
-        return # nothing (no default)
+        return  # nothing (no default)
 
     def get_intervent_number(self, cr, uid, context=None):
         """ Get intervent sequence number
@@ -525,45 +527,56 @@ class hr_analytic_timesheet_extra(osv.osv):
 
     _columns = {
         'is_invoiced': fields.boolean('Is invoiced'),
-        'ref':fields.char('Ref.', size=12, required=False, readonly=False,
+        'ref': fields.char('Ref.', size=12, required=False, readonly=False,
             help="ID for intervent, actually manually configured, after became a sequence"),
         'operation_id': fields.many2one(
             'hr.analytic.timesheet.operation', 'Operation'),
         'intervent_partner_id': fields.many2one('res.partner', 'Partner ref.'),
         'intervent_contact_id': fields.many2one('res.partner', 'Contact ref.'),
-        'intervention_request': fields.text('Intervention request',
+        'intervention_request': fields.text(
+            'Intervention request',
             help="Keep track of the origina request"),
-        'intervention': fields.text('Intervention description',
+        'intervention': fields.text(
+            'Intervention description',
             help="All description of the intervent, used for print report"),
-        'internal_note': fields.text('Internal note',
+        'internal_note': fields.text(
+            'Internal note',
             help="Note for save some impression, no comunication to customer"),
-        'date_start': fields.datetime('Date start'), # TODO check definition for data (override this?)
-        'date_end': fields.datetime('Date end'),         # TODO evauluate if necessari
-        'intervent_duration': fields.float('Duration intervent',
+        'date_start': fields.datetime('Date start'),  # todo check definition for data (override this?)
+        'date_end': fields.datetime('Date end'),   # todo evauluate if necessari
+        'intervent_duration': fields.float(
+            'Duration intervent',
             digits=(16, 6), help="Duration intervent without trip"),
-        'intervent_total': fields.float('Duration intervent', digits=(16, 6),
-            help = "Duration intervent considering trip and break used for invoice (q. for customer)"),
-        'manual_total':fields.boolean('Manual', required=False,
+        'intervent_total': fields.float(
+            'Duration intervent', digits=(16, 6),
+            help="Duration intervent considering trip and break used for invoice (q. for customer)"),
+        'manual_total': fields.boolean('Manual', required=False,
             help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
-        'manual_total_internal':fields.boolean('Manual (internal)',
+        'manual_total_internal': fields.boolean(
+            'Manual (internal)',
             help="If true don't auto calculate total internal hour, if false, total hours=intervent + trip - pause hours"),
         'user_name': fields.related('user_id', 'name', type = 'char',
             string='User'),
-        'trip_require':fields.boolean('Trip'),
+        'trip_require': fields.boolean('Trip'),
         'trip_hour': fields.float('Trip hour', digits=(16, 6)),
-        'break_require': fields.boolean('Break',
+        'break_require': fields.boolean(
+            'Break',
             help='If intervention is split in 2 part for break'),
-        'break_hour': fields.float('Break hour', digits=(16, 6),
+        'break_hour': fields.float(
+            'Break hour', digits=(16, 6),
             help='Duration of break'),
 
-        'extra_invoiced_total': fields.float('Duration of extra invoiced',
+        'extra_invoiced_total': fields.float(
+            'Duration of extra invoiced',
             digits=(16, 3),
-            help = 'Extra invoiced of this contract intervent'),
+            help='Extra invoiced of this contract intervent'),
 
-        'request_by':fields.char('Request by', size=100,
+        'request_by': fields.char(
+            'Request by', size=100,
             help='List of people that request intervent'
             ),
-        'request_reference':fields.char('Request reference', size=200,
+        'request_reference': fields.char(
+            'Request reference', size=200,
             help='Reference for request (asana link, mail ecc.)',
             ),
 
@@ -574,22 +587,28 @@ class hr_analytic_timesheet_extra(osv.osv):
             help='If checked show only account without partner'),
 
         # Google maps trip manage:
-        'google_from':fields.selection([
-            ('previous','Previous'),
-            ('home','Home'),
-            ('company','Company'),
-            ],'From', select=True, readonly=False, help = "Used for auto trace route 'from' with google maps"),
-        'google_to':fields.selection([
-            ('next','Next'),
-            ('home','Home'),
-            ('company','Company'),
-            ],'To', select=True, readonly=False, help = "Used for auto trace route 'to' with google maps"),
+        'google_from': fields.selection([
+            ('previous', 'Previous'),
+            ('home', 'Home'),
+            ('company', 'Company'),
+            ], 'From', select=True, readonly=False,
+            help="Used for auto trace route 'from' with google maps"),
+        'google_to': fields.selection([
+            ('next', 'Next'),
+            ('home', 'Home'),
+            ('company', 'Company'),
+            ], 'To', select=True, readonly=False,
+            help="Used for auto trace route 'to' with google maps"),
         # Valutare se tenere:
-        # 'type_id':fields.many2one('intervention.type', 'Type', required=False),
+        # 'type_id': fields.many2one('intervention.type', 'Type',
+        # required=False),
         # TODO valutare se è il caso di tenere un prodotto per il settore
-        # 'sector_id':fields.many2one('intervention.sector', 'Sector', required=False, help = "List of sector of intervent, used in sector study for division of activity intervents"),
-        'not_in_report':fields.boolean('Not in report',
-            help = "It's not printed in monthly report"),
+        # 'sector_id':fields.many2one('intervention.sector', 'Sector',
+        # required=False, help = "List of sector of intervent, used in
+        # sector study for division of activity intervents"),
+        'not_in_report': fields.boolean(
+            'Not in report',
+            help="It's not printed in monthly report"),
         'mode': fields.selection([
             ('phone', 'Phone'),
             ('customer', 'Customer address'),
@@ -605,14 +624,16 @@ class hr_analytic_timesheet_extra(osv.osv):
             ('close', 'Close'),  # Appointment close without sending intervent report
             ('reported', 'Close reported'),  # Appointment close with sending intervent report
         ], 'State', select=True, readonly=True),
-        'extra_planned':fields.boolean('Extra Planned'),
+        'extra_planned': fields.boolean('Extra Planned'),
         }
 
     _defaults = {
         # set working data from xml file as default
         'name': lambda *a: False,
-        'to_invoice': lambda s, c, uid, ctx: s.get_default_invoice_value(c, uid, context=ctx),
-        # 'ref': lambda s, c, uid, ctx: s.get_intervent_number(c, uid, context=ctx),
+        'to_invoice': lambda s, c, uid, ctx: s.get_default_invoice_value(
+            c, uid, context=ctx),
+        # 'ref': lambda s, c, uid, ctx: s.get_intervent_number(
+        # c, uid, context=ctx),
         'state': lambda *a: 'draft',
         'mode': lambda *a: 'connection',
         'manual_total': lambda *x: False,
