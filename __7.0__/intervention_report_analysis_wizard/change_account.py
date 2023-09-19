@@ -130,11 +130,11 @@ class intervention_status_account_force(osv.osv):
         # TODO
         return True
 
-
     _columns = {
         # Log fields:
-        #'name': fields.char('Name of operation', size=256, required=True),
-        'new_account_id': fields.many2one('account.analytic.account',
+        # 'name': fields.char('Name of operation', size=256, required=True),
+        'new_account_id': fields.many2one(
+            'account.analytic.account',
             'Force to Account', required=True),
         'log_date': fields.datetime('Log date for operation'),
         'finded': fields.boolean('Finded'),
@@ -159,6 +159,7 @@ class intervention_status_account_force(osv.osv):
         'log_date': lambda *x: datetime.now().strftime(
             DEFAULT_SERVER_DATETIME_FORMAT),
         }
+
 
 class hr_analytic_timesheet(osv.osv):
     """ Add reference for forced elements:
