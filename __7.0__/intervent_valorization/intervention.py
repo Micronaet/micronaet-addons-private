@@ -31,11 +31,11 @@ from openerp.tools.translate import _
 _logger = logging.getLogger(__name__)
 
 class hr_analytic_timesheet(osv.osv):
-    ''' Add extra fields to intervent 
+    ''' Add extra fields to intervent
     '''
     _name = 'hr.analytic.timesheet'
     _inherit = 'hr.analytic.timesheet'
-    
+
     def _get_profit(self, cr, uid, ids, fields, args, context=None):
         ''' Return real profit depend on type invoice and invoiced
         '''
@@ -45,10 +45,8 @@ class hr_analytic_timesheet(osv.osv):
             cost = intervent.intervent_partner_id.hour_cost or 0.0
             res[intervent.id] = cost * hour
         return res
-        
+
     _columns = {
-        'profit': fields.function(_get_profit, method=True, type='float', 
+        'profit': fields.function(_get_profit, method=True, type='float',
             string='Profit', store=True), # TODO problems during change hour cost
         }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
