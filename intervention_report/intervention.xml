@@ -169,6 +169,10 @@
 	                  <field name="ref" attrs="{'invisible': [('ref','=',False)]}"/>
 	                  <newline/>
 
+                      <!--on_change="onchange_find_account_id(find_account_id)"-->
+                      <field name="find_account_id"
+                             colspan="5" domain="[('state', 'not in', ['close', 'cancelled'])]"
+                             attrs="{'invisible': ['|',('intervent_partner_id', '!=', False),('account_id', '!=', False)]}"/>
                       <field name="name" on_change="on_change_name(name,intervention_request)" colspan="5"/>
 
                       <field name="intervent_partner_id" on_change="on_change_partner(intervent_partner_id,account_id,account_no_parent)" domain="[('is_company','=',True),('is_address','=',False)]" context="{'default_is_company':True}" colspan="3"/>

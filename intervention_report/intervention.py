@@ -28,7 +28,7 @@ import openerp.addons.decimal_precision as dp
 from openerp.osv import fields, osv, expression
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from openerp import SUPERUSER_ID#, api
+from openerp import SUPERUSER_ID, api
 from openerp import tools
 from openerp.tools.translate import _
 from openerp.tools.float_utils import float_round as round
@@ -285,12 +285,16 @@ class hr_analytic_timesheet_extra(osv.osv):
             } # True if customer
         return res
 
-    def on_change_partner(self, cr, uid, ids, partner_id, account_id,
+    def on_change_partner(
+            self, cr, uid, ids, partner_id, account_id,
             account_no_parent, context=None):
         """ If change partner:
             set up account_id if there's default
             change trip hour if mode setted up to 'customer'
         """
+        if context is None:
+            context = {}
+
         # ---------------------------------------------------------------------
         # Filter for account:
         # ---------------------------------------------------------------------
@@ -319,16 +323,26 @@ class hr_analytic_timesheet_extra(osv.osv):
 
         partner_proxy = self.pool.get("res.partner").browse(
             cr, uid, partner_id, context=context)
-        res['value']['account_id'] = partner_proxy.default_contract_id.id if \
-            partner_proxy.default_contract_id else False
-        res['value']['trip_hour'] = partner_proxy.trip_duration  # hide if non required
+
+        # Force parameter:
+        force_account_id = context.get('force_account_id')
+        if force_account_id:
+            _logger.warning('Forced account onchange call for partner!')
+            res['value']['account_id'] = force_account_id
+            del(context['force_account_id'])
+        else:
+            res['value']['account_id'] = partner_proxy.default_contract_id.id \
+                if partner_proxy.default_contract_id else False
+        res['value']['trip_hour'] = partner_proxy.trip_duration
+        # hide if non required
         return res
 
-    def on_change_account(self, cr, uid, ids, account_id, partner_id,
+    def on_change_account(
+            self, cr, uid, ids, account_id, partner_id,
             user_id=False, context=None):
         """ Test if change account, then write, if present, to_invoice field
         """
-        res = {'value': {'partner_id': partner_id}} # default
+        res = {'value': {'partner_id': partner_id}}  # default
         user_font = 'blue'
         font_black = 'black'
         font_red = 'red'
@@ -490,7 +504,7 @@ class hr_analytic_timesheet_extra(osv.osv):
             break_require, break_hour, context=None):
         """ Calculate total duration and total intenal duration depending on
             parameter passed
-            (TODO: cost)
+            todo: cost
         """
         res = {'value': {}}
 
@@ -515,7 +529,7 @@ class hr_analytic_timesheet_extra(osv.osv):
            ], context=context)
         if ids:
             res_id = self.pool.get('ir.model.data').read(
-                cr, uid, ids, ('id','res_id'), context=context)
+                cr, uid, ids, ('id', 'res_id'), context=context)
             return res_id[0]['res_id']
         return  # nothing (no default)
 
@@ -525,12 +539,76 @@ class hr_analytic_timesheet_extra(osv.osv):
         res = self.pool.get('ir.sequence').get(cr, uid, 'hr.intervent.report')
         return res
 
+    """
+    def onchange_find_account_id(
+            self, cr, uid, ids, find_account_id, context=None):
+        if context is None:
+            context = {}
+        account_pool = self.pool.get('account.analytic.account')
+
+        res = {}
+
+        if not find_account_id:
+            return res
+
+        # todo raise error if != 1?
+        account = account_pool.browse(
+            cr, uid, find_account_id, context=context)
+
+        res['value'] = {
+            'find_account_id': False,
+            'intervent_partner_id': account.partner_id.id,
+            'account_id': account.id,
+            }
+
+        # Force context for account ID
+        self.env.context = self.with_context(
+            force_account_id=account.id).env.context
+        return res
+    """
+    @api.onchange('find_account_id')
+    def onchange_find_account_id(self):
+        """ Find account code
+        """
+        find_account_id = self.find_account_id.id
+        account_pool = self.env['account.analytic.account']
+        res = {}
+
+        if not find_account_id:
+            return res
+
+        # todo raise error if != 1?
+        account = account_pool.browse(find_account_id)
+
+        res['value'] = {
+            'find_account_id': False,
+            'intervent_partner_id': account.partner_id.id,
+            'account_id': account.id,
+            }
+
+        # Force context for account ID
+        self.env.context = self.with_context(
+            force_account_id=account.id).env.context
+        return res
+
     _columns = {
         'is_invoiced': fields.boolean('Is invoiced'),
-        'ref': fields.char('Ref.', size=12, required=False, readonly=False,
+        'ref': fields.char(
+            'Ref.', size=12, required=False, readonly=False,
             help="ID for intervent, actually manually configured, after became a sequence"),
         'operation_id': fields.many2one(
             'hr.analytic.timesheet.operation', 'Operation'),
+
+        'find_account_id': fields.many2one(
+            'account.analytic.account', 'Cerca dal contratto',
+            help='Indicare il codice del contratto per cercare cliente e '
+                 'impostare questo contratto, se vengono trovati più'
+                 'contratti con il codice parziale viene preso il primo.'
+                 'Questa casella sparisce quando si imposta un cliente '
+                 'o il contratto, se volete farla comparire vanno cancellati'
+                 'i due dati.'
+                 'Nota: il contratto deve essere aperto e non annullato!'),
+
         'intervent_partner_id': fields.many2one('res.partner', 'Partner ref.'),
         'intervent_contact_id': fields.many2one('res.partner', 'Contact ref.'),
         'intervention_request': fields.text(
