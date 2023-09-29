@@ -193,6 +193,17 @@ class AccountAnalyticTicketInherit(osv.osv):
             'state': 'suspended',
         }, context=context)
 
+    def wkf_completed(self, cr, uid, ids, context=None):
+        """ Completed ticket
+        """
+        message = 'Cambio stato ticket: Completato'
+        self.write_log_chatter_message(cr, uid, ids, message, context=context)
+        return self.write(cr, uid, ids, {
+            'state': 'completed',
+            'invoice_date':
+                datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT),
+        }, context=context)
+
     def wkf_closed(self, cr, uid, ids, context=None):
         """ Open ticket
         """
@@ -269,9 +280,10 @@ class AccountAnalyticTicketInherit(osv.osv):
                  'la fine del mese oppure non è da fatturare'),
         'state': fields.selection([
             ('draft', 'Bozza'),
-            ('open', 'Aperta'),
-            ('closed', 'Chiusa'),
-            ('suspended', 'Sospesa'),
+            ('open', 'Aperto'),
+            ('completed', 'Completato'),
+            ('closed', 'Chiuso'),
+            ('suspended', 'Sospeso'),
             ], string='Stato', required=True, readonly=True),
         'intervention_ids': fields.one2many(
             'hr.analytic.timesheet', 'ticket_id', 'Interventi collegati',

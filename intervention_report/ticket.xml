@@ -46,7 +46,8 @@
                         <filter name="state_draft" string="Bozza" domain="[('state','=','draft')]" />
                         <filter name="state_open" string="Aperti" domain="[('state','=','open')]" />
                         <filter name="state_suspended" string="Sospesi" domain="[('state','=','suspended')]" />
-                        <filter name="state_completed" string="Completi" domain="[('state','=','closed')]" />
+                        <filter name="state_completed" string="Completati" domain="[('state','=','completed')]" />
+                        <filter name="state_close" string="Chiusi" domain="[('state','=','closed')]" />
                         <separator/>
 
                         <group expand="0" string="Raggruppa per...">
@@ -94,8 +95,9 @@
 
                         <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-media-play" />
                         <button name="wkf_suspended" string="Sospendi" type="object" states="open" icon="terp-gtk-media-pause" />
-                        <button name="wkf_closed" string="Chiuso" type="object" states="open" icon="gtk-media-stop" />  <!--STOCK_APPLY-->
-                        <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-media-previous" /> <!--gtk-revert-to-saved-->
+                        <button name="wkf_completed" string="Completato" type="object" states="open" icon="gtk-media-stop" />  <!--STOCK_APPLY-->
+                        <button name="wkf_closed" string="Chiuso" type="object" states="completed" icon="kanban-apply" />
+                        <button name="wkf_restart" string="Riattiva" type="object" states="completed,closed" icon="gtk-media-previous" /> <!--gtk-revert-to-saved-->
                         <field name="state" />
                         <button name="create_new_intervention_for_ticket" string="Nuovo intervento" type="object" icon="gtk-dnd" states="open" />
                     </tree>
@@ -114,8 +116,9 @@
 
                             <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-media-play" />
                             <button name="wkf_suspended" string="Sospendi" type="object" states="open" icon="terp-gtk-media-pause" />
-                            <button name="wkf_closed" string="Chiuso" type="object" states="open" icon="gtk-media-stop" />  <!--STOCK_APPLY-->
-                            <button name="wkf_restart" string="Riattiva" type="object" states="closed" icon="gtk-media-previous" /> <!--gtk-revert-to-saved-->
+                            <button name="wkf_completed" string="Completato" type="object" states="open" icon="gtk-media-stop" />  <!--STOCK_APPLY-->
+                            <button name="wkf_closed" string="Chiuso" type="object" states="completed" icon="kanban-apply" />
+                            <button name="wkf_restart" string="Riattiva" type="object" states="completed,closed" icon="gtk-media-previous" /> <!--gtk-revert-to-saved-->
 
                             <field name="state" widget="statusbar" readonly="1"/>
                         </header>
