@@ -47,7 +47,7 @@
         'hr',
         'hr_timesheet_invoice',
         'invervention_code_search',  # Extra search for code
-        ],
+    ],
     'init_xml': [],
     'demo_xml': [],
     'data': [

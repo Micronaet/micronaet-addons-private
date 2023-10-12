@@ -288,7 +288,7 @@ class AccountAnalyticTicketInherit(osv.osv):
         'intervention_ids': fields.one2many(
             'hr.analytic.timesheet', 'ticket_id', 'Interventi collegati',
             ),
-        }
+    }
 
     _defaults = {
         'date': lambda *x: datetime.now().strftime(
