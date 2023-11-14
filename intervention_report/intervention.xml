@@ -297,7 +297,7 @@
                   <field name="mode" on_change="on_change_mode(mode)"/>
                   <field name="user_id" on_change="on_change_user_id(user_id)" required="1"/>
                   <field name="account_no_parent" on_change="on_change_partner(intervent_partner_id,account_id,account_no_parent)" string="No partner"/>
-                  <field name="account_id" colspan="4" required="1" context="{'with_code': True,'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),('partner_id','=',intervent_partner_id)]" on_change="on_change_account(account_id,intervent_partner_id,user_id)" />
+                  <field name="account_id" colspan="4" required="1" context="{'with_code': True,'default_use_timesheets': 1}" domain="[('type','in',['normal','contract']),('state', '=', 'open'),('use_timesheets','=',1),('partner_id','=',intervent_partner_id)]" on_change="on_change_account(account_id,intervent_partner_id,user_id)" />
                   <field name="date_start" required="1" />
                   <field name="intervent_duration" widget="float_time" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)" required="1" />
                   <field name="intervention" />

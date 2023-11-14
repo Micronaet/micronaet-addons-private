@@ -5,7 +5,7 @@
             <field name="name">fast.stock.picking.returned.search</field>
             <field name="model">fast.stock.picking.returned</field>
             <field name="arch" type="xml">
-                <search string="String" version="7.0">        
+                <search string="String" version="7.0">
                     <field name="partner_id" filter_domain="[('partner_id','=',self)]"/>
                     <field name="account_id" filter_domain="[('partner_id','=',self)]"/>
                     <filter name="state_open" string="Open" domain="[('done','=',False)]"/>
@@ -14,7 +14,7 @@
                         <filter name="group_partner" string="Partner" context="{'group_by': 'partner_id'}"/>
                         <filter name="group_account" string="Account" context="{'group_by': 'account_id'}"/>
                         <filter string="Status" context="{'group_by': 'done'}" />
-                    </group>                
+                    </group>
                 </search>
             </field>
         </record>
@@ -37,17 +37,17 @@
             <field name="name">fast.stock.picking.returned.form</field>
             <field name="model">fast.stock.picking.returned</field>
             <field name="arch" type="xml">
-                <form string="Refund inline" version="7.0">        
+                <form string="Refund inline" version="7.0">
                     <header>
                          <button name="report_original_picking" string="Print preview" type="object" icon="gtk-print" attrs="{'invisible': [('done','=',True)]}" />
                          <button name="update_original_picking" string="Refund" type="object" icon="gtk-execute" attrs="{'invisible': [('done','=',True)]}" />
                     </header>
-                    <sheet>                    
+                    <sheet>
                         <group col="4" colspan="4">
                             <field name="partner_id" />
-                            <field name="account_id" 
-                                context="{'default_use_timesheets': 1}" 
-                                domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('partner_id','=',partner_id)]" />
+                            <field name="account_id"
+                                context="{'default_use_timesheets': 1}"
+                                domain="[('type','in',['normal','contract']),('state', '=', 'open'),('partner_id','=',partner_id)]" />
                             <field name="contact_id" />
                             <field name="done" readonly="1"/>
                             <field name="with_ddt" invisible="1"/>
@@ -59,7 +59,7 @@
                                 </tree>
                             </field>
                         </group>
-                    </sheet>        
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -81,22 +81,22 @@
             <field name="context">{'search_default_state_open': True}</field>
             <field name="domain">[]</field>
         </record>
-        
-        <menuitem 
-            parent="fast_stock_move.menu_stock_picking_root" 
+
+        <menuitem
+            parent="fast_stock_move.menu_stock_picking_root"
             id="menu_new_fast_stock_refund_root"
             name="Product return"
             sequence="40"
             />
-        
-        <menuitem 
-            parent="menu_new_fast_stock_refund_root" 
+
+        <menuitem
+            parent="menu_new_fast_stock_refund_root"
             id="menu_new_fast_stock_picking_returned_new"
             action="action_new_fast_stock_picking_returned"
             sequence="10"
             />
-        <menuitem 
-            parent="menu_new_fast_stock_refund_root" 
+        <menuitem
+            parent="menu_new_fast_stock_refund_root"
             id="menu_new_fast_stock_picking_returned_pending"
             action="action_new_fast_stock_picking_returned_opened_tree"
             sequence="20"
