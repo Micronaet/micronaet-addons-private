@@ -47,6 +47,7 @@
                         <filter name="state_open" string="Aperti" domain="[('state','=','open')]" />
                         <filter name="state_suspended" string="Sospesi" domain="[('state','=','suspended')]" />
                         <filter name="state_completed" string="Completati" domain="[('state','=','completed')]" />
+                        <filter name="state_processed" string="Elaborati" domain="[('state','=','processed')]" />
                         <filter name="state_close" string="Chiusi" domain="[('state','=','closed')]" />
                         <separator/>
 
