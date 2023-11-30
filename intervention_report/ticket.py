@@ -204,6 +204,17 @@ class AccountAnalyticTicketInherit(osv.osv):
                 datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT),
         }, context=context)
 
+    def wkf_processed(self, cr, uid, ids, context=None):
+        """ Processed ticket
+        """
+        message = 'Cambio stato ticket: Elaborato'
+        self.write_log_chatter_message(cr, uid, ids, message, context=context)
+        return self.write(cr, uid, ids, {
+            'state': 'processed',
+            # 'invoice_date':  # todo keep here invoice date?
+            #    datetime.now().strftime(DEFAULT_SERVER_DATE_FORMAT),
+        }, context=context)
+
     def wkf_closed(self, cr, uid, ids, context=None):
         """ Open ticket
         """
@@ -282,6 +293,7 @@ class AccountAnalyticTicketInherit(osv.osv):
             ('draft', 'Bozza'),
             ('open', 'Aperto'),
             ('completed', 'Completato'),
+            ('processed', 'Elaborato'),
             ('closed', 'Chiuso'),
             ('suspended', 'Sospeso'),
             ], string='Stato', required=True, readonly=True),
