@@ -57,17 +57,23 @@ class account_invoice(osv.osv):
             total to_invoice
             Description for group of intervent
         """
+        partner_convert = {
+            'analysis': 'Analisi studio di fattibilità',
+            'partner_invoice': 'Per conto (FT partner)',
+            'company_invoice': 'Per conto (FT azienda)',
+        }
         res = {}
         for invoice in self.browse(cr, uid, ids, context=context):
             res[invoice.id] = {}
             res[invoice.id]['to_invoice_total'] = 0.0
-            res[invoice.id]['to_invoice_summary'] = ""
+            # res[invoice.id]['to_invoice_summary'] = ''
             summary = {}
             for intervent in invoice.intervention_report_ids:
                 if intervent.state == 'cancel':
                     continue
 
-                partnership_mode = intervent.partnership_mode or 'Azienda'
+                partnership_mode = partner_convert.get(
+                    intervent.partnership_mode, 'Fatturare Azienda')
 
                 # Manual intervent:
                 if intervent.manual_total:
@@ -88,18 +94,25 @@ class account_invoice(osv.osv):
                         (intervent.to_invoice.factor or 0.0) / 100 * \
                         total_hours  # only if in report (total)
 
+                if partnership_mode not in summary:
+                    summary[partnership_mode] = {}
                 # Summary with also not in report values
-                if summary_name not in summary:
-                    summary[summary_name] = total_hours
-                else:
-                    summary[summary_name] += total_hours
+                if summary_name not in summary[partnership_mode]:
+                    summary[partnership_mode][summary_name] = 0
+                summary[partnership_mode][summary_name] += total_hours
 
             hour_cost = intervent.intervent_partner_id.hour_cost or 0.0
             res[invoice.id]['to_invoice_total_price'] = \
                 res[invoice.id]['to_invoice_total'] * hour_cost
-            for key in summary.keys():
-                res[invoice.id]['to_invoice_summary'] += '%s: %s\n' % (
-                    key, summary[key])
+
+            # Summary field:
+            to_invoice_summary = ''
+            for partnership_mode in summary:
+                to_invoice_summary += '[%s]\n' % partnership_mode
+                for key in summary[partnership_mode]:
+                    to_invoice_summary += '%s: %s\n' % (
+                        key, summary[partnership_mode][key])
+            res[invoice.id]['to_invoice_summary'] = to_invoice_summary
         return res
 
     _columns = {
