@@ -458,8 +458,8 @@ class hr_analytic_timesheet_extra(osv.osv):
         res = self.pool.get('ir.sequence').get(cr, uid, 'hr.intervent.report')
         return res
 
-    _columns={
-        'ref':fields.char('Ref.', size=12, required=False, readonly=False,
+    _columns = {
+        'ref': fields.char('Ref.', size=12, required=False, readonly=False,
             help="ID for intervent, actually manually configured, after became a sequence"),
         'intervent_partner_id': fields.many2one('res.partner', 'Partner ref.'),
         'intervention_request': fields.text('Intervention request',
@@ -474,27 +474,30 @@ class hr_analytic_timesheet_extra(osv.osv):
             digits=(16, 6), help="Duration intervent without trip"),
         'intervent_total': fields.float('Duration intervent', digits=(16, 6),
             help = "Duration intervent considering trip and break used for invoice (q. for customer)"),
-        'manual_total':fields.boolean('Manual', required=False,
+        'manual_total': fields.boolean('Manual', required=False,
             help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
-        'manual_total_internal':fields.boolean('Manual (internal)',
+        'manual_total_internal': fields.boolean('Manual (internal)',
             help="If true don't auto calculate total internal hour, if false, total hours=intervent + trip - pause hours"),
-        'user_name': fields.related('user_id', 'name', type = 'char',
+        'user_name': fields.related('user_id', 'name', type='char',
             string='User'),
         'trip_require':fields.boolean('Trip'),
         'trip_hour': fields.float('Trip hour', digits=(16, 6)),
-        'break_require': fields.boolean('Break',
+        'break_require': fields.boolean(
+            'Break',
             help='If intervention is split in 2 part for break'),
         'break_hour': fields.float('Break hour', digits=(16, 6),
             help='Duration of break'),
 
         'extra_invoiced_total': fields.float('Duration of extra invoiced',
             digits=(16, 3),
-            help = 'Extra invoiced of this contract intervent'),
+            help='Extra invoiced of this contract intervent'),
 
-        'request_by':fields.char('Request by', size=100,
+        'request_by': fields.char(
+            'Request by', size=100,
             help='List of people that request intervent'
             ),
-        'request_reference':fields.char('Request reference', size=200,
+        'request_reference': fields.char(
+            'Request reference', size=200,
             help='Reference for request (asana link, mail ecc.)',
             ),
 
@@ -502,16 +505,33 @@ class hr_analytic_timesheet_extra(osv.osv):
         'account_hour_status': fields.text('Account status', size=40),
 
         # Google maps trip manage:
-        'google_from':fields.selection([
-            ('previous','Previous'),
-            ('home','Home'),
-            ('company','Company'),
-            ],'From', select=True, readonly=False, help = "Used for auto trace route 'from' with google maps"),
-        'google_to':fields.selection([
-            ('next','Next'),
-            ('home','Home'),
-            ('company','Company'),
-            ],'To', select=True, readonly=False, help = "Used for auto trace route 'to' with google maps"),
+        'partnership_mode': fields.selection([
+            ('analysis', 'Analisi studio di fattibilità'),
+            ('partner_invoice', 'Per conto di, non fatturato'),
+            ('company_invoice', 'Per conto di, fatturato'),
+            ], 'Modalità Partnership', select=True,
+            help='Utilizzato per separare gli interventi nelle stampe e '
+                 'inviare automaticamente quelli collegati al contratto di '
+                 'Partnership: '
+                 '- Analisi sono gli interventi di contatto cliente '
+                 '(vengono fatturati con delle condizioni particolari),'
+                 '- Per conto di non fatturato, demanda la fatturazione e '
+                 'vengono ripartiti,'
+                 '- Per conto di fatturato, fatturiamo noi ma vanno '
+                 'ripartiti.'),
+
+        'google_from': fields.selection([
+            ('previous', 'Previous'),
+            ('home', 'Home'),
+            ('company', 'Company'),
+            ], 'From', select=True, readonly=False,
+            help="Used for auto trace route 'from' with google maps"),
+        'google_to': fields.selection([
+            ('next', 'Next'),
+            ('home', 'Home'),
+            ('company', 'Company'),
+            ], 'To', select=True, readonly=False,
+            help="Used for auto trace route 'to' with google maps"),
         # Valutare se tenere:
         #'type_id':fields.many2one('intervention.type', 'Type', required=False),
         # TODO valutare se è il caso di tenere un prodotto per il settore
