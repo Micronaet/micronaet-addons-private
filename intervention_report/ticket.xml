@@ -96,7 +96,7 @@
 
                         <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-media-play" />
                         <button name="wkf_suspended" string="Sospendi" type="object" states="open" icon="terp-gtk-media-pause" />
-                        <button name="wkf_completed" string="Completato" type="object" states="open" icon="gtk-media-stop" groups="intervention_report.group_ticket_manager" />  <!--STOCK_APPLY-->
+                        <button name="wkf_completed" string="Completato" type="object" states="open" icon="gtk-media-stop" />  <!--STOCK_APPLY-->
                         <button name="wkf_processed" string="Elaborato" type="object" states="completed" icon="STOCK_EXECUTE" groups="intervention_report.group_ticket_manager" />  <!--STOCK_APPLY-->
                         <button name="wkf_closed" string="Chiuso" type="object" states="processed" icon="kanban-apply" groups="intervention_report.group_ticket_manager" />
                         <button name="wkf_restart" string="Riattiva" type="object" states="completed,processed,closed" icon="gtk-media-previous" /> <!--gtk-revert-to-saved-->
@@ -118,7 +118,7 @@
 
                             <button name="wkf_open" string="Confermato" type="object" states="draft,suspended" icon="gtk-media-play" />
                             <button name="wkf_suspended" string="Sospendi" type="object" states="open" icon="terp-gtk-media-pause" />
-                            <button name="wkf_completed" string="Completato" type="object" states="open" icon="gtk-media-stop" groups="intervention_report.group_ticket_manager" />  <!--STOCK_APPLY-->
+                            <button name="wkf_completed" string="Completato" type="object" states="open" icon="gtk-media-stop" />  <!--STOCK_APPLY-->
                             <button name="wkf_processed" string="Elaborato" type="object" states="completed" icon="STOCK_EXECUTE" groups="intervention_report.group_ticket_manager" />  <!--STOCK_APPLY-->
                             <button name="wkf_closed" string="Chiuso" type="object" states="processed" icon="kanban-apply" groups="intervention_report.group_ticket_manager" />
                             <button name="wkf_restart" string="Riattiva" type="object" states="completed,processed,closed" icon="gtk-media-previous" /> <!--gtk-revert-to-saved-->
