@@ -122,7 +122,8 @@ class hr_analytic_timesheet_calendar(osv.osv):
         # No more used!:
         'meeting_sync': fields.boolean('Sync with meeting'),
         'meeting_id': fields.many2one(
-            'crm.meeting', 'Meeting linked', required=False),#, ondelete="set null"),
+            'crm.meeting', 'Meeting linked', required=False),
+        #, ondelete="set null"),
     }
 
     _defaults = {
