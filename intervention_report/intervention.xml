@@ -188,7 +188,7 @@
 	                  <field name="manual_total_internal" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
                       <field name="unit_amount" widget="float_time" string="Internal total (eff.)" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)" attrs="{'required':[('manual_total_internal','=',True)]}" help="Internal purpose, not visible for customers" />
 
-                       <field name="partnership_mode" colspan="4"/>
+                      <field name="partnership_mode" colspan="4"/>
 
                       <notebook colspan="4">
 	                       <page string="Map route">
