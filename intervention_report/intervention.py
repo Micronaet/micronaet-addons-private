@@ -507,8 +507,8 @@ class hr_analytic_timesheet_extra(osv.osv):
         # Google maps trip manage:
         'partnership_mode': fields.selection([
             ('analysis', 'Analisi studio di fattibilità'),
-            ('partner_invoice', 'Per conto di, non fatturato'),
-            ('company_invoice', 'Per conto di, fatturato'),
+            ('partner_invoice', 'Per conto di (fatturato dal partner)'),
+            ('company_invoice', 'Per conto di (fatturato da noi)'),
             ], 'Modalità Partnership', select=True,
             help='Utilizzato per separare gli interventi nelle stampe e '
                  'inviare automaticamente quelli collegati al contratto di '
