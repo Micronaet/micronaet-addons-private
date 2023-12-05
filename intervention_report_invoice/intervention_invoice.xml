@@ -9,9 +9,9 @@
         <field name='arch' type='xml'>
             <field name="to_invoice" position="after">
                <field name="invoice_id" />
-            </field> 
+            </field>
         </field>
-    </record>  
+    </record>
 
     <record id='view_hr_analytic_timesheet_from_invoice' model='ir.ui.view'>
         <field name='name'>HR analytic timesheet invoice</field>
@@ -20,12 +20,12 @@
         <field name='arch' type='xml'>
            <field name="general_account_id" position="after">
                <field name="invoice_id" context="{'form_view_ref':'account.invoice_form'}" domain="[('partner_id','=',intervent_partner_id)]"/>
-            </field> 
+            </field>
         </field>
-    </record>  
-    
+    </record>
+
     <!--account.invoice-->
-    
+
     <record id='view_invoice_tree_intervent' model='ir.ui.view'>
         <field name='name'>Intervent</field>
         <field name='model'>account.invoice</field>
@@ -33,10 +33,10 @@
         <field name='arch' type='xml'>
             <field name="user_id" position="attributes">
                 <attribute name="invisible">1</attribute>
-            </field>   
+            </field>
             <field name="amount_total" position="attributes">
                 <attribute name="invisible">0</attribute>
-            </field>               
+            </field>
             <field name="amount_total" position="after">
                 <field name="to_invoice_total" sum="hours"/>
                 <field name="to_invoice_total_price" sum="amount"/>
@@ -44,33 +44,34 @@
             <!--Hide fields not used now:-->
             <field name="residual" position="attributes">
                 <attribute name="invisible">1</attribute>
-            </field>   
+            </field>
             <field name="amount_untaxed" position="attributes">
                 <attribute name="invisible">1</attribute>
-            </field>   
+            </field>
             <field name="amount_total" position="attributes">
                 <attribute name="invisible">1</attribute>
-            </field>   
+            </field>
 	    </field>
-	</record>            
+	</record>
     <record id='view_invoice_form_intervent' model='ir.ui.view'>
         <field name='name'>Intervent</field>
         <field name='model'>account.invoice</field>
         <field name='inherit_id' ref='account.invoice_form' />
         <field name='arch' type='xml'>
-            <xpath expr="/form/sheet/notebook/page" position="before"> 
+            <xpath expr="/form/sheet/notebook/page" position="before">
                 <page string="Intervents">
                    <group colspan="4" col="6">
-                       <field name="to_invoice_summary" colspan="2" /> 
+                       <field name="to_invoice_summary" colspan="2" />
                        <field name="to_invoice_total" colspan="2" />
                        <field name="to_invoice_total_price" colspan="2" />
                    </group>
                    <field name="intervention_report_ids" context="{'form_view_ref':'intervention_report.intervention_report.view_hr_analytic_timesheet_form'}">
                        <tree string="Intervent list" colors="brown:manual_total;grey:not_in_report">
                             <field name="ref" />
-                            <field name="date_start" /> 
+                            <field name="date_start" />
                             <field name="user_name" />
-                            <field name="intervention_request" />                       
+                            <field name="partnership_mode" />
+                            <field name="intervention_request" />
                             <field name="account_id" invisible="1" />
                             <field name="intervent_duration" widget="float_time"/>
                             <field name="trip_hour" widget="float_time" invisible="1"/>
@@ -89,13 +90,13 @@
                             <button name="intervention_confirmed_cancel" string="Cancel" states="confirmed" icon="gtk-cancel" />
                             <button name="intervention_report_close" string="Close with report" states="confirmed" icon="gtk-go-forward" />
                             <button name="intervention_close" string="Close" states="confirmed" icon="gtk-ok" />
-                            <field name="state" />     
-     	                    <field name="not_in_report" invisible="1"/>                            
-                       </tree>                       
+                            <field name="state" />
+     	                    <field name="not_in_report" invisible="1"/>
+                       </tree>
                    </field>
                 </page>
             </xpath>
-        </field>        
+        </field>
     </record>
 
     <record id="action_view_account_invoice_intervent" model="ir.actions.act_window">
@@ -114,17 +115,17 @@
         name="Intervent list"
         res_model="hr.analytic.timesheet"
         src_model="account.invoice"/>
-    
-    <!-- Menu -->               
-        <menuitem name="Invoices" 
-                  parent="intervention_report.menu_base_intervention_trip_root" 
+
+    <!-- Menu -->
+        <menuitem name="Invoices"
+                  parent="intervention_report.menu_base_intervention_trip_root"
                   id="menu_base_intervention_invoice_list"
                   sequence="10" />        <!--<menuitem name="Trip list" parent="menu_base_intervention_trip_root" id="menu_base_intervention_trip_list" action="action_view_hr_analytic_timesheet_trip" sequence="20" /> -->
 
-        <menuitem name="Invoice list" 
-                  parent="menu_base_intervention_invoice_list" 
-                  id="menu_account_invoice_intervent" 
-                  action="action_view_account_invoice_intervent" 
-                  sequence="20" />                     
+        <menuitem name="Invoice list"
+                  parent="menu_base_intervention_invoice_list"
+                  id="menu_account_invoice_intervent"
+                  action="action_view_account_invoice_intervent"
+                  sequence="20" />
     </data>
 </openerp>
