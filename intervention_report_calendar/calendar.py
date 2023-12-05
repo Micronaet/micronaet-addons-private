@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 #
-#    OpenERP, Open Source Management Solution    
+#    OpenERP, Open Source Management Solution
 #    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>). All Rights Reserved
 #    d$
 #
@@ -21,7 +21,7 @@
 ###############################################################################
 from osv import osv, fields
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT, DATETIME_FORMATS_MAP, float_compare
-from datetime import datetime 
+from datetime import datetime
 from tools.translate import _
 
 
@@ -30,22 +30,22 @@ class crm_meeting(osv.osv):
     '''
     _name = 'crm.meeting'
     _inherit = 'crm.meeting'
-    
+
     _columns = {
         'timesheet_id':fields.many2one('hr.analytic.timesheet', 'Timesheet linked', required=False),#, ondelete="cascade"),
     }
 
 class hr_analytic_timesheet_calendar(osv.osv):
-    ''' Add extra fields to intervent 
+    ''' Add extra fields to intervent
     '''
     _name = 'hr.analytic.timesheet'
     _inherit = 'hr.analytic.timesheet'
-    
+
     # -----------------
     # Utility function:
     # -----------------
     def create_meeting_linked(self, cr, uid, item_id, context=None):
-        ''' Create a meeting and linked to intervent with his informations        
+        ''' Create a meeting and linked to intervent with his informations
         '''
         intervent_proxy = self.browse(cr, uid, item_id, context=context)
         meeting_pool = self.pool.get('crm.meeting')
@@ -54,7 +54,7 @@ class hr_analytic_timesheet_calendar(osv.osv):
             date_deadline = meeting_pool.onchange_dates(cr, uid, 0, intervent_proxy.date_start, intervent_proxy.intervent_duration, False, False)['value']['date_deadline']
         except:
             date_deadline = intervent_proxy.date_start # duration 1 hour in case of error
-            
+
         meeting_id = meeting_pool.create(cr, uid, {
             'name': "%s (%s)" % (intervent_proxy.name, customer),
             'date': intervent_proxy.date_start,
@@ -65,14 +65,14 @@ class hr_analytic_timesheet_calendar(osv.osv):
             'location': customer if intervent_proxy.mode == 'customer' else _('Company'),
             'timesheet_id': item_id,
         }, context=context)
-        
+
         # Update intervent with link to meeting
         self.write(cr, uid, item_id, {
             'meeting_id': meeting_id,
             'meeting_sync': True,
-        }, context=context)  
+        }, context=context)
         return
-    
+
     # -------------
     # Button event:
     # -------------
@@ -81,7 +81,7 @@ class hr_analytic_timesheet_calendar(osv.osv):
         '''
         self.create_meeting_linked(cr, uid, ids[0], context=context)
         return True
-    
+
     # -------------
     # Override ORM:
     # -------------
@@ -92,40 +92,39 @@ class hr_analytic_timesheet_calendar(osv.osv):
         @param uid: id of current user
         @param vals: provides a data for new record
         @param context: context arguments, like lang, time zone
-        
+
         @return: returns a id of new record
-        """    
+        """
         res_id = super(hr_analytic_timesheet_calendar, self).create(cr, uid, vals, context=context)
         if vals.get('meeting_sync', False): # Create sync meeting
             self.create_meeting_linked(cr, uid, res_id, context=None)
         return res_id
-    
+
     def write(self, cr, uid, ids, vals, context=None):
         """
         Update redord(s) comes in {ids}, with new value comes as {vals}
         return True on success, False otherwise
-    
+
         @param cr: cursor to database
         @param uid: id of current user
         @param ids: list of record ids to be update
         @param vals: dict of new values to be set
         @param context: context arguments, like lang, time zone
-        
+
         @return: True on success, False otherwise
         """
-        #if vals('meeting_sync', False):
-            
+        # if vals('meeting_sync', False):
+
         res = super(hr_analytic_timesheet_calendar, self).write(cr, uid, ids, vals, context)
         return res
-    
-    
+
     _columns = {
+        # No more used!:
         'meeting_sync': fields.boolean('Sync with meeting'),
-        'meeting_id': fields.many2one('crm.meeting', 'Meeting linked', required=False),#, ondelete="set null"),
+        'meeting_id': fields.many2one(
+            'crm.meeting', 'Meeting linked', required=False),#, ondelete="set null"),
     }
-    
+
     _defaults = {
         'meeting_sync': lambda *a: True,
     }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

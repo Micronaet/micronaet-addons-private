@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <openerp>
-    <data>    
+    <data>
     <record model="ir.ui.view" id="view_crm_meeting_task_form">
         <field name="name">crm.meeting.task.form</field>
         <field name="model">crm.meeting</field>
@@ -11,7 +11,7 @@
             </field>
         </field>
     </record>
-    <record id='view_hr_analytic_timesheet_meeting_form' model='ir.ui.view'>
+    <!--<record id='view_hr_analytic_timesheet_meeting_form' model='ir.ui.view'>
         <field name='name'>HR analytic timesheet meeting</field>
         <field name='model'>hr.analytic.timesheet</field>
         <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_form"/>
@@ -22,6 +22,6 @@
                 <button name="create_linked_meeting" string="Create calendar" type="object" attrs="{'invisible':[('meeting_sync','=',True),('meeting_id','!=',False)]}" />
             </field>
         </field>
-    </record>
+    </record>-->
     </data>
 </openerp>
