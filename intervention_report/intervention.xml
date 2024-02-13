@@ -64,6 +64,7 @@
                 <field name="default_to_invoice" string="Default invoice intervent"/>
                 <field name="total_hours" sum="Total" />
                 <field name="total_amount" sum="Total"/>
+                <field name="call_cost" />
                 <field name="account_mode" />
             </field>
         </field>
@@ -77,6 +78,7 @@
                 <field name="default_to_invoice" string="Default invoice intervent"/>
                 <field name="total_hours" sum="Total"/>
                 <field name="total_amount" sum="Total"/>
+                <field name="call_cost" />
                 <field name="account_mode" />
                 <field name="account_approved" />
             </field>
@@ -105,6 +107,7 @@
                 <field name="default_to_invoice" />
                 <field name="total_hours" />
                 <field name="total_amount" />
+                <field name="call_cost" />
             </field>
         </field>
     </record>
@@ -119,6 +122,7 @@
                  <separator string="Intervent parameter:" colspan="4" />
                  <group>
                     <field name="trip_duration" widget="float_time"/>
+                    <field name="call_cost" />
                     <newline/>
                     <field name="has_contract"/>
                     <field name="default_contract_id" domain="[('type','in',['normal','contract']),('state', '&lt;&gt;', 'close'),('use_timesheets','=',1),'|',('partner_id','=',active_id),('partner_id','=',False)]" attrs="{'invisible':[('has_contract','=',False)]}"/>
@@ -217,6 +221,8 @@
 	                               <field name="break_require" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
 	                               <field name="break_hour"  widget="float_time" attrs="{'invisible':[('break_require','=',False)],'required':[('break_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)"/>
 	                               <newline />
+                                   <field name="has_call_cost" attrs="{'invisible': ['|', ('intervent_partner_id', '=', False), ('account_id', '=', False)]}" on_change="onchange_has_call_cost(has_call_cost, intervent_partner_id, account_id)"/>
+                                   <field name="call_cost" attrs="{'invisible': [('has_call_cost', '=', False)], 'required': [('has_call_cost', '=', True)]}" />
 	                           </group>
 	                       </page>
 	                       <page string="Description">
@@ -322,6 +328,8 @@
                   <field name="trip_hour" widget="float_time" attrs="{'invisible':[('trip_require','=',False)],'required':[('trip_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)" invisible="1"/>
                   <field name="break_require" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)" invisible="1"/>
                   <field name="break_hour"  widget="float_time" attrs="{'invisible':[('break_require','=',False)],'required':[('break_require','=',True)]}" on_change="on_change_duration_elements(intervent_duration,manual_total,manual_total_internal,trip_require,trip_hour,break_require,break_hour)" invisible="1"/>
+                  <field name="has_call_cost" attrs="{'readonly': ['|', ('intervent_partner_id', '=', False), ('account_id', '=', False)]}" on_change="onchange_has_call_cost(has_call_cost, intervent_partner_id, account_id)"/>
+                  <field name="call_cost" attrs="{'required': [('has_call_cost', '=', True)]}" /> <!--'readonly': [('has_call_cost', '=', False)], -->
 
                   <field name="intervention_request" invisible="1" />
                   <field name="internal_note" invisible="1"/>

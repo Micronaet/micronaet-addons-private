@@ -77,6 +77,15 @@ class account_analytic_account(osv.osv):
         return res
 
     _columns = {
+        'call_cost': fields.float(
+            'Diritto di chiamata', digits=(16, 2), copy=False,
+            help='Costo per il diritto di chiamata per questa commessa, '
+                 'va poi indicato nell\'intervento se è attivo o meno. '
+                 'Ha più forza rispetto al valore impostato nel cliente, '
+                 'in caso di indicazione nell\'intervento se qui non è '
+                 'presente viene caricato il valore presente nella scheda '
+                 'del cliente'),
+
         'default_to_invoice': fields.many2one(
             'hr_timesheet_invoice.factor', 'Default invoice',
             help='Defaulf invoice type if there\'s one active for customer. '
@@ -126,6 +135,11 @@ class res_partner_extra_fields(osv.osv):
     _inherit = 'res.partner'
 
     _columns = {
+        'call_cost': fields.float(
+            'Diritto di chiamata', digits=(16, 2), copy=False,
+            help='Costo per il diritto di chiamata, va poi indicato '
+                 'nell\'intervento se è attivo o meno '
+                 '(in caso di dupliazione intervento viene rimosso)'),
         'trip_duration': fields.float(
             'Trip duration', digits=(16, 2),
             help="Trip hour duration dealed with the partner"),
@@ -137,6 +151,45 @@ class res_partner_extra_fields(osv.osv):
             'Default Contract',
             help="Defaulf contract if there's one active for customer. All intervent are, for default, setted to this value"),
         }
+
+
+class hr_analytic_timesheet(osv.osv):
+    """ Model name: hr.analytic.timesheet
+    """
+    _inherit = 'hr.analytic.timesheet'
+
+    def onchange_has_call_cost(
+            self, cr, uid, ids,
+            has_call_cost, intervent_partner_id, account_id, context=None):
+        """ Save call cost in intervent
+        """
+        partner_pool = self.pool.get('res.partner')
+        account_pool = self.pool.get('account.analytic.account')
+
+        res = {'value': {}}
+        call_cost = 0.0
+        if has_call_cost:
+            call_cost = account_pool.browse(
+                cr, uid, account_id, context=context).call_cost
+            if not call_cost:
+                call_cost = partner_pool.browse(
+                    cr, uid, intervent_partner_id, context=context).call_cost
+        res['value']['call_cost'] = call_cost
+        return res
+
+    _columns = {
+        'has_call_cost': fields.boolean(
+            'Ha diritto chiamata',
+            help='Se spuntato viene applicato il costo di chiamata presente '
+                 'nella commessa oppure quello nel cliente se non viene '
+                 'trovato il primo valore.'),
+        'call_cost': fields.float(
+            'Diritto di chiamata', digits=(16, 2), copy=False,
+            help='Diritto di chiamata storicizzato per questo intervento, '
+                 'Se viene cambiato nel conto o nel cliente gli '
+                 'inteventi vecchi conservano il valore storico al momento '
+                 'della creazione'),
+    }
 
 
 class hr_analytic_timesheet_operation(osv.osv):
