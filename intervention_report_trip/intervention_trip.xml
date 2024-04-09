@@ -28,7 +28,7 @@
         <field name='inherit_id' ref='base.view_partner_form' />
         <field name='arch' type='xml'>
             <xpath expr="//notebook/page[1]" position="after">
-                <page string="GPS Mapt">
+                <page string="GPS Maps">
                     <group colspan="4" col="4">
                         <field name="map_partner_name" />
                         <newline/>

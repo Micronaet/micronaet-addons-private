@@ -609,7 +609,7 @@ class ResPartner(osv.osv):
         self.write(cr, uid, ids, {
             'map_longitude': lon,
             'map_latitude': lat,
-            'map_dispaly_name': display_name,
+            'map_diplay_name': display_name,
         }, context=context)
         return ('%s,%s' % (lat, lon)).replace(' ', '')
 
