@@ -590,7 +590,6 @@ class ResPartner(osv.osv):
 
         query = url_mask.format(url=url, address=address)
         try:
-            pdb.set_trace()
             reply = urllib.urlopen(query)
             response_json = reply.read()
             response = json.loads(response_json)
