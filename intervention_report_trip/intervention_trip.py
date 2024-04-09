@@ -298,46 +298,47 @@ class hr_analytic_timesheet_trip(osv.osv):
             ctx = context.copy()
             ctx['dry_run'] = True  # Force GET only if not present!
 
-            return partner_pool.get_lat_lon(
+            result = partner_pool.get_lat_lon(
                 cr, uid, [partner.id], context=ctx)
+            return result['lon'], result['lat']
 
-        def distance_query(
-                endpoint, key, origin, destination, unit, routeType):
+        def distance_query(self, cr, uid, origin, destination, context=None):
             """ Generate query string for compute km from origin to destination
                 element in string ask for return json object
             """
+            url_mask = ''
             try:
-                maps_page = '%s?key=%s&from=%s&to=%s&unit=%s&routeType=%s' % (
-                    endpoint,
-                    key,
-                    prepare_element(
-                        self, cr, uid, origin, context=context),
-                    prepare_element(
-                        self, cr, uid, destination, context=context),
-                    unit,
-                    routeType,
-                    )
-                _logger.info('Call maps quest page: %s' % maps_page)
-                return maps_page
+                # Note: lon1, lat1, lon2, lat2
+                lon1, lat1 = prepare_element(
+                    self, cr, uid, origin, context=context)
+                lon2, lat2 = prepare_element(
+                    self, cr, uid, destination, context=context)
+                url_mask = \
+                    'https://router.project-osrm.org/table/v1/' \
+                    'driving/{},{};{},{}?' \
+                    'sources=0'.format(lon1, lat1, lon2, lat2)
+                _logger.info('Call maps quest page: %s' % url_mask)
+
+                return url_mask
             except IOError:
-                _logger.error('Error generate google page: %s' % maps_page)
+                _logger.error('Error generate google page: %s' % url_mask)
                 return None
 
         # ---------------------------------------------------------------------
         # Call Google page:
         # ---------------------------------------------------------------------
         # Read parameters:
-        company = origin.company_id
-        endpoint = company.map_endpoint
-        key = company.map_key
+        # company = origin.company_id
+        # endpoint = company.map_endpoint
+        # key = company.map_key
         # secret = company.map_secret
-        unit = company.map_route_unit
-        routeType = company.map_route_type
+        # unit = company.map_route_unit
+        # routeType = company.map_route_type
 
         error = False
         distance_km = 0.0
         query = distance_query(
-            endpoint, key, origin, destination, unit, routeType)
+            self, cr, uid, origin, destination, context=context)
         try:
             if query in self._map_cache:
                 distance_km = self._map_cache[query]
@@ -356,6 +357,7 @@ class hr_analytic_timesheet_trip(osv.osv):
             return distance_km
 
         # Not in cache:
+        pdb.set_trace()
         if not error:
             try:
                 if reply.code == 400:
@@ -363,9 +365,12 @@ class hr_analytic_timesheet_trip(osv.osv):
             except:
                 error = 'Generic error reading MAPS reply message!'
             try:
-                # distance_km = response['route']['summary']['length']  # km
-                distance_km = response['route']['distance']
-                self._map_cache[query] = distance_km
+                if response.get('code', '').lower() != 'Ok':
+                    error = 'Error in call'
+                else:
+                    distance_km = response.get(
+                        'destinations')[1].get('distance')
+                self._map_cache[query] = distance_km  # Alway save also error
             except:
                 error = 'Error getting KM returned!'
 
@@ -625,7 +630,7 @@ class ResPartner(osv.osv):
                 'map_diplay_name': display_name,
             }, context=context)
 
-        return ('%s,%s' % (lat, lon)).replace(' ', '')
+        return {'lon': lon, 'lat': lat}
 
     _columns = {
         'map_partner_name': fields.char('Partner name for map', size=64),
