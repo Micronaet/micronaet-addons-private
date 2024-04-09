@@ -604,6 +604,7 @@ class ResPartner(osv.osv):
             query = url_mask.format(url=url, address=address)
             try:
                 reply = urllib.urlopen(query)
+                _logger.info('Calling: %s' % query)
                 response_json = reply.read()
                 response = json.loads(response_json)
                 if len(response) > 1:
