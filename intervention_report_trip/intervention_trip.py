@@ -291,18 +291,15 @@ class hr_analytic_timesheet_trip(osv.osv):
             """ Generate a string with all address parameter used for compute
                 distances
             """
-            partner_pool = self.pool('res.partner')
+            if context is None:
+                context = {}
 
-            if not partner.map_latitude or not partner.map_longitude:
-                # Generate Lat Long for this partner:
-                return partner_pool.get_lat_lon(
-                    cr, uid, [partner.id], context=context)
+            partner_pool = self.pool.get('res.partner')
+            ctx = context.copy()
+            ctx['dry_run'] = True  # Force GET only if not present!
 
-            return (
-                '%s,%s' % (
-                    partner.map_latitude,
-                    partner.map_longitude,
-                )).replace(' ', '')
+            return partner_pool.get_lat_lon(
+                cr, uid, [partner.id], context=ctx)
 
         def distance_query(
                 endpoint, key, origin, destination, unit, routeType):
@@ -564,52 +561,69 @@ class ResPartner(osv.osv):
         map = 15
         url = 'www.openstreetmap.org'
 
-        url_mask = 'https://{url}/?mlat={lat}&mlon={lon}#map={map/{lat}/{lon}'
+        url_mask = 'https://{url}/?mlat={lat}&mlon={lon}#map={map}/{lat}/{lon}'
         url_get = url_mask.format(
             url=url,
             lat=partner.map_latitude,
             lon=partner.map_longitude,
+            map=map,
         )
-        return True
+        return {
+            'name': 'Open MAP',
+            'type': 'ir.actions.act_url',
+            'url': url_get,
+            # 'target': 'self',
+            }
 
-    def get_lan_lon(self, cr, uid, ids, context=None):
+    def get_lat_lon(self, cr, uid, ids, context=None):
         """ Partner get lat lon
+            context parameter:
+            dry_run: Force GET only if not present
         """
+        if context is None:
+            context = {}
+        dry_run = context.get('dry_run')
+
         partner = self.browse(cr, uid, ids, context=context)[0]
 
-        url = 'nominatim.openstreetmap.org'
-        address = '{}+{}+{}+{}'.format(
-            partner.street,
-            partner.zip,
-            partner.city,
-            partner.state_id.code or '',
-            ).replace(' ', '+')
+        if dry_run and partner.map_latitude and partner.map_longitude:
+            lat = partner.map_latitude
+            lon = partner.map_longitude
+        else:
+            url = 'nominatim.openstreetmap.org'
+            address = '{}+{}+{}+{}'.format(
+                partner.street,
+                partner.zip,
+                partner.city,
+                partner.state_id.code or '',
+                ).replace(' ', '+')
 
-        url_mask = 'https://{url}/search?q={address}&format=json&polygon=1&' \
-                   'addressdetails=1'
+            url_mask = 'https://{url}/search?q={address}&format=json&' \
+                       'polygon=1&addressdetails=1'
 
-        query = url_mask.format(url=url, address=address)
-        try:
-            reply = urllib.urlopen(query)
-            response_json = reply.read()
-            response = json.loads(response_json)
-            if len(response) > 1:
-                _logger.error('More than one address!: %s' % str(response))
-            lat = response[0]['lat']
-            lon = response[0]['lon']
-            display_name = response[0]['display_name']
-        except:
-            raise osv.except_osv(
-                'Errore recuperando Lat / Lon:',
-                'Errore:\n%s' % str(sys.exc_info()),
-            )
+            query = url_mask.format(url=url, address=address)
+            try:
+                reply = urllib.urlopen(query)
+                response_json = reply.read()
+                response = json.loads(response_json)
+                if len(response) > 1:
+                    _logger.error('More than one address!: %s' % str(response))
+                lat = response[0]['lat']
+                lon = response[0]['lon']
+                display_name = response[0]['display_name']
+            except:
+                raise osv.except_osv(
+                    'Errore recuperando Lat / Lon:',
+                    'Errore:\n%s' % str(sys.exc_info()),
+                )
 
-        # Save in Partner
-        self.write(cr, uid, ids, {
-            'map_longitude': lon,
-            'map_latitude': lat,
-            'map_diplay_name': display_name,
-        }, context=context)
+            # Save in Partner
+            self.write(cr, uid, ids, {
+                'map_longitude': lon,
+                'map_latitude': lat,
+                'map_diplay_name': display_name,
+            }, context=context)
+
         return ('%s,%s' % (lat, lon)).replace(' ', '')
 
     _columns = {
