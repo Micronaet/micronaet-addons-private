@@ -598,7 +598,7 @@ class ResPartner(osv.osv):
                 _logger.error('More than one address!: %s' % str(response))
             lat = response[0]['lat']
             lon = response[0]['lon']
-            display_name = response[0]['dispaly_name']
+            display_name = response[0]['display_name']
         except:
             raise osv.except_osv(
                 'Errore recuperando Lat / Lon:',
