@@ -34,6 +34,8 @@
                         <newline/>
                         <field name="map_latitude" />
                         <field name="map_longitude" />
+                        <button name="get_lan_lon" type="object" string="Recupera Lat / Lon" icon="get-refresh"/>
+                        <button name="url_open_map" type="object" string="Apri cartina" icon="get-open"/>
                     </group>
                 </page>
             </xpath>

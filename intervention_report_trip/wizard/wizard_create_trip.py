@@ -41,6 +41,7 @@ class hr_analytic_timesheet_trip_wizard(osv.osv_memory):
         """ Create trip for chosen day and users (deleting previous elements)
         """
         # Pool used:
+        intervent_pool = self.pool.get('hr.analytic.timesheet')
         trip_pool = self.pool.get('hr.analytic.timesheet.trip')
 
         _logger.warning('Cleaning cache for this generation:')
@@ -70,9 +71,6 @@ class hr_analytic_timesheet_trip_wizard(osv.osv_memory):
                 cr, uid, user_ids, context=context):
             date_list_for_user[user.id] = []
             user_get_from_id[user.id] = user.name
-
-        intervent_pool = self.pool.get('hr.analytic.timesheet')
-        trip_pool = self.pool.get('hr.analytic.timesheet.trip')
 
         intervent_ids = intervent_pool.search(
             cr, uid, domain, order="date_start", context=context)

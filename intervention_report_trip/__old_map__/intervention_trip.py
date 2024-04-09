@@ -275,13 +275,87 @@ class hr_analytic_timesheet_trip(osv.osv):
             name_of_file='trip_log', version='7.0', php=True, context=context)
 
     # -------------------------------------------------------------------------
+    # XXX Not used vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    """def google_distance_between_partner(
+            self, cr, uid, origin, destination, context=None):
+        ''' Master function that calculate distance between origin and 
+            destination partner id
+            NOTE: correct function evalute start and to elements 
+            
+        '''
+        # ---------------------------------------------------------------------
+        # XXX 19/03/2019: Removed Google calc maps mode
+        # XXX Note: not used (old function that passedin payment mode!!!!!!!!!!
+        # ---------------------------------------------------------------------
+        
+        # private function
+        def prepare_element(self, cr, uid, partner_id, context=None):
+            ''' Generate a string with all address parameter used for compute 
+                distances
+            '''
+            partner = self.pool.get('res.partner').browse(
+                cr, uid, [partner_id], context=context)[0]
+            
+            value = '%s %s %s %s' % (
+                partner.street, partner.zip, partner.city, 'Italia')
+            # remove comma and transform blank in plus                
+            return value.strip().replace(' ', '+').replace(',', '') 
+            
+        def distance_query(origin, destination):
+            ''' Generate query string for compute km from origin to destination
+                element in string ask for return json object
+            '''
+            try:
+                header = u'http://maps.googleapis.com/maps/api/distancematrix/json?'
+                google_page = header + 'origins=' + prepare_element(
+                    self, cr, uid, origin, context=context) + '&destinations=' + prepare_element(
+                        self, cr, uid, destination, context=context) + '&sensor=false'
+                _logger.warning('Call google page: %s' % google_page)
+                return google_page
+            except IOError:
+                _logger.error('Error generate google page: %s' % google_page)
+                return None
+
+        # ---------------------------------------------------------------------        
+        # Call Google page:
+        # ---------------------------------------------------------------------        
+        query = distance_query(origin, destination)
+        try:
+            response = eval(urllib.urlopen(query).read())
+        except:
+            raise osv.except_osv(
+                _('Google error'), 
+                _('Error asking: %s' % query),
+                )
+                
+        # ---------------------------------------------------------------------        
+        # Check if not correct call:
+        # ---------------------------------------------------------------------        
+        if 'error_message' in response:
+            raise osv.except_osv(
+                _('Google error'),
+                _('Call error: %s' % response.get(
+                    'error_message', 'Generic error')),
+                )
+                    
+        try:
+            distance_km = response['rows'][0]['elements'][0][
+                'distance']['value'] / 1000.0  # km
+            return distance_km
+        except:    
+            return 0.0"""
+    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    # XXX NOT USED
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
     # Utility function:
     # -------------------------------------------------------------------------
     def distance_between_partner(
             self, cr, uid, origin, destination, context=None):
         """ Master function that calculate distance between origin and
             destination partner id
-            NOTE: correct function evaluate start and to elements
+            NOTE: correct function evalute start and to elements
             Use Map Quest web site (need a registration and a Key management)
         """
         # ---------------------------------------------------------------------
@@ -291,18 +365,17 @@ class hr_analytic_timesheet_trip(osv.osv):
             """ Generate a string with all address parameter used for compute
                 distances
             """
-            partner_pool = self.pool('res.partner')
-
-            if not partner.map_latitude or not partner.map_longitude:
-                # Generate Lat Long for this partner:
-                return partner_pool.get_lat_lon(
-                    cr, uid, [partner.id], context=context)
-
-            return (
-                '%s,%s' % (
+            if partner.map_latitude and partner.map_longitude:
+                value = ('%s,%s' % (
                     partner.map_latitude,
                     partner.map_longitude,
-                )).replace(' ', '')
+                    )).replace(' ', '')
+            else:
+                value = '%s,%s+%s,Italia' % (
+                    partner.street, partner.zip, partner.city)
+                # Remove comma and transform blank in plus
+                value = value.strip().replace(' ', '+')
+            return value
 
         def distance_query(
                 endpoint, key, origin, destination, unit, routeType):
@@ -409,7 +482,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         """ Create name from date and user_id
         """
         res = {'value': {}}
-        # todo completare (anche se non li creeremmo mai da qui
+        # TODO completare (anche se non li creeremmo mai da qui
         return
 
     # Workflow function:
@@ -430,8 +503,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         'user_id': fields.many2one('res.users', 'Users'),
 
         'date': fields.date('Date'),
-        'refund_day': fields.boolean(
-            'Refund day',
+        'refund_day': fields.boolean('Refund day',
             help='If checked the itinerary will be reported in a report'),
 
         # Trip field from Home:
@@ -468,12 +540,12 @@ class hr_analytic_timesheet_trip(osv.osv):
          'name': lambda *a: '',
          'state': lambda *a: 'draft',
 
-         # Trip field from Home:
+        # Trip field from Home:
          'total_trip': lambda *x: 0.0,
          'manual_total': lambda *x: False,
          'manual_total_trip': lambda *x: 0.0,
 
-         # Trip field from Company:
+        # Trip field from Company:
          'total_trip_company': lambda *x: 0.0,
          'manual_total_company': lambda *x: False,
          'manual_total_trip_company': lambda *x: 0.0,
@@ -488,8 +560,7 @@ class hr_analytic_timesheet_extra_trip(osv.osv):
     _inherit = 'hr.analytic.timesheet'
 
     _columns = {
-        'trip_id': fields.many2one(
-            'hr.analytic.timesheet.trip', 'Day trip',
+        'trip_id':fields.many2one('hr.analytic.timesheet.trip', 'Day trip',
             ondelete='set null', ),  # reset if delete trip
         }
 
@@ -510,11 +581,9 @@ class hr_analytic_timesheet_trip_step(osv.osv):
         'seq': fields.integer('Sequence'),
 
         'trip_id': fields.many2one('hr.analytic.timesheet.trip', 'Trip'),
-        'company_trip_id': fields.many2one(
-            'hr.analytic.timesheet.trip',
+        'company_trip_id': fields.many2one('hr.analytic.timesheet.trip',
             'Company Trip'),  # ondelete='cascade',), #
     }
-
     _defaults = {
          'total_trip': lambda *x: 0.0,
     }
@@ -554,60 +623,6 @@ class ResPartner(osv.osv):
     """ Company parameter
     """
     _inherit = 'res.partner'
-
-    def url_open_map(self, cr, uid, ids, context=None):
-        """ Open URL
-        """
-        partner = self.browse(cr, uid, ids, context=context)[0]
-
-        # Parameter:
-        map = 15
-        url = 'www.openstreetmap.org'
-
-        url_mask = 'https://{url}/?mlat={lat}&mlon={lon}#map={map/{lat}/{lon}'
-        url_get = url_mask.format(
-            url=url,
-            lat=partner.map_latitude,
-            lon=partner.map_longitude,
-        )
-        return True
-
-    def get_lan_lon(self, cr, uid, ids, context=None):
-        """ Partner get lat lon
-        """
-        partner = self.browse(cr, uid, ids, context=context)[0]
-
-        url = 'nominatim.openstreetmap.org'
-        address = '{}+{}+{}+{}'.format(
-            partner.street,
-            partner.zip,
-            partner.city,
-            partner.state_id.code or '',
-            ).replace(' ', '+')
-
-        url_mask = 'https://{url}/search?q={address}&format=json&polygon=1&' \
-                   'addressdetails=1'
-
-        query = url_mask.format(url=url, address=address)
-        try:
-            pdb.set_trace()
-            reply = urllib.urlopen(query)
-            response_json = reply.read()
-            response = json.loads(response_json)
-        except:
-            raise osv.except_osv(
-                'Errore recuperando Lat / Lon:',
-                'Errore:\n%s' % str(sys.exc_info()),
-            )
-        lat = ''
-        lon = ''
-
-        # Save in Partner
-        self.write(cr, uid, ids, {
-            'map_longitude': lon,
-            'map_latitude': lat,
-        }, context=context)
-        return ('%s,%s' % (lat, lon)).replace(' ', '')
 
     _columns = {
         'map_partner_name': fields.char('Partner name for map', size=64),
