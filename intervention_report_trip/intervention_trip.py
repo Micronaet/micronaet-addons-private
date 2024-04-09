@@ -348,11 +348,12 @@ class hr_analytic_timesheet_trip(osv.osv):
 
         error = payload = False
         distance_km = 0.0
+        cache_key = origin, destination
         query = distance_query(
             self, cr, uid, key, origin, destination, context=context)
         try:
-            if query in self._map_cache:
-                distance_km = self._map_cache[query]
+            if cache_key in self._map_cache:
+                distance_km = self._map_cache[cache_key]
             else:
                 reply = urllib.urlopen(query)
                 response_json = reply.read()
@@ -390,7 +391,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                 # payload['duration'][0][1] >> sec.
                 if cache_on:
                     # Always save also errors:
-                    self._map_cache[query] = distance_km
+                    self._map_cache[cache_key] = distance_km
             except:
                 error = 'Error getting KM returned!'
 
