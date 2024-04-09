@@ -594,18 +594,22 @@ class ResPartner(osv.osv):
             reply = urllib.urlopen(query)
             response_json = reply.read()
             response = json.loads(response_json)
+            if len(response) > 1:
+                _logger.error('More than one address!: %s' % str(response))
+            lat = response[0]['lat']
+            lon = response[0]['lon']
+            display_name = response[0]['dispaly_name']
         except:
             raise osv.except_osv(
                 'Errore recuperando Lat / Lon:',
                 'Errore:\n%s' % str(sys.exc_info()),
             )
-        lat = ''
-        lon = ''
 
         # Save in Partner
         self.write(cr, uid, ids, {
             'map_longitude': lon,
             'map_latitude': lat,
+            'map_dispaly_name': display_name,
         }, context=context)
         return ('%s,%s' % (lat, lon)).replace(' ', '')
 
@@ -613,6 +617,7 @@ class ResPartner(osv.osv):
         'map_partner_name': fields.char('Partner name for map', size=64),
         'map_latitude': fields.char('Map Latitude', size=18),
         'map_longitude': fields.char('Map Longitude', size=18),
+        'map_diplay_name': fields.char('Map diplay name', size=180),
         }
 
 

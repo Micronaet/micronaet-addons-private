@@ -32,6 +32,7 @@
                     <group colspan="4" col="4">
                         <field name="map_partner_name" />
                         <newline/>
+                        <field name="map_diplay_name" readonly="1" colspan="4"/>
                         <field name="map_latitude" />
                         <field name="map_longitude" />
                         <button name="get_lan_lon" type="object" string="Recupera Lat / Lon" icon="gtk-refresh"/>
