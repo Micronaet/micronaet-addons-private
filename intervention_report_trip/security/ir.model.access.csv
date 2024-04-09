@@ -1,3 +1,4 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
 "access_hr_analytic_timesheet_trip_user","hr.analytic.timesheet.trip","model_hr_analytic_timesheet_trip","base.group_user",1,1,1,1
 "access_hr_analytic_timesheet_trip_step_user","hr.analytic.timesheet.trip.step","model_hr_analytic_timesheet_trip_step","base.group_user",1,1,1,1
+"access_gps_from_to_km_user","gps.from.to.km","model_gps_from_to_km","base.group_user",1,1,1,1

@@ -43,6 +43,22 @@ from openerp.tools import (
 _logger = logging.getLogger(__name__)
 
 
+# todo Create a route partner from partner to km for cache!
+class GpsFromToKm(osv.osv):
+    """ History for routes
+    """
+    _name = 'gps.from.to.km'
+    _description = 'GPS route history'
+    _rec_name = 'from_partner_id'
+
+    _columns = {
+        'from_partner_id': fields.many2one('res.partner', 'Dal cliente'),
+        'to_partner_id': fields.many2one('res.partner', 'Al cliente'),
+        'distance': fields.float('Distanza Km', digits=(10, 2), required=True),
+        'duration': fields.float('Durata Min.', digits=(10, 2)),
+    }
+
+
 class hr_analytic_timesheet_trip(osv.osv):
     """ Trip for intervent daily for user
     """
@@ -335,6 +351,8 @@ class hr_analytic_timesheet_trip(osv.osv):
         # ---------------------------------------------------------------------
         # Call Google page:
         # ---------------------------------------------------------------------
+        history_pool = self.pool.get('gps.from.to.km')
+
         # Read parameters:
         company = origin.company_id
         # endpoint = company.map_endpoint
@@ -343,38 +361,55 @@ class hr_analytic_timesheet_trip(osv.osv):
         # unit = company.map_route_unit
         # routeType = company.map_route_type
 
-        cache_on = True  # todo parameter
-        log_all = True
-
+        # Init setup:
         error = payload = False
         distance_km = 0.0
-        cache_key = origin, destination
+
+        # =====================================================================
+        #                      Search route process:
+        # =====================================================================
+        cache_key = origin.id, destination.id
+
+        # ---------------------------------------------------------------------
+        # 1. Read from runtime cache:
+        # ---------------------------------------------------------------------
+        if cache_key in self._map_cache:
+            distance_km = self._map_cache[cache_key]
+            return distance_km
+
+        # ---------------------------------------------------------------------
+        # 2. Search in history cache:
+        # ---------------------------------------------------------------------
+        history_ids = history_pool.search(cr, uid, [
+            ('from_partner_id', '=', origin.id),
+            ('to_partner_id', '=', destination.id),
+            ('destination', '>', 0),
+            ], context=context)
+        if history_ids:
+            history = history_pool.browse(
+                cr, uid, history_ids[0], context=context)
+
+            distance_km = history.distance
+            if cache_key in self._map_cache:
+                self._map_cache[cache_key] = distance_km  # Save in cache
+            return distance_km
+
+        # ---------------------------------------------------------------------
+        # 3. Get from API call:
+        # ---------------------------------------------------------------------
         query = distance_query(
             self, cr, uid, key, origin, destination, context=context)
         try:
-            if cache_key in self._map_cache:
-                distance_km = self._map_cache[cache_key]
-            else:
-                reply = urllib.urlopen(query)
-                response_json = reply.read()
-                payload = json.loads(response_json)
+            reply = urllib.urlopen(query)
+            response_json = reply.read()
+            payload = json.loads(response_json)
+            if reply.code == 400:
+                error = 'Error calling URL: %s' % reply.url
         except:
             error = 'MAP Quest generic error!'
 
-        # ---------------------------------------------------------------------
-        # Check if not correct call:
-        # ---------------------------------------------------------------------
-        if distance_km:  # Cache mode found!
-            _logger.info('Cache mode: %s >> %s' % (distance_km, query))
-            return distance_km
-
-        # Not in cache:
+        # Parse JSON result:
         if not error:
-            try:
-                if reply.code == 400:
-                    error = 'Error calling URL: %s' % reply.url
-            except:
-                error = 'Generic error reading MAPS reply message!'
             try:
                 block = payload['features'][0]['properties']['segments'][0]
                 distance_km = block['distance'] / 1000.0
@@ -387,27 +422,40 @@ class hr_analytic_timesheet_trip(osv.osv):
                     distance_km = payload.get(
                         'sources')[0].get('distance')
                 '''
-
                 # payload['duration'][0][1] >> sec.
-                if cache_on:
-                    # Always save also errors:
-                    self._map_cache[cache_key] = distance_km
+
+                # -------------------------------------------------------------
+                # History data:
+                # -------------------------------------------------------------
+                history_data = {
+                    'from_partner_id': origin.id,
+                    'to_partner_id': destination.id,
+                    'distance': distance_km,
+                }
+                if distance_km > 0.0:
+                    history_pool.create(
+                        cr, uid, history_data, context=context)
+                    self._map_cache[cache_key] = distance_km  # Save in cache
+                # Note: if 0 still try to reload the call
             except:
                 error = 'Error getting KM returned!'
 
-        if error or log_all:  # Error present or log all calls:
-            self._excel_log['wb'].write_xls_line(
-                self._excel_log['ws_name'],
-                self._excel_log['row'],
-                [
-                    origin.name, destination.name,
-                    distance_km,
-                    query,
-                    u'%s' % (payload, ),
-                    u'%s' % (error, ),
-                    ],
-            )
-            self._excel_log['row'] += 1
+        # ---------------------------------------------------------------------
+        # Log on Excel file:
+        # ---------------------------------------------------------------------
+        self._excel_log['wb'].write_xls_line(
+            self._excel_log['ws_name'],
+            self._excel_log['row'],
+            [
+                origin.name, destination.name,
+                distance_km,
+                query,
+                u'%s' % (payload, ),
+                u'%s' % (error, ),
+                ],
+        )
+        self._excel_log['row'] += 1
+
         return distance_km
 
     # fields function:
