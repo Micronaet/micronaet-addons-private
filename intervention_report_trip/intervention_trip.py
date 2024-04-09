@@ -365,7 +365,7 @@ class hr_analytic_timesheet_trip(osv.osv):
             except:
                 error = 'Generic error reading MAPS reply message!'
             try:
-                if response.get('code', '').lower() != 'Ok':
+                if response.get('code', '').lower() != 'ok':
                     error = 'Error in call'
                 else:
                     distance_km = response.get(
