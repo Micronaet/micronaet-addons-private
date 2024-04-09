@@ -302,7 +302,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                 cr, uid, [partner.id], context=ctx)
             return result['lon'], result['lat']
 
-        def distance_query(self, cr, uid, origin, destination, context=None):
+        def distance_query(self, cr, uid, key, origin, destination, context=None):
             """ Generate query string for compute km from origin to destination
                 element in string ask for return json object
             """
@@ -313,12 +313,20 @@ class hr_analytic_timesheet_trip(osv.osv):
                     self, cr, uid, origin, context=context)
                 lon2, lat2 = prepare_element(
                     self, cr, uid, destination, context=context)
-                url_mask = \
-                    'https://router.project-osrm.org/table/v1/' \
-                    'driving/{},{};{},{}?' \
-                    'sources=0'.format(lon1, lat1, lon2, lat2)
-                _logger.info('Call maps quest page: %s' % url_mask)
 
+                url_mask = 'https://api.openrouteservice.org/v2/directions/' \
+                           'driving-car?api_key={key}&start={lon1},{lat1}&' \
+                           'end={lon2},{lat2}'.format(
+                                key=key,
+                                lon1=lon1, lat1=lat1,
+                                lon2=lon2, lat2=lat2)
+
+                # url_mask = \
+                #    'https://router.project-osrm.org/table/v1/' \
+                #    'driving/{},{};{},{}?' \
+                #    'sources=0'.format(lon1, lat1, lon2, lat2)
+
+                _logger.info('Call maps quest page: %s' % url_mask)
                 return url_mask
             except IOError:
                 _logger.error('Error generate google page: %s' % url_mask)
@@ -328,9 +336,9 @@ class hr_analytic_timesheet_trip(osv.osv):
         # Call Google page:
         # ---------------------------------------------------------------------
         # Read parameters:
-        # company = origin.company_id
+        company = origin.company_id
         # endpoint = company.map_endpoint
-        # key = company.map_key
+        key = company.map_key
         # secret = company.map_secret
         # unit = company.map_route_unit
         # routeType = company.map_route_type
@@ -341,7 +349,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         error = payload = False
         distance_km = 0.0
         query = distance_query(
-            self, cr, uid, origin, destination, context=context)
+            self, cr, uid, key, origin, destination, context=context)
         try:
             if query in self._map_cache:
                 distance_km = self._map_cache[query]
@@ -367,11 +375,18 @@ class hr_analytic_timesheet_trip(osv.osv):
             except:
                 error = 'Generic error reading MAPS reply message!'
             try:
+                block = payload['features'][0]['properties']['segments']
+                distance_km = block['distance'] / 1000.0
+                # time_minute = block['duration'] / 60.0
+
+                '''
                 if payload.get('code', '').lower() != 'ok':
                     error = 'Error in call'
                 else:
                     distance_km = payload.get(
                         'sources')[0].get('distance')
+                '''
+
                 # payload['duration'][0][1] >> sec.
                 if cache_on:
                     # Always save also errors:
