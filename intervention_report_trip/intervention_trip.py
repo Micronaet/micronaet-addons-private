@@ -500,18 +500,22 @@ class hr_analytic_timesheet_trip(osv.osv):
             help='If checked the itinerary will be reported in a report'),
 
         # Trip field from Home:
-        'total_trip': fields.function(_function_calculate_distance,
+        'total_trip': fields.function(
+            _function_calculate_distance,
             method=True, type='float', string='Tot. distance', multi=True),
-        'manual_total': fields.boolean('Manual',
+        'manual_total': fields.boolean(
+            'Manual',
             help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
         'manual_total_trip': fields.float('Manual total trip', digits=(16, 6),
             help='Duration in Km of total trip, setted manual, used instead of Total trip'),
 
         # Trip field from Company:
-        'total_trip_company': fields.function(_function_calculate_distance,
+        'total_trip_company': fields.function(
+            _function_calculate_distance,
             method=True, type='float', string='Tot. distance company',
             multi=True),
-        'manual_total_company': fields.boolean('Manual company',
+        'manual_total_company': fields.boolean(
+            'Manual company',
             help="If true don't auto calculate total hour, if false, total hours=intervent + trip - pause hours"),
         'manual_total_trip_company': fields.float('Manual total trip company',
             digits=(16, 6), help='Duration in Km of total trip, setted manual, used instead of Total trip'),
@@ -542,6 +546,7 @@ class hr_analytic_timesheet_trip(osv.osv):
          'refund_day': lambda *x: False,
     }
 
+
 class hr_analytic_timesheet_extra_trip(osv.osv):
     """ Add extra fields to intervent
     """
@@ -549,8 +554,9 @@ class hr_analytic_timesheet_extra_trip(osv.osv):
 
     _columns = {
         'trip_id':fields.many2one('hr.analytic.timesheet.trip', 'Day trip',
-            ondelete='set null',), # reset if delete trip
+            ondelete='set null', ),  # reset if delete trip
         }
+
 
 class hr_analytic_timesheet_trip_step(osv.osv):
     """ Step computed for the trip
@@ -560,7 +566,8 @@ class hr_analytic_timesheet_trip_step(osv.osv):
 
     _columns = {
         'name': fields.char('Description', size=80),
-        'total_trip': fields.float('Distance', digits=(16, 6),
+        'total_trip': fields.float(
+            'Distance', digits=(16, 6),
             help='Distance in Km from google maps'),
         'from_id': fields.many2one('res.partner', 'From partner', ),
         'to_id': fields.many2one('res.partner', 'To partner', ),
@@ -568,11 +575,12 @@ class hr_analytic_timesheet_trip_step(osv.osv):
 
         'trip_id': fields.many2one('hr.analytic.timesheet.trip', 'Trip'),
         'company_trip_id': fields.many2one('hr.analytic.timesheet.trip',
-            'Company Trip'), #ondelete='cascade',), #
+            'Company Trip'),  # ondelete='cascade',), #
     }
     _defaults = {
          'total_trip': lambda *x: 0.0,
     }
+
 
 class hr_analytic_timesheet_trip(osv.osv):
     """ Trip for intervent daily for user
@@ -589,6 +597,7 @@ class hr_analytic_timesheet_trip(osv.osv):
              'Company Trip step'),
         }
 
+
 class res_users_trip(osv.osv):
     """ Extra field for user
     """
@@ -601,6 +610,7 @@ class res_users_trip(osv.osv):
          'refund_user': fields.boolean(
              'Refund user', help='Used that have refund day on intervent'),
         }
+
 
 class ResPartner(osv.osv):
     """ Company parameter
@@ -640,5 +650,3 @@ class ResCompany(osv.osv):
         'map_route_unit': lambda *x: 'k',
         'map_route_type': lambda *x: 'fastest',
         }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
