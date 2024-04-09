@@ -675,7 +675,7 @@ class ResCompany(osv.osv):
 
     _columns = {
         'map_endpoint': fields.char('Map End point', size=180),
-        'map_key': fields.char('Map Customer Key', size=40),
+        'map_key': fields.char('Map Customer Key', size=120),
         'map_secret': fields.char('Map Customer Secret', size=40),
         'map_route_unit': fields.selection([
             ('k', 'Km'),
