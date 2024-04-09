@@ -72,15 +72,15 @@ class hr_analytic_timesheet_trip(osv.osv):
                 data = {
                     'from_id': from_id,
                     'to_id': to_id,
-                    'name': "%02d. %s > %s"%(seq, from_name, to_name),
+                    'name': "%02d. %s > %s" % (seq, from_name, to_name),
                     'total_trip': total_trip,
                 }
                 if company_trip:
-                    data['company_trip_id']=trip_id
+                    data['company_trip_id'] = trip_id
                     data['trip_id']=False
                 else:
-                    data['company_trip_id']=False
-                    data['trip_id']=trip_id
+                    data['company_trip_id'] = False
+                    data['trip_id'] = trip_id
 
                 self.pool.get('hr.analytic.timesheet.trip.step').create(
                     cr, uid, data, context=context)
@@ -91,9 +91,9 @@ class hr_analytic_timesheet_trip(osv.osv):
         company_name = "Company"
         home_name = "Home"
         for trip in self.browse(cr, uid, ids, context=context):
-            ###################################################################
-            # COMMON PART #####################################################
-            ###################################################################
+            # =================================================================
+            #                         COMMON PART
+            # =================================================================
             # Get parameters from home and company
             home_partner_id = trip.user_id.partner_id.id
             company_partner_id = trip.user_id.company_id.partner_id.id
@@ -108,11 +108,11 @@ class hr_analytic_timesheet_trip(osv.osv):
                 self.pool.get('hr.analytic.timesheet.trip.step').unlink(
                     cr, uid, step_ids, context=context)
 
-            ###################################################################
-            # FROM HOME TO HOME ###############################################
-            ###################################################################
+            # =================================================================
+            #                      FROM HOME TO HOME
+            # =================================================================
             # Generate all the steps
-            previous_id = home_partner_id # Always home first start
+            previous_id = home_partner_id  # Always home first start
             previous_name = home_name
             next_destination = False
             seq = 1
@@ -189,9 +189,9 @@ class hr_analytic_timesheet_trip(osv.osv):
                         self, cr, uid, previous_id, home_partner_id, trip.id,
                         seq, previous_name, home_name, context=context)
 
-            ###################################################################
-            # FROM COMPANY TO COMPANY #########################################
-            ###################################################################
+            # =================================================================
+            #                     FROM COMPANY TO COMPANY
+            # =================================================================
             # Generate all the steps
             previous_id = company_partner_id  # Always company first step
             previous_name = company_name

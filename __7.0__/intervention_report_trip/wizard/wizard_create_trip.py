@@ -71,7 +71,7 @@ class hr_analytic_timesheet_trip_wizard(osv.osv_memory):
 
         trip_list = []  # used to reactivate or compute google trip km
         for intervent in intervent_proxy:
-            # save day if user is a compunte office trip:
+            # save day if user is a compute office trip:
             if (intervent.user_id.id in date_list_for_user) and (
                     intervent.date_start[:10] not in date_list_for_user[
                     intervent.user_id.id]):
