@@ -10,11 +10,13 @@
             <xpath expr="//notebook/page[1]" position="after">
                 <page string="GPS Map">
                     <group colspan="4" col="4">
-                        <field name="map_endpoint" colspan="4" />
                         <field name="map_key" />
+                        <!--
+                        <field name="map_endpoint" colspan="4" />
                         <field name="map_secret" />
                         <field name="map_route_unit" />
                         <field name="map_route_type" />
+                        -->
                     </group>
                 </page>
             </xpath>
