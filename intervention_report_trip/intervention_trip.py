@@ -375,7 +375,7 @@ class hr_analytic_timesheet_trip(osv.osv):
             except:
                 error = 'Generic error reading MAPS reply message!'
             try:
-                block = payload['features'][0]['properties']['segments']
+                block = payload['features'][0]['properties']['segments'][0]
                 distance_km = block['distance'] / 1000.0
                 # time_minute = block['duration'] / 60.0
 
