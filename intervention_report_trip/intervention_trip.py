@@ -368,7 +368,8 @@ class hr_analytic_timesheet_trip(osv.osv):
                     error = 'Error in call'
                 else:
                     distance_km = payload.get(
-                        'destinations')[1].get('distance')
+                        'sources')[0].get('distance')
+                # payload['duration'][0][1] >> sec.
                 self._map_cache[query] = distance_km  # Always save also errors
             except:
                 error = 'Error getting KM returned!'
