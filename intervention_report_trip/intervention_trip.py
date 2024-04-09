@@ -335,7 +335,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         # unit = company.map_route_unit
         # routeType = company.map_route_type
 
-        error = False
+        error = payload = False
         distance_km = 0.0
         query = distance_query(
             self, cr, uid, origin, destination, context=context)
@@ -345,7 +345,7 @@ class hr_analytic_timesheet_trip(osv.osv):
             else:
                 reply = urllib.urlopen(query)
                 response_json = reply.read()
-                response = json.loads(response_json)
+                payload = json.loads(response_json)
         except:
             error = 'MAP Quest generic error!'
 
@@ -357,7 +357,6 @@ class hr_analytic_timesheet_trip(osv.osv):
             return distance_km
 
         # Not in cache:
-        pdb.set_trace()
         if not error:
             try:
                 if reply.code == 400:
@@ -365,12 +364,12 @@ class hr_analytic_timesheet_trip(osv.osv):
             except:
                 error = 'Generic error reading MAPS reply message!'
             try:
-                if response.get('code', '').lower() != 'ok':
+                if payload.get('code', '').lower() != 'ok':
                     error = 'Error in call'
                 else:
-                    distance_km = response.get(
+                    distance_km = payload.get(
                         'destinations')[1].get('distance')
-                self._map_cache[query] = distance_km  # Alway save also error
+                self._map_cache[query] = distance_km  # Always save also errors
             except:
                 error = 'Error getting KM returned!'
 
