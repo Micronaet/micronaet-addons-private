@@ -387,8 +387,8 @@ class hr_analytic_timesheet_trip(osv.osv):
                     origin.name, destination.name,
                     distance_km,
                     query,
-                    str(payload),
-                    str(error),
+                    u'%s' % (payload, ),
+                    u'%s' % (error, ),
                     ],
             )
             self._excel_log['row'] += 1
