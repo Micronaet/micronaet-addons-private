@@ -118,7 +118,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         self._excel_log['wb'].write_xls_line(
             self._excel_log['ws_name'],
             self._excel_log['row'],
-            ['Da', 'A', 'Errore', 'Link'],
+            ['Da', 'A', 'Km', 'Chiamata', 'Payload', 'Errore'],
             )
         self._excel_log['row'] += 1
 
@@ -336,6 +336,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         # routeType = company.map_route_type
 
         cache_on = True  # todo parameter
+        log_all = True
 
         error = payload = False
         distance_km = 0.0
@@ -378,10 +379,17 @@ class hr_analytic_timesheet_trip(osv.osv):
             except:
                 error = 'Error getting KM returned!'
 
-        if error:  # Error present:
+        if error or log_all:  # Error present or log all calls:
             self._excel_log['wb'].write_xls_line(
-                self._excel_log['ws_name'], self._excel_log['row'],
-                [origin.name, destination.name, error, query])
+                self._excel_log['ws_name'],
+                self._excel_log['row'],
+                [
+                    origin.name, destination.name,
+                    distance_km,
+                    query, payload,
+                    error,
+                    ],
+            )
             self._excel_log['row'] += 1
         return distance_km
 
