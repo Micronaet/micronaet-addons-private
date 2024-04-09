@@ -335,7 +335,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         # unit = company.map_route_unit
         # routeType = company.map_route_type
 
-        cache_off = True  # todo parameter!
+        cache_on = True  # todo parameter
 
         error = payload = False
         distance_km = 0.0
@@ -372,7 +372,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                     distance_km = payload.get(
                         'sources')[0].get('distance')
                 # payload['duration'][0][1] >> sec.
-                if not cache_off:
+                if cache_on:
                     # Always save also errors:
                     self._map_cache[query] = distance_km
             except:
