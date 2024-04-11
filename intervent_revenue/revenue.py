@@ -91,7 +91,7 @@ class HrAnalyticTimesheet(orm.Model):
                 if mapping.user_id.id == user.id:
                     real_id = mapping.to_id.id
                     res[intervent.id]['user_mode_map'] += '[operazione-utente]'
-                    break # Much force
+                    break  # Much force
                 if real_id == mapping.from_id.id:
                     real_id = mapping.to_id.id
                     res[intervent.id]['user_mode_map'] += '[operazione-da]'
@@ -105,7 +105,7 @@ class HrAnalyticTimesheet(orm.Model):
                 if mapping.user_id.id == user.id:
                     real_id = mapping.to_id.id
                     res[intervent.id]['user_mode_map'] += '[cliente-utente]'
-                    break # Much force
+                    break  # Much force
                 if real_id == mapping.from_id.id:
                     real_id = mapping.to_id.id
                     res[intervent.id]['user_mode_map'] += '[cliente-da]'
@@ -158,7 +158,7 @@ class HrInterventUserModeMap(orm.Model):
 
     _name = 'hr.intervent.user.mode.map'
     _description = 'Intervent user mode mapping'
-    _order = 'user_id desc' # User map before
+    _order = 'user_id desc'  # User map before
 
     _columns = {
         # ---------------------------------------------------------------------
