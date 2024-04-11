@@ -42,6 +42,7 @@ from openerp.tools import (DEFAULT_SERVER_DATE_FORMAT,
 
 _logger = logging.getLogger(__name__)
 
+
 class HrInterventUserMode(orm.Model):
     """ Model name: InterventUserMode
     """
