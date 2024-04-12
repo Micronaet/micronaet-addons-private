@@ -102,11 +102,14 @@ class HrAnalyticTimesheet(orm.Model):
             # -----------------------------------------------------------------
             for mapping in intervent.intervent_partner_id.mode_map_ids:
                 # If user present work with this rule:
+                # User rule has more force!
                 if mapping.user_id.id == user.id:
                     real_id = mapping.to_id.id
                     res[intervent.id]['user_mode_map'] = '[cliente-utente]'
                     break  # Much force
-                if real_id == mapping.from_id.id:
+
+                # No user consider ad force mode from-to
+                if not mapping.user_id and real_id == mapping.from_id.id:
                     real_id = mapping.to_id.id
                     res[intervent.id]['user_mode_map'] = '[cliente-da]'
                     # Continue rules (XXX user is after? wasn't sorted?)
