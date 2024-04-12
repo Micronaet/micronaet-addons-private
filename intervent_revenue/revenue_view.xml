@@ -6,7 +6,7 @@
             <field name="name">hr.intervent.user.mode.form</field>
             <field name="model">hr.intervent.user.mode</field>
             <field name="arch" type="xml">
-                <form string="Intervent user mode" version="7.0">        
+                <form string="Intervent user mode" version="7.0">
                     <sheet>
                         <group col="4" colspan="4">
                              <field name="name" />
@@ -14,7 +14,7 @@
                              <separator string="Note" colspan="4"/>
                              <field name="note" colspan="4" nolabel="1" />
                         </group>
-                    </sheet>        
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -45,12 +45,13 @@
             <field name="model">hr.analytic.timesheet</field>
             <field name="inherit_id" ref="intervention_report.view_hr_analytic_timesheet_form"/>
             <field name="arch" type="xml">
-                <field name="amount" position="after">
+                <field name="amount" position="before">
                     <field name="user_mode_id" readonly="1" />
+                    <field name="user_mode_map" readonly="1" />
                 </field>
             </field>
         </record>
-        
+
         <!--res.partner-->
         <record model="ir.ui.view" id="view_res_partner_user_mode_form">
             <field name="name">res.partner.form</field>
@@ -74,10 +75,10 @@
                                      <field name="from_id" />
                                      <field name="to_id" />
                                  </tree>
-                             </field>                                 
-                        </group>                       
+                             </field>
+                        </group>
                     </page>
-                </xpath> 
+                </xpath>
             </field>
         </record>
 
@@ -98,7 +99,7 @@
                 </field>
             </field>
         </record>
-        
+
         <record model="ir.ui.view" id="view_hr_revenue_form">
             <field name="name">hr.employee.form</field>
             <field name="model">hr.employee</field>
@@ -109,14 +110,14 @@
                 </field>
             </field>
         </record>
-        
-        <menuitem 
-            parent="hr.menu_hr_configuration" 
-            id="menu_action_hr_intervent_user_mode_form" 
+
+        <menuitem
+            parent="hr.menu_hr_configuration"
+            id="menu_action_hr_intervent_user_mode_form"
             action="action_hr_intervent_user_mode_form"
             groups="base.group_hr_manager"
             />
-        
+
     </data>
 </openerp>
 
