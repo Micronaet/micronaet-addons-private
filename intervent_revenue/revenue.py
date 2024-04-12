@@ -90,11 +90,11 @@ class HrAnalyticTimesheet(orm.Model):
                 # If user present work with this rule:
                 if mapping.user_id.id == user.id:
                     real_id = mapping.to_id.id
-                    res[intervent.id]['user_mode_map'] += '[operazione-utente]'
+                    res[intervent.id]['user_mode_map'] = '[operazione-utente]'
                     break  # Much force
                 if real_id == mapping.from_id.id:
                     real_id = mapping.to_id.id
-                    res[intervent.id]['user_mode_map'] += '[operazione-da]'
+                    res[intervent.id]['user_mode_map'] = '[operazione-da]'
                     # Continue rules (XXX user is after? wasn't sorted?)
 
             # -----------------------------------------------------------------
@@ -104,11 +104,11 @@ class HrAnalyticTimesheet(orm.Model):
                 # If user present work with this rule:
                 if mapping.user_id.id == user.id:
                     real_id = mapping.to_id.id
-                    res[intervent.id]['user_mode_map'] += '[cliente-utente]'
+                    res[intervent.id]['user_mode_map'] = '[cliente-utente]'
                     break  # Much force
                 if real_id == mapping.from_id.id:
                     real_id = mapping.to_id.id
-                    res[intervent.id]['user_mode_map'] += '[cliente-da]'
+                    res[intervent.id]['user_mode_map'] = '[cliente-da]'
                     # Continue rules (XXX user is after? wasn't sorted?)
 
             # Update data:
@@ -118,11 +118,11 @@ class HrAnalyticTimesheet(orm.Model):
     _columns = {
         'user_mode_id': fields.function(
             _get_current_user_mode, method=True,
-            type='many2one', string='User mode',
+            type='many2one', string='Modalità utente',
             relation='hr.intervent.user.mode', multi=True),
         'user_mode_map': fields.function(
             _get_current_user_mode, method=True,
-            type='char', size=100, string='User text', multi=True),
+            type='char', size=100, string='Dettaglio modalità', multi=True),
         }
 
 
