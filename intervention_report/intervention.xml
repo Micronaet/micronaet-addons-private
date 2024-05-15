@@ -303,7 +303,7 @@
         <field name='model'>hr.analytic.timesheet</field>
         <field name='priority' eval='20' />
         <field name='arch' type='xml'>
-            <tree string="Intervent report" editable="bottom">
+            <tree string="Diritto di chiamata" editable="bottom" colors="red: has_call_cost == True and call_cost == 0">
                 <field name="ref" readonly="1"/>
                 <field name="date_start" readonly="1" />
                 <field name="intervent_duration" widget="float_time" readonly="1"/>
