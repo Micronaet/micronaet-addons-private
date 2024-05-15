@@ -13,6 +13,7 @@
             <menuitem name="Interventi" id="menu_partner_fc_intervent" parent="menu_partner_fc_root" sequence="10" />
                 <menuitem name="My intervent" parent="menu_partner_fc_intervent" id="menu_partner_fc_intervent_my" action="intervention_report.action_view_hr_analytic_timesheet_my" sequence="10" />
                 <menuitem name="My intervent (lite)" parent="menu_partner_fc_intervent" id="menu_partner_fc_intervent_my_lite" action="intervention_report.action_view_hr_analytic_timesheet_my_lite" sequence="10" />
+                <menuitem name="Diritto di chiamata" parent="menu_partner_fc_intervent" id="menu_base_intervention_report_cost_call" action="intervention_report.action_view_hr_analytic_timesheet_call_cost" sequence="30" />
 
             <menuitem name="Magazzino" id="menu_partner_fc_stock_management" parent="menu_partner_fc_root" sequence="15" />
                 <menuitem
