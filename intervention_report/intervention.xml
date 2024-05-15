@@ -26,6 +26,10 @@
                     <filter name="check_month" string="Check month" domain="[('date_start','&gt;=',context_today().strftime('%%Y-%%m-01 00:00:00')),]" context="{'group_by':['to_invoice','account_id','intervent_partner_id']}" icon="terp-dolar"/>
                     <separator/>
 
+                    <filter name="has_call_cost_on" string="Con chiamata" domain="[('has_call_cost','=',True)]" />
+                    <filter name="has_call_cost_off" string="Senza chiamata" domain="[('has_call_cost','=',False)]" />
+                    <filter name="has_call_cost_error" string="Errore chiamata" domain="[('has_call_cost','=',True),('call_cost','=',0)]" />
+
                     <filter name="is_opened" string="To close" domain="[('state','not in',('close','reported')),]" />
                     <filter name="is_closed" string="Closed" domain="[('state','in',('close','reported')),]" />
                     <separator/>
@@ -270,6 +274,7 @@
                 <field name="operation_id" />
                 <field name="name" />
                 <field name="account_id" invisible="1" />
+
                 <field name="to_invoice" />
                 <field name="mode" />
 
@@ -285,6 +290,46 @@
                 <button name="intervention_confirmed_cancel" string="Cancel" states="confirmed" icon="gtk-cancel" />
                 <button name="intervention_report_close" string="Close with report" states="confirmed" icon="gtk-go-forward" />
                 <button name="intervention_close" string="Close" states="confirmed" icon="gtk-ok" />
+
+                <field name="has_call_cost" invisible="1" />
+                <field name="call_cost" invisible="1" />
+                <!--<button name="intervention_report_after_close" string="Report after close" states="close" icon="gtk-ok" />-->
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+    <record id='view_hr_analytic_timesheet_call_cost_tree' model='ir.ui.view'>
+        <field name='name'>HR analytic timesheet call cost</field>
+        <field name='model'>hr.analytic.timesheet</field>
+        <field name='priority' eval='20' />
+        <field name='arch' type='xml'>
+            <tree string="Intervent report" editable="bottom">
+                <field name="ref" readonly="1"/>
+                <field name="date_start" readonly="1" />
+                <field name="intervent_duration" widget="float_time" readonly="1"/>
+                <field name="user_id" readonly="1" />
+                <field name="intervent_partner_id" readonly="1" />
+                <field name="operation_id" readonly="1" />
+                <field name="name" readonly="1" />
+                <field name="account_id" readonly="1" />
+                <field name="to_invoice" readonly="1" />
+                <field name="mode" readonly="1" />
+
+                <button name="intervention_draft" string="Draft" states="cancel" icon="gtk-go-back" />
+
+                <button name="intervention_waiting" string="Waiting" states="draft" icon="gtk-execute" />
+                <button name="intervention_confirmed" string="Confirmed" states="draft" icon="gtk-go-forward" />
+
+                <button name="intervention_waiting_cancel" string="Cancel" states="waiting" icon="gtk-cancel" />
+                <button name="intervention_reschedule" string="Reschedule" states="waiting" icon="gtk-go-back" />
+                <button name="intervention_waiting_confirmed" string="Confirmed" states="waiting" icon="gtk-go-forward" />
+
+                <button name="intervention_confirmed_cancel" string="Cancel" states="confirmed" icon="gtk-cancel" />
+                <button name="intervention_report_close" string="Close with report" states="confirmed" icon="gtk-go-forward" />
+                <button name="intervention_close" string="Close" states="confirmed" icon="gtk-ok" />
+
+                <field name="has_call_cost" on_change="onchange_has_call_cost(has_call_cost, intervent_partner_id, account_id)"/>
+                <field name="call_cost" attrs="{'required': [('has_call_cost', '=', True)]}" />
 
                 <!--<button name="intervention_report_after_close" string="Report after close" states="close" icon="gtk-ok" />-->
                 <field name="state" />
@@ -493,6 +538,17 @@
         </record>
 
 
+    <record id="action_view_hr_analytic_timesheet_call_cost" model="ir.actions.act_window">
+            <field name="name">Diritto di chianata interv.</field>
+            <field name="res_model">hr.analytic.timesheet</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_hr_analytic_timesheet_call_cost_tree"/>
+            <field name="search_view_id" ref="hr_timesheet_line_search"/>
+            <field name="context">{}</field>
+            <field name="domain">[('extra_planned','=', False)]</field>
+    </record>
+
     <record id="action_view_hr_analytic_timesheet" model="ir.actions.act_window">
             <field name="name">Intervent list all</field>
             <field name="res_model">hr.analytic.timesheet</field>
@@ -661,12 +717,13 @@
             <menuitem name="Invoice type" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_pay" action="action_view_hr_analytic_timesheet_pay" sequence="50" />
             <menuitem name="Operation" parent="menu_base_intervention_report_all" id="menu_hr_analytic_timesheet_operation_calendar" action="action_view_hr_analytic_timesheet_operation" sequence="60" />
 
+        <menuitem name="Diritto di chiamata" parent="menu_base_intervention_report" id="menu_base_intervention_report_cost_call" action="action_view_hr_analytic_timesheet_call_cost" sequence="30" />
+
         <menuitem name="Invoice and trip"
              parent="hr.menu_hr_root"
              id="menu_base_intervention_trip_root"
              sequence="2" /> <!--for inherited modules-->
 
         <menuitem name="Timesheet operation" parent="menu_base_intervention_report" id="menu_hr_analytic_timesheet_operation" action="action_hr_analytic_timesheet_operation" sequence="90" />
-
     </data>
 </openerp>
