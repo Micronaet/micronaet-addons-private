@@ -43,9 +43,6 @@
 
             <menuitem name="Configurazione" id="menu_partner_fc_configuration" parent="menu_partner_fc_root" sequence="99" />
                  <menuitem name="Timesheet operation" parent="menu_partner_fc_configuration" id="menu_menu_partner_fc_configuration_operation_list" action="intervention_report.action_hr_analytic_timesheet_operation" sequence="10" />
-
-
-
     </data>
 </openerp>
 
