@@ -1,6 +1,42 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+         <!-- account.analytic.ticket.category -->
+         <record id="view_account_analytic_ticket_category_search" model="ir.ui.view">
+                <field name="name">account.analytic.ticket.category.search</field>
+                <field name="model">account.analytic.ticket.category</field>
+                <field name="arch" type="xml">
+                    <search string="Categoria Ticket">
+                        <field name="name"/>
+                    </search>
+                </field>
+         </record>
+         <record id="view_account_analytic_ticket_category_tree" model="ir.ui.view">
+                <field name="name">account.analytic.ticket.category.tree</field>
+                <field name="model">account.analytic.ticket.category</field>
+                <field name='arch' type='xml'>
+                    <tree string="Categorie Ticket" editable="bottom">
+                        <field name="name" />
+                        <field name="note" />
+                    </tree>
+                </field>
+         </record>
+         <record id="view_account_analytic_ticket_category_form" model="ir.ui.view">
+                <field name="name">account.analytic.ticket.category.form</field>
+                <field name="model">account.analytic.ticket.category</field>
+                <field name='arch' type='xml'>
+                    <form string="Categorie Ticket" version="7.0">
+                        <sheet>
+                            <group col="4" colspan="4">
+                                <field name="name" />
+                                <separator string="Note" colspan="4"/>
+                                <field name="note" colspan="4"/>
+                            </group>
+                        </sheet>
+                    </form>
+                </field>
+         </record>
+
          <!-- account.analytic.ticket -->
          <record id="view_account_analytic_ticket_search" model="ir.ui.view">
                 <field name="name">account.analytic.ticket.search</field>
@@ -29,6 +65,7 @@
                         <field name="partner_id"/>
                         <field name="contact_id"/>
                         <field name="account_id" invisible="1"/>
+                        <field name="category_id" />
 
                         <field name="user_id"/>
 
@@ -61,6 +98,7 @@
                             <filter string="Contatto" domain="[]" context="{'group_by':'contact_id'}" invisible="1"/>
                             <filter string="Assegnato a" domain="[]" context="{'group_by':'user_id'}"/>
 
+                            <filter string="Categoria" domain="[]" context="{'group_by':'category_id'}"/>
                             <filter string="Commessa" domain="[]" context="{'group_by':'account_id'}"/>
 
                             <filter string="Priorità" domain="[]" context="{'group_by':'priority'}"/>
@@ -85,6 +123,7 @@
                         <field name="partner_id" />
                         <field name="contact_id" />
                         <field name="account_id" invisible="1" />
+                        <field name="category_id" invisible="1" />
 
                         <field name="max_hours" widget="float_time"/>
 
@@ -143,6 +182,7 @@
                               <field name="assigned_user_ids" widget="many2many_tags" colspan="4"/>
 
                               <field name="user_id" />
+                              <field name="category_id" />
 
                               <notebook colspan="5">
                                    <page string="Dettagli">

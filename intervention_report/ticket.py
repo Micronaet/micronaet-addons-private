@@ -50,6 +50,21 @@ class HrAnalyticTimesheetInherit(osv.osv):
         }
 
 
+class AccountAnalyticTicketCategory(osv.osv):
+    """ Ticket Category
+    """
+
+    _name = 'account.analytic.ticket.category'
+    _description = 'Ticket category'
+    _order = 'name'
+
+    _columns = {
+        # 'code': fields.char('Codice', size=15),
+        'name': fields.char('Oggetto', size=90),
+        'note': fields.text('Note'),
+        }
+
+
 class AccountAnalyticTicketInherit(osv.osv):
     """ Ticket Management
     """
@@ -245,6 +260,9 @@ class AccountAnalyticTicketInherit(osv.osv):
                  'dal cliente (alcune indicazioni di massima per spiegare'
                  ' come deve intervenire, di solito rilasciate dal '
                  'responsabile)'),
+        'category_id': fields.many2one(
+            'account.analytic.ticket.category', 'Categoria',
+            help='Categorizzazione del ticket'),
         'partner_id': fields.many2one(
             'res.partner', 'Cliente', required=True,
             help='Cliente che ha aperto il ticket'),
@@ -280,9 +298,9 @@ class AccountAnalyticTicketInherit(osv.osv):
             ('C', 'C'),
             ('D', 'D'),
             ('E', 'E'),
-            ('low', 'Bassa'),
-            ('normal', 'Normale'),
-            ('high', 'Alta'),
+            # ('low', 'Bassa'),
+            # ('normal', 'Normale'),
+            # ('high', 'Alta'),
             ], string='Priorità', required=True),
         'invoice_mode': fields.selection([
             ('month', 'Mensilmente'),
