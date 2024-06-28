@@ -36,6 +36,15 @@
                     </form>
                 </field>
          </record>
+        <record id="action_view_account_analytic_ticket_category" model="ir.actions.act_window">
+            <field name="name">Categorie ticket</field>
+            <field name="res_model">account.analytic.ticket.category</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_analytic_ticket_category_tree"/>
+            <field name="search_view_id" ref="view_account_analytic_ticket_category_search"/>
+            <field name="context">{}</field>
+        </record>
 
          <!-- account.analytic.ticket -->
          <record id="view_account_analytic_ticket_search" model="ir.ui.view">
@@ -304,5 +313,7 @@
             <menuitem name="Ticket da assegnare" parent="menu_base_ticket" id="menu_action_unassigned_account_analytic_ticket_tree"
                       action="action_unassigned_account_analytic_ticket_tree" sequence="30" />
 
+            <menuitem name="Categorie Ticket" parent="menu_base_ticket" id="menu_view_account_analytic_ticket_category"
+                      action="action_view_account_analytic_ticket_category" sequence="30" />
     </data>
 </openerp>
