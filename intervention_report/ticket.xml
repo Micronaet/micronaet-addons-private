@@ -132,7 +132,7 @@
                         <field name="partner_id" />
                         <field name="contact_id" />
                         <field name="account_id" invisible="1" />
-                        <field name="category_id" invisible="1" />
+                        <field name="category_id" />
 
                         <field name="max_hours" widget="float_time"/>
 
@@ -314,6 +314,6 @@
                       action="action_unassigned_account_analytic_ticket_tree" sequence="30" />
 
             <menuitem name="Categorie Ticket" parent="menu_base_ticket" id="menu_view_account_analytic_ticket_category"
-                      action="action_view_account_analytic_ticket_category" sequence="30" />
+                      action="action_view_account_analytic_ticket_category" sequence="40" />
     </data>
 </openerp>
