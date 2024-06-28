@@ -275,6 +275,11 @@ class AccountAnalyticTicketInherit(osv.osv):
                  'ha preso il ticket.'),
 
         'priority': fields.selection([
+            ('A', 'A'),
+            ('B', 'B'),
+            ('C', 'C'),
+            ('D', 'D'),
+            ('E', 'E'),
             ('low', 'Bassa'),
             ('normal', 'Normale'),
             ('high', 'Alta'),
@@ -305,7 +310,7 @@ class AccountAnalyticTicketInherit(osv.osv):
     _defaults = {
         'date': lambda *x: datetime.now().strftime(
             DEFAULT_SERVER_DATETIME_FORMAT),
-        'priority': lambda *x: 'normal',
+        'priority': lambda *x: 'C',
         'invoice_mode': lambda *x: 'end',
         'state': lambda *x: 'draft',
         }
