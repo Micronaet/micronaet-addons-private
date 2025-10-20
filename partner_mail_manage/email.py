@@ -290,7 +290,7 @@ class ResPartnerEmailDomain(orm.Model):
     _description = 'Mail Domain'
     
     _columns = {
-        'server_id': fields.many2one('res.partner.email.server', 'Server'),
+        'server_id': fields.many2one('res.partner.email.server', 'Server', ondelete='cascade'),
         'code': fields.char('Codice', size=30, required=True),
         'name': fields.char('Dominio', size=30, required=True),
         'partner_id': fields.many2one('res.partner', 'Partner'),
@@ -306,7 +306,7 @@ class ResPartnerDomainMail(orm.Model):
     
     _columns={
         'name': fields.char('Nome', size=120, required=True),
-        'domain_id': fields.many2one('res.partner.email.domain', 'Domini'),
+        'domain_id': fields.many2one('res.partner.email.domain', 'Domini', ondelete='cascade'),
         'create_date': fields.datetime('Data Creazione'),
         'dimension': fields.integer('Dimensione'),
 
@@ -323,7 +323,7 @@ class ResPartnerDomainAlias(orm.Model):
 
     _columns = {
         'name': fields.char('Nome', size=120, required=True),
-        'domain_id': fields.many2one('res.partner.email.domain', 'Domini'),
+        'domain_id': fields.many2one('res.partner.email.domain', 'Domini', ondelete='cascade'),
         'create_date': fields.datetime('Data Creazione'),
         'redirect': fields.text('Indiriziz di redirect'),
 
