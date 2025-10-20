@@ -198,7 +198,7 @@
     </record>
 
     <menuitem name="Email Server"  id="menu_root_email" sequence="90" /><!--parent="mail.mail_feeds_main"-->
-        <menuitem name="Dettaglio"  id="menu_root_email_detail" sequence="90" /><!--parent="mail.mail_feeds_main"-->
+        <menuitem name="Dettaglio" parent="menu_root_email" id="menu_root_email_detail" sequence="90" /><!--parent="mail.mail_feeds_main"-->
             <menuitem name="Server di posta" parent="menu_root_email_detail" id="menu_res_partner_email_server" action="action_res_partner_email_server" sequence="10" />
             <menuitem name="Domini di posta" parent="menu_root_email_detail" id="menu_res_partner_email_domain" action="action_res_partner_email_domain" sequence="20" />
             <menuitem name="Email account" parent="menu_root_email_detail" id="menu_res_partner_email_domain_mail" action="action_res_partner_email_domain_mail" sequence="30" />
