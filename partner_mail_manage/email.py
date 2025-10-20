@@ -220,7 +220,11 @@ class ResPartnerEmailServer(orm.Model):
                     this_email_id = this_email_ids[0]
                 else:
                     this_email_id = email_pool.create(cr, uid, data, context=context)
-                previous_email_ids.remove(this_email_id)
+                try:
+                    # Remove if present
+                    previous_email_ids.remove(this_email_id)
+                except:
+                    pass
 
             for alias in domain_data[domain_name]['alias']:
                 alias_name = '{}@{}'.format(alias['name'], domain_name),
@@ -240,7 +244,11 @@ class ResPartnerEmailServer(orm.Model):
                     this_alias_id = this_alias_ids[0]
                 else:
                     this_alias_id = alias_pool.create(cr, uid, data, context=context)
-                previous_alias_ids.remove(this_alias_id)
+                try:
+                    # Remove if present
+                    previous_alias_ids.remove(this_alias_id)
+                except:
+                    pass
 
             # ----------------------------------------------------------------------------------------------------------
             # Removed data operation:
