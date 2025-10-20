@@ -351,11 +351,7 @@ class ResPartnerInherit(orm.Model):
     def open_domain_list(self, cr, uid, ids, context=None):
         """ Partner button open domain list
         """
-        if context is None:
-            context = {}
-        ctx = context.copy()
-        ctx['force_operation'] = 'alias'
-        return self.open_email_list(cr, uid, ids, context=ctx)
+        return True
 
     def open_email_list(self, cr, uid, ids, context=None):
         """ Partner button open domain list
@@ -389,7 +385,11 @@ class ResPartnerInherit(orm.Model):
     def open_alias_list(self, cr, uid, ids, context=None):
         """ Partner button open domain list
         """
-        return True
+        if context is None:
+            context = {}
+        ctx = context.copy()
+        ctx['force_operation'] = 'alias'
+        return self.open_email_list(cr, uid, ids, context=ctx)
 
     _columns = {
         'domain_ids': fields.one2many('res.partner.email.domain', 'partner_id', 'Domini di posta'),
