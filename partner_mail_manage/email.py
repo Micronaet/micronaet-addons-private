@@ -137,7 +137,7 @@ class ResPartnerEmailServer(orm.Model):
 
                     while True:
                         email_payload['page'] = page
-                        reply = get_data_with_token(email_url, HEADERS, mode='get')
+                        reply = get_data_with_token(email_url, HEADERS, mode='post')
                         if reply:
                             for email in reply['resources']:
                                 domain_data[domain_name][key].append(email)
