@@ -369,7 +369,7 @@ class ResPartnerInherit(orm.Model):
             'type': 'ir.actions.act_window',
             'view_type': 'form',
             'view_mode': 'form,tree',
-            'res_model': 'res.partner.domain.email',
+            'res_model': 'res.partner.email.domain.email',
             'views': [(tree_view_id, 'tree'), (form_view_id, 'form')],
             'view_id': tree_view_id,
             'domain': [('domai_id.partner_id', '=', partner_id)],
