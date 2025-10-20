@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+
+    <record id='view_res_partner_mail_right_button_form' model='ir.ui.view'>
+        <field name='name'>Partner Domain button</field>
+        <field name='model'>res.partner</field>
+        <field name='inherit_id' ref='base.view_partner_form' />
+        <field name='arch' type='xml'>
+            <xpath expr="//div[@name='buttons']" position="inner">
+    			<button type="object" string="Email" name="open_email_list" context="{}}" readonly="0"/>
+    			<button type="object" string="Alias" name="open_alias_list" context="{}}" readonly="0"/>
+            </xpath>
+        </field>
+    </record>
+
     <!--res.partner.email.server-->
     <record id="res_partner_email_server_form_view" model="ir.ui.view">
         <field name="name">res.partner.email.server.form</field>

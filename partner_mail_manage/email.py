@@ -347,7 +347,22 @@ class ResPartnerInherit(orm.Model):
     """ *2many in Partner
     """
     _inherit = 'res.partner'
-    
+
+    def open_domain_list(self, cr, uid, ids, context=None):
+        """ Partner button open domain list
+        """
+        return True
+
+    def open_email_list(self, cr, uid, ids, context=None):
+        """ Partner button open domain list
+        """
+        return True
+
+    def open_alias_list(self, cr, uid, ids, context=None):
+        """ Partner button open domain list
+        """
+        return True
+
     _columns = {
         'domain_ids': fields.one2many('res.partner.email.domain', 'partner_id', 'Domini di posta'),
         }
