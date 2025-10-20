@@ -22,6 +22,7 @@ import sys
 import logging
 import requests
 import json
+import pdb
 from osv import osv, orm, fields
 from datetime import datetime, timedelta
 from openerp.tools import (
@@ -77,6 +78,7 @@ class ResPartnerEmailServer(orm.Model):
         # --------------------------------------------------------------------------------------------------------------
         #                                                      Procedure:
         # --------------------------------------------------------------------------------------------------------------
+        pdb.set_trace()
         domain_pool = self.pool.get('res.partner.email.domain')
         email_pool = self.pool.get('res.partner.email.domain.mail')
         alias_pool = self.pool.get('res.partner.email.domain.alias')
