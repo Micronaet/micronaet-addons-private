@@ -83,7 +83,6 @@ class ResPartnerEmailServer(orm.Model):
         # --------------------------------------------------------------------------------------------------------------
         #                                                      Procedure:
         # --------------------------------------------------------------------------------------------------------------
-        pdb.set_trace()
         domain_pool = self.pool.get('res.partner.email.domain')
         email_pool = self.pool.get('res.partner.email.domain.mail')
         alias_pool = self.pool.get('res.partner.email.domain.alias')
@@ -260,9 +259,9 @@ class ResPartnerEmailServer(orm.Model):
         return True
 
     _columns = {
-        'token': fields.char('API Token', size=60, required=True),
+        'token': fields.char('API Token', size=100, required=True),
         'root_url': fields.char('Root URL', size=120, required=True),
-        'name': fields.char('Dominio', size=30, required=True),
+        'name': fields.char('Dominio', size=60, required=True),
         'partner_id': fields.many2one('res.partner', 'Partner'),
         'note': fields.text('Note'),
     }
