@@ -67,7 +67,11 @@ def get_data_with_token(url, headers, mode='get', verbose=False):
         if verbose:
             print("Richiesta riuscita. Codice di stato:", response.status_code)
 
-        return response.json()
+        try:
+            json_data = response.json()
+        except:
+            json_data = json.loadd(response.content)
+        return json_data
 
     except requests.exceptions.HTTPError as errh:
         print("Errore HTTP: {}".format(errh))
