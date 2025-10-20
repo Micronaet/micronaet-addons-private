@@ -185,7 +185,7 @@ class ResPartnerEmailServer(orm.Model):
             ], context=context)
 
             if this_domain_ids:
-                domain_pool.write(cr, uid, this_domain_id, {
+                domain_pool.write(cr, uid, this_domain_ids, {
                     # 'code': domain_code,
                     # 'server_id': server_id,
                     'name': domain_record['name'],
