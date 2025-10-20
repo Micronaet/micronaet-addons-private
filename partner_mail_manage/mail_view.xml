@@ -185,7 +185,6 @@
                 <field name="domain_id" />
                 <field name="name" />
                 <field name="create_date" />
-                <field name="active" />
                 <field name="removed" />
                 <field name="redirect" />
             </tree>
