@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record id='view_res_partner_crm_right_button_form' model='ir.ui.view'>
+        <field name='name'>Partner CRM button</field>
+        <field name='model'>res.partner</field>
+        <field name='inherit_id' ref='base.view_partner_form' />
+        <field name='arch' type='xml'>
+            <xpath expr="//div[@name='buttons']" position="inside">
+    			<button type="object" string="Email" name="open_email_list" context="{}}" readonly="0" icon="terp-personal"/>
+    			<button type="object" string="Alias" name="open_alias_list" context="{}}" readonly="0" icon="terp-partner"/>
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</openerp>
