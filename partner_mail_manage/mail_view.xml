@@ -9,7 +9,7 @@
         <field name='arch' type='xml'>
             <xpath expr="//div[@name='buttons']" position="inside">
     			<button type="object" string="Email" name="open_email_list" context="{}}" readonly="0" icon="stock_person"/>
-    			<button type="object" string="Alias" name="open_alias_list" context="{}}" readonly="0" icon="crm"/>
+    			<button type="object" string="Alias" name="open_alias_list" context="{}}" readonly="0" icon="partner"/>
             </xpath>
             <xpath expr="//notebook" position="inside">
                 <page name="email_domain_page" string="Domini posta">
@@ -76,7 +76,7 @@
             <form string="Domini di posta" version="7.0">
                 <header>
                     <button type="object" string="Email" name="open_email_list" context="{}" icon="stock_person"/>
-                    <button type="object" string="Alias" name="open_alias_list" context="{}" icon="crm"/>
+                    <button type="object" string="Alias" name="open_alias_list" context="{}" icon="partner"/>
                 </header>
                 <sheet>
                     <group colspan="4" col="4">
@@ -122,7 +122,7 @@
                 <field name="name" />
                 <field name="note" />
                 <button type="object" string="Email" name="open_email_list" icon="stock_person"/>
-                <button type="object" string="Alias" name="open_alias_list" icon="crm"/>
+                <button type="object" string="Alias" name="open_alias_list" icon="partner"/>
             </tree>
         </field>
     </record>
