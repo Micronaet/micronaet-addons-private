@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    <!--res.partner.email.server-->
+    <record id="res_partner_email_server_form_view" model="ir.ui.view">
+        <field name="name">res.partner.email.server.form</field>
+        <field name="model">res.partner.email.server</field>
+        <field name="arch" type="xml">
+            <form string="Server di posta" version="7.0">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name" />
+                        <field name="partner_id" />
+
+                        <separator string="API" colspan="4"/>
+                        <field name="root_url" />
+                        <field name="token" />
+
+                        <separator string="Note" colspan="4"/>
+                        <field name="note" colspan="4" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="res_partner_email_server_tree_view" model="ir.ui.view">
+        <field name="name">res.partner.email.server.tree</field>
+        <field name="model">res.partner.email.server</field>
+        <field name="arch" type="xml">
+            <tree string="Server di posta">
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="root_url" />
+                <field name="note" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_res_partner_email_server" model="ir.actions.act_window">
+        <field name="name">Server di posta</field>
+        <field name="res_model">res.partner.email.server</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="res_partner_email_server_tree_view"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!--res.partner.email.domain-->
+    <record id="res_partner_email_domain_form_view" model="ir.ui.view">
+        <field name="name">res.partner.email.domain.form</field>
+        <field name="model">res.partner.email.domain</field>
+        <field name="arch" type="xml">
+            <form string="Domini di posta" version="7.0">
+                <header>
+
+                </header>
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="server_id" />
+                        <newline />
+
+                        <field name="code" />
+                        <field name="name" />
+
+                        <notebook colspan="4">
+                            <page name="email_page" string="Email">
+                                <group>
+                                    <field name="email_ids" />
+                                </group>
+                            </page>
+                            <page name="alias_page" string="Alias">
+                                <group>
+                                    <field name="alias_ids" />
+                                </group>
+                            </page>
+                            <page name="note_page" string="Note">
+                                <group>
+                                    <field name="note" />
+                                </group>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="res_partner_email_domain_tree_view" model="ir.ui.view">
+        <field name="name">res.partner.email.domain.tree</field>
+        <field name="model">res.partner.email.domain</field>
+        <field name="arch" type="xml">
+            <tree string="Domini di posta">
+                <field name="server_id" />
+                <field name="code" />
+                <field name="name" />
+                <field name="note" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_res_partner_email_domain" model="ir.actions.act_window">
+        <field name="name">Domini di posta</field>
+        <field name="res_model">res.partner.email.domain</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="res_partner_email_domain_tree_view"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- res.partner.email.domain.mail -->
+    <record id="res_partner_email_domain_mail_form_view" model="ir.ui.view">
+        <field name="name">res.partner.email.domain.mail.form</field>
+        <field name="model">res.partner.email.domain.mail</field>
+        <field name="arch" type="xml">
+            <form string="Server di posta" version="7.0">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name" />
+                        <field name="domain_id" />
+
+                        <field name="create_date" />
+                        <field name="dimension" />
+
+                        <field name="removed" />
+                        <field name="active" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="res_partner_email_domain_mail_tree_view" model="ir.ui.view">
+        <field name="name">res.partner.email.domain.mail.tree</field>
+        <field name="model">res.partner.email.domain.mail</field>
+        <field name="arch" type="xml">
+            <tree string="Email account">
+                <field name="name" />
+                <field name="domain_id" />
+
+                <field name="create_date" />
+                <field name="dimension" />
+
+                <field name="removed" />
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_res_partner_email_domain_mail" model="ir.actions.act_window">
+        <field name="name">Email account</field>
+        <field name="res_model">res.partner.email.domain.mail</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="res_partner_email_domain_mail_tree_view"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- res.partner.email.domain.alias -->
+    <record id="res_partner_email_domain_alias_form_view" model="ir.ui.view">
+        <field name="name">res.partner.email.domain.alias.form</field>
+        <field name="model">res.partner.email.domain.alias</field>
+        <field name="arch" type="xml">
+            <form string="Server di posta" version="7.0">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="name" />
+                        <field name="domain_id" />
+
+                        <field name="create_date" />
+                        <field name="removed" />
+
+                        <field name="active" />
+
+                        <separator string="Redirect" colspan="4"/>
+                        <field name="redirect" colspan="4" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="res_partner_email_domain_alias_tree_view" model="ir.ui.view">
+        <field name="name">res.partner.email.domain.alias.tree</field>
+        <field name="model">res.partner.email.domain.alias</field>
+        <field name="arch" type="xml">
+            <tree string="Alias">
+                <field name="active" />
+                <field name="domain_id" />
+                <field name="name" />
+                <field name="create_date" />
+                <field name="active" />
+                <field name="removed" />
+                <field name="redirect" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_res_partner_email_domain_alias" model="ir.actions.act_window">
+        <field name="name">Alias</field>
+        <field name="res_model">res.partner.email.domain.alias</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="res_partner_email_domain_alias_tree_view"/>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem name="Email Server"  id="menu_root_email" sequence="90" /><!--parent="mail.mail_feeds_main"-->
+        <menuitem name="Server di posta" parent="menu_root_email" id="menu_res_partner_email_server" action="action_res_partner_email_server" sequence="10" />
+        <menuitem name="Domini di posta" parent="menu_root_email" id="menu_res_partner_email_domain" action="action_res_partner_email_domain" sequence="20" />
+        <menuitem name="Email account" parent="menu_root_email" id="menu_res_partner_email_domain_mail" action="action_res_partner_email_domain_mail" sequence="30" />
+        <menuitem name="Alias" parent="menu_root_email" id="menu_res_partner_email_domain_alias" action="action_res_partner_email_domain_alias" sequence="40" />
+    </data>
+</openerp>
