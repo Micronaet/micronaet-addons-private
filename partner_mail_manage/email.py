@@ -351,7 +351,12 @@ class ResPartnerInherit(orm.Model):
     def open_domain_list(self, cr, uid, ids, context=None):
         """ Partner button open domain list
         """
-        return True
+        if context is None:
+            context = {}
+        ctx = context.copy()
+        ctx['force_operation'] = 'alias'
+
+        return self.open_email_list(cr, uid, ids, context=ctx)
 
     def open_email_list(self, cr, uid, ids, context=None):
         """ Partner button open domain list
@@ -360,6 +365,10 @@ class ResPartnerInherit(orm.Model):
 
         ir_model_data = self.pool.get('ir.model.data')
         partner_id = ids[0]
+        if context is None:
+            context = {}
+        force_operation = context.get('force_operation', 'mail')
+        res_model = 'res.partner.email.domain.{}'.format(force_operation)
 
         # template_id = ir_model_data.get_object_reference(
         # cr, uid, 'intervention_report', 'email_template_timesheet_intervent')[1]
@@ -369,7 +378,7 @@ class ResPartnerInherit(orm.Model):
             'type': 'ir.actions.act_window',
             'view_type': 'form',
             'view_mode': 'form,tree',
-            'res_model': 'res.partner.email.domain.mail',
+            'res_model': res_model,
             'views': [(tree_view_id, 'tree'), (form_view_id, 'form')],
             'view_id': tree_view_id,
             'domain': [('domain_id.partner_id', '=', partner_id)],
