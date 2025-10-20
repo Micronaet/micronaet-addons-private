@@ -185,12 +185,16 @@ class ResPartnerEmailServer(orm.Model):
             ], context=context)
 
             if this_domain_ids:
-                # No update for now
+                domain_pool.write(cr, uid, this_domain_id, {
+                    # 'code': domain_code,
+                    # 'server_id': server_id,
+                    'name': domain_record['name'],
+                }, context=context)
                 this_domain_id = this_domain_ids[0]
             else:
                 this_domain_id = domain_pool.create(cr, uid, {
                     'code': domain_code,
-                    'name': domain_record['code'],
+                    'name': domain_record['name'],
                     'server_id': server_id,
                 }, context=context)
 
@@ -227,7 +231,7 @@ class ResPartnerEmailServer(orm.Model):
                     pass
 
             for alias in domain_data[domain_name]['alias']:
-                alias_name = '{}@{}'.format(alias['name'], domain_name),
+                alias_name = '{}@{}'.format(alias['name'], domain_name)
                 this_alias_ids = alias_pool.search(cr, uid, [
                     ('domain_id', '=', this_domain_id),
                     ('name', '=', alias_name),
