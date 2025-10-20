@@ -51,7 +51,6 @@ class ResPartnerEmailServer(orm.Model):
                 _logger.info('Connecting to {} ...'.format(url))
 
             try:
-                pdb.set_trace()
                 if mode == 'get':
                     response = requests.get(url, headers=headers)
                 elif mode == 'post':
