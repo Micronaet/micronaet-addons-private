@@ -291,6 +291,40 @@ class ResPartnerEmailDomain(orm.Model):
     _name = 'res.partner.email.domain'
     _description = 'Mail Domain'
     
+    def open_email_list(self, cr, uid, ids, context=None):
+        """ Open mail from domain
+        """
+        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
+
+        domain_id = ids[0]
+        if context is None:
+            context = {}
+
+        force_operation = context.get('force_operation', 'mail')
+        res_model = 'res.partner.email.domain.{}'.format(force_operation)
+
+
+        form_view_id = tree_view_id = False
+        return {
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form,tree',
+            'res_model': res_model,
+            'views': [(tree_view_id, 'tree'), (form_view_id, 'form')],
+            'view_id': tree_view_id,
+            'domain': [('domain_id', '=', domain_id)],
+            # 'target': '',
+            'context': context,
+        }
+    def open_alias_list(self, cr, uid, ids, context=None):
+        """ Open alias for domain
+        """
+        if context is None:
+            context = {}
+        ctx = context.copy()
+        ctx['force_operation'] = 'alias'
+        return self.open_email_list(cr, uid, ids, context=ctx)
+
     _columns = {
         'server_id': fields.many2one('res.partner.email.server', 'Server', ondelete='cascade'),
         'code': fields.char('Codice', size=30, required=True),

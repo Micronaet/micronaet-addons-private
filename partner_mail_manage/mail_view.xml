@@ -74,6 +74,10 @@
         <field name="model">res.partner.email.domain</field>
         <field name="arch" type="xml">
             <form string="Domini di posta" version="7.0">
+                <header>
+                    <button type="object" string="Email" name="open_email_list" context="{}" icon="stock_person"/>
+                    <button type="object" string="Alias" name="open_alias_list" context="{}" icon="crm"/>
+                </header>
                 <sheet>
                     <group colspan="4" col="4">
                         <field name="server_id" />
@@ -117,6 +121,8 @@
                 <field name="code" />
                 <field name="name" />
                 <field name="note" />
+                <button type="object" string="Email" name="open_email_list" icon="stock_person"/>
+                <button type="object" string="Alias" name="open_alias_list" icon="crm"/>
             </tree>
         </field>
     </record>
