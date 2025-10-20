@@ -194,7 +194,11 @@ class ResPartnerEmailServer(orm.Model):
                     'server_id': server_id,
                 }, context=context)
 
-            previous_domain_ids.remove(this_domain_id)
+            try:
+                # If present remove:
+                previous_domain_ids.remove(this_domain_id)
+            except:
+                pass
 
             # ----------------------------------------------------------------------------------------------------------
             # Mail update:
