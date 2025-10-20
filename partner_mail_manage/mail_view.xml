@@ -8,7 +8,7 @@
         <field name='inherit_id' ref='base.view_partner_form' />
         <field name='arch' type='xml'>
             <xpath expr="//div[@name='buttons']" position="inside">
-    			<button type="object" string="Email" name="open_email_list" context="{}}" readonly="0" icon="stock_person"/>
+    			<button type="object" string="Email" name="open_email_list" context="{}}" readonly="0" icon="terp-personal"/>
     			<button type="object" string="Alias" name="open_alias_list" context="{}}" readonly="0" icon="terp-partner"/>
             </xpath>
             <xpath expr="//notebook" position="inside">
@@ -75,7 +75,7 @@
         <field name="arch" type="xml">
             <form string="Domini di posta" version="7.0">
                 <header>
-                    <button type="object" string="Email" name="open_email_list" context="{}" icon="stock_person"/>
+                    <button type="object" string="Email" name="open_email_list" context="{}" icon="terp-personal"/>
                     <button type="object" string="Alias" name="open_alias_list" context="{}" icon="terp-partner"/>
                 </header>
                 <sheet>
@@ -121,7 +121,7 @@
                 <field name="code" />
                 <field name="name" />
                 <field name="note" />
-                <button type="object" string="Email" name="open_email_list" icon="stock_person"/>
+                <button type="object" string="Email" name="open_email_list" icon="terp-personal"/>
                 <button type="object" string="Alias" name="open_alias_list" icon="terp-partner"/>
             </tree>
         </field>
