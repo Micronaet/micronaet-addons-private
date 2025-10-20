@@ -62,7 +62,12 @@ class ResPartnerEmailServer(orm.Model):
                 response.raise_for_status()
                 if verbose:
                     _logger.info('Connected! Status code {}'.format(response.status_code))
-                return response.json()
+
+                try:
+                    json_data = response.json()
+                except:
+                    json_data = json.loads(response.content)
+                return json_data
 
             except requests.exceptions.HTTPError as errh:
                 _logger.info('Error HTTP: {}'.format(errh))
