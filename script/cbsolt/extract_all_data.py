@@ -31,7 +31,7 @@ def get_data_with_token(url, headers, mode='get', verbose=False):
         di autenticazione nell'header.
     """
     if verbose:
-        print(f"Tentativo di connessione a: {url}")
+        print("Tentativo di connessione a: {}".format(url))
 
     try:
         if mode == 'get':
@@ -48,14 +48,14 @@ def get_data_with_token(url, headers, mode='get', verbose=False):
         return response.json()
 
     except requests.exceptions.HTTPError as errh:
-        print(f"Errore HTTP: {errh}")
-        print(f"Contenuto della risposta: {response.text}")
+        print("Errore HTTP: {}".format(errh))
+        print("Contenuto della risposta: {}".format(response.text))
     except requests.exceptions.ConnectionError as errc:
-        print(f"Errore di connessione: {errc}")
+        print("Errore di connessione: {}".format(errc))
     except requests.exceptions.Timeout as errt:
-        print(f"Timeout della richiesta: {errt}")
+        print("Timeout della richiesta: {}".format(errt))
     except requests.exceptions.RequestException as err:
-        print(f"Si è verificato un errore generico: {err}")
+        print("Si è verificato un errore generico: {}".format(err))
     return None
 
 
