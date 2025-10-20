@@ -64,17 +64,20 @@
                         <notebook colspan="4">
                             <page name="email_page" string="Email">
                                 <group>
-                                    <field name="email_ids" />
+                                    <separator string="Email" colspan="4" />
+                                    <field name="email_ids" nolabel="1" colspan="4"/>
                                 </group>
                             </page>
                             <page name="alias_page" string="Alias">
                                 <group>
-                                    <field name="alias_ids" />
+                                    <separator string="Alias" colspan="4" />
+                                    <field name="alias_ids" nolabel="1" colspan="4" />
                                 </group>
                             </page>
                             <page name="note_page" string="Note">
                                 <group>
-                                    <field name="note" />
+                                    <separator string="Note" colspan="4" />
+                                    <field name="note" nolabel="1" colspan="4" />
                                 </group>
                             </page>
                         </notebook>
