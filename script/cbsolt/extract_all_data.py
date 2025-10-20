@@ -70,7 +70,7 @@ def get_data_with_token(url, headers, mode='get', verbose=False):
         try:
             json_data = response.json()
         except:
-            json_data = json.loadd(response.content)
+            json_data = json.load(response.content)
         return json_data
 
     except requests.exceptions.HTTPError as errh:
