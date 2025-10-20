@@ -104,7 +104,7 @@ class ResPartnerEmailServer(orm.Model):
         # Load Domain list:
         # --------------------------------------------------------------------------------------------------------------
         domain_url = '{}/domains'.format(ROOT_URL)
-        domain_reply = get_data_with_token(domain_url, HEADERS, mode='post')
+        domain_reply = get_data_with_token(domain_url, HEADERS, mode='get')
 
         domain_data = {}
 
