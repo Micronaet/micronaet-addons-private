@@ -214,6 +214,7 @@ class ResPartnerEmailServer(orm.Model):
                 ], context=context)
 
                 data = {
+                    'domain_id': this_domain_id,
                     'name': email['email_address'],
                     # 'create_date': email['created_at'],
                     'dimension': email['max_email_quota'] / (1024 ** 3),
@@ -238,6 +239,7 @@ class ResPartnerEmailServer(orm.Model):
                 ], context=context)
 
                 data = {
+                    'domain_id': this_domain_id,
                     'name': alias_name,
                     # 'create_date': alias['created_at'],
                     'redirect': ', '.join(alias['destinations']),
