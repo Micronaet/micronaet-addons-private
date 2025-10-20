@@ -357,7 +357,9 @@ class ResPartnerInherit(orm.Model):
         """ Partner button open domain list
         """
         assert len(ids) == 1, 'This option should only be used for a single id at a time.'
+
         ir_model_data = self.pool.get('ir.model.data')
+        partner_id = ids[0]
 
         # template_id = ir_model_data.get_object_reference(
         # cr, uid, 'intervention_report', 'email_template_timesheet_intervent')[1]
@@ -370,6 +372,7 @@ class ResPartnerInherit(orm.Model):
             'res_model': 'res.partner.domain.email',
             'views': [(tree_view_id, 'tree'), (form_view_id, 'form')],
             'view_id': tree_view_id,
+            'domain': [('domai_id.partner_id', '=', partner_id)],
             # 'target': '',
             'context': context,
         }
