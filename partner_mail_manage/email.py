@@ -254,24 +254,24 @@ class ResPartnerEmailServer(orm.Model):
                 except:
                     pass
 
-            # ----------------------------------------------------------------------------------------------------------
-            # Removed data operation:
-            # ----------------------------------------------------------------------------------------------------------
-            if previous_domain_ids:
-                _logger.info('Removed domain {}'.format(previous_domain_ids))
-                domain_pool.write(cr, uid, previous_domain_ids, {
-                    'removed': True,
-                }, context=context)
-            if previous_email_ids:
-                _logger.info('Removed email {}'.format(previous_email_ids))
-                email_pool.write(cr, uid, previous_email_ids, {
-                    'removed': True,
-                }, context=context)
-            if previous_alias_ids:
-                _logger.info('Removed alias {}'.format(previous_alias_ids))
-                alias_pool.write(cr, uid, previous_alias_ids, {
-                    'removed': True,
-                }, context=context)
+        # --------------------------------------------------------------------------------------------------------------
+        # Removed data operation:
+        # --------------------------------------------------------------------------------------------------------------
+        if previous_domain_ids:
+            _logger.info('Removed domain {}'.format(previous_domain_ids))
+            domain_pool.write(cr, uid, previous_domain_ids, {
+                'removed': True,
+            }, context=context)
+        if previous_email_ids:
+            _logger.info('Removed email {}'.format(previous_email_ids))
+            email_pool.write(cr, uid, previous_email_ids, {
+                'removed': True,
+            }, context=context)
+        if previous_alias_ids:
+            _logger.info('Removed alias {}'.format(previous_alias_ids))
+            alias_pool.write(cr, uid, previous_alias_ids, {
+                'removed': True,
+            }, context=context)
         return True
 
     _columns = {
