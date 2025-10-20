@@ -355,7 +355,6 @@ class ResPartnerInherit(orm.Model):
             context = {}
         ctx = context.copy()
         ctx['force_operation'] = 'alias'
-
         return self.open_email_list(cr, uid, ids, context=ctx)
 
     def open_email_list(self, cr, uid, ids, context=None):
@@ -363,15 +362,17 @@ class ResPartnerInherit(orm.Model):
         """
         assert len(ids) == 1, 'This option should only be used for a single id at a time.'
 
-        ir_model_data = self.pool.get('ir.model.data')
+        # ir_model_data = self.pool.get('ir.model.data')
+        # template_id = ir_model_data.get_object_reference(
+        # cr, uid, 'intervention_report', 'email_template_timesheet_intervent')[1]
+
         partner_id = ids[0]
         if context is None:
             context = {}
+
         force_operation = context.get('force_operation', 'mail')
         res_model = 'res.partner.email.domain.{}'.format(force_operation)
 
-        # template_id = ir_model_data.get_object_reference(
-        # cr, uid, 'intervention_report', 'email_template_timesheet_intervent')[1]
 
         form_view_id = tree_view_id = False
         return {
