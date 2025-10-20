@@ -20,11 +20,11 @@
 
 
 {
-    'name': 'Partner email manage',
+    'name': 'Partner CRM manage',
     'version': '0.1',
     'category': 'Custom',
     'description': """
-        Module for manager partner email and domains
+        Extra function for CRM Micronaet
         """,
     'author': 'Micronaet s.r.l.',
     'website': 'http://www.micronaet.it',
@@ -37,9 +37,7 @@
     'init_xml': [],
     'demo_xml': [],
     'data': [                    
-        'security/ir.model.access.csv',
-        'mail_view.xml',
-        'data/list.xml',                    
+        'crm_view.xml',
         ],
     'active': False,
     'installable': True,
