@@ -8,8 +8,8 @@
         <field name='inherit_id' ref='base.view_partner_form' />
         <field name='arch' type='xml'>
             <xpath expr="//div[@name='buttons']" position="inside">
-    			<button type="object" string="Email" name="open_email_list" context="{}}" readonly="0"/>
-    			<button type="object" string="Alias" name="open_alias_list" context="{}}" readonly="0"/>
+    			<button type="object" string="Email" name="open_email_list" context="{}}" readonly="0" icon="stock_person"/>
+    			<button type="object" string="Alias" name="open_alias_list" context="{}}" readonly="0" icon="crm"/>
             </xpath>
         </field>
     </record>
