@@ -53,25 +53,25 @@ class ResPartnerEmailServer(orm.Model):
                 if mode == 'get':
                     response = requests.get(url, headers=headers)
                 elif mode == 'post':
-                    response = requests.get(url, headers=headers)
+                    response = requests.post(url, headers=headers)
                 else:
                     _logger.info('No mode {}'.format(mode))
                     return False
 
                 response.raise_for_status()
                 if verbose:
-                    print('Connected! Status code {}'.format(response.status_code))
+                    _logger.info('Connected! Status code {}'.format(response.status_code))
                 return response.json()
 
             except requests.exceptions.HTTPError as errh:
-                print('Error HTTP: {}'.format(errh))
-                print('Reply response: {}'.format(response.text))
+                _logger.info('Error HTTP: {}'.format(errh))
+                _logger.info('Reply response: {}'.format(response.text))
             except requests.exceptions.ConnectionError as errc:
-                print('Connection error: {}'.format(errc))
+                _logger.info('Connection error: {}'.format(errc))
             except requests.exceptions.Timeout as errt:
-                print('Timeout in request: {}'.format(errt))
+                _logger.info('Timeout in request: {}'.format(errt))
             except requests.exceptions.RequestException as err:
-                print('Generic error: {}'.format(err))
+                _logger.info('Generic error: {}'.format(err))
             return None
 
         # --------------------------------------------------------------------------------------------------------------
