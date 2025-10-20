@@ -53,6 +53,7 @@ def get_data_with_token(url, headers, mode='get', verbose=False):
     if verbose:
         print("Tentativo di connessione a: {}".format(url))
 
+    pdb.set_trace()
     try:
         if mode == 'get':
             response = requests.get(url, headers=headers)
@@ -65,6 +66,7 @@ def get_data_with_token(url, headers, mode='get', verbose=False):
         response.raise_for_status()
         if verbose:
             print("Richiesta riuscita. Codice di stato:", response.status_code)
+
         return response.json()
 
     except requests.exceptions.HTTPError as errh:
