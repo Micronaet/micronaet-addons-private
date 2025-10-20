@@ -51,6 +51,7 @@ class ResPartnerEmailServer(orm.Model):
                 _logger.info('Connecting to {} ...'.format(url))
 
             try:
+                pdb.set_trace()
                 if mode == 'get':
                     response = requests.get(url, headers=headers)
                 elif mode == 'post':
@@ -60,7 +61,6 @@ class ResPartnerEmailServer(orm.Model):
                     return False
 
                 response.raise_for_status()
-                pdb.set_trace()
                 if verbose:
                     _logger.info('Connected! Status code {}'.format(response.status_code))
 
