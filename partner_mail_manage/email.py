@@ -65,7 +65,7 @@ class ResPartnerEmailServer(orm.Model):
 
             except requests.exceptions.HTTPError as errh:
                 _logger.info('Error HTTP: {}'.format(errh))
-                _logger.info('Reply response: {}'.format(response.text))
+                # _logger.info('Reply response: {}'.format(response.text))
             except requests.exceptions.ConnectionError as errc:
                 _logger.info('Connection error: {}'.format(errc))
             except requests.exceptions.Timeout as errt:
