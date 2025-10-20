@@ -1,7 +1,6 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-"access_res_partner_server_os_user","res.partner.server.os","model_res_partner_server_os","base.group_user",1,1,1,1
-"access_res_partner_server_password_type_user","res.partner.server.password.type","model_res_partner_server_password_type","base.group_user",1,1,1,1
-"access_res_partner_server_password_user","res.partner.server.password","model_res_partner_server_password","base.group_user",1,1,1,1
-"access_res_partner_server_user","res.partner.server","model_res_partner_server","base.group_user",1,1,1,1
-"access_res_partner_server_service_user","res.partner.server.service","model_res_partner_server_service","base.group_user",1,1,1,1
+access_res_partner_email_server_user,res.partner.email.server,model_res_partner_email_server,"base.group_user",1,1,1,1
+access_res_partner_email_domain_user,res.partner.email.domain,model_res_partner_email_domain,"base.group_user",1,1,1,1
+access_res_partner_email_domain_mail_user,res.partner.email.domain.mail,model_res_partner_email_domain_mail,"base.group_user",1,1,1,1
+access_res_partner_email_domain_alias_user,res.partner.email.domain.alias,model_res_partner_email_domain_alias,"base.group_user",1,1,1,1
 
