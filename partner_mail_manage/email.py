@@ -372,7 +372,7 @@ class ResPartnerInherit(orm.Model):
             'res_model': 'res.partner.email.domain.mail',
             'views': [(tree_view_id, 'tree'), (form_view_id, 'form')],
             'view_id': tree_view_id,
-            'domain': [('domai_id.partner_id', '=', partner_id)],
+            'domain': [('domain_id.partner_id', '=', partner_id)],
             # 'target': '',
             'context': context,
         }
