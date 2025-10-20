@@ -60,6 +60,7 @@ class ResPartnerEmailServer(orm.Model):
                     return False
 
                 response.raise_for_status()
+                pdb.set_trace()
                 if verbose:
                     _logger.info('Connected! Status code {}'.format(response.status_code))
 
