@@ -87,7 +87,7 @@ class ResPartnerEmailServer(orm.Model):
         imap_server = self.browse(cr, uid, server_id, context=context)
 
         ROOT_URL = imap_server.root_url
-        API_TOKEN = imap_server.token
+        API_TOKEN = imap_server.token.encode('ascii', 'ignore')
 
         HEADERS = {
             "X-API-Token": API_TOKEN,
