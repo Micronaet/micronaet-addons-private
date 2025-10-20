@@ -356,8 +356,23 @@ class ResPartnerInherit(orm.Model):
     def open_email_list(self, cr, uid, ids, context=None):
         """ Partner button open domain list
         """
-        return True
+        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
+        ir_model_data = self.pool.get('ir.model.data')
 
+        # template_id = ir_model_data.get_object_reference(
+        # cr, uid, 'intervention_report', 'email_template_timesheet_intervent')[1]
+
+        form_view_id = tree_view_id = False
+        return {
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form,tree',
+            'res_model': 'res.partner.domain.email',
+            'views': [(tree_view_id, 'tree'), (form_view_id, 'form')],
+            'view_id': tree_view_id,
+            # 'target': '',
+            'context': context,
+        }
     def open_alias_list(self, cr, uid, ids, context=None):
         """ Partner button open domain list
         """
