@@ -388,8 +388,7 @@ class hr_analytic_timesheet_trip(osv.osv):
             ('distance', '>', 0),
             ], context=context)
         if history_ids:
-            history = history_pool.browse(
-                cr, uid, history_ids[0], context=context)
+            history = history_pool.browse(cr, uid, history_ids[0], context=context)
 
             distance_km = history.distance
             if cache_key in self._map_cache:
@@ -399,8 +398,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         # ---------------------------------------------------------------------
         # 3. Get from API call:
         # ---------------------------------------------------------------------
-        query = distance_query(
-            self, cr, uid, key, origin, destination, context=context)
+        query = distance_query(self, cr, uid, key, origin, destination, context=context)
         try:
             reply = urllib.urlopen(query)
             response_json = reply.read()
