@@ -86,8 +86,7 @@ class hr_analytic_timesheet_trip(osv.osv):
                 trip_id = id of parent record
             """
             if to_partner and from_partner and trip_id:
-                total_trip = self.distance_between_partner(
-                    cr, uid, from_partner, to_partner, context=context)
+                total_trip = self.distance_between_partner(cr, uid, from_partner, to_partner, context=context)
                 data = {
                     'from_id': from_partner.id,
                     'to_id': to_partner.id,
@@ -325,10 +324,8 @@ class hr_analytic_timesheet_trip(osv.osv):
             url_mask = ''
             try:
                 # Note: lon1, lat1, lon2, lat2
-                lon1, lat1 = prepare_element(
-                    self, cr, uid, origin, context=context)
-                lon2, lat2 = prepare_element(
-                    self, cr, uid, destination, context=context)
+                lon1, lat1 = prepare_element(self, cr, uid, origin, context=context)
+                lon2, lat2 = prepare_element(self, cr, uid, destination, context=context)
 
                 url_mask = 'https://api.openrouteservice.org/v2/directions/' \
                            'driving-car?api_key={key}&start={lon1},{lat1}&' \
@@ -368,6 +365,11 @@ class hr_analytic_timesheet_trip(osv.osv):
         # =====================================================================
         #                      Search route process:
         # =====================================================================
+        if not destination:
+            raise osv.except_osv(
+                _('No destination'),
+                _('Destination not fount for origin: {}'.format(origin.name)),
+                )
         cache_key = origin.id, destination.id
 
         # ---------------------------------------------------------------------
