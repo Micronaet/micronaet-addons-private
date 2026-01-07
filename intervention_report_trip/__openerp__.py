@@ -31,28 +31,29 @@
     'name' : 'Intervention Report Trip',
     'version' : '0.1',
     'category' : 'Report',
-    'description' : """ Manage intervent trip, every day user do a particular
-                        trip that is calculated in Km and manage for refund
-                    """,
+    'description' : """ 
+        Manage intervent trip, every day user do a particular
+        trip that is calculated in Km and manage for refund
+        """,
     'author' : 'Micronaet s.r.l.',
-    'website' : 'http://www.micronaet.it',
+    'website' : 'https://micronaet.it',
     'license' : 'AGPL-3',
-    'depends' : ['base',
-                 'intervention_report',
-                 'report_aeroo',
-                 'report_aeroo_ooo',
-                ],
+    'depends' : [
+        'base',
+        'intervention_report',
+        'report_aeroo',
+        'report_aeroo_ooo',
+        ],
     'init_xml' : [],
     'demo_xml' : [],
-    'update_xml' : ['security/ir.model.access.csv',
-                    'wizard/wizard_create_intervent_view.xml',
-                    'intervention_trip.xml',
-                    'intervention_trip_workflow.xml',
-                    'wizard/wizard_create_trip_view.xml', 
-                    'report/report_trip.xml',                   
-                    ],
+    'update_xml' : [
+        'security/ir.model.access.csv',
+        'wizard/wizard_create_intervent_view.xml',
+        'intervention_trip.xml',
+        'intervention_trip_workflow.xml',
+        'wizard/wizard_create_trip_view.xml',
+        'report/report_trip.xml',
+        ],
     'active': False,
     'installable': True,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
