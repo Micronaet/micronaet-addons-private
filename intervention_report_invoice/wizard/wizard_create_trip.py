@@ -96,7 +96,9 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'font_name': 'Courier 10 pitch',
                 'font_size': 9,
                 'align': 'right',
-                'border': 0,
+                'bg_color': '#DDDDDD',
+                'border': 1,
+                #'text_wrap': True,
                 }),
             'text_center': WB.add_format({
                 'font_color': 'black',
@@ -214,16 +216,6 @@ class account_invoice_intervent_wizard(osv.osv_memory):
                 'align': 'right',
                 'border': 1,
                 'num_format': num_format,
-                }),
-            'text_total': WB.add_format({
-                'bold': True,
-                'font_color': 'black',
-                'font_name': 'Courier 10 pitch',
-                'font_size': 9,
-                'align': 'left',
-                'bg_color': '#DDDDDD',
-                'border': 1,
-                #'text_wrap': True,
                 }),
             'number_total': WB.add_format({
                 'bold': True,
