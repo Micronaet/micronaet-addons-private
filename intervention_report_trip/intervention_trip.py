@@ -385,7 +385,7 @@ class hr_analytic_timesheet_trip(osv.osv):
         history_ids = history_pool.search(cr, uid, [
             ('from_partner_id', '=', origin.id),
             ('to_partner_id', '=', destination.id),
-            ('destination', '>', 0),
+            ('distance', '>', 0),
             ], context=context)
         if history_ids:
             history = history_pool.browse(
